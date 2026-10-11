@@ -1,3 +1,146 @@
+
+<!-- NEGOCIO ALERTA: VALIDACION DE LICENCIA -->
+<style>
+#na-license-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: #f3f7f4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+  font-family: Arial, sans-serif;
+}
+#na-license-card {
+  background: white;
+  border-radius: 18px;
+  padding: 26px 20px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 8px 30px #0002;
+  text-align: center;
+}
+#na-license-card h2 { color: #173f35; }
+#na-license-card input,
+#na-license-card button {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 13px;
+  margin-top: 12px;
+  border-radius: 9px;
+  font-size: 16px;
+}
+#na-license-card input {
+  border: 1px solid #bbc9c0;
+}
+#na-license-card button {
+  border: 0;
+  background: #173f35;
+  color: white;
+  font-weight: bold;
+}
+#na-license-message {
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+</style>
+
+<div id="na-license-screen">
+  <div id="na-license-card">
+    <h2>Negocio Alerta</h2>
+    <p>Ingresá tu código de licencia para continuar.</p>
+    <form id="na-license-form">
+      <input id="na-license-code"
+        placeholder="Ej.: NA-PRUEBA-002"
+        autocomplete="off" required>
+      <button id="na-license-button" type="submit">
+        Verificar licencia
+      </button>
+    </form>
+    <p id="na-license-message" role="status"></p>
+  </div>
+</div>
+
+<script>
+(function () {
+  const API_URL =
+    'https://eyvsvtsbgwccbtytkuju.supabase.co';
+
+  const API_KEY =
+    'sb_publishable_4Mfk_ZP_BnVz9luy8CeF0A_Jh4zYV9R';
+
+  const screen = document.getElementById('na-license-screen');
+  const form = document.getElementById('na-license-form');
+  const input = document.getElementById('na-license-code');
+  const button = document.getElementById('na-license-button');
+  const message = document.getElementById('na-license-message');
+
+  input.value = localStorage.getItem('na_license_code') || '';
+
+  async function verifyLicense(code) {
+    button.disabled = true;
+    message.textContent = 'Verificando licencia...';
+
+    try {
+      const response = await fetch(
+        API_URL + '/rest/v1/rpc/validate_license',
+        {
+          method: 'POST',
+          headers: {
+            'apikey': API_KEY,
+            'Content-Type': 'application/json',
+            'Content-Profile': 'api'
+          },
+          body: JSON.stringify({
+            p_license_code: code
+          })
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          'No se pudo consultar la API (' + response.status +
+          '). Revisá la configuración de Supabase.'
+        );
+      }
+
+      const result = await response.json();
+      const license = Array.isArray(result) ? result[0] : result;
+
+      if (!license || license.valid !== true) {
+        localStorage.removeItem('na_license_code');
+        message.textContent =
+          'Licencia inválida, vencida o inactiva.';
+        return;
+      }
+
+      localStorage.setItem('na_license_code', code);
+      message.textContent =
+        'Licencia activa: ' + license.business_name;
+
+      screen.remove();
+    } catch (error) {
+      message.textContent =
+        error.message || 'Error al verificar la licencia.';
+    } finally {
+      button.disabled = false;
+    }
+  }
+
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    const code = input.value.trim();
+
+    if (code) verifyLicense(code);
+  });
+
+  if (input.value.trim()) {
+    verifyLicense(input.value.trim());
+  }
+})();
+</script>
+<!-- FIN VALIDACION DE LICENCIA -->
 <!doctype html>
 <html lang="es">
 <head>
