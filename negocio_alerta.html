@@ -1,54 +1,4 @@
-<!-- NEGOCIO ALERTA
-#na-clientes-section .na-actions {
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-}
-#na-clientes-section .na-btn {
-  border:0;
-  border-radius:10px;
-  padding:11px 14px;
-  background:#173f35;
-  color:white;
-  font:inherit;
-  cursor:pointer;
-}
-#na-clientes-section .na-small {
-  border:1px solid #dce5df;
-  border-radius:9px;
-  padding:8px 10px;
-  background:white;
-  color:#173f35;
-  cursor:pointer;
-}
-#na-clientes-section .na-muted {
-  color:#65736c;
-  font-size:13px;
-}
-#na-clientes-section .na-total {
-  font-size:25px;
-  font-weight:750;
-  color:#173f35;
-}
-@media(max-width:380px) {
-  #na-clientes-section .na-form {
-    grid-template-columns:1fr;
-  }
-  #na-clientes-section .na-full {
-    grid-column:auto;
-  }
-}
-</style>
-
-<script id="na-clientes-tickets-script">
-(function () {
-  "use strict";
-
-  // Reutiliza el almacenamiento de Negocio Alerta.
-  if (!Array.isArray(state.clients)) state.clients = [];
-  if (!Array.isArray(state.tickets)) state.tickets = [];
-
-  // Agregar la nueva sección al menú existente.
+// Agregar la nueva sección al menú existente.
   const nav = document.querySelector(".tabs");
   const section = document.createElement("section");
 
@@ -706,9 +656,7 @@ button:focus-visible {
       selectores.join(",")
     );
 
-    elementos.forEach(function (elemento, indice) {
-      if (elemento.dataset.naPremiumReady) return;
-
+    
       elemento.dataset.naPremiumReady = "1";
       elemento.classList.add("na-premium-reveal");
       elemento.style.animationDelay =
@@ -721,9 +669,7 @@ button:focus-visible {
       "DOMContentLoaded",
       iniciarAnimacionesPremium,
       { once: true }
-    );
-  } else {
-    iniciarAnimacionesPremium();
+      iniciarAnimacionesPremium();
   }
 })();
 </script>
