@@ -17,6 +17,285 @@
   --red:#a53b35;
 }
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+(function () {
+  "use strict";
+
+  const SUPABASE_URL =
+    "https://eyvsvtsbgwccbtytkuju.supabase.co";
+
+  const SUPABASE_KEY =
+    "sb_publishable_4Mfk_ZP_BnVz9luy8CeF0A_Jh4zYV9R";
+
+  const client = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    }
+  );
+
+  window.naAuthClient = client;
+  window.naCloudReady = false;
+
+  const screen = document.getElementById("na-auth-screen");
+  const form = document.getElementById("na-auth-form");
+  const emailInput = document.getElementById("na-auth-email");
+  const passwordInput = document.getElementById("na-auth-password");
+  const message = document.getElementById("na-auth-message");
+  const loginButton = document.getElementById("na-auth-login");
+  const registerButton = document.getElementById("na-auth-register");
+  const resetButton = document.getElementById("na-auth-reset");
+
+  let busy = false;
+
+  function showMessage(text) {
+    message.textContent = text;
+  }
+
+  function showAuth() {
+    window.naCloudReady = false;
+    screen.style.display = "flex";
+  }
+
+  function hideAuth() {
+    screen.style.display = "none";
+  }
+
+  function setBusy(value) {
+    busy = value;
+    loginButton.disabled = value;
+    registerButton.disabled = value;
+    resetButton.disabled = value;
+  }
+
+  async function withBusy(action) {
+    if (busy) return;
+
+    setBusy(true);
+    try {
+      await action();
+    } catch (error) {
+      showMessage(error.message || "Ocurrió un error.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function email() {
+    return emailInput.value.trim().toLowerCase();
+  }
+
+  function password() {
+    return passwordInput.value;
+  }
+
+  function validInput() {
+    if (!emailInput.checkValidity()) {
+      showMessage("Ingresá un correo electrónico válido.");
+      return false;
+    }
+
+    if (password().length < 8) {
+      showMessage("La contraseña debe tener al menos 8 caracteres.");
+      return false;
+    }
+
+    return true;
+  }
+
+  async function saveCloudData() {
+    const { data: { user }, error: userError } =
+      await client.auth.getUser();
+
+    if (userError || !user) {
+      throw new Error("Iniciá sesión para guardar tus datos.");
+    }
+
+    const appData = {
+      products: state.products,
+      sales: state.sales,
+      orders: state.orders,
+      clients: state.clients,
+      tickets: state.tickets
+    };
+
+    const { error } = await client
+      .from("na_user_data")
+      .upsert({
+        user_id: user.id,
+        app_data: appData,
+        updated_at: new Date().toISOString()
+      }, {
+        onConflict: "user_id"
+      });
+
+    if (error) throw error;
+  }
+
+  window.naSaveCloudData = async function () {
+    if (!window.naCloudReady) return;
+    await saveCloudData();
+  };
+
+  async function loadCloudData() {
+    const { data: { user }, error: userError } =
+      await client.auth.getUser();
+
+    if (userError || !user) {
+      throw new Error("No se pudo comprobar tu cuenta.");
+    }
+
+    const { data, error } = await client
+      .from("na_user_data")
+      .select("app_data")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    if (data && data.app_data) {
+      const saved = data.app_data;
+
+      state = {
+        products: Array.isArray(saved.products) ? saved.products : [],
+        sales: Array.isArray(saved.sales) ? saved.sales : [],
+        orders: Array.isArray(saved.orders) ? saved.orders : [],
+        clients: Array.isArray(saved.clients) ? saved.clients : [],
+        tickets: Array.isArray(saved.tickets) ? saved.tickets : []
+      };
+
+      localStorage.setItem("na-v1", JSON.stringify(state));
+      render();
+    } else {
+      // Primera entrada de esta cuenta.
+      // Conserva los datos locales iniciales y los copia a la nube.
+      await saveCloudData();
+    }
+
+    window.naCloudReady = true;
+  }
+
+  async function finishLogin() {
+    await loadCloudData();
+    hideAuth();
+
+    // La validación de licencia existente sigue siendo obligatoria.
+    // No se modifica la pantalla ni la función de validación.
+    showMessage("");
+  }
+
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+
+    if (!validInput()) return;
+
+    withBusy(async () => {
+      const { error } = await client.auth.signInWithPassword({
+        email: email(),
+        password: password()
+      });
+
+      if (error) throw error;
+
+      await finishLogin();
+    });
+  });
+
+  registerButton.addEventListener("click", () => {
+    if (!validInput()) return;
+
+    withBusy(async () => {
+      const { data, error } = await client.auth.signUp({
+        email: email(),
+        password: password()
+      });
+
+      if (error) throw error;
+
+      if (!data.session) {
+        showMessage(
+          "Cuenta creada. Revisá tu correo para confirmar el registro. Después iniciá sesión."
+        );
+        return;
+      }
+
+      await finishLogin();
+    });
+  });
+
+  resetButton.addEventListener("click", () => {
+    if (!emailInput.checkValidity()) {
+      showMessage("Primero ingresá tu correo electrónico.");
+      return;
+    }
+
+    withBusy(async () => {
+      const { error } = await client.auth.resetPasswordForEmail(
+        email(),
+        {
+          redirectTo: window.location.origin +
+            window.location.pathname
+        }
+      );
+
+      if (error) throw error;
+
+      showMessage(
+        "Si el correo está registrado, recibirás instrucciones para restablecer la contraseña."
+      );
+    });
+  });
+
+  // Función para mostrar la pantalla de acceso si se cierra sesión.
+  window.naLogoutUser = async function () {
+    window.naCloudReady = false;
+
+    const { error } = await client.auth.signOut();
+
+    if (error) {
+      showMessage("No se pudo cerrar la sesión de usuario.");
+      return;
+    }
+
+    showAuth();
+    showMessage("Cerraste sesión. Podés volver a ingresar.");
+  };
+
+  // Recuperar una sesión existente al abrir la aplicación.
+  (async function init() {
+    showAuth();
+
+    const { data, error } = await client.auth.getSession();
+
+    if (error) {
+      showMessage("No se pudo recuperar la sesión. Iniciá sesión nuevamente.");
+      return;
+    }
+
+    if (data.session) {
+      try {
+        await finishLogin();
+      } catch (err) {
+        window.naCloudReady = false;
+        showAuth();
+        showMessage(
+          "No se pudieron recuperar tus datos: " +
+          (err.message || "error de conexión")
+        );
+      }
+    }
+  })();
+
+})();
+</script>
+
 * { box-sizing:border-box; }
 
 body {
