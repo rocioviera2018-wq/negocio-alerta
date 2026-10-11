@@ -192,4 +192,19 @@ window.adjust=(id,n)=>{let p=state.products.find(x=>x.id===id);if(p)p.qty=Math.m
     Cerrar sesión
   </button>
 </header>
+<button id="btnCerrarSesion" type="button">
+  Cerrar sesión
+</button>
+
+<script>
+document.getElementById("btnCerrarSesion")
+  .addEventListener("click", function () {
+    if (confirm("¿Querés cerrar sesión?")) {
+      localStorage.removeItem("na_session");
+      sessionStorage.clear();
+      window.location.href = "index.html";
+    }
+  });
+</script>
+
 
