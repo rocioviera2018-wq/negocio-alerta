@@ -1,4 +1,131 @@
-// Agregar la nueva sección al menú existente.
+<!-- NEGOCIO ALERTA: AJUSTES DEL PANEL -->
+<style>
+#na-ajustes-btn {
+  background: #173f35;
+  color: white;
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+#na-ajustes {
+  background: #f3f7f4;
+  color: #182520;
+  padding: 18px;
+  border-radius: 16px;
+  margin: 16px 0;
+  border: 1px solid #d8e7de;
+}
+#na-ajustes h2 {
+  color: #173f35;
+  margin-top: 0;
+}
+#na-ajustes label {
+  display: block;
+  margin-top: 12px;
+  font-weight: bold;
+}
+#na-ajustes input,
+#na-ajustes select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  margin-top: 6px;
+  border: 1px solid #c8d8ce;
+  border-radius: 10px;
+  background: white;
+  font-size: 15px;
+}
+#na-ajustes .na-guardar {
+  width: 100%;
+  padding: 13px;
+  margin-top: 18px;
+  border: 0;
+  border-radius: 10px;
+  background: #176b4d;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+}
+#na-ajustes-msg {
+  color: #176b4d;
+  font-weight: bold;
+}
+</style>
+
+<div id="na-ajustes">
+  <h2>⚙️ Ajustes del panel</h2>
+  <p>Personalizá los datos de tu negocio.</p>
+
+  <label for="na-nombre">Nombre del negocio</label>
+  <input id="na-nombre" placeholder="Ej.: Mi negocio">
+
+  <label for="na-telefono">Teléfono de contacto</label>
+  <input id="na-telefono" type="tel" placeholder="Tu teléfono">
+
+  <label for="na-color">Color del panel</label>
+  <select id="na-color">
+    <option value="#173f35">Verde profesional</option>
+    <option value="#14532d">Verde oscuro</option>
+    <option value="#1d4ed8">Azul</option>
+    <option value="#6d28d9">Violeta</option>
+  </select>
+
+  <button class="na-guardar" type="button"
+    onclick="naGuardarAjustes()">
+    Guardar ajustes
+  </button>
+
+  <p id="na-ajustes-msg" role="status"></p>
+</div>
+
+<script>
+(function () {
+  const campoNombre = document.getElementById('na-nombre');
+  const campoTelefono = document.getElementById('na-telefono');
+  const campoColor = document.getElementById('na-color');
+
+  try {
+    const ajustes = JSON.parse(
+      localStorage.getItem('na-ajustes-panel') || '{}'
+    );
+
+    campoNombre.value = ajustes.nombre || '';
+    campoTelefono.value = ajustes.telefono || '';
+    campoColor.value = ajustes.color || '#173f35';
+
+    document.documentElement.style.setProperty(
+      '--green',
+      campoColor.value
+    );
+  } catch (e) {}
+})();
+
+function naGuardarAjustes() {
+  const ajustes = {
+    nombre: document.getElementById('na-nombre').value.trim(),
+    telefono: document.getElementById('na-telefono').value.trim(),
+    color: document.getElementById('na-color').value
+  };
+
+  try {
+    localStorage.setItem('na-ajustes-panel', JSON.stringify(ajustes));
+
+    document.documentElement.style.setProperty(
+      '--green',
+      ajustes.color
+    );
+
+    document.getElementById('na-ajustes-msg').textContent =
+      '✅ Ajustes guardados en este dispositivo.';
+  } catch (e) {
+    document.getElementById('na-ajustes-msg').textContent =
+      'No se pudieron guardar los ajustes.';
+  }
+}
+</script> // Agregar la nueva sección al menú existente.
   const nav = document.querySelector(".tabs");
   const section = document.createElement("section");
 
