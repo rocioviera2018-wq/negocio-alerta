@@ -204,7 +204,187 @@ document.getElementById("btnCerrarSesion")
       sessionStorage.clear();
       window.location.href = "index.html";
     }
-  });
+  });<!-- NEGOCIO ALERTA - PREMIUM MOTION -->
+<style id="na-premium-motion">
+:root {
+  --na-premium-green: #173f35;
+  --na-premium-mint: #dff3e9;
+  --na-premium-shadow: 0 8px 28px rgba(23,63,53,.09);
+}
+
+/* Movimiento suave y profesional */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Paneles y tarjetas existentes */
+.card,
+.stat-card,
+.product-card,
+.dashboard-card,
+.panel,
+.sidebar,
+.menu,
+nav {
+  transition:
+    transform .28s ease,
+    box-shadow .28s ease,
+    background-color .28s ease,
+    opacity .28s ease;
+}
+
+/* Entrada progresiva */
+.na-premium-reveal {
+  animation: naPremiumReveal .48s ease both;
+}
+
+@keyframes naPremiumReveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Efectos táctiles */
+button,
+.btn,
+[role="button"],
+input[type="submit"] {
+  transition:
+    transform .18s ease,
+    box-shadow .22s ease,
+    filter .22s ease;
+}
+
+button:active,
+.btn:active,
+[role="button"]:active,
+input[type="submit"]:active {
+  transform: scale(.97);
+  filter: brightness(.96);
+}
+
+/* Campos modernos */
+input,
+select,
+textarea {
+  transition: border-color .2s ease,
+              box-shadow .2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--na-premium-green);
+  box-shadow: 0 0 0 3px rgba(23,63,53,.12);
+  outline: none;
+}
+
+/* Menú y navegación */
+nav a,
+.sidebar a,
+.menu a,
+.nav-link {
+  transition:
+    color .2s ease,
+    background-color .2s ease,
+    padding-left .2s ease;
+}
+
+nav a:focus-visible,
+.sidebar a:focus-visible,
+.menu a:focus-visible,
+.nav-link:focus-visible,
+button:focus-visible {
+  outline: 2px solid #4b9b78;
+  outline-offset: 3px;
+}
+
+/* Evitar efectos incómodos en móviles */
+@media (hover: hover) {
+  .card:hover,
+  .stat-card:hover,
+  .product-card:hover,
+  .dashboard-card:hover,
+  .panel:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--na-premium-shadow);
+  }
+
+  button:hover,
+  .btn:hover {
+    box-shadow: 0 5px 16px rgba(23,63,53,.15);
+  }
+}
+
+/* Respeto por accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+
+<script id="na-premium-motion-script">
+(function () {
+  "use strict";
+
+  // No modifica licencias, autenticación ni Supabase.
+  function iniciarAnimacionesPremium() {
+    if (window.matchMedia &&
+        window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches) {
+      return;
+    }
+
+    var selectores = [
+      ".card",
+      ".stat-card",
+      ".product-card",
+      ".dashboard-card",
+      ".panel"
+    ];
+
+    var elementos = document.querySelectorAll(
+      selectores.join(",")
+    );
+
+    elementos.forEach(function (elemento, indice) {
+      if (elemento.dataset.naPremiumReady) return;
+
+      elemento.dataset.naPremiumReady = "1";
+      elemento.classList.add("na-premium-reveal");
+      elemento.style.animationDelay =
+        Math.min(indice * 45, 270) + "ms";
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener(
+      "DOMContentLoaded",
+      iniciarAnimacionesPremium,
+      { once: true }
+    );
+  } else {
+    iniciarAnimacionesPremium();
+  }
+})();
+</script>
+<!-- FIN NEGOCIO ALERTA PREMIUM -->
 </script>
 
 
