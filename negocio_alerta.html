@@ -23,7 +23,39 @@
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-}
+} 
+<button id="na-google-login" type="button">
+  Continuar con Gmail
+</button>
+
+<p id="na-google-mensaje"></p>
+
+<script>
+document.getElementById("na-google-login")
+  .addEventListener("click", async () => {
+    const mensaje =
+      document.getElementById("na-google-mensaje");
+
+    if (!window.supabaseClient) {
+      mensaje.textContent =
+        "Falta configurar Supabase.";
+      return;
+    }
+
+    const { error } =
+      await window.supabaseClient.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: window.location.origin
+        }
+      });
+
+    if (error) {
+      mensaje.textContent = error.message;
+    }
+  });
+</script>
+
 #na-google-mensaje {
   font-size: 14px;
   color: #173f35;
