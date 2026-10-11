@@ -169,3 +169,15 @@ $('saleProduct').innerHTML='<option value="">Elegí un producto</option>'+state.
 $('recent').innerHTML=state.sales.length?state.sales.slice(0,4).map(s=>`<div class="item"><div><strong>${esc(s.product)} × ${s.qty}</strong><span class="muted">${s.date}</span></div><strong>${money(s.total)}</strong></div>`).join(''):'<div class="empty">Tus ventas aparecerán acá.</div>';$('orderList').innerHTML=state.orders.length?state.orders.map(o=>`<div class="item"><div><strong>${esc(o.customer)}</strong><span class="muted">${esc(o.detail)} · ${o.date}</span><div><span class="pill">${esc(o.status)}</span></div></div><div class="actions"><button class="secondary" onclick="nextOrder(${o.id})">Avanzar</button><button class="secondary danger" onclick="removeO(${o.id})">Borrar</button></div></div>`).join(''):'<div class="empty">No hay pedidos guardados.</div>'}
 window.adjust=(id,n)=>{let p=state.products.find(x=>x.id===id);if(p)p.qty=Math.max(0,p.qty+n);save()};window.removeP=id=>{if(confirm('¿Borrar este producto?')){state.products=state.products.filter(x=>x.id!==id);save()}};window.removeO=id=>{if(confirm('¿Borrar este pedido?')){state.orders=state.orders.filter(x=>x.id!==id);save()}};window.nextOrder=id=>{let o=state.orders.find(x=>x.id===id);if(o){o.status=o.status==='Pendiente'?'En preparación':o.status==='En preparación'?'Entregado':'Pendiente';save()}};render();
 </script></body></html>
+<body>
+<header>
+  <h1>🌿 Negocio Alerta</h1>
+  <p>Tu negocio organizado, desde el celular.</p>
+  <button
+    type="button"
+    onclick="if(confirm('¿Querés cerrar sesión?')){localStorage.removeItem('na_license_code');location.reload();}"
+    style="margin-top:14px;padding:10px 16px;border:1px solid #d8e9e0;border-radius:10px;background:white;color:#173f35;font-weight:bold;">
+    Cerrar sesión
+  </button>
+</header>
+
