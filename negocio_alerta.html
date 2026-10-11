@@ -1,392 +1,796 @@
-<!-- NEGOCIO ALERTA: AJUSTES DEL PANEL -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#173f35">
+<title>Negocio Alerta</title>
+
 <style>
-#na-ajustes-btn {
-  background: #173f35;
-  color: white;
-  border: 0;
-  border-radius: 12px;
-  padding: 12px 16px;
-  font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
+:root {
+  --green:#173f35;
+  --mint:#dff3e9;
+  --paper:#f6f8f6;
+  --ink:#182520;
+  --muted:#65736c;
+  --line:#dce5df;
+  --red:#a53b35;
 }
-#na-ajustes {
-  background: #f3f7f4;
-  color: #182520;
-  padding: 18px;
-  border-radius: 16px;
-  margin: 16px 0;
-  border: 1px solid #d8e7de;
+
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:system-ui,-apple-system,Segoe UI,sans-serif;
+  -webkit-tap-highlight-color:transparent;
 }
-#na-ajustes h2 {
-  color: #173f35;
-  margin-top: 0;
+
+header {
+  background:var(--green);
+  color:white;
+  padding:22px 18px;
+  border-radius:0 0 24px 24px;
 }
-#na-ajustes label {
-  display: block;
-  margin-top: 12px;
-  font-weight: bold;
+
+header h1 { margin:0; font-size:25px; }
+header p { margin:6px 0 0; color:#d8e9e0; font-size:14px; }
+
+.wrap { max-width:760px; margin:auto; padding:16px; }
+
+.stats {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:9px;
 }
-#na-ajustes input,
-#na-ajustes select {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px;
-  margin-top: 6px;
-  border: 1px solid #c8d8ce;
-  border-radius: 10px;
-  background: white;
-  font-size: 15px;
+
+.stat,.panel {
+  background:white;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:13px;
 }
-#na-ajustes .na-guardar {
-  width: 100%;
-  padding: 13px;
-  margin-top: 18px;
-  border: 0;
-  border-radius: 10px;
-  background: #176b4d;
-  color: white;
-  font-weight: bold;
-  font-size: 16px;
+
+.stat small { display:block; color:var(--muted); font-size:12px; }
+.stat strong { display:block; font-size:21px; margin-top:5px; overflow-wrap:anywhere; }
+
+.tabs {
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  margin:16px 0;
+  padding-bottom:3px;
 }
-#na-ajustes-msg {
-  color: #176b4d;
-  font-weight: bold;
+
+.tabs button {
+  flex-shrink:0;
+  white-space:nowrap;
+  border:1px solid var(--line);
+  background:white;
+  border-radius:999px;
+  padding:10px 14px;
+  color:var(--ink);
 }
-</style>
 
-<div id="na-ajustes">
-  <h2>⚙️ Ajustes del panel</h2>
-  <p>Personalizá los datos de tu negocio.</p>
+.tabs button.active {
+  background:var(--green);
+  color:white;
+  border-color:var(--green);
+}
 
-  <label for="na-nombre">Nombre del negocio</label>
-  <input id="na-nombre" placeholder="Ej.: Mi negocio">
+h2 { font-size:19px; margin:4px 0 12px; }
+.panel { margin-bottom:13px; }
 
-  <label for="na-telefono">Teléfono de contacto</label>
-  <input id="na-telefono" type="tel" placeholder="Tu teléfono">
+.form,.na-form {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
 
-  <label for="na-color">Color del panel</label>
-  <select id="na-color">
-    <option value="#173f35">Verde profesional</option>
-    <option value="#14532d">Verde oscuro</option>
-    <option value="#1d4ed8">Azul</option>
-    <option value="#6d28d9">Violeta</option>
-  </select>
+input,select,textarea {
+  width:100%;
+  min-width:0;
+  padding:12px;
+  border:1px solid #cbd8d0;
+  border-radius:10px;
+  background:white;
+  color:var(--ink);
+  font:inherit;
+}
 
-  <button class="na-guardar" type="button"
-    onclick="naGuardarAjustes()">
-    Guardar ajustes
-  </button>
+textarea { min-height:85px; resize:vertical; }
 
-  <p id="na-ajustes-msg" role="status"></p>
-</div>
+input:focus,select:focus,textarea:focus {
+  border-color:var(--green);
+  box-shadow:0 0 0 3px rgba(23,63,53,.12);
+  outline:none;
+}
 
-<script>
-(function () {
-  const campoNombre = document.getElementById('na-nombre');
-  const campoTelefono = document.getElementById('na-telefono');
-  const campoColor = document.getElementById('na-color');
+.full { grid-column:1/-1; }
 
-  try {
-    const ajustes = JSON.parse(
-      localStorage.getItem('na-ajustes-panel') || '{}'
-    );
+button { cursor:pointer; font:inherit; }
 
-    campoNombre.value = ajustes.nombre || '';
-    campoTelefono.value = ajustes.telefono || '';
-    campoColor.value = ajustes.color || '#173f35';
+button:disabled { opacity:.6; cursor:not-allowed; }
 
-    document.documentElement.style.setProperty(
-      '--green',
-      campoColor.value
-    );
-  } catch (e) {}
-})();
+button.primary,.na-btn {
+  border:0;
+  border-radius:10px;
+  background:var(--green);
+  color:white;
+  padding:12px 14px;
+  font-weight:650;
+}
 
-function naGuardarAjustes() {
-  const ajustes = {
-    nombre: document.getElementById('na-nombre').value.trim(),
-    telefono: document.getElementById('na-telefono').value.trim(),
-    color: document.getElementById('na-color').value
-  };
+button.secondary,.na-small {
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:white;
+  color:var(--ink);
+  padding:8px 10px;
+  font-size:13px;
+}
 
-  try {
-    localStorage.setItem('na-ajustes-panel', JSON.stringify(ajustes));
+button.danger { color:var(--red); }
 
-    document.documentElement.style.setProperty(
-      '--green',
-      ajustes.color
-    );
+.item,.na-row {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:12px 0;
+  border-bottom:1px solid #edf1ee;
+}
 
-    document.getElementById('na-ajustes-msg').textContent =
-      '✅ Ajustes guardados en este dispositivo.';
-  } catch (e) {
-    document.getElementById('na-ajustes-msg').textContent =
-      'No se pudieron guardar los ajustes.';
+.item:last-child,.na-row:last-child { border-bottom:0; }
+
+.item strong,.na-row strong { display:block; overflow-wrap:anywhere; }
+
+.muted,.na-muted { color:var(--muted); font-size:13px; overflow-wrap:anywhere; }
+
+.pill {
+  display:inline-block;
+  background:var(--mint);
+  color:#245a43;
+  border-radius:999px;
+  padding:3px 8px;
+  font-size:12px;
+}
+
+.pill.low { background:#ffe7e3; color:#8a302b; }
+
+.actions,.na-actions { display:flex; gap:6px; flex-wrap:wrap; }
+
+.empty { color:var(--muted); padding:14px 0; }
+
+.hidden { display:none!important; }
+
+.total,.na-total { font-size:23px; font-weight:750; }
+
+.notice {
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.5;
+  margin:12px 2px 26px;
+}
+
+.na-field-label {
+  display:block;
+  font-size:14px;
+  font-weight:650;
+  margin:10px 0 5px;
+}
+
+.na-save {
+  width:100%;
+  margin-top:16px;
+}
+
+.na-message {
+  font-size:13px;
+  overflow-wrap:anywhere;
+}
+
+.na-reveal { animation:naReveal .35s ease both; }
+
+@keyframes naReveal {
+  from { opacity:0; transform:translateY(7px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+@media (hover:hover) {
+  .panel,.stat,.item,.na-row {
+    transition:box-shadow .2s ease;
+  }
+  .panel:hover,.stat:hover {
+    box-shadow:0 5px 18px rgba(23,63,53,.08);
   }
 }
-</script> // Agregar la nueva sección al menú existente.
-  const nav = document.querySelector(".tabs");
-  const section = document.createElement("section");
 
-  section.id = "na-clientes-section";
-  section.className = "hidden";
+@media(max-width:380px) {
+  .stat { padding:9px; }
+  .stat strong { font-size:17px; }
+  .form,.na-form { grid-template-columns:1fr; }
+  .full { grid-column:auto; }
+  .item,.na-row { align-items:flex-start; }
+}
 
-  section.innerHTML = `
-    <div class="na-box">
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after {
+    animation:none!important;
+    transition:none!important;
+    scroll-behavior:auto!important;
+  }
+}
+
+/* Pantalla de licencia */
+#na-license-screen {
+  position:fixed;
+  inset:0;
+  z-index:999999;
+  background:#f3f7f4;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+  overflow-y:auto;
+}
+
+#na-license-card {
+  background:white;
+  border-radius:18px;
+  padding:26px 20px;
+  width:100%;
+  max-width:380px;
+  box-shadow:0 8px 30px #0002;
+  text-align:center;
+}
+
+#na-license-card h2 { color:#173f35; }
+
+#na-license-card input,
+#na-license-card button {
+  width:100%;
+  padding:13px;
+  margin-top:12px;
+  border-radius:9px;
+  font-size:16px;
+}
+
+#na-license-card button {
+  border:0;
+  background:#173f35;
+  color:white;
+  font-weight:bold;
+}
+
+#na-license-message {
+  font-size:13px;
+  overflow-wrap:anywhere;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🌿 Negocio Alerta</h1>
+  <p>Tu negocio organizado, desde el celular.</p>
+  <button id="na-logout" type="button"
+    style="margin-top:14px;padding:10px 16px;border:1px solid #d8e9e0;border-radius:10px;background:white;color:#173f35;font-weight:bold">
+    Cerrar sesión
+  </button>
+</header>
+
+<div class="wrap" id="na-app">
+
+  <div class="stats">
+    <div class="stat">
+      <small>Productos</small>
+      <strong id="statProducts">0</strong>
+    </div>
+    <div class="stat">
+      <small>Stock bajo</small>
+      <strong id="statLow">0</strong>
+    </div>
+    <div class="stat">
+      <small>Ventas de hoy</small>
+      <strong id="statSales">$0</strong>
+    </div>
+  </div>
+
+  <nav class="tabs" aria-label="Menú principal">
+    <button class="active" data-tab="home">Resumen</button>
+    <button data-tab="products">Productos</button>
+    <button data-tab="sales">Ventas</button>
+    <button data-tab="orders">Pedidos</button>
+    <button data-tab="na-clientes-section">Clientes y tickets</button>
+    <button data-tab="na-ajustes-section">Ajustes</button>
+  </nav>
+
+  <section id="home">
+    <div class="panel">
+      <h2>Atención para hoy</h2>
+      <div id="alerts" class="muted"></div>
+    </div>
+    <div class="panel">
+      <h2>Últimos movimientos</h2>
+      <div id="recent" class="empty"></div>
+    </div>
+  </section>
+
+  <section id="products" class="hidden">
+    <div class="panel">
+      <h2>Agregar producto</h2>
+      <form id="productForm" class="form">
+        <input id="pName" class="full" placeholder="Nombre del producto" maxlength="80" required>
+        <input id="pPrice" type="number" min="0" step="0.01" placeholder="Precio ($)" required>
+        <input id="pQty" type="number" min="0" max="1000000" step="1" placeholder="Cantidad" required>
+        <input id="pMin" type="number" min="0" max="1000000" step="1" value="3" placeholder="Avisar si baja de" required>
+        <button class="primary full" type="submit">Guardar producto</button>
+      </form>
+    </div>
+    <div class="panel">
+      <h2>Tu catálogo</h2>
+      <div id="productList" class="empty"></div>
+    </div>
+  </section>
+
+  <section id="sales" class="hidden">
+    <div class="panel">
+      <h2>Registrar una venta</h2>
+      <form id="saleForm" class="form">
+        <select id="saleProduct" class="full" required>
+          <option value="">Elegí un producto</option>
+        </select>
+        <input id="saleQty" type="number" min="1" step="1" value="1" placeholder="Cantidad" required>
+        <input id="saleCustomer" placeholder="Cliente (opcional)" maxlength="80">
+        <button class="primary full" type="submit">Confirmar venta</button>
+      </form>
+      <p class="muted">Al confirmar, se descuenta el stock y se registra el importe.</p>
+    </div>
+    <div class="panel">
+      <h2>Historial de ventas</h2>
+      <div id="salesList" class="empty"></div>
+    </div>
+  </section>
+
+  <section id="orders" class="hidden">
+    <div class="panel">
+      <h2>Nuevo pedido</h2>
+      <form id="orderForm" class="form">
+        <input id="oCustomer" placeholder="Nombre del cliente" maxlength="80" required>
+        <input id="oDetail" placeholder="Pedido / detalle" maxlength="120" required>
+        <select id="oStatus" class="full">
+          <option>Pendiente</option>
+          <option>En preparación</option>
+          <option>Entregado</option>
+        </select>
+        <button class="primary full" type="submit">Guardar pedido</button>
+      </form>
+    </div>
+    <div class="panel">
+      <h2>Seguimiento</h2>
+      <div id="orderList" class="empty"></div>
+    </div>
+  </section>
+
+  <section id="na-clientes-section" class="hidden">
+    <div class="panel">
       <h2>👥 Registrar cliente</h2>
       <form id="na-client-form" class="na-form">
-        <input id="na-c-name" class="na-full"
-          placeholder="Nombre y apellido" maxlength="100" required>
-        <input id="na-c-phone" type="tel"
-          placeholder="Teléfono" maxlength="30">
-        <input id="na-c-address"
-          placeholder="Dirección" maxlength="150">
-        <textarea id="na-c-notes" class="na-full"
-          placeholder="Observaciones (opcional)"
-          maxlength="300"></textarea>
-        <button class="na-btn na-full" type="submit">
-          Guardar cliente
-        </button>
+        <input id="na-c-name" class="full" placeholder="Nombre y apellido" maxlength="100" required>
+        <input id="na-c-phone" type="tel" placeholder="Teléfono" maxlength="30">
+        <input id="na-c-address" class="full" placeholder="Dirección" maxlength="150">
+        <textarea id="na-c-notes" class="full" placeholder="Observaciones (opcional)" maxlength="300"></textarea>
+        <button class="na-btn full" type="submit">Guardar cliente</button>
       </form>
     </div>
 
-    <div class="na-box">
+    <div class="panel">
       <h2>Buscar clientes</h2>
-      <input id="na-c-search"
-        placeholder="Buscar por nombre o teléfono">
-      <div id="na-c-list" class="na-muted">
-        Todavía no hay clientes.
-      </div>
+      <input id="na-c-search" placeholder="Buscar por nombre o teléfono">
+      <div id="na-c-list" class="na-muted">Todavía no hay clientes.</div>
     </div>
 
-    <div class="na-box">
+    <div class="panel">
       <h2>🧾 Crear ticket</h2>
       <form id="na-ticket-form" class="na-form">
-        <select id="na-t-client" class="na-full" required>
+        <select id="na-t-client" class="full" required>
           <option value="">Elegí un cliente</option>
         </select>
-        <input id="na-t-detail" class="na-full"
-          placeholder="Producto o concepto" maxlength="180" required>
-        <input id="na-t-qty" type="number"
-          min="1" max="100000" step="1"
-          value="1" placeholder="Cantidad" required>
-        <input id="na-t-price" type="number"
-          min="0" max="1000000000" step="0.01"
-          placeholder="Precio unitario ($)" required>
-        <div class="na-full">
+        <input id="na-t-detail" class="full" placeholder="Producto o concepto" maxlength="180" required>
+        <input id="na-t-qty" type="number" min="1" max="100000" step="1" value="1" placeholder="Cantidad" required>
+        <input id="na-t-price" type="number" min="0" max="1000000000" step="0.01" placeholder="Precio unitario ($)" required>
+        <div class="full">
           <div class="na-muted">Total del ticket</div>
           <div id="na-t-total" class="na-total">$0</div>
         </div>
-        <button class="na-btn na-full" type="submit">
-          Guardar ticket
-        </button>
+        <button class="na-btn full" type="submit">Guardar ticket</button>
       </form>
-      <p class="na-muted">
-        Este comprobante es un ticket interno de venta,
-        no una factura fiscal.
-      </p>
+      <p class="na-muted">Comprobante interno de venta; no es una factura fiscal.</p>
     </div>
 
-    <div class="na-box">
+    <div class="panel">
       <h2>📋 Historial de tickets</h2>
-      <div id="na-t-list" class="na-muted">
-        Todavía no hay tickets.
-      </div>
+      <div id="na-t-list" class="na-muted">Todavía no hay tickets.</div>
     </div>
-  `;
+  </section>
 
-  nav.insertAdjacentHTML(
-    "beforeend",
-    '<button type="button" data-tab="na-clientes-section">Clientes y tickets</button>'
+  <section id="na-ajustes-section" class="hidden">
+    <div class="panel" id="na-ajustes">
+      <h2>⚙️ Ajustes del panel</h2>
+      <p class="muted">Personalizá los datos de tu negocio.</p>
+
+      <label class="na-field-label" for="na-nombre">Nombre del negocio</label>
+      <input id="na-nombre" maxlength="100" placeholder="Ej.: Mi negocio">
+
+      <label class="na-field-label" for="na-telefono">Teléfono de contacto</label>
+      <input id="na-telefono" type="tel" maxlength="30" placeholder="Tu teléfono">
+
+      <label class="na-field-label" for="na-color">Color del panel</label>
+      <select id="na-color">
+        <option value="#173f35">Verde profesional</option>
+        <option value="#14532d">Verde oscuro</option>
+        <option value="#1d4ed8">Azul</option>
+        <option value="#6d28d9">Violeta</option>
+      </select>
+
+      <button class="primary na-save" id="na-save-settings" type="button">Guardar ajustes</button>
+      <p id="na-ajustes-msg" class="na-message" role="status"></p>
+    </div>
+  </section>
+
+  <p class="notice">
+    Los datos comerciales se guardan localmente en este navegador.
+    Pueden perderse al borrar sus datos o cambiar de dispositivo.
+    Los tickets son comprobantes internos, no facturas fiscales.
+    No almacenes información sensible de clientes.
+  </p>
+</div>
+
+<!-- Validación de licencia -->
+<div id="na-license-screen">
+  <div id="na-license-card">
+    <h2>🌿 Negocio Alerta</h2>
+    <p>Ingresá tu código de licencia para continuar.</p>
+    <form id="na-license-form">
+      <input id="na-license-code" placeholder="Ej.: NA-PRUEBA-002" autocomplete="off" required>
+      <button id="na-license-button" type="submit">Verificar licencia</button>
+    </form>
+    <p id="na-license-message" role="status" aria-live="polite"></p>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/* Utilidades y almacenamiento */
+const $ = id => document.getElementById(id);
+
+const money = n => new Intl.NumberFormat("es-AR", {
+  style:"currency",
+  currency:"ARS",
+  maximumFractionDigits:2
+}).format(Number(n) || 0);
+
+const day = () => {
+  const d = new Date();
+  return d.getFullYear() + "-" +
+    String(d.getMonth()+1).padStart(2,"0") + "-" +
+    String(d.getDate()).padStart(2,"0");
+};
+
+function esc(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[c]);
+}
+
+function loadState() {
+  const empty = {
+    products:[],
+    sales:[],
+    orders:[],
+    clients:[],
+    tickets:[]
+  };
+
+  try {
+    const data = JSON.parse(localStorage.getItem("na-v1") || "{}");
+
+    return {
+      products:Array.isArray(data.products) ? data.products : [],
+      sales:Array.isArray(data.sales) ? data.sales : [],
+      orders:Array.isArray(data.orders) ? data.orders : [],
+      clients:Array.isArray(data.clients) ? data.clients : [],
+      tickets:Array.isArray(data.tickets) ? data.tickets : []
+    };
+  } catch (error) {
+    return empty;
+  }
+}
+
+let state = loadState();
+
+function save() {
+  try {
+    localStorage.setItem("na-v1", JSON.stringify(state));
+    render();
+  } catch (error) {
+    alert("No se pudieron guardar los datos. Revisá el espacio disponible en el navegador.");
+  }
+}
+
+/* Navegación */
+const tabIds = [
+  "home",
+  "products",
+  "sales",
+  "orders",
+  "na-clientes-section",
+  "na-ajustes-section"
+];
+
+document.querySelectorAll(".tabs [data-tab]").forEach(button => {
+  button.addEventListener("click", () => {
+    const target = button.dataset.tab;
+
+    document.querySelectorAll(".tabs [data-tab]").forEach(b => {
+      b.classList.toggle("active", b === button);
+    });
+
+    tabIds.forEach(id => {
+      $(id).classList.toggle("hidden", id !== target);
+    });
+
+    render();
+  });
+});
+
+/* Productos */
+$("productForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const name = $("pName").value.trim();
+  const price = Number($("pPrice").value);
+  const qty = Number($("pQty").value);
+  const min = Number($("pMin").value);
+
+  if (!name || !Number.isFinite(price) || price < 0 ||
+      !Number.isInteger(qty) || qty < 0 ||
+      !Number.isInteger(min) || min < 0) {
+    alert("Revisá el nombre, precio, cantidad y mínimo de stock.");
+    return;
+  }
+
+  state.products.push({
+    id:Date.now(),
+    name,
+    price,
+    qty,
+    min
+  });
+
+  event.target.reset();
+  $("pMin").value = 3;
+  save();
+});
+
+window.adjust = (id, amount) => {
+  const product = state.products.find(p => p.id === id);
+  if (!product) return;
+
+  if (amount < 0 && product.qty < Math.abs(amount)) {
+    alert("El stock no puede ser negativo.");
+    return;
+  }
+
+  product.qty += amount;
+  save();
+};
+
+window.removeP = id => {
+  if (!confirm("¿Borrar este producto?")) return;
+  state.products = state.products.filter(p => p.id !== id);
+  save();
+};
+
+/* Ventas */
+$("saleForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const product = state.products.find(
+    p => p.id === Number($("saleProduct").value)
   );
 
-  document.querySelector(".wrap").appendChild(section);
+  const qty = Number($("saleQty").value);
 
-  // Navegación compatible con las pestañas existentes.
-  document.querySelectorAll("[data-tab]").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      document.querySelectorAll("[data-tab]").forEach(function (b) {
-        b.classList.toggle("active", b === btn);
-      });
-
-      ["home", "products", "sales", "orders",
-       "na-clientes-section"].forEach(function (id) {
-        const el = document.getElementById(id);
-        if (el) el.classList.toggle("hidden", id !== btn.dataset.tab);
-      });
-
-      render();
-    });
-  });
-
-  function renderClients() {
-    const search = $("na-c-search").value.trim().toLowerCase();
-
-    $("na-c-list").innerHTML = state.clients
-      .filter(function (c) {
-        return (c.name + " " + c.phone)
-          .toLowerCase().includes(search);
-      })
-      .map(function (c) {
-        return `
-          <div class="na-row">
-            <div>
-              <strong>${esc(c.name)}</strong>
-              <div class="na-muted">${esc(c.phone || "Sin teléfono")}</div>
-              <div class="na-muted">${esc(c.address || "")}</div>
-            </div>
-            <div class="na-actions">
-              <button type="button" class="na-small"
-                onclick="naEditClient(${c.id})">Editar</button>
-              <button type="button" class="na-small"
-                onclick="naDeleteClient(${c.id})">Borrar</button>
-            </div>
-          </div>`;
-      }).join("") || '<p class="na-muted">No hay clientes para mostrar.</p>';
-
-    $("na-t-client").innerHTML =
-      '<option value="">Elegí un cliente</option>' +
-      state.clients.map(function (c) {
-        return `<option value="${c.id}">${esc(c.name)}</option>`;
-      }).join("");
+  if (!product) {
+    alert("Elegí un producto.");
+    return;
   }
 
-  function renderTickets() {
-    $("na-t-list").innerHTML = state.tickets.map(function (t) {
-      return `
-        <div class="na-row">
-          <div>
-            <strong>Ticket #${t.id}</strong>
-            <div>${esc(t.customer)} · ${esc(t.detail)}</div>
-            <div class="na-muted">${esc(t.date)} · ${t.qty} × ${money(t.price)}</div>
-            <strong>${money(t.total)}</strong>
-          </div>
-          <button type="button" class="na-small"
-            onclick="naPrintTicket(${t.id})">Imprimir</button>
-        </div>`;
-    }).join("") || '<p class="na-muted">Todavía no hay tickets.</p>';
+  if (!Number.isInteger(qty) || qty < 1 || qty > product.qty) {
+    alert("No hay suficiente stock para esa cantidad.");
+    return;
   }
 
-  // Ampliar el render existente sin reemplazarlo.
-  const originalRender = render;
-  render = function () {
-    originalRender();
-    renderClients();
-    renderTickets();
-  };
+  product.qty -= qty;
 
-  $("na-client-form").addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    state.clients.push({
-      id: Date.now(),
-      name: $("na-c-name").value.trim(),
-      phone: $("na-c-phone").value.trim(),
-      address: $("na-c-address").value.trim(),
-      notes: $("na-c-notes").value.trim()
-    });
-
-    e.target.reset();
-    save();
-    alert("Cliente guardado correctamente.");
+  state.sales.unshift({
+    id:Date.now(),
+    product:product.name,
+    qty,
+    total:product.price * qty,
+    customer:$("saleCustomer").value.trim(),
+    date:day(),
+    time:new Date().toLocaleTimeString("es-AR", {
+      hour:"2-digit",
+      minute:"2-digit"
+    })
   });
 
-  $("na-c-search").addEventListener("input", renderClients);
+  $("saleQty").value = 1;
+  $("saleCustomer").value = "";
+  save();
+  alert("Venta registrada correctamente.");
+});
 
-  window.naEditClient = function (id) {
-    const c = state.clients.find(function (x) { return x.id === id; });
-    if (!c) return;
+/* Pedidos */
+$("orderForm").addEventListener("submit", event => {
+  event.preventDefault();
 
-    const name = prompt("Nombre del cliente:", c.name);
-    if (name === null || !name.trim()) return;
+  state.orders.unshift({
+    id:Date.now(),
+    customer:$("oCustomer").value.trim(),
+    detail:$("oDetail").value.trim(),
+    status:$("oStatus").value,
+    date:day()
+  });
 
-    const phone = prompt("Teléfono:", c.phone || "");
-    if (phone === null) return;
+  event.target.reset();
+  save();
+});
 
-    const address = prompt("Dirección:", c.address || "");
-    if (address === null) return;
+window.removeO = id => {
+  if (!confirm("¿Borrar este pedido?")) return;
+  state.orders = state.orders.filter(o => o.id !== id);
+  save();
+};
 
-    c.name = name.trim();
-    c.phone = phone.trim();
-    c.address = address.trim();
-    save();
-  };
+window.nextOrder = id => {
+  const order = state.orders.find(o => o.id === id);
+  if (!order) return;
 
-  window.naDeleteClient = function (id) {
-    if (!confirm("¿Borrar este cliente? Los tickets anteriores se conservarán.")) return;
-    state.clients = state.clients.filter(function (c) {
-      return c.id !== id;
-    });
-    save();
-  };
+  order.status =
+    order.status === "Pendiente" ? "En preparación" :
+    order.status === "En preparación" ? "Entregado" :
+    "Pendiente";
 
-  function updateTotal() {
-    const qty = Number($("na-t-qty").value) || 0;
-    const price = Number($("na-t-price").value) || 0;
-    $("na-t-total").textContent = money(qty * price);
+  save();
+};
+
+/* Clientes */
+$("na-client-form").addEventListener("submit", event => {
+  event.preventDefault();
+
+  state.clients.push({
+    id:Date.now(),
+    name:$("na-c-name").value.trim(),
+    phone:$("na-c-phone").value.trim(),
+    address:$("na-c-address").value.trim(),
+    notes:$("na-c-notes").value.trim()
+  });
+
+  event.target.reset();
+  save();
+  alert("Cliente guardado correctamente.");
+});
+
+$("na-c-search").addEventListener("input", renderClients);
+
+window.naEditClient = id => {
+  const client = state.clients.find(c => c.id === id);
+  if (!client) return;
+
+  const name = prompt("Nombre del cliente:", client.name);
+  if (name === null || !name.trim()) return;
+
+  const phone = prompt("Teléfono:", client.phone || "");
+  if (phone === null) return;
+
+  const address = prompt("Dirección:", client.address || "");
+  if (address === null) return;
+
+  client.name = name.trim();
+  client.phone = phone.trim();
+  client.address = address.trim();
+  save();
+};
+
+window.naDeleteClient = id => {
+  if (!confirm("¿Borrar este cliente? Los tickets anteriores se conservarán.")) return;
+
+  state.clients = state.clients.filter(c => c.id !== id);
+  save();
+};
+
+/* Tickets */
+function updateTicketTotal() {
+  const qty = Number($("na-t-qty").value) || 0;
+  const price = Number($("na-t-price").value) || 0;
+  $("na-t-total").textContent = money(qty * price);
+}
+
+$("na-t-qty").addEventListener("input", updateTicketTotal);
+$("na-t-price").addEventListener("input", updateTicketTotal);
+
+$("na-ticket-form").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const client = state.clients.find(
+    c => c.id === Number($("na-t-client").value)
+  );
+
+  const qty = Number($("na-t-qty").value);
+  const price = Number($("na-t-price").value);
+  const detail = $("na-t-detail").value.trim();
+
+  if (!client) {
+    alert("Elegí un cliente.");
+    return;
   }
 
-  $("na-t-qty").addEventListener("input", updateTotal);
-  $("na-t-price").addEventListener("input", updateTotal);
+  if (!detail || !Number.isInteger(qty) || qty < 1 ||
+      !Number.isFinite(price) || price < 0) {
+    alert("Revisá el concepto, la cantidad y el precio.");
+    return;
+  }
 
-  $("na-ticket-form").addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const client = state.clients.find(function (c) {
-      return c.id === Number($("na-t-client").value);
-    });
-    const qty = Number($("na-t-qty").value);
-    const price = Number($("na-t-price").value);
-    const detail = $("na-t-detail").value.trim();
-
-    if (!client) return alert("Elegí un cliente.");
-    if (!detail || !Number.isInteger(qty) || qty < 1 ||
-        !Number.isFinite(price) || price < 0) {
-      return alert("Revisá el concepto, la cantidad y el precio.");
-    }
-
-    state.tickets.unshift({
-      id: Date.now(),
-      customer: client.name,
-      phone: client.phone,
-      address: client.address,
-      detail: detail,
-      qty: qty,
-      price: price,
-      total: qty * price,
-      date: new Date().toLocaleString("es-AR")
-    });
-
-    e.target.reset();
-    $("na-t-qty").value = 1;
-    updateTotal();
-    save();
-    alert("Ticket guardado. Ya podés imprimirlo.");
+  state.tickets.unshift({
+    id:Date.now(),
+    customer:client.name,
+    phone:client.phone,
+    address:client.address,
+    detail,
+    qty,
+    price,
+    total:qty * price,
+    date:new Date().toLocaleString("es-AR")
   });
 
-  window.naPrintTicket = function (id) {
-    const t = state.tickets.find(function (x) {
-      return x.id === id;
-    });
-    if (!t) return;
+  event.target.reset();
+  $("na-t-qty").value = 1;
+  updateTicketTotal();
+  save();
+  alert("Ticket guardado correctamente.");
+});
 
-    const w = window.open("", "_blank");
-    if (!w) {
-      alert("Permití las ventanas emergentes en Chrome para imprimir.");
-      return;
-    }
+window.naPrintTicket = id => {
+  const ticket = state.tickets.find(t => t.id === id);
+  if (!ticket) return;
 
-    w.document.open();
-    w.document.write(`<!doctype html>
+  const win = window.open("", "_blank");
+
+  if (!win) {
+    alert("Permití las ventanas emergentes en tu navegador para imprimir.");
+    return;
+  }
+
+  win.document.open();
+  win.document.write(`<!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Ticket ${t.id}</title>
+<title>Ticket ${esc(ticket.id)}</title>
 <style>
-body{font-family:Arial,sans-serif;color:#17251e;
-max-width:360px;margin:20px auto;padding:12px}
+body{font-family:Arial,sans-serif;color:#17251e;max-width:360px;margin:20px auto;padding:12px}
 h2{text-align:center;color:#173f35}
 hr{border:0;border-top:1px dashed #888}
 .line{display:flex;justify-content:space-between;gap:12px;margin:12px 0}
@@ -398,142 +802,258 @@ hr{border:0;border-top:1px dashed #888}
 <h2>NEGOCIO ALERTA</h2>
 <p style="text-align:center">Comprobante interno</p>
 <hr>
-<p><b>Ticket:</b> ${esc(t.id)}</p>
-<p><b>Fecha:</b> ${esc(t.date)}</p>
-<p><b>Cliente:</b> ${esc(t.customer)}</p>
-<p><b>Teléfono:</b> ${esc(t.phone || "—")}</p>
-<p><b>Dirección:</b> ${esc(t.address || "—")}</p>
+<p><b>Ticket:</b> ${esc(ticket.id)}</p>
+<p><b>Fecha:</b> ${esc(ticket.date)}</p>
+<p><b>Cliente:</b> ${esc(ticket.customer)}</p>
+<p><b>Teléfono:</b> ${esc(ticket.phone || "—")}</p>
+<p><b>Dirección:</b> ${esc(ticket.address || "—")}</p>
 <hr>
 <div class="line"><b>Concepto</b><b>Cantidad</b></div>
-<div class="line"><span>${esc(t.detail)}</span><span>${t.qty}</span></div>
-<div class="line"><span>Precio unitario</span><span>${money(t.price)}</span></div>
+<div class="line"><span>${esc(ticket.detail)}</span><span>${ticket.qty}</span></div>
+<div class="line"><span>Precio unitario</span><span>${money(ticket.price)}</span></div>
 <hr>
-<div class="line total"><span>TOTAL</span><span>${money(t.total)}</span></div>
+<div class="line total"><span>TOTAL</span><span>${money(ticket.total)}</span></div>
 <p style="text-align:center">¡Gracias por su compra!</p>
+<p style="font-size:11px;text-align:center">Comprobante interno, no válido como factura fiscal.</p>
 <button onclick="window.print()">Imprimir / Guardar PDF</button>
-</body></html>`);
-    w.document.close();
+</body>
+</html>`);
+  win.document.close();
+};
+
+/* Ajustes del negocio */
+function applySettings(settings) {
+  document.documentElement.style.setProperty("--green", settings.color || "#173f35");
+  document.documentElement.style.setProperty("--na-premium-green", settings.color || "#173f35");
+
+  const name = settings.nombre || "Negocio Alerta";
+  document.querySelector("header h1").textContent = "🌿 " + name;
+  document.querySelector("#na-license-card h2").textContent = "🌿 " + name;
+}
+
+function loadSettings() {
+  try {
+    const settings = JSON.parse(
+      localStorage.getItem("na-ajustes-panel") || "{}"
+    );
+
+    $("na-nombre").value = settings.nombre || "";
+    $("na-telefono").value = settings.telefono || "";
+    $("na-color").value = settings.color || "#173f35";
+    applySettings(settings);
+  } catch (error) {
+    applySettings({color:"#173f35"});
+  }
+}
+
+$("na-save-settings").addEventListener("click", () => {
+  const settings = {
+    nombre:$("na-nombre").value.trim(),
+    telefono:$("na-telefono").value.trim(),
+    color:$("na-color").value
   };
 
-  render();
-})();
-</script>
-<!-- FIN CLIENTES Y TICKETS -->
-<!-- NEGOCIO ALERTA: VALIDACION DE LICENCIA -->
-<style>
-#na-license-screen {
-  position: fixed;
-  inset: 0;
-  z-index: 999999;
-  background: #f3f7f4;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 22px;
-  font-family: Arial, sans-serif;
-}
-#na-license-card {
-  background: white;
-  border-radius: 18px;
-  padding: 26px 20px;
-  width: 100%;
-  max-width: 380px;
-  box-shadow: 0 8px 30px #0002;
-  text-align: center;
-}
-#na-license-card h2 { color: #173f35; }
-#na-license-card input,
-#na-license-card button {
-  box-sizing: border-box;
-  width: 100%;
-  padding: 13px;
-  margin-top: 12px;
-  border-radius: 9px;
-  font-size: 16px;
-}
-#na-license-card input {
-  border: 1px solid #bbc9c0;
-}
-#na-license-card button {
-  border: 0;
-  background: #173f35;
-  color: white;
-  font-weight: bold;
-}
-<body>
-<header>
-  <h1>🌿 Negocio Alerta</h1>
-  <p>Tu negocio organizado, desde el celular.</p>
-  <button
-    type="button"
-    onclick="if(confirm('¿Querés cerrar sesión?')){localStorage.removeItem('na_license_code');location.reload();}"
-    style="margin-top:14px;padding:10px 16px;border:1px solid #d8e9e0;border-radius:10px;background:white;color:#173f35;font-weight:bold;">
-    Cerrar sesión
-  </button>
-</header>
+  try {
+    localStorage.setItem("na-ajustes-panel", JSON.stringify(settings));
+    applySettings(settings);
+    $("na-ajustes-msg").textContent = "✅ Ajustes guardados en este dispositivo.";
+  } catch (error) {
+    $("na-ajustes-msg").textContent = "No se pudieron guardar los ajustes.";
+  }
+});
 
-#na-license-message {
-  font-size: 14px;
-  overflow-wrap: anywhere;
+/* Renderizado de la aplicación */
+function renderClients() {
+  const search = $("na-c-search").value.trim().toLowerCase();
+
+  const clients = state.clients.filter(c =>
+    (c.name + " " + c.phone).toLowerCase().includes(search)
+  );
+
+  $("na-c-list").innerHTML = clients.map(c => `
+    <div class="na-row">
+      <div>
+        <strong>${esc(c.name)}</strong>
+        <div class="na-muted">${esc(c.phone || "Sin teléfono")}</div>
+        <div class="na-muted">${esc(c.address || "")}</div>
+        ${c.notes ? `<div class="na-muted">${esc(c.notes)}</div>` : ""}
+      </div>
+      <div class="na-actions">
+        <button type="button" class="na-small" onclick="naEditClient(${c.id})">Editar</button>
+        <button type="button" class="na-small" onclick="naDeleteClient(${c.id})">Borrar</button>
+      </div>
+    </div>
+  `).join("") || '<p class="na-muted">No hay clientes para mostrar.</p>';
+
+  $("na-t-client").innerHTML =
+    '<option value="">Elegí un cliente</option>' +
+    state.clients.map(c =>
+      `<option value="${c.id}">${esc(c.name)}</option>`
+    ).join("");
 }
-</style>
 
-<div id="na-license-screen">
-  <div id="na-license-card">
-    <h2>Negocio Alerta</h2>
-    <p>Ingresá tu código de licencia para continuar.</p>
-    <form id="na-license-form">
-      <input id="na-license-code"
-        placeholder="Ej.: NA-PRUEBA-002"
-        autocomplete="off" required>
-      <button id="na-license-button" type="submit">
-        Verificar licencia
-      </button>
-    </form>
-    <p id="na-license-message" role="status"></p>
-  </div>
-</div>
+function renderTickets() {
+  $("na-t-list").innerHTML = state.tickets.map(t => `
+    <div class="na-row">
+      <div>
+        <strong>Ticket #${esc(t.id)}</strong>
+        <div>${esc(t.customer)} · ${esc(t.detail)}</div>
+        <div class="na-muted">${esc(t.date)} · ${t.qty} × ${money(t.price)}</div>
+        <strong>${money(t.total)}</strong>
+      </div>
+      <button type="button" class="na-small" onclick="naPrintTicket(${t.id})">Imprimir</button>
+    </div>
+  `).join("") || '<p class="na-muted">Todavía no hay tickets.</p>';
+}
 
-<script>
-(function () {
-  const API_URL =
-    'https://eyvsvtsbgwccbtytkuju.supabase.co';
+function render() {
+  const low = state.products.filter(p => p.qty <= p.min);
 
-  const API_KEY =
-    'sb_publishable_4Mfk_ZP_BnVz9luy8CeF0A_Jh4zYV9R';
+  $("statProducts").textContent = state.products.length;
+  $("statLow").textContent = low.length;
 
-  const screen = document.getElementById('na-license-screen');
-  const form = document.getElementById('na-license-form');
-  const input = document.getElementById('na-license-code');
-  const button = document.getElementById('na-license-button');
-  const message = document.getElementById('na-license-message');
+  $("statSales").textContent = money(
+    state.sales
+      .filter(s => s.date === day())
+      .reduce((sum,s) => sum + s.total, 0)
+  );
 
-  input.value = localStorage.getItem('na_license_code') || '';
+  $("alerts").innerHTML = low.length
+    ? low.map(p => `
+      <div class="item">
+        <div>
+          <strong>${esc(p.name)}</strong>
+          <span class="muted">Quedan ${p.qty} · mínimo ${p.min}</span>
+        </div>
+        <span class="pill low">Stock bajo</span>
+      </div>
+    `).join("")
+    : '<span class="pill">Todo en orden</span><p>Los productos con poco stock aparecerán acá.</p>';
+
+  $("productList").innerHTML = state.products.length
+    ? state.products.map(p => `
+      <div class="item">
+        <div>
+          <strong>${esc(p.name)}</strong>
+          <span class="muted">${money(p.price)} · Stock: ${p.qty}</span>
+        </div>
+        <div class="actions">
+          <button class="secondary" onclick="adjust(${p.id},1)">+1</button>
+          <button class="secondary" onclick="adjust(${p.id},-1)">−1</button>
+          <button class="secondary danger" onclick="removeP(${p.id})">Borrar</button>
+        </div>
+      </div>
+    `).join("")
+    : '<div class="empty">No hay productos guardados.</div>';
+
+  $("saleProduct").innerHTML =
+    '<option value="">Elegí un producto</option>' +
+    state.products.filter(p => p.qty > 0).map(p =>
+      `<option value="${p.id}">${esc(p.name)} — ${money(p.price)} (stock ${p.qty})</option>`
+    ).join("");
+
+  $("salesList").innerHTML = state.sales.length
+    ? state.sales.map(s => `
+      <div class="item">
+        <div>
+          <strong>${esc(s.product)} × ${s.qty}</strong>
+          <span class="muted">${esc(s.date)} ${esc(s.time)}${s.customer ? " · " + esc(s.customer) : ""}</span>
+        </div>
+        <strong>${money(s.total)}</strong>
+      </div>
+    `).join("")
+    : '<div class="empty">Todavía no registraste ventas.</div>';
+
+  $("recent").innerHTML = state.sales.length
+    ? state.sales.slice(0,4).map(s => `
+      <div class="item">
+        <div>
+          <strong>${esc(s.product)} × ${s.qty}</strong>
+          <span class="muted">${esc(s.date)}</span>
+        </div>
+        <strong>${money(s.total)}</strong>
+      </div>
+    `).join("")
+    : '<div class="empty">Tus ventas aparecerán acá.</div>';
+
+  $("orderList").innerHTML = state.orders.length
+    ? state.orders.map(o => `
+      <div class="item">
+        <div>
+          <strong>${esc(o.customer)}</strong>
+          <span class="muted">${esc(o.detail)} · ${esc(o.date)}</span>
+          <div><span class="pill">${esc(o.status)}</span></div>
+        </div>
+        <div class="actions">
+          <button class="secondary" onclick="nextOrder(${o.id})">Avanzar</button>
+          <button class="secondary danger" onclick="removeO(${o.id})">Borrar</button>
+        </div>
+      </div>
+    `).join("")
+    : '<div class="empty">No hay pedidos guardados.</div>';
+
+  renderClients();
+  renderTickets();
+}
+
+/* Cierre de sesión */
+$("na-logout").addEventListener("click", () => {
+  if (!confirm("¿Querés cerrar sesión?")) return;
+
+  localStorage.removeItem("na_license_code");
+  $("na-license-message").textContent = "";
+  $("na-license-code").value = "";
+  $("na-license-screen").classList.remove("hidden");
+  $("na-license-screen").style.display = "flex";
+  $("na-license-code").focus();
+});
+
+/* Validación de licencia con Supabase */
+(function initLicense() {
+  const API_URL = "https://eyvsvtsbgwccbtytkuju.supabase.co";
+
+  // Clave publicable proporcionada para este proyecto.
+  // Nunca coloques una clave secreta o service_role en el HTML.
+  const API_KEY = "sb_publishable_4Mfk_ZP_BnVz9luy8CeF0A_Jh4zYV9R";
+
+  const screen = $("na-license-screen");
+  const form = $("na-license-form");
+  const input = $("na-license-code");
+  const button = $("na-license-button");
+  const message = $("na-license-message");
+
+  let checking = false;
 
   async function verifyLicense(code) {
+    if (checking) return;
+
+    checking = true;
     button.disabled = true;
-    message.textContent = 'Verificando licencia...';
+    input.disabled = true;
+    message.textContent = "Verificando licencia...";
 
     try {
       const response = await fetch(
-        API_URL + '/rest/v1/rpc/validate_license',
+        API_URL + "/rest/v1/rpc/validate_license",
         {
-          method: 'POST',
-          headers: {
-            'apikey': API_KEY,
-            'Content-Type': 'application/json',
-            'Content-Profile': 'api'
+          method:"POST",
+          headers:{
+            "apikey":API_KEY,
+            "Content-Type":"application/json",
+            "Content-Profile":"api",
+            "Accept-Profile":"api"
           },
-          body: JSON.stringify({
-            p_license_code: code
+          body:JSON.stringify({
+            p_license_code:code
           })
         }
       );
 
       if (!response.ok) {
         throw new Error(
-          'No se pudo consultar la API (' + response.status +
-          '). Revisá la configuración de Supabase.'
+          "No se pudo verificar la licencia (HTTP " +
+          response.status +
+          "). Revisá la función y los permisos de Supabase."
         );
       }
 
@@ -541,266 +1061,45 @@ hr{border:0;border-top:1px dashed #888}
       const license = Array.isArray(result) ? result[0] : result;
 
       if (!license || license.valid !== true) {
-        localStorage.removeItem('na_license_code');
-        message.textContent =
-          'Licencia inválida, vencida o inactiva.';
+        localStorage.removeItem("na_license_code");
+        message.textContent = "Licencia inválida, vencida o inactiva.";
         return;
       }
 
-      localStorage.setItem('na_license_code', code);
-      message.textContent =
-        'Licencia activa: ' + license.business_name;
+      localStorage.setItem("na_license_code", code);
+      message.textContent = "Licencia activa.";
 
-      screen.remove();
+      screen.style.display = "none";
+      render();
     } catch (error) {
       message.textContent =
-        error.message || 'Error al verificar la licencia.';
+        error.message || "Error al verificar la licencia.";
     } finally {
+      checking = false;
       button.disabled = false;
+      input.disabled = false;
     }
   }
 
-  form.addEventListener('submit', function (event) {
+  form.addEventListener("submit", event => {
     event.preventDefault();
-    const code = input.value.trim();
 
+    const code = input.value.trim();
     if (code) verifyLicense(code);
   });
 
-  if (input.value.trim()) {
-    verifyLicense(input.value.trim());
+  const savedCode = localStorage.getItem("na_license_code");
+
+  if (savedCode) {
+    input.value = savedCode;
+    verifyLicense(savedCode);
   }
 })();
-</script>
-<!-- FIN VALIDACION DE LICENCIA -->
-<!doctype html>
-<html lang="es">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#173f35"><title>Negocio Alerta</title>
-<style>
-:root{--green:#173f35;--mint:#dff3e9;--paper:#f6f8f6;--ink:#182520;--muted:#65736c;--line:#dce5df;--red:#a53b35}*{box-sizing:border-box}body{margin:0;background:var(--paper);font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink)}header{background:var(--green);color:white;padding:22px 18px 18px;border-radius:0 0 24px 24px}header h1{margin:0;font-size:25px}header p{margin:6px 0 0;color:#d8e9e0;font-size:14px}.wrap{max-width:720px;margin:auto;padding:16px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:-3px}.stat,.panel{background:white;border:1px solid var(--line);border-radius:16px;padding:13px}.stat small{display:block;color:var(--muted);font-size:12px}.stat strong{display:block;font-size:23px;margin-top:5px}.tabs{display:flex;gap:8px;overflow:auto;margin:16px 0}.tabs button{white-space:nowrap;border:1px solid var(--line);background:white;border-radius:999px;padding:10px 14px;color:var(--ink)}.tabs button.active{background:var(--green);color:white;border-color:var(--green)}h2{font-size:19px;margin:4px 0 12px}.panel{margin-bottom:13px}.form{display:grid;grid-template-columns:1fr 1fr;gap:9px}.form input,.form select{width:100%;min-width:0;padding:12px;border:1px solid #cbd8d0;border-radius:10px;background:#fff;font:inherit}.full{grid-column:1/-1}button.primary{border:0;border-radius:10px;background:var(--green);color:#fff;padding:12px 14px;font-weight:650;font:inherit}button.secondary{border:1px solid var(--line);border-radius:9px;background:#fff;padding:8px 10px}button.danger{color:var(--red)}.item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #edf1ee}.item:last-child{border-bottom:0}.item strong{display:block}.muted{color:var(--muted);font-size:13px}.pill{display:inline-block;background:var(--mint);color:#245a43;border-radius:999px;padding:3px 8px;font-size:12px}.pill.low{background:#ffe7e3;color:#8a302b}.actions{display:flex;gap:6px;flex-wrap:wrap}.empty{color:var(--muted);padding:14px 0}.hidden{display:none!important}.total{font-size:24px;font-weight:750}.notice{font-size:12px;color:var(--muted);line-height:1.5;margin:12px 2px 26px}@media(max-width:380px){.stat{padding:10px}.stat strong{font-size:19px}.form{grid-template-columns:1fr}.full{grid-column:auto}}
-</style></head>
-<body><header><h1>🌿 Negocio Alerta</h1><p>Tu negocio organizado, desde el celular.</p></header>
-<div class="wrap"><div class="stats"><div class="stat"><small>Productos</small><strong id="statProducts">0</strong></div><div class="stat"><small>Stock bajo</small><strong id="statLow">0</strong></div><div class="stat"><small>Ventas de hoy</small><strong id="statSales">$0</strong></div></div>
-<nav class="tabs"><button class="active" data-tab="home">Resumen</button><button data-tab="products">Productos</button><button data-tab="sales">Registrar venta</button><button data-tab="orders">Pedidos</button></nav>
-<section id="home"><div class="panel"><h2>Atención para hoy</h2><div id="alerts" class="muted">Todavía no hay productos. Agregá uno para comenzar.</div></div><div class="panel"><h2>Últimos movimientos</h2><div id="recent" class="empty">Tus ventas aparecerán acá.</div></div></section>
-<section id="products" class="hidden"><div class="panel"><h2>Agregar producto</h2><form id="productForm" class="form"><input id="pName" class="full" placeholder="Nombre del producto" required maxlength="80"><input id="pPrice" type="number" min="0" step="0.01" placeholder="Precio ($)" required><input id="pQty" type="number" min="0" step="1" placeholder="Cantidad" required><input id="pMin" type="number" min="0" step="1" placeholder="Avisar si baja de" value="3" required><button class="primary full">Guardar producto</button></form></div><div class="panel"><h2>Tu catálogo</h2><div id="productList" class="empty">No hay productos guardados.</div></div></section>
-<section id="sales" class="hidden"><div class="panel"><h2>Registrar una venta</h2><form id="saleForm" class="form"><select id="saleProduct" class="full" required><option value="">Elegí un producto</option></select><input id="saleQty" type="number" min="1" step="1" value="1" placeholder="Cantidad" required><input id="saleCustomer" placeholder="Cliente (opcional)" maxlength="80"><button class="primary full">Confirmar venta</button></form><p class="muted">Al confirmar, se descuenta el stock y se registra el importe. Esta versión guarda los datos solo en este dispositivo.</p></div><div class="panel"><h2>Historial de ventas</h2><div id="salesList" class="empty">Todavía no registraste ventas.</div></div></section>
-<section id="orders" class="hidden"><div class="panel"><h2>Nuevo pedido</h2><form id="orderForm" class="form"><input id="oCustomer" placeholder="Nombre del cliente" required maxlength="80"><input id="oDetail" placeholder="Pedido / detalle" required maxlength="120"><select id="oStatus" class="full"><option>Pendiente</option><option>En preparación</option><option>Entregado</option></select><button class="primary full">Guardar pedido</button></form></div><div class="panel"><h2>Seguimiento</h2><div id="orderList" class="empty">No hay pedidos guardados.</div></div></section>
-<p class="notice">Prototipo inicial gratuito. Los datos se guardan en el almacenamiento de este navegador y pueden perderse si borrás sus datos o cambiás de dispositivo. No es todavía una aplicación publicada ni un sistema de licencias. No cargues información sensible de clientes.</p></div>
-<script>
-const $=id=>document.getElementById(id);const money=n=>new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:2}).format(n||0);const day=()=>new Date().toLocaleDateString('sv-SE');let state;try{state=JSON.parse(localStorage.getItem('na-v1'))||{products:[],sales:[],orders:[]}}catch(e){state={products:[],sales:[],orders:[]}}function save(){localStorage.setItem('na-v1',JSON.stringify(state));render()}function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));['home','products','sales','orders'].forEach(id=>$(id).classList.toggle('hidden',id!==b.dataset.tab));render()});
-$('productForm').onsubmit=e=>{e.preventDefault();state.products.push({id:Date.now(),name:$('pName').value.trim(),price:Number($('pPrice').value),qty:Number($('pQty').value),min:Number($('pMin').value)});e.target.reset();$('pMin').value=3;save()};
-$('saleForm').onsubmit=e=>{e.preventDefault();let p=state.products.find(x=>x.id===Number($('saleProduct').value)),qty=Number($('saleQty').value);if(!p)return alert('Elegí un producto.');if(qty<1||qty>p.qty)return alert('No hay suficiente stock para esa cantidad.');p.qty-=qty;state.sales.unshift({id:Date.now(),product:p.name,qty,total:p.price*qty,customer:$('saleCustomer').value.trim(),date:day(),time:new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})});$('saleQty').value=1;$('saleCustomer').value='';save();alert('Venta registrada correctamente.')};
-$('orderForm').onsubmit=e=>{e.preventDefault();state.orders.unshift({id:Date.now(),customer:$('oCustomer').value.trim(),detail:$('oDetail').value.trim(),status:$('oStatus').value,date:day()});e.target.reset();save()};
-function render(){let low=state.products.filter(p=>p.qty<=p.min);$('statProducts').textContent=state.products.length;$('statLow').textContent=low.length;$('statSales').textContent=money(state.sales.filter(s=>s.date===day()).reduce((a,s)=>a+s.total,0));$('alerts').innerHTML=low.length?low.map(p=>`<div class="item"><div><strong>${esc(p.name)}</strong><span class="muted">Quedan ${p.qty} · mínimo ${p.min}</span></div><span class="pill low">Stock bajo</span></div>`).join(''):'<span class="pill">Todo en orden</span><p>Los productos con poco stock aparecerán acá.</p>';
-$('productList').innerHTML=state.products.length?state.products.map(p=>`<div class="item"><div><strong>${esc(p.name)}</strong><span class="muted">${money(p.price)} · Stock: ${p.qty}</span></div><div class="actions"><button class="secondary" onclick="adjust(${p.id},1)">+1</button><button class="secondary" onclick="adjust(${p.id},-1)">−1</button><button class="secondary danger" onclick="removeP(${p.id})">Borrar</button></div></div>`).join(''):'<div class="empty">No hay productos guardados.</div>';
-$('saleProduct').innerHTML='<option value="">Elegí un producto</option>'+state.products.filter(p=>p.qty>0).map(p=>`<option value="${p.id}">${esc(p.name)} — ${money(p.price)} (stock ${p.qty})</option>`).join('');$('salesList').innerHTML=state.sales.length?state.sales.map(s=>`<div class="item"><div><strong>${esc(s.product)} × ${s.qty}</strong><span class="muted">${s.date} ${s.time}${s.customer?' · '+esc(s.customer):''}</span></div><strong>${money(s.total)}</strong></div>`).join(''):'<div class="empty">Todavía no registraste ventas.</div>';
-$('recent').innerHTML=state.sales.length?state.sales.slice(0,4).map(s=>`<div class="item"><div><strong>${esc(s.product)} × ${s.qty}</strong><span class="muted">${s.date}</span></div><strong>${money(s.total)}</strong></div>`).join(''):'<div class="empty">Tus ventas aparecerán acá.</div>';$('orderList').innerHTML=state.orders.length?state.orders.map(o=>`<div class="item"><div><strong>${esc(o.customer)}</strong><span class="muted">${esc(o.detail)} · ${o.date}</span><div><span class="pill">${esc(o.status)}</span></div></div><div class="actions"><button class="secondary" onclick="nextOrder(${o.id})">Avanzar</button><button class="secondary danger" onclick="removeO(${o.id})">Borrar</button></div></div>`).join(''):'<div class="empty">No hay pedidos guardados.</div>'}
-window.adjust=(id,n)=>{let p=state.products.find(x=>x.id===id);if(p)p.qty=Math.max(0,p.qty+n);save()};window.removeP=id=>{if(confirm('¿Borrar este producto?')){state.products=state.products.filter(x=>x.id!==id);save()}};window.removeO=id=>{if(confirm('¿Borrar este pedido?')){state.orders=state.orders.filter(x=>x.id!==id);save()}};window.nextOrder=id=>{let o=state.orders.find(x=>x.id===id);if(o){o.status=o.status==='Pendiente'?'En preparación':o.status==='En preparación'?'Entregado':'Pendiente';save()}};render();
-</script></body></html>
-<body>
-<header>
-  <h1>🌿 Negocio Alerta</h1>
-  <p>Tu negocio organizado, desde el celular.</p>
-  <button
-    type="button"
-    onclick="if(confirm('¿Querés cerrar sesión?')){localStorage.removeItem('na_license_code');location.reload();}"
-    style="margin-top:14px;padding:10px 16px;border:1px solid #d8e9e0;border-radius:10px;background:white;color:#173f35;font-weight:bold;">
-    Cerrar sesión
-  </button>
-</header>
-<button id="btnCerrarSesion" type="button">
-  Cerrar sesión
-</button>
 
-<script>
-document.getElementById("btnCerrarSesion")
-  .addEventListener("click", function () {
-    if (confirm("¿Querés cerrar sesión?")) {
-      localStorage.removeItem("na_session");
-      sessionStorage.clear();
-      window.location.href = "index.html";
-    }
-  });<!-- NEGOCIO ALERTA - PREMIUM MOTION -->
-<style id="na-premium-motion">
-:root {
-  --na-premium-green: #173f35;
-  --na-premium-mint: #dff3e9;
-  --na-premium-shadow: 0 8px 28px rgba(23,63,53,.09);
-}
-
-/* Movimiento suave y profesional */
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* Paneles y tarjetas existentes */
-.card,
-.stat-card,
-.product-card,
-.dashboard-card,
-.panel,
-.sidebar,
-.menu,
-nav {
-  transition:
-    transform .28s ease,
-    box-shadow .28s ease,
-    background-color .28s ease,
-    opacity .28s ease;
-}
-
-/* Entrada progresiva */
-.na-premium-reveal {
-  animation: naPremiumReveal .48s ease both;
-}
-
-@keyframes naPremiumReveal {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Efectos táctiles */
-button,
-.btn,
-[role="button"],
-input[type="submit"] {
-  transition:
-    transform .18s ease,
-    box-shadow .22s ease,
-    filter .22s ease;
-}
-
-button:active,
-.btn:active,
-[role="button"]:active,
-input[type="submit"]:active {
-  transform: scale(.97);
-  filter: brightness(.96);
-}
-
-/* Campos modernos */
-input,
-select,
-textarea {
-  transition: border-color .2s ease,
-              box-shadow .2s ease;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: var(--na-premium-green);
-  box-shadow: 0 0 0 3px rgba(23,63,53,.12);
-  outline: none;
-}
-
-/* Menú y navegación */
-nav a,
-.sidebar a,
-.menu a,
-.nav-link {
-  transition:
-    color .2s ease,
-    background-color .2s ease,
-    padding-left .2s ease;
-}
-
-nav a:focus-visible,
-.sidebar a:focus-visible,
-.menu a:focus-visible,
-.nav-link:focus-visible,
-button:focus-visible {
-  outline: 2px solid #4b9b78;
-  outline-offset: 3px;
-}
-
-/* Evitar efectos incómodos en móviles */
-@media (hover: hover) {
-  .card:hover,
-  .stat-card:hover,
-  .product-card:hover,
-  .dashboard-card:hover,
-  .panel:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--na-premium-shadow);
-  }
-
-  button:hover,
-  .btn:hover {
-    box-shadow: 0 5px 16px rgba(23,63,53,.15);
-  }
-}
-
-/* Respeto por accesibilidad */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: .01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: .01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-</style>
-
-<script id="na-premium-motion-script">
-(function () {
-  "use strict";
-
-  // No modifica licencias, autenticación ni Supabase.
-  function iniciarAnimacionesPremium() {
-    if (window.matchMedia &&
-        window.matchMedia(
-          "(prefers-reduced-motion: reduce)"
-        ).matches) {
-      return;
-    }
-
-    var selectores = [
-      ".card",
-      ".stat-card",
-      ".product-card",
-      ".dashboard-card",
-      ".panel"
-    ];
-
-    var elementos = document.querySelectorAll(
-      selectores.join(",")
-    );
-
-    
-      elemento.dataset.naPremiumReady = "1";
-      elemento.classList.add("na-premium-reveal");
-      elemento.style.animationDelay =
-        Math.min(indice * 45, 270) + "ms";
-    });
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener(
-      "DOMContentLoaded",
-      iniciarAnimacionesPremium,
-      { once: true }
-      iniciarAnimacionesPremium();
-  }
-})();
-</script>
-<!-- FIN NEGOCIO ALERTA PREMIUM -->
+/* Inicio */
+loadSettings();
+render();
 </script>
 
-
+</body>
+        </html>
