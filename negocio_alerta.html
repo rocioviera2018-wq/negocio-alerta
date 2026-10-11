@@ -1,4 +1,380 @@
+<!-- NEGOCIO ALERTA: CLIENTES Y TICKETS -->
+<style id="na-clientes-tickets-css">
+#na-clientes-section .na-box {
+  background:#fff;
+  border:1px solid #dce5df;
+  border-radius:16px;
+  padding:15px;
+  margin-bottom:14px;
+}
+#na-clientes-section .na-form {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+#na-clientes-section input,
+#na-clientes-section select,
+#na-clientes-section textarea {
+  width:100%;
+  min-width:0;
+  padding:12px;
+  border:1px solid #cbd8d0;
+  border-radius:10px;
+  font:inherit;
+  background:white;
+}
+#na-clientes-section .na-full {grid-column:1/-1}
+#na-clientes-section .na-row {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 0;
+  border-bottom:1px solid #edf1ee;
+}
+#na-clientes-section .na-actions {
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+#na-clientes-section .na-btn {
+  border:0;
+  border-radius:10px;
+  padding:11px 14px;
+  background:#173f35;
+  color:white;
+  font:inherit;
+  cursor:pointer;
+}
+#na-clientes-section .na-small {
+  border:1px solid #dce5df;
+  border-radius:9px;
+  padding:8px 10px;
+  background:white;
+  color:#173f35;
+  cursor:pointer;
+}
+#na-clientes-section .na-muted {
+  color:#65736c;
+  font-size:13px;
+}
+#na-clientes-section .na-total {
+  font-size:25px;
+  font-weight:750;
+  color:#173f35;
+}
+@media(max-width:380px) {
+  #na-clientes-section .na-form {
+    grid-template-columns:1fr;
+  }
+  #na-clientes-section .na-full {
+    grid-column:auto;
+  }
+}
+</style>
 
+<script id="na-clientes-tickets-script">
+(function () {
+  "use strict";
+
+  // Reutiliza el almacenamiento de Negocio Alerta.
+  if (!Array.isArray(state.clients)) state.clients = [];
+  if (!Array.isArray(state.tickets)) state.tickets = [];
+
+  // Agregar la nueva sección al menú existente.
+  const nav = document.querySelector(".tabs");
+  const section = document.createElement("section");
+
+  section.id = "na-clientes-section";
+  section.className = "hidden";
+
+  section.innerHTML = `
+    <div class="na-box">
+      <h2>👥 Registrar cliente</h2>
+      <form id="na-client-form" class="na-form">
+        <input id="na-c-name" class="na-full"
+          placeholder="Nombre y apellido" maxlength="100" required>
+        <input id="na-c-phone" type="tel"
+          placeholder="Teléfono" maxlength="30">
+        <input id="na-c-address"
+          placeholder="Dirección" maxlength="150">
+        <textarea id="na-c-notes" class="na-full"
+          placeholder="Observaciones (opcional)"
+          maxlength="300"></textarea>
+        <button class="na-btn na-full" type="submit">
+          Guardar cliente
+        </button>
+      </form>
+    </div>
+
+    <div class="na-box">
+      <h2>Buscar clientes</h2>
+      <input id="na-c-search"
+        placeholder="Buscar por nombre o teléfono">
+      <div id="na-c-list" class="na-muted">
+        Todavía no hay clientes.
+      </div>
+    </div>
+
+    <div class="na-box">
+      <h2>🧾 Crear ticket</h2>
+      <form id="na-ticket-form" class="na-form">
+        <select id="na-t-client" class="na-full" required>
+          <option value="">Elegí un cliente</option>
+        </select>
+        <input id="na-t-detail" class="na-full"
+          placeholder="Producto o concepto" maxlength="180" required>
+        <input id="na-t-qty" type="number"
+          min="1" max="100000" step="1"
+          value="1" placeholder="Cantidad" required>
+        <input id="na-t-price" type="number"
+          min="0" max="1000000000" step="0.01"
+          placeholder="Precio unitario ($)" required>
+        <div class="na-full">
+          <div class="na-muted">Total del ticket</div>
+          <div id="na-t-total" class="na-total">$0</div>
+        </div>
+        <button class="na-btn na-full" type="submit">
+          Guardar ticket
+        </button>
+      </form>
+      <p class="na-muted">
+        Este comprobante es un ticket interno de venta,
+        no una factura fiscal.
+      </p>
+    </div>
+
+    <div class="na-box">
+      <h2>📋 Historial de tickets</h2>
+      <div id="na-t-list" class="na-muted">
+        Todavía no hay tickets.
+      </div>
+    </div>
+  `;
+
+  nav.insertAdjacentHTML(
+    "beforeend",
+    '<button type="button" data-tab="na-clientes-section">Clientes y tickets</button>'
+  );
+
+  document.querySelector(".wrap").appendChild(section);
+
+  // Navegación compatible con las pestañas existentes.
+  document.querySelectorAll("[data-tab]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      document.querySelectorAll("[data-tab]").forEach(function (b) {
+        b.classList.toggle("active", b === btn);
+      });
+
+      ["home", "products", "sales", "orders",
+       "na-clientes-section"].forEach(function (id) {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle("hidden", id !== btn.dataset.tab);
+      });
+
+      render();
+    });
+  });
+
+  function renderClients() {
+    const search = $("na-c-search").value.trim().toLowerCase();
+
+    $("na-c-list").innerHTML = state.clients
+      .filter(function (c) {
+        return (c.name + " " + c.phone)
+          .toLowerCase().includes(search);
+      })
+      .map(function (c) {
+        return `
+          <div class="na-row">
+            <div>
+              <strong>${esc(c.name)}</strong>
+              <div class="na-muted">${esc(c.phone || "Sin teléfono")}</div>
+              <div class="na-muted">${esc(c.address || "")}</div>
+            </div>
+            <div class="na-actions">
+              <button type="button" class="na-small"
+                onclick="naEditClient(${c.id})">Editar</button>
+              <button type="button" class="na-small"
+                onclick="naDeleteClient(${c.id})">Borrar</button>
+            </div>
+          </div>`;
+      }).join("") || '<p class="na-muted">No hay clientes para mostrar.</p>';
+
+    $("na-t-client").innerHTML =
+      '<option value="">Elegí un cliente</option>' +
+      state.clients.map(function (c) {
+        return `<option value="${c.id}">${esc(c.name)}</option>`;
+      }).join("");
+  }
+
+  function renderTickets() {
+    $("na-t-list").innerHTML = state.tickets.map(function (t) {
+      return `
+        <div class="na-row">
+          <div>
+            <strong>Ticket #${t.id}</strong>
+            <div>${esc(t.customer)} · ${esc(t.detail)}</div>
+            <div class="na-muted">${esc(t.date)} · ${t.qty} × ${money(t.price)}</div>
+            <strong>${money(t.total)}</strong>
+          </div>
+          <button type="button" class="na-small"
+            onclick="naPrintTicket(${t.id})">Imprimir</button>
+        </div>`;
+    }).join("") || '<p class="na-muted">Todavía no hay tickets.</p>';
+  }
+
+  // Ampliar el render existente sin reemplazarlo.
+  const originalRender = render;
+  render = function () {
+    originalRender();
+    renderClients();
+    renderTickets();
+  };
+
+  $("na-client-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    state.clients.push({
+      id: Date.now(),
+      name: $("na-c-name").value.trim(),
+      phone: $("na-c-phone").value.trim(),
+      address: $("na-c-address").value.trim(),
+      notes: $("na-c-notes").value.trim()
+    });
+
+    e.target.reset();
+    save();
+    alert("Cliente guardado correctamente.");
+  });
+
+  $("na-c-search").addEventListener("input", renderClients);
+
+  window.naEditClient = function (id) {
+    const c = state.clients.find(function (x) { return x.id === id; });
+    if (!c) return;
+
+    const name = prompt("Nombre del cliente:", c.name);
+    if (name === null || !name.trim()) return;
+
+    const phone = prompt("Teléfono:", c.phone || "");
+    if (phone === null) return;
+
+    const address = prompt("Dirección:", c.address || "");
+    if (address === null) return;
+
+    c.name = name.trim();
+    c.phone = phone.trim();
+    c.address = address.trim();
+    save();
+  };
+
+  window.naDeleteClient = function (id) {
+    if (!confirm("¿Borrar este cliente? Los tickets anteriores se conservarán.")) return;
+    state.clients = state.clients.filter(function (c) {
+      return c.id !== id;
+    });
+    save();
+  };
+
+  function updateTotal() {
+    const qty = Number($("na-t-qty").value) || 0;
+    const price = Number($("na-t-price").value) || 0;
+    $("na-t-total").textContent = money(qty * price);
+  }
+
+  $("na-t-qty").addEventListener("input", updateTotal);
+  $("na-t-price").addEventListener("input", updateTotal);
+
+  $("na-ticket-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const client = state.clients.find(function (c) {
+      return c.id === Number($("na-t-client").value);
+    });
+    const qty = Number($("na-t-qty").value);
+    const price = Number($("na-t-price").value);
+    const detail = $("na-t-detail").value.trim();
+
+    if (!client) return alert("Elegí un cliente.");
+    if (!detail || !Number.isInteger(qty) || qty < 1 ||
+        !Number.isFinite(price) || price < 0) {
+      return alert("Revisá el concepto, la cantidad y el precio.");
+    }
+
+    state.tickets.unshift({
+      id: Date.now(),
+      customer: client.name,
+      phone: client.phone,
+      address: client.address,
+      detail: detail,
+      qty: qty,
+      price: price,
+      total: qty * price,
+      date: new Date().toLocaleString("es-AR")
+    });
+
+    e.target.reset();
+    $("na-t-qty").value = 1;
+    updateTotal();
+    save();
+    alert("Ticket guardado. Ya podés imprimirlo.");
+  });
+
+  window.naPrintTicket = function (id) {
+    const t = state.tickets.find(function (x) {
+      return x.id === id;
+    });
+    if (!t) return;
+
+    const w = window.open("", "_blank");
+    if (!w) {
+      alert("Permití las ventanas emergentes en Chrome para imprimir.");
+      return;
+    }
+
+    w.document.open();
+    w.document.write(`<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ticket ${t.id}</title>
+<style>
+body{font-family:Arial,sans-serif;color:#17251e;
+max-width:360px;margin:20px auto;padding:12px}
+h2{text-align:center;color:#173f35}
+hr{border:0;border-top:1px dashed #888}
+.line{display:flex;justify-content:space-between;gap:12px;margin:12px 0}
+.total{font-size:20px;font-weight:bold}
+@media print{button{display:none}body{margin:0 auto}}
+</style>
+</head>
+<body>
+<h2>NEGOCIO ALERTA</h2>
+<p style="text-align:center">Comprobante interno</p>
+<hr>
+<p><b>Ticket:</b> ${esc(t.id)}</p>
+<p><b>Fecha:</b> ${esc(t.date)}</p>
+<p><b>Cliente:</b> ${esc(t.customer)}</p>
+<p><b>Teléfono:</b> ${esc(t.phone || "—")}</p>
+<p><b>Dirección:</b> ${esc(t.address || "—")}</p>
+<hr>
+<div class="line"><b>Concepto</b><b>Cantidad</b></div>
+<div class="line"><span>${esc(t.detail)}</span><span>${t.qty}</span></div>
+<div class="line"><span>Precio unitario</span><span>${money(t.price)}</span></div>
+<hr>
+<div class="line total"><span>TOTAL</span><span>${money(t.total)}</span></div>
+<p style="text-align:center">¡Gracias por su compra!</p>
+<button onclick="window.print()">Imprimir / Guardar PDF</button>
+</body></html>`);
+    w.document.close();
+  };
+
+  render();
+})();
+</script>
+<!-- FIN CLIENTES Y TICKETS -->
 <!-- NEGOCIO ALERTA: VALIDACION DE LICENCIA -->
 <style>
 #na-license-screen {
