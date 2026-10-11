@@ -27,6 +27,59 @@ body {
   -webkit-tap-highlight-color:transparent;
 }
 
+<!-- NEGOCIO ALERTA: ACCESO DE USUARIOS -->
+<div id="na-auth-screen" style="
+  display:none;position:fixed;inset:0;z-index:1000000;
+  background:#f3f7f4;align-items:center;justify-content:center;
+  padding:20px;font-family:Arial,sans-serif;overflow-y:auto">
+
+  <div style="
+    background:white;width:100%;max-width:380px;padding:25px;
+    border-radius:18px;box-shadow:0 8px 30px #0002">
+
+    <h2 style="color:#173f35;text-align:center">
+      🌿 Negocio Alerta
+    </h2>
+    <p>Ingresá a tu cuenta o registrate gratis.</p>
+
+    <form id="na-auth-form">
+      <label for="na-auth-email">Correo electrónico</label>
+      <input id="na-auth-email" type="email"
+        autocomplete="email" required maxlength="254"
+        placeholder="tu@email.com"
+        style="width:100%;padding:12px;margin:8px 0 14px">
+
+      <label for="na-auth-password">Contraseña</label>
+      <input id="na-auth-password" type="password"
+        autocomplete="current-password" required minlength="8"
+        placeholder="Mínimo 8 caracteres"
+        style="width:100%;padding:12px;margin:8px 0 14px">
+
+      <button type="submit" id="na-auth-login"
+        style="width:100%;padding:13px;background:#173f35;
+        color:white;border:0;border-radius:10px;font-weight:bold">
+        Iniciar sesión
+      </button>
+    </form>
+
+    <button type="button" id="na-auth-register"
+      style="width:100%;padding:12px;margin-top:10px;
+      background:#e0f2e8;color:#173f35;border:0;border-radius:10px">
+      Crear cuenta nueva
+    </button>
+
+    <button type="button" id="na-auth-reset"
+      style="width:100%;padding:12px;margin-top:8px;
+      background:white;color:#173f35;border:1px solid #dce5df;border-radius:10px">
+      Recuperar contraseña
+    </button>
+
+    <p id="na-auth-message" role="status"
+      aria-live="polite" style="font-size:13px;overflow-wrap:anywhere"></p>
+  </div>
+</div>
+<!-- FIN ACCESO DE USUARIOS -->
+
 header {
   background:var(--green);
   color:white;
