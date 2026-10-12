@@ -114,7 +114,7 @@ const menus=[
 ];
 function icon(id){return `<svg aria-hidden="true"><use href="#${id}"/></svg>`}
 function navHTML(){return menus.map(([id,label,ico])=>`<button class="nav ${page===id?"active":""}" onclick="navigate('${id}')">${icon(ico)}<span>${label}</span></button>`).join("")}
-function updateNav(){
+(){
  document.getElementById("sidebar").innerHTML=navHTML();
  document.getElementById("bottomnav").innerHTML=menus.filter(x=>["inicio","productos","clientes","ventas","stock"].includes(x[0])).map(([id,label,ico])=>`<button class="${page===id?"active":""}" onclick="navigate('${id}')">${icon(ico)}<span>${label}</span></button>`).join("");
 }
@@ -301,3 +301,43 @@ render();
 </script>
 </body>
 </html>
+<!-- NEGOCIO ALERTA: SESIÓN -->
+<div id="na-sesion-panel">
+  <button id="na-google-login" type="button">
+    🌐 Iniciar sesión con Google
+  </button>
+
+  <button id="na-cerrar-sesion" type="button">
+    🚪 Cerrar sesión
+  </button>
+
+  <p id="na-sesion-mensaje" role="status"></p>
+</div>
+
+<style>
+#na-sesion-panel button {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  margin: 10px 0;
+  border: 0;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+#na-google-login {
+  background: #ffffff;
+  color: #173f35;
+  border: 1px solid #d4ded8 !important;
+}
+#na-cerrar-sesion {
+  background: #173f35;
+  color: #ffffff;
+}
+#na-sesion-mensaje {
+  font-size: 14px;
+  color: #173f35;
+}
+</style>
+
