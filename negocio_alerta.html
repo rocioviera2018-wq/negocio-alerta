@@ -24,6 +24,77 @@
   font-weight: 600;
   cursor: pointer;
 } 
+<!-- NEGOCIO ALERTA: BOTÓN INICIAR SESIÓN CON GOOGLE -->
+
+<div id="na-google-login" style="margin:16px 0;text-align:center;">
+  <button
+    id="na-google-btn"
+    type="button"
+    style="width:100%;padding:14px;border:1px solid #d7dfda;
+    border-radius:12px;background:#fff;color:#173f35;
+    font-size:16px;font-weight:600;cursor:pointer;">
+    🌐 Iniciar sesión con Google
+  </button>
+
+  <p id="na-google-msg"
+     style="font-size:13px;color:#52645a;margin-top:10px;">
+  </p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+(function () {
+  const SUPABASE_URL =
+    "https://eyvsvtsbgwccbtytkuju.supabase.co";
+
+  // Reemplazá este texto por tu clave pública de Supabase.
+  const SUPABASE_ANON_KEY = "PEGAR_AQUI_TU_CLAVE_PUBLICA";
+
+  const btn = document.getElementById("na-google-btn");
+  const msg = document.getElementById("na-google-msg");
+
+  if (!btn || !msg) return;
+
+  btn.addEventListener("click", async function () {
+    try {
+      if (
+        SUPABASE_ANON_KEY ===
+        "PEGAR_AQUI_TU_CLAVE_PUBLICA"
+      ) {
+        msg.textContent =
+          "Falta configurar la clave pública de Supabase.";
+        return;
+      }
+
+      btn.disabled = true;
+      msg.textContent = "Conectando con Google...";
+
+      const supabase = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
+
+      const { error } =
+        await supabase.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo: window.location.origin +
+                        window.location.pathname
+          }
+        });
+
+      if (error) throw error;
+
+    } catch (error) {
+      msg.textContent =
+        "Error al iniciar sesión: " + error.message;
+      btn.disabled = false;
+    }
+  });
+})();
+</script>
+
 <button id="na-google-login" type="button">
   Continuar con Gmail
 </button>
