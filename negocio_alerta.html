@@ -1,6 +1,149 @@
 <!doctype html><!doctype html>
 <html lang="es">
 <head>
+<!-- MENÚ PRINCIPAL - NEGOCIO ALERTA -->
+<style>
+#na-menu-principal {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  padding: 16px 0;
+}
+
+#na-menu-principal .na-menu-card {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-height: 82px;
+  padding: 14px;
+  border: 1px solid #d8e8dd;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #ffffff, #eaf5ed);
+  color: #173f35;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 3px 10px #173f3510;
+  transition: transform .2s, box-shadow .2s;
+}
+
+#na-menu-principal .na-menu-card:active {
+  transform: scale(.96);
+}
+
+#na-menu-principal .na-menu-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  background: #d8eddf;
+  color: #17613e;
+}
+
+#na-menu-principal svg {
+  width: 25px;
+  height: 25px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#na-menu-principal .na-menu-label {
+  display: block;
+}
+
+#na-menu-principal .na-menu-sub {
+  display: block;
+  margin-top: 4px;
+  color: #668073;
+  font-size: 11px;
+  font-weight: 400;
+}
+</style>
+
+<nav id="na-menu-principal" aria-label="Menú principal">
+
+  <button class="na-menu-card" type="button"
+    onclick="document.getElementById('na-productos')?.scrollIntoView({behavior:'smooth'})">
+    <span class="na-menu-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="m12 3 9 5-9 5-9-5 9-5Z"/>
+        <path d="m3 8 9 5 9-5M3 8v9l9 5 9-5V8M12 13v9"/>
+      </svg>
+    </span>
+    <span><span class="na-menu-label">Productos</span>
+      <span class="na-menu-sub">Catálogo</span></span>
+  </button>
+
+  <button class="na-menu-card" type="button"
+    onclick="document.getElementById('na-clientes')?.scrollIntoView({behavior:'smooth'})">
+    <span class="na-menu-icon">
+      <svg viewBox="0 0 24 24">
+        <circle cx="9" cy="8" r="4"/>
+        <path d="M2 21v-2a7 7 0 0 1 14 0v2M19 8a4 4 0 0 1 0 8M20 21v-2a5 5 0 0 0-3-4.6"/>
+      </svg>
+    </span>
+    <span><span class="na-menu-label">Clientes</span>
+      <span class="na-menu-sub">Contactos</span></span>
+  </button>
+
+  <button class="na-menu-card" type="button"
+    onclick="document.getElementById('na-ventas')?.scrollIntoView({behavior:'smooth'})">
+    <span class="na-menu-icon">
+      <svg viewBox="0 0 24 24">
+        <circle cx="9" cy="21" r="1"/>
+        <circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/>
+      </svg>
+    </span>
+    <span><span class="na-menu-label">Ventas</span>
+      <span class="na-menu-sub">Operaciones</span></span>
+  </button>
+
+  <button class="na-menu-card" type="button"
+    onclick="document.getElementById('na-stock')?.scrollIntoView({behavior:'smooth'})">
+    <span class="na-menu-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="m12 3 9 5-9 5-9-5 9-5Z"/>
+        <path d="m3 8 9 5 9-5M3 8v9l9 5 9-5V8"/>
+      </svg>
+    </span>
+    <span><span class="na-menu-label">Stock</span>
+      <span class="na-menu-sub">Inventario</span></span>
+  </button>
+
+  <button class="na-menu-card" type="button"
+    onclick="document.getElementById('na-tickets')?.scrollIntoView({behavior:'smooth'})">
+    <span class="na-menu-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M4 3h16v18l-4-2-4 2-4-2-4 2V3Z"/>
+        <path d="M8 8h8M8 12h8M8 16h5"/>
+      </svg>
+    </span>
+    <span><span class="na-menu-label">Tickets</span>
+      <span class="na-menu-sub">Soporte</span></span>
+  </button>
+
+  <button class="na-menu-card" type="button"
+    onclick="document.getElementById('na-ajustes-btn')?.click()">
+    <span class="na-menu-icon">
+      <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a2 2 0 0 0 .4 2.2l-2.1 2.1a2 2 0 0 0-2.2-.4 2 2 0 0 0-1.2 1.8h-3a2 2 0 0 0-1.2-1.8 2 2 0 0 0-2.2.4l-2.1-2.1a2 2 0 0 0 .4-2.2A2 2 0 0 0 4.4 14v-3a2 2 0 0 0 1.8-1.2 2 2 0 0 0-.4-2.2l2.1-2.1a2 2 0 0 0 2.2.4A2 2 0 0 0 11.3 4h3a2 2 0 0 0 1.2 1.9 2 2 0 0 0 2.2-.4l2.1 2.1a2 2 0 0 0-.4 2.2 2 2 0 0 0 1.8 1.2v3a2 2 0 0 0-1.8 1Z"/>
+      </svg>
+    </span>
+    <span><span class="na-menu-label">Ajustes</span>
+      <span class="na-menu-sub">Configuración</span></span>
+  </button>
+
+</nav>
+<!-- FIN MENÚ PRINCIPAL -->
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#173f35">
