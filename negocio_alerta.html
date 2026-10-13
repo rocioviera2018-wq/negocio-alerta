@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Negocio Alerta PRO</title>
+<style>
+:root{--bg:#edf5f1;--card:#fff;--tx:#0f2b24;--mut:#5d7169;--g1:#04473a;--g2:#0e8a70;--gold:#d9b24a;--red:#d93a3a;--redbg:#fde8e8;--line:#dbe6e1}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+#app{max-width:560px;margin:0 auto;padding-bottom:96px}
+header{background:linear-gradient(135deg,var(--g1) 40%,var(--g2));color:#fff;padding:calc(18px + env(safe-area-inset-top,0px)) 16px 18px;border-radius:0 0 34px 34px;box-shadow:0 8px 20px rgba(0,0,0,.15)}
+.top{display:flex;align-items:center;gap:14px}
+.logo{width:64px;height:64px;border-radius:18px;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);display:grid;place-items:center;font-size:34px;flex:none}
+.top h1{margin:0;font-size:24px;line-height:1.15}.top h1 em{color:#f3d572;font-style:normal}
+.top p{margin:4px 0 0;font-size:14px;opacity:.85}
+.welcome{margin-top:18px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);border-radius:20px;padding:12px 14px;display:flex;align-items:center;gap:10px}
+.welcome b{font-size:17px;display:block}.welcome small{opacity:.85}.sp{flex:1}
+.out{background:var(--gold);color:#1d2b00;border:0;border-radius:14px;padding:12px 14px;font-weight:700;font-size:15px;display:flex;gap:6px;align-items:center;cursor:pointer}
+main{padding:16px 14px 0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--card);border:1px solid #cfe0d8;border-radius:18px;padding:10px 12px;text-align:left;color:var(--tx);font:inherit;cursor:pointer}
+.stat.red{border-color:#f0b4b4}.stat.gold{border-color:#ecd48f}
+.stat small{display:flex;gap:5px;align-items:center;color:var(--mut);font-weight:700;font-size:11.5px;text-transform:uppercase}
+.stat small svg{width:16px;height:16px}.stat.red small svg{color:#e0a100}.stat.gold small svg{color:var(--red)}
+.stat b{font-size:24px;display:block;margin-top:4px}
+.menu{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.menu button{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px 4px;color:var(--g1);font:700 15px inherit;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer}
+.menu button.on{background:linear-gradient(160deg,#00755c,var(--g1));color:#fff;border:2px solid var(--gold)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px;margin-top:16px}
+.card h2{margin:0;font-size:18px}
+.hd{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.hd .ic{width:42px;height:42px;border-radius:50%;background:var(--g1);color:#fff;display:grid;place-items:center;flex:none}
+.link{margin-left:auto;background:none;border:0;color:var(--g1);font-weight:700;cursor:pointer;font-size:13px}
+.pill{display:inline-block;background:#fcd9d9;color:var(--red);font-weight:700;font-size:13px;padding:2px 10px;border-radius:99px;margin-top:2px}
+.alerts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.al b{display:block;font-size:13px}.al span{color:var(--red);font-weight:700;display:block;font-size:12.5px}.al i{color:var(--mut);font-style:normal;font-size:12.5px}
+.row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.row:last-child{border:0}.row>b,.row>div{flex:1;min-width:0}.row small{color:var(--mut);display:block;font-weight:400}
+.dot{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:#fff;flex:none}
+.dot svg{width:14px;height:14px}
+.tag{background:#fde9b8;color:#8a5a00;font-size:12px;padding:3px 10px;border-radius:8px;font-weight:700}.tag.ok{background:#cfeedd;color:#0b5a38}
+.empty{color:var(--mut);padding:6px 0;font-size:14px}
+.note{margin-top:16px;background:#dcebe4;color:#2c5a4a;border-radius:14px;padding:10px 12px;font-size:12.5px}
+label{display:block;font-size:12px;color:var(--mut);margin-top:10px;font-weight:600}
+input,select{width:100%;padding:11px;border-radius:12px;border:1px solid var(--line);background:#f7fbf9;color:var(--tx);font:inherit;margin-top:4px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.primary{background:var(--g1);color:#fff;border:0;border-radius:14px;padding:13px;font-weight:700;font-size:15px;margin-top:14px;width:100%;cursor:pointer}
+.danger{background:var(--redbg);color:var(--red)}
+.mini{background:#f3f8f5;border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:6px 10px;cursor:pointer;font-weight:700}
+.low{color:var(--red);font-weight:700}
+.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin:4px 0 10px}.bar i{display:block;height:100%;background:var(--g2)}
+nav{position:fixed;left:0;right:0;bottom:0;max-width:560px;margin:0 auto;background:#05382d;border-top:3px solid var(--gold);display:flex;padding:8px 2px calc(8px + env(safe-area-inset-bottom,0px))}
+nav button{flex:1;background:none;border:0;color:#fff;font:600 12px inherit;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
+nav button.on{color:#f3d572}
+#modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;place-items:center;padding:20px;z-index:9}
+#modal.show{display:grid}
+.ticket{background:#fff;border-radius:16px;padding:18px;width:100%;max-width:340px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+.ticket h3{margin:0 0 6px;text-align:center;font-family:system-ui,sans-serif}
+.ticket hr{border:0;border-top:1px dashed #999;margin:10px 0}
+.ticket div{display:flex;justify-content:space-between;gap:8px}
+.ticket p{font-size:11px;color:#666;text-align:center;margin:8px 0 0}
+</style></head><body>
+<div id="app">
+ <header>
+  <div class="top"><div class="logo">🌿</div>
+   <div><h1>Negocio Alerta <em>PRO</em>👑</h1><p>Tu negocio organizado, desde el celular.</p></div></div>
+  <div class="welcome"><div><b>Bienvenido/a</b><small>Tu negocio, siempre en control.</small></div><div class="sp"></div>
+   <button class="out" data-out="1" id="out"></button></div>
+ </header>
+ <main id="view"></main>
+</div>
+<nav id="nav"></nav>
+<div id="modal"></div>
+
+<script>
+/* ---------- Íconos (SVG, se ven bien en cualquier celular) ---------- */
+const P={
+ home:'<path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
+ bag:'<path d="M6 7h12l1 14H5z"/><path d="M9 7a3 3 0 0 1 6 0"/>',
+ card:'<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',
+ box:'<path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>',
+ users:'<circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-4 3-6 7-6s7 2 7 6"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c3 0 5 1.5 5 5"/>',
+ gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9L7 7M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>',
+ chart:'<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
+ alert:'<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.5"/>',
+ bell:'<path d="M6 16v-5a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/>',
+ out:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+ plus:'<path d="M12 5v14M5 12h14"/>',
+ cart:'<circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h3l3 11h10l2-8H7"/>',
+ user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>',
+ trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 14h10l1-14"/>',
+ ticket:'<path d="M3 8a2 2 0 0 0 0 8v3h18v-3a2 2 0 0 1 0-8V5H3z"/><path d="M13 5v14" stroke-dasharray="2 2"/>'
+};
+const ic=(n,s=22)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${P[n]}</svg>`;
+
+/* ---------- Datos (se guardan en el navegador) ---------- */
+const $=s=>document.querySelector(s), KEY="negocioAlertaPro";
+let D={productos:[],ventas:[],pedidos:[],clientes:[],mov:[]};
+try{D=Object.assign(D,JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(D))}catch(e){}};
+const money=n=>"$ "+Math.round(n).toLocaleString("es-AR");
+const now=()=>new Date().toLocaleTimeString("es",{hour:"2-digit",minute:"2-digit",hour12:false});
+const nid=a=>a.reduce((m,x)=>Math.max(m,x.id),0)+1;
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const low=()=>D.productos.filter(p=>p.s<=p.m);
+const ganancia=()=>D.ventas.reduce((a,v)=>a+v.g,0);
+const ingresos=()=>D.ventas.reduce((a,v)=>a+v.t,0);
+const log=(t,x,extra)=>{D.mov.unshift(Object.assign({t,x,h:now()},extra||{}));D.mov=D.mov.slice(0,50)};
+
+/* ---------- Navegación ---------- */
+let tab="inicio";
+const TABS=[["inicio","home","Inicio"],["productos","bag","Productos"],["ventas","card","Ventas"],["pedidos","box","Pedidos"],["clientes","users","Clientes"],["ajustes","gear","Ajustes"]];
+const MENU=TABS.concat([["reportes","chart","Reportes"]]);
+const menu=()=>`<div class="menu">${MENU.map(t=>`<button class="${tab==t[0]?"on":""}" data-go="${t[0]}">${ic(t[1],30)}${t[2]}</button>`).join("")}</div>`;
+const navBar=()=>{$("#nav").innerHTML=TABS.map(t=>`<button class="${tab==t[0]?"on":""}" data-go="${t[0]}">${ic(t[1],26)}${t[2]}</button>`).join("")};
+$("#out").innerHTML=ic("out",18)+" Cerrar sesión";
+
+/* ---------- Pantallas ---------- */
+const MOVC={v:["#2f9a52","plus"],p:["#3b6fd6","cart"],c:["#7a4cc2","user"]};
+function movs(n){
+ if(!D.mov.length)return '<div class="empty">Todavía no hay movimientos.</div>';
+ return D.mov.slice(0,n).map(m=>`<div class="row"><sp
