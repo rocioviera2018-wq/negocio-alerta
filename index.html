@@ -120,7 +120,7 @@ textarea{min-height:80px}
 (() => {
 'use strict';
 
-const KEY='negocioAlertaPro_v6';
+const KEY='negocioAlertaPro_v7';
 let state=load();
 let page='home';
 let modalText='';
@@ -132,7 +132,7 @@ function defaultState(){
     business:'Mi negocio',
     owner:'',
     logo:'',
-    whatsapp:'5493755222727',
+    whatsapp:'5493755223737',
     products:[],
     sales:[],
     orders:[],
@@ -152,7 +152,7 @@ function load(){
 }
 function save(){
   try{localStorage.setItem(KEY,JSON.stringify(state));render();return true;}
-  catch(e){alert('No hay espacio suficiente para guardar.');return false;}
+  catch(e){alert('No hay espacio suficiente.');return false;}
 }
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function money(v){return new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:2}).format(Number(v)||0);}
@@ -177,26 +177,24 @@ function openModal(html){
 function closeModal(){document.getElementById('modal')?.remove();}
 
 /* =========================================================
-   COMPARTIR — usa navigator.share (menú nativo Android)
-   Sin URLs raras, sin whatsapp://, sin wa.me obligatorio
+   COMPARTIR — menú nativo Android primero
    ========================================================= */
 function cleanPhone(p){return String(p||'').replace(/\D/g,'');}
 
 async function compartirTexto(mensaje){
   copyText(mensaje, true);
 
-  // Método 1: menú nativo de Android (muestra WhatsApp, Business, etc)
+  // 1) Menú nativo de Android (WhatsApp, Business, etc)
   if(navigator.share){
     try{
       await navigator.share({text: mensaje});
       return true;
     }catch(e){
       if(e && e.name === 'AbortError') return true;
-      // si falla, seguimos al siguiente método
     }
   }
 
-  // Método 2: wa.me (WhatsApp Web)
+  // 2) Respaldo: wa.me
   const number = cleanPhone(state.whatsapp);
   const url = number
     ? `https://wa.me/${number}?text=${encodeURIComponent(mensaje)}`
@@ -245,7 +243,7 @@ async function copyText(text, silent){
    ========================================================= */
 function generarPDF(sale){
   if(!window.jspdf || !window.jspdf.jsPDF){
-    alert('Necesitás conexión a internet para generar PDF la primera vez.');
+    alert('Necesitás conexión a internet para generar el PDF la primera vez.');
     return null;
   }
   const { jsPDF } = window.jspdf;
@@ -364,7 +362,7 @@ TOTAL: ${money(sale.total)}
       <pre>${esc(modalText)}</pre>
     </div>
     <div class="actions noprint">
-      <button class="wa" data-act="share-text">📤 Compartir texto (WhatsApp, etc.)</button>
+      <button class="wa" data-act="share-text">📤 Compartir texto</button>
       <button data-act="pdf-share">📄 Compartir PDF</button>
       <button class="secondary" data-act="pdf-down">⬇️ Descargar PDF</button>
       <button class="secondary" data-act="copy-modal">📋 Copiar texto</button>
@@ -375,9 +373,7 @@ TOTAL: ${money(sale.total)}
 async function compartirTextoComprobante(){
   const sale = state.sales.find(s=>s.id===modalSaleId);
   if(!sale){ toast('Venta no encontrada'); return; }
-  const numero = cleanPhone(modalPhone) || cleanPhone(state.whatsapp);
-  const textoConNumero = numero ? `Para: ${numero}\n\n${modalText}` : modalText;
-  await compartirTexto(textoConNumero);
+  await compartirTexto(modalText);
 }
 
 async function compartirPDFComprobante(){
@@ -671,7 +667,7 @@ function render(){
           <div class="field full">
             <label>WhatsApp predeterminado</label>
             <input name="whatsapp" value="${esc(state.whatsapp||'')}" inputmode="tel" placeholder="549...">
-            <small class="muted">Solo números con código de país. Ej: 5493755222727</small>
+            <small class="muted">Solo números con código de país. Ej: 5493755223737</small>
           </div>
           <div class="field full">
             <label>Logo del negocio</label>
