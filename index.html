@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Negocio Alerta PRO</title>
-    <!-- Iconos FontAwesome -->
+    <!-- Iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Librería para generar PDFs -->
+    <!-- Librería PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Librería Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <style>
         :root {
             --primary-dark: #0a3d2e;
@@ -102,8 +105,14 @@
         .mov-right p { font-size: 13px; font-weight: bold; margin: 0; color: var(--primary-dark); }
 
         /* Botón PDF */
-        .btn-pdf { width: 100%; padding: 15px; background: #25D366; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
+        .btn-pdf { width: 100%; padding: 15px; background: #25D366; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); margin-top: 10px; }
         .btn-pdf:active { transform: scale(0.98); }
+
+        /* Formularios */
+        .form-group { margin-bottom: 10px; }
+        .form-group label { font-size: 12px; color: var(--text-light); display: block; margin-bottom: 5px; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
+        .btn-primary { width: 100%; padding: 12px; background: var(--primary-mid); color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 10px; }
 
         /* Menú Inferior */
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 10px 0; box-shadow: 0 -4px 15px rgba(0,0,0,0.05); border-top: 1px solid #eee; z-index: 100; }
@@ -111,6 +120,9 @@
         .nav-item i { font-size: 18px; display: block; margin-bottom: 5px; }
         .nav-item.active { color: var(--primary-dark); font-weight: bold; }
         .nav-item.active i { color: var(--gold); }
+
+        /* Texto vacío */
+        .empty-text { text-align: center; color: var(--text-light); font-size: 14px; padding: 20px; }
     </style>
 </head>
 <body>
@@ -140,183 +152,425 @@
     </header>
 
     <div class="container">
-        <!-- Tarjetas Resumen -->
-        <div class="summary-cards">
-            <div class="card-stat products">
-                <i class="fas fa-box icon"></i>
-                <h4>Productos</h4>
-                <p>12</p>
-            </div>
-            <div class="card-stat stock">
-                <i class="fas fa-exclamation-triangle icon"></i>
-                <h4>Stock bajo</h4>
-                <p style="color: var(--danger);">3</p>
-            </div>
-            <div class="card-stat earnings">
-                <i class="fas fa-chart-line icon"></i>
-                <h4>Ganancia</h4>
-                <p>$ 18.750</p>
-            </div>
-        </div>
-
-        <!-- Menú Grid -->
-        <div class="menu-grid">
-            <div class="menu-item active"><i class="fas fa-home"></i><span>Inicio</span></div>
-            <div class="menu-item"><i class="fas fa-shopping-bag"></i><span>Productos</span></div>
-            <div class="menu-item"><i class="fas fa-credit-card"></i><span>Ventas</span></div>
-            <div class="menu-item"><i class="fas fa-box-open"></i><span>Pedidos</span></div>
-            <div class="menu-item"><i class="fas fa-users"></i><span>Clientes</span></div>
-            <div class="menu-item"><i class="fas fa-chart-bar"></i><span>Reportes</span></div>
-            <div class="menu-item"><i class="fas fa-cog"></i><span>Ajustes</span></div>
-        </div>
-
-        <!-- Alerta de Stock -->
-        <div class="section-card">
-            <div class="section-header">
-                <h3><i class="fas fa-bell" style="color: var(--gold); margin-right: 5px;"></i> Atención para hoy</h3>
-                <a href="#">Ver todos ></a>
-            </div>
-            <div class="alert-item">
-                <div class="alert-img">🍞</div>
-                <div class="alert-info">
-                    <h4>Pan lactal</h4>
-                    <p>Quedan: 2 <span style="color: var(--text-light);">(Mínimo: 5)</span></p>
+        
+        <!-- ================= SECCIÓN INICIO ================= -->
+        <div id="seccion-inicio">
+            <div class="summary-cards">
+                <div class="card-stat products">
+                    <i class="fas fa-box icon"></i>
+                    <h4>Productos</h4>
+                    <p id="stat-productos">12</p>
+                </div>
+                <div class="card-stat stock">
+                    <i class="fas fa-exclamation-triangle icon"></i>
+                    <h4>Stock bajo</h4>
+                    <p id="stat-stock" style="color: var(--danger);">3</p>
+                </div>
+                <div class="card-stat earnings">
+                    <i class="fas fa-chart-line icon"></i>
+                    <h4>Ganancia</h4>
+                    <p id="stat-ganancia">$ 18.750</p>
                 </div>
             </div>
-            <div class="alert-item">
-                <div class="alert-img">🧃</div>
-                <div class="alert-info">
-                    <h4>Jugo naranja</h4>
-                    <p>Quedan: 1 <span style="color: var(--text-light);">(Mínimo: 3)</span></p>
-                </div>
-            </div>
-            <div class="alert-item">
-                <div class="alert-img">🍟</div>
-                <div class="alert-info">
-                    <h4>Papas fritas</h4>
-                    <p>Quedan: 2 <span style="color: var(--text-light);">(Mínimo: 5)</span></p>
-                </div>
-            </div>
-        </div>
 
-        <!-- Últimos Movimientos -->
-        <div class="section-card">
-            <div class="section-header">
-                <h3><i class="fas fa-clock" style="color: var(--primary-mid); margin-right: 5px;"></i> Últimos movimientos</h3>
-                <a href="#">Ver todos ></a>
+            <div class="menu-grid">
+                <div class="menu-item active" onclick="cambiarSeccion('inicio', this)"><i class="fas fa-home"></i><span>Inicio</span></div>
+                <div class="menu-item" onclick="cambiarSeccion('productos', this)"><i class="fas fa-shopping-bag"></i><span>Productos</span></div>
+                <div class="menu-item" onclick="cambiarSeccion('ventas', this)"><i class="fas fa-credit-card"></i><span>Ventas</span></div>
+                <div class="menu-item" onclick="cambiarSeccion('pedidos', this)"><i class="fas fa-box-open"></i><span>Pedidos</span></div>
+                <div class="menu-item" onclick="cambiarSeccion('clientes', this)"><i class="fas fa-users"></i><span>Clientes</span></div>
+                <div class="menu-item" onclick="cambiarSeccion('reportes', this)"><i class="fas fa-chart-bar"></i><span>Reportes</span></div>
+                <div class="menu-item" onclick="cambiarSeccion('ajustes', this)"><i class="fas fa-cog"></i><span>Ajustes</span></div>
             </div>
-            <div class="mov-item">
-                <div class="mov-left">
-                    <div class="mov-icon"><i class="fas fa-plus"></i></div>
-                    <div class="mov-text">
-                        <h4>Venta registrada - Pan lactal x2</h4>
-                        <span>17:32</span>
+
+            <div class="section-card">
+                <div class="section-header">
+                    <h3><i class="fas fa-bell" style="color: var(--gold); margin-right: 5px;"></i> Atención para hoy</h3>
+                    <a href="#">Ver todos ></a>
+                </div>
+                <div id="lista-alertas">
+                    <div class="alert-item">
+                        <div class="alert-img">🍞</div>
+                        <div class="alert-info">
+                            <h4>Pan lactal</h4>
+                            <p>Quedan: 2 <span style="color: var(--text-light);">(Mínimo: 5)</span></p>
+                        </div>
+                    </div>
+                    <div class="alert-item">
+                        <div class="alert-img">🧃</div>
+                        <div class="alert-info">
+                            <h4>Jugo naranja</h4>
+                            <p>Quedan: 1 <span style="color: var(--text-light);">(Mínimo: 3)</span></p>
+                        </div>
+                    </div>
+                    <div class="alert-item">
+                        <div class="alert-img">🍟</div>
+                        <div class="alert-info">
+                            <h4>Papas fritas</h4>
+                            <p>Quedan: 2 <span style="color: var(--text-light);">(Mínimo: 5)</span></p>
+                        </div>
                     </div>
                 </div>
-                <div class="mov-right">
-                    <p>$ 2.400</p>
-                </div>
             </div>
-            <div class="mov-item">
-                <div class="mov-left">
-                    <div class="mov-icon" style="background: #fdf2e9; color: #e67e22;"><i class="fas fa-shopping-cart"></i></div>
-                    <div class="mov-text">
-                        <h4>Pedido - Cliente: Ana</h4>
-                        <span>16:45</span>
-                    </div>
+
+            <div class="section-card">
+                <div class="section-header">
+                    <h3><i class="fas fa-clock" style="color: var(--primary-mid); margin-right: 5px;"></i> Últimos movimientos</h3>
+                    <a href="#">Ver todos ></a>
                 </div>
-                <div class="mov-right">
-                    <p style="color: #e67e22; font-size: 11px; background: #fdf2e9; padding: 2px 6px; border-radius: 5px;">Pendiente</p>
+                <div id="lista-movimientos">
+                    <div class="mov-item">
+                        <div class="mov-left">
+                            <div class="mov-icon"><i class="fas fa-plus"></i></div>
+                            <div class="mov-text">
+                                <h4>Venta registrada - Pan lactal x2</h4>
+                                <span>17:32</span>
+                            </div>
+                        </div>
+                        <div class="mov-right"><p>$ 2.400</p></div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Botón de PDF -->
-        <div class="section-card">
+        <!-- ================= SECCIÓN PRODUCTOS ================= -->
+        <div id="seccion-productos" style="display: none;">
+            <div class="section-card">
+                <h3 style="color: var(--primary-dark); margin-bottom: 15px;"><i class="fas fa-shopping-bag"></i> Mis Productos</h3>
+                <div id="lista-productos" class="empty-text">Cargando productos...</div>
+            </div>
+            <div class="section-card">
+                <h4 style="margin-bottom: 10px; color: var(--primary-dark);">Agregar Producto</h4>
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" id="prod-nombre" placeholder="Ej: Pan lactal">
+                </div>
+                <div class="form-group">
+                    <label>Stock</label>
+                    <input type="number" id="prod-stock" placeholder="Ej: 10">
+                </div>
+                <div class="form-group">
+                    <label>Precio</label>
+                    <input type="number" id="prod-precio" placeholder="Ej: 1200">
+                </div>
+                <button class="btn-primary" onclick="agregarProducto()">Guardar Producto</button>
+            </div>
+        </div>
+
+        <!-- ================= SECCIÓN VENTAS ================= -->
+        <div id="seccion-ventas" style="display: none;">
+            <div class="section-card">
+                <h3 style="color: var(--primary-dark); margin-bottom: 15px;"><i class="fas fa-credit-card"></i> Registrar Venta</h3>
+                <div class="form-group">
+                    <label>Producto</label>
+                    <input type="text" id="venta-producto" placeholder="Ej: Pan lactal">
+                </div>
+                <div class="form-group">
+                    <label>Cantidad</label>
+                    <input type="number" id="venta-cantidad" placeholder="Ej: 2">
+                </div>
+                <div class="form-group">
+                    <label>Total</label>
+                    <input type="number" id="venta-total" placeholder="Ej: 2400">
+                </div>
+                <button class="btn-primary" onclick="registrarVenta()">Registrar Venta</button>
+            </div>
+        </div>
+
+        <!-- ================= SECCIÓN PEDIDOS ================= -->
+        <div id="seccion-pedidos" style="display: none;">
+            <div class="section-card">
+                <h3 style="color: var(--primary-dark); margin-bottom: 15px;"><i class="fas fa-box-open"></i> Pedidos</h3>
+                <p class="empty-text">Aquí aparecerán tus pedidos.</p>
+            </div>
+        </div>
+
+        <!-- ================= SECCIÓN CLIENTES ================= -->
+        <div id="seccion-clientes" style="display: none;">
+            <div class="section-card">
+                <h3 style="color: var(--primary-dark); margin-bottom: 15px;"><i class="fas fa-users"></i> Clientes</h3>
+                <p class="empty-text">Aquí aparecerán tus clientes.</p>
+            </div>
+        </div>
+
+        <!-- ================= SECCIÓN REPORTES ================= -->
+        <div id="seccion-reportes" style="display: none;">
+            <div class="section-card">
+                <h3 style="color: var(--primary-dark); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Reportes</h3>
+                <button class="btn-pdf" onclick="generarYCompartirPDF()">
+                    <i class="fas fa-file-pdf"></i> Descargar Reporte PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= SECCIÓN AJUSTES ================= -->
+        <div id="seccion-ajustes" style="display: none;">
+            <div class="section-card">
+                <h3 style="color: var(--primary-dark); margin-bottom: 15px;"><i class="fas fa-cog"></i> Ajustes</h3>
+                <p class="empty-text">Configuración de la app.</p>
+            </div>
+        </div>
+
+        <!-- ================= BOTÓN PDF (Visible en Inicio) ================= -->
+        <div id="boton-pdf-inicio">
             <button class="btn-pdf" onclick="generarYCompartirPDF()">
-                <i class="fas fa-file-pdf"></i> Generar Ticket PDF (Venta Pan lactal)
+                <i class="fas fa-file-pdf"></i> Generar Ticket PDF
             </button>
         </div>
+
     </div>
 
     <!-- Menú Inferior -->
     <nav class="bottom-nav">
-        <div class="nav-item active"><i class="fas fa-home"></i>Inicio</div>
-        <div class="nav-item"><i class="fas fa-shopping-bag"></i>Productos</div>
-        <div class="nav-item"><i class="fas fa-credit-card"></i>Ventas</div>
-        <div class="nav-item"><i class="fas fa-box-open"></i>Pedidos</div>
-        <div class="nav-item"><i class="fas fa-users"></i>Clientes</div>
-        <div class="nav-item"><i class="fas fa-cog"></i>Ajustes</div>
+        <div class="nav-item active" onclick="cambiarSeccion('inicio', this)"><i class="fas fa-home"></i>Inicio</div>
+        <div class="nav-item" onclick="cambiarSeccion('productos', this)"><i class="fas fa-shopping-bag"></i>Productos</div>
+        <div class="nav-item" onclick="cambiarSeccion('ventas', this)"><i class="fas fa-credit-card"></i>Ventas</div>
+        <div class="nav-item" onclick="cambiarSeccion('pedidos', this)"><i class="fas fa-box-open"></i>Pedidos</div>
+        <div class="nav-item" onclick="cambiarSeccion('clientes', this)"><i class="fas fa-users"></i>Clientes</div>
+        <div class="nav-item" onclick="cambiarSeccion('ajustes', this)"><i class="fas fa-cog"></i>Ajustes</div>
     </nav>
 
     <script>
         // ==========================================
-        // LÓGICA DE PDF Y WHATSAPP
+        // 1. CONEXIÓN A SUPABASE
         // ==========================================
-        
+        // ⚠️ REEMPLAZA ESTAS DOS LÍNEAS CON TUS DATOS REALES DE SUPABASE:
+        const SUPABASE_URL = 'TU_SUPABASE_URL_AQUI';
+        const SUPABASE_KEY = 'TU_SUPABASE_ANON_KEY_AQUI';
+
+        let supabase = null;
+        try {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        } catch (e) {
+            console.warn("Supabase no configurado. Usando datos de prueba.");
+        }
+
+        // ==========================================
+        // 2. NAVEGACIÓN (Cambiar secciones)
+        // ==========================================
+        function cambiarSeccion(nombreSeccion, elementoClickeado) {
+            // Ocultar todas las secciones
+            const secciones = document.querySelectorAll('.container > div');
+            secciones.forEach(seccion => {
+                seccion.style.display = 'none';
+            });
+
+            // Mostrar la sección seleccionada
+            const seccionActiva = document.getElementById('seccion-' + nombreSeccion);
+            if (seccionActiva) {
+                seccionActiva.style.display = 'block';
+            }
+
+            // Mostrar u ocultar el botón de PDF según la sección
+            const botonPdf = document.getElementById('boton-pdf-inicio');
+            if (nombreSeccion === 'inicio') {
+                botonPdf.style.display = 'block';
+            } else {
+                botonPdf.style.display = 'none';
+            }
+
+            // Quitar 'active' de todos los botones
+            document.querySelectorAll('.menu-item, .nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Poner 'active' al botón que se tocó
+            if (elementoClickeado) {
+                elementoClickeado.classList.add('active');
+
+                // Sincronizar menú superior e inferior
+                const esMenuSuperior = elementoClickeado.classList.contains('menu-item');
+                if (esMenuSuperior) {
+                    const navItemAbajo = document.querySelector(`.bottom-nav .nav-item[onclick*="${nombreSeccion}"]`);
+                    if (navItemAbajo) navItemAbajo.classList.add('active');
+                } else {
+                    const menuItemArriba = document.querySelector(`.menu-grid .menu-item[onclick*="${nombreSeccion}"]`);
+                    if (menuItemArriba) menuItemArriba.classList.add('active');
+                }
+            }
+        }
+
+        // ==========================================
+        // 3. CARGAR DATOS DESDE SUPABASE
+        // ==========================================
+        async function cargarDatos() {
+            if (!supabase || SUPABASE_URL === 'TU_SUPABASE_URL_AQUI') {
+                console.log("Supabase no configurado. Mostrando datos de prueba.");
+                return;
+            }
+
+            try {
+                // Cargar Productos
+                const { data: productos, error: errProd } = await supabase.from('productos').select('*');
+                if (errProd) throw errProd;
+
+                if (productos && productos.length > 0) {
+                    document.getElementById('stat-productos').innerText = productos.length;
+                    
+                    // Mostrar lista de productos
+                    const listaProd = document.getElementById('lista-productos');
+                    listaProd.innerHTML = '';
+                    productos.forEach(p => {
+                        listaProd.innerHTML += `
+                            <div class="mov-item">
+                                <div class="mov-text">
+                                    <h4>${p.nombre || p.producto}</h4>
+                                    <span>Stock: ${p.stock || 0} | $${p.precio || 0}</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                // Cargar Ventas
+                const { data: ventas, error: errVentas } = await supabase.from('ventas').select('*');
+                if (errVentas) throw errVentas;
+
+                if (ventas && ventas.length > 0) {
+                    const totalGanancia = ventas.reduce((sum, v) => sum + (Number(v.total) || 0), 0);
+                    document.getElementById('stat-ganancia').innerText = '$ ' + totalGanancia.toLocaleString();
+                }
+
+            } catch (error) {
+                console.error("Error al cargar Supabase:", error.message);
+            }
+        }
+
+        // ==========================================
+        // 4. AGREGAR PRODUCTO
+        // ==========================================
+        async function agregarProducto() {
+            const nombre = document.getElementById('prod-nombre').value;
+            const stock = document.getElementById('prod-stock').value;
+            const precio = document.getElementById('prod-precio').value;
+
+            if (!nombre || !stock || !precio) {
+                alert("Completa todos los campos");
+                return;
+            }
+
+            if (!supabase || SUPABASE_URL === 'TU_SUPABASE_URL_AQUI') {
+                alert("Producto guardado (modo local). Configura Supabase para guardar en la nube.");
+                document.getElementById('prod-nombre').value = '';
+                document.getElementById('prod-stock').value = '';
+                document.getElementById('prod-precio').value = '';
+                return;
+            }
+
+            try {
+                const { error } = await supabase.from('productos').insert([
+                    { nombre: nombre, stock: parseInt(stock), precio: parseFloat(precio) }
+                ]);
+                if (error) throw error;
+                alert("¡Producto guardado!");
+                document.getElementById('prod-nombre').value = '';
+                document.getElementById('prod-stock').value = '';
+                document.getElementById('prod-precio').value = '';
+                cargarDatos();
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+        }
+
+        // ==========================================
+        // 5. REGISTRAR VENTA
+        // ==========================================
+        async function registrarVenta() {
+            const producto = document.getElementById('venta-producto').value;
+            const cantidad = document.getElementById('venta-cantidad').value;
+            const total = document.getElementById('venta-total').value;
+
+            if (!producto || !cantidad || !total) {
+                alert("Completa todos los campos");
+                return;
+            }
+
+            if (!supabase || SUPABASE_URL === 'TU_SUPABASE_URL_AQUI') {
+                alert("Venta registrada (modo local).");
+                document.getElementById('venta-producto').value = '';
+                document.getElementById('venta-cantidad').value = '';
+                document.getElementById('venta-total').value = '';
+                return;
+            }
+
+            try {
+                const { error } = await supabase.from('ventas').insert([
+                    { producto: producto, cantidad: parseInt(cantidad), total: parseFloat(total) }
+                ]);
+                if (error) throw error;
+                alert("¡Venta registrada!");
+                document.getElementById('venta-producto').value = '';
+                document.getElementById('venta-cantidad').value = '';
+                document.getElementById('venta-total').value = '';
+                cargarDatos();
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+        }
+
+        // ==========================================
+        // 6. GENERAR PDF Y COMPARTIR POR WHATSAPP
+        // ==========================================
         async function generarYCompartirPDF() {
-            // 1. DATOS DE LA VENTA (Aquí conectarías con Supabase para traer los datos reales)
-            // TODO: CONECTAR A SUPABASE (Reemplazar estos datos por los de tu base de datos)
-            const cliente = "Cliente General";
-            const producto = "Pan lactal";
-            const cantidad = 2;
-            const total = "$ 2.400";
-            const fecha = new Date().toLocaleDateString();
+            try {
+                // Datos de ejemplo (puedes reemplazarlos con datos reales de Supabase)
+                const cliente = "Cliente General";
+                const fecha = new Date().toLocaleDateString();
+                const producto = document.getElementById('venta-producto')?.value || "Pan lactal";
+                const cantidad = document.getElementById('venta-cantidad')?.value || "2";
+                const total = document.getElementById('venta-total')?.value || "2400";
 
-            // 2. CREAR EL PDF
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
+                // Crear PDF
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
 
-            // Diseño del ticket
-            doc.setFontSize(22);
-            doc.setTextColor(10, 61, 46); // Verde oscuro
-            doc.text("Negocio Alerta PRO", 10, 20);
-            
-            doc.setFontSize(12);
-            doc.setTextColor(0, 0, 0);
-            doc.text("Comprobante de Venta Interno", 10, 30);
-            doc.text("Fecha: " + fecha, 10, 40);
-            doc.text("Cliente: " + cliente, 10, 50);
-            
-            doc.line(10, 55, 200, 55); // Línea divisoria
+                doc.setFontSize(22);
+                doc.setTextColor(10, 61, 46);
+                doc.text("Negocio Alerta PRO", 10, 20);
 
-            doc.text("Producto", 10, 65);
-            doc.text("Cant.", 100, 65);
-            doc.text("Total", 150, 65);
-            
-            doc.text(producto, 10, 75);
-            doc.text(cantidad.toString(), 100, 75);
-            doc.text(total, 150, 75);
+                doc.setFontSize(12);
+                doc.setTextColor(0, 0, 0);
+                doc.text("Comprobante de Venta", 10, 30);
+                doc.text("Fecha: " + fecha, 10, 40);
+                doc.text("Cliente: " + cliente, 10, 50);
+                doc.line(10, 55, 200, 55);
+                doc.text("Producto: " + producto, 10, 65);
+                doc.text("Cantidad: " + cantidad, 10, 75);
+                doc.text("Total: $" + total, 10, 85);
+                doc.setFontSize(10);
+                doc.setTextColor(150, 150, 150);
+                doc.text("¡Gracias por su compra!", 10, 100);
 
-            doc.line(10, 85, 200, 85);
-            doc.setFontSize(14);
-            doc.text("TOTAL: " + total, 150, 95);
+                // Intentar compartir
+                const pdfBlob = doc.output('blob');
+                const file = new File([pdfBlob], 'ticket_venta.pdf', { type: 'application/pdf' });
 
-            doc.setFontSize(10);
-            doc.setTextColor(150, 150, 150);
-            doc.text("¡Gracias por su compra!", 10, 110);
-
-            // 3. COMPARTIR POR WHATSAPP
-            const pdfBlob = doc.output('blob');
-            const file = new File([pdfBlob], 'ticket_venta.pdf', { type: 'application/pdf' });
-
-            if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                try {
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
                     await navigator.share({
                         files: [file],
                         title: 'Ticket de Venta',
-                        text: 'Aquí tienes tu ticket de compra.'
+                        text: 'Aquí tienes tu ticket.'
                     });
-                } catch (error) {
-                    console.error('Error al compartir:', error);
+                } else {
+                    // Plan B: descargar y abrir WhatsApp
+                    doc.save('ticket_venta.pdf');
+                    setTimeout(() => {
+                        window.open('https://wa.me/?text=Hola, aquí está tu ticket de venta. Te adjunto el PDF que acabo de descargar.', '_blank');
+                    }, 500);
                 }
-            } else {
-                // Plan B: Si la app no soporta compartir archivos, descarga el PDF y abre WhatsApp
-                alert("Tu app no soporta compartir archivos directamente. Se descargará el PDF y se abrirá WhatsApp.");
-                doc.save('ticket_venta.pdf');
-                window.open(`https://wa.me/?text=Hola, aquí está tu ticket de venta. Te adjunto el PDF que acabo de descargar.`, '_blank');
+
+            } catch (error) {
+                console.error(error);
+                alert("Error al generar PDF: " + error.message);
             }
         }
+
+        // ==========================================
+        // 7. INICIALIZAR AL CARGAR LA PÁGINA
+        // ==========================================
+        window.onload = function() {
+            cargarDatos();
+        };
     </script>
 </body>
 </html>
