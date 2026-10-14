@@ -143,7 +143,7 @@ function defaultState(){
     business:'Mi negocio',
     owner:'',
     logo:'',
-    whatsapp:'5493755223737',
+    whatsapp:'',
     products:[],
     sales:[],
     orders:[],
@@ -189,34 +189,21 @@ function openModal(html){
 function closeModal(){document.getElementById('modal')?.remove();}
 
 /* =========================================================
-   WHATSAPP — intent:// en Android, wa.me en el resto
+   WHATSAPP — solo wa.me (HTTPS)
    ========================================================= */
 function cleanPhone(p){return String(p||'').replace(/\D/g,'');}
 
 function openWhatsApp(message, phone=''){
-  const number = cleanPhone(phone) || cleanPhone(state.whatsapp) || '5493755223737';
+  const number = cleanPhone(phone) || cleanPhone(state.whatsapp);
   const text = encodeURIComponent(message);
 
   copyText(message, true);
 
-  const waUrl = `https://wa.me/${number}?text=${text}`;
+  const url = number
+    ? `https://wa.me/${number}?text=${text}`
+    : `https://wa.me/?text=${text}`;
 
-  // Android: intent:// fuerza abrir la app nativa
-  const isAndroid = /android/i.test(navigator.userAgent);
-  if(isAndroid){
-    const fallback = encodeURIComponent(waUrl);
-    const intentUrl =
-      `intent://send?phone=${number}&text=${text}` +
-      `#Intent;scheme=whatsapp;package=com.whatsapp;` +
-      `S.browser_fallback_url=${fallback};end`;
-    try{
-      window.location.href = intentUrl;
-      return;
-    }catch(e){/* sigue al fallback */}
-  }
-
-  // iOS, escritorio, o si intent:// falló
-  window.location.href = waUrl;
+  window.location.href = url;
 }
 
 async function copyText(text, silent){
@@ -414,8 +401,13 @@ async function startScanner(videoId, messageId, callback){
   const video = document.getElementById(videoId);
   const message = document.getElementById(messageId);
   if(!video || !message) return;
+
+  if(location.protocol === 'file:'){
+    message.textContent = 'La cámara NO funciona con archivos locales (file://). Subí la app a HTTPS (Netlify Drop, GitHub Pages) y abrilo desde ese link.';
+    return;
+  }
   if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
-    message.textContent = 'La cámara requiere HTTPS. Subí el archivo a Netlify Drop o GitHub Pages.';
+    message.textContent = 'Tu navegador no permite usar la cámara.';
     return;
   }
   if(!('BarcodeDetector' in window)){
@@ -449,7 +441,7 @@ async function startScanner(videoId, messageId, callback){
     scan();
   }catch(e){
     stopScanner();
-    message.textContent = 'No se pudo abrir la cámara. Revisá los permisos de Chrome o subí el archivo a HTTPS.';
+    message.textContent = 'No se pudo abrir la cámara: ' + (e.message || 'revisá los permisos de Chrome.');
   }
 }
 function findProductByBarcode(bc){
