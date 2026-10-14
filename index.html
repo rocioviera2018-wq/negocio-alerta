@@ -267,4 +267,701 @@ function render(){
           ...state.orders.slice(-2).reverse().map(o=>({
             label:'Pedido',detail:o.client||'Cliente',value:o.status||'Pendiente'
           }))
-        ],x=>`<div class="item"><div><strong>${
+        ],x=>`<div class="item"><div><strong>${esc(x.label)}</strong><small>${esc(x.detail)}</small></div><b>${esc(x.value)}</b></div>`)
+      )+
+      '<div class="notice">🔒 Los datos se guardan en este navegador y dispositivo. Descargá respaldos regularmente.</div>';
+  }
+
+  if(page==='products'){
+    root.innerHTML=
+      card('➕ Agregar producto',`
+        <form id="productForm" class="form">
+          <div class="field full">
+            <label>Nombre del producto</label>
+            <input name="name" required placeholder="Ej. Pan lactal">
+          </div>
+          <div class="field full">
+            <label>Foto del producto</label>
+            <input name="image" id="productImage" type="file" accept="image/*">
+            <input type="hidden" name="imageData" id="imageData">
+            <small class="muted">Elegí una imagen de la galería o sacá una foto si tu navegador ofrece esa opción.</small>
+            <div id="productImagePreview"></div>
+          </div>
+          <div class="field">
+            <label>Código de barras</label>
+            <input name="barcode" id="productBarcode" placeholder="Código opcional">
+          </div>
+          <div class="field" style="align-content:end">
+            <button type="button" class="secondary" id="openScannerProduct">📷 Escanear código</button>
+          </div>
+          <div class="field">
+            <label>Precio de costo ($)</label>
+            <input name="cost" type="number" min="0" step="0.01" value="0" required>
+          </div>
+          <div class="field">
+            <label>Precio de venta ($)</label>
+            <input name="price" type="number" min="0" step="0.01" required>
+          </div>
+          <div class="field">
+            <label>Stock actual</label>
+            <input name="stock" type="number" min="0" step="1" value="0" required>
+          </div>
+          <div class="field">
+            <label>Stock mínimo</label>
+            <input name="min" type="number" min="0" step="1" value="3">
+          </div>
+          <div class="field full"><button>Guardar producto</button></div>
+        </form>
+        <div id="productScanner" class="scanner-box hide">
+          <video id="scannerVideo" autoplay playsinline></video>
+          <div id="scannerMessage" class="barcode-result">Apuntá la cámara al código de barras.</div>
+          <button type="button" class="danger" id="closeScannerProduct" style="margin-top:8px">Cerrar cámara</button>
+        </div>
+      `)+
+      card('📦 Mis productos',
+        list(state.products,p=>`
+          <div class="item">
+            <div class="product-info">${imageHTML(p)}<div>
+              <strong>${esc(p.name)}</strong>
+              <small>Código: ${esc(p.barcode||'Sin código')}</small>
+              <small>Costo: ${money(p.cost)} · Venta: ${money(p.price)}</small>
+              <small>Ganancia/unidad: ${money(profit(p))} · Stock: ${p.stock}${low(p)?' · ⚠️ Bajo':''}</small>
+            </div></div>
+            <button class="danger" data-del-product="${p.id}">Eliminar</button>
+          </div>`));
+  }
+
+  if(page==='sales'){
+    root.innerHTML=
+      card('🧾 Registrar venta',`
+        <div class="actions">
+          <button type="button" class="secondary" id="openScannerSale">📷 Escanear producto</button>
+        </div>
+        <div id="saleScanner" class="scanner-box hide">
+          <video id="saleScannerVideo" autoplay playsinline></video>
+          <div id="saleScannerMessage" class="barcode-result">Apuntá la cámara al código de barras.</div>
+          <button type="button" class="danger" id="closeScannerSale" style="margin-top:8px">Cerrar cámara</button>
+        </div>
+        <form id="saleForm" class="form" style="margin-top:12px">
+          <div class="field full">
+            <label>Producto</label>
+            <select name="product" id="saleProduct" required>
+              <option value="">Seleccioná un producto</option>
+              ${state.products.map(p=>`<option value="${p.id}">${esc(p.name)} — ${money(p.price)} — stock ${p.stock}</option>`).join('')}
+            </select>
+          </div>
+          <div class="field">
+            <label>Cantidad</label>
+            <input name="qty" type="number" min="1" step="1" value="1" required>
+          </div>
+          <div class="field">
+            <label>Cliente opcional</label>
+            <input name="client" placeholder="Nombre">
+          </div>
+          <div class="field full"><button ${state.products.length?'':'disabled'}>Registrar venta</button></div>
+        </form>
+        <p class="muted">Al registrar, se descuenta el stock automáticamente.</p>
+      `)+
+      card('💳 Historial de ventas',
+        list(state.sales.slice().reverse(),s=>`
+          <div class="item">
+            <div>
+              <strong>${esc(s.productName)} × ${s.qty}</strong>
+              <small>${esc(s.date)} · ${esc(s.client||'Cliente ocasional')}</small>
+            </div>
+            <div style="text-align:right">
+              <b>${money(s.total)}</b><br>
+              <button class="secondary" data-receipt="${s.id}" style="margin-top:6px">Comprobante</button>
+            </div>
+          </div>`));
+  }
+
+  if(page==='orders'){
+    root.innerHTML=
+      card('➕ Nuevo pedido',`
+        <form id="orderForm" class="form">
+          <div class="field"><label>Cliente</label><input name="client" required></div>
+          <div class="field"><label>Detalle del pedido</label><input name="detail" required></div>
+          <div class="field"><label>Total estimado ($)</label><input name="total" type="number" min="0" step="0.01" value="0"></div>
+          <div class="field"><label>Estado</label>
+            <select name="status"><option>Pendiente</option><option>Preparando</option><option>Entregado</option><option>Cancelado</option></select>
+          </div>
+          <div class="field full"><button>Guardar pedido</button></div>
+        </form>
+      `)+
+      card('📦 Pedidos',
+        list(state.orders.slice().reverse(),o=>`
+          <div class="item">
+            <div><strong>${esc(o.client)} — ${esc(o.detail)}</strong><small>${money(o.total)} · ${esc(o.date)}</small></div>
+            <select data-order-status="${o.id}" aria-label="Estado del pedido">
+              ${['Pendiente','Preparando','Entregado','Cancelado'].map(s=>`<option ${o.status===s?'selected':''}>${s}</option>`).join('')}
+            </select>
+          </div>`));
+  }
+
+  if(page==='clients'){
+    root.innerHTML=
+      card('➕ Agregar cliente',`
+        <form id="clientForm" class="form">
+          <div class="field"><label>Nombre</label><input name="name" required></div>
+          <div class="field"><label>WhatsApp</label><input name="phone" placeholder="549..."></div>
+          <div class="field full"><label>Notas</label><textarea name="notes" placeholder="Preferencias, dirección, etc."></textarea></div>
+          <div class="field full"><button>Guardar cliente</button></div>
+        </form>
+      `)+
+      card('👥 Clientes',
+        list(state.clients,c=>`
+          <div class="item">
+            <div><strong>${esc(c.name)}</strong><small>${esc(c.phone||'Sin teléfono')}</small>${c.notes?`<small>${esc(c.notes)}</small>`:''}</div>
+            <div class="actions">
+              ${c.phone?`<button class="secondary" data-client-whatsapp="${c.id}">WhatsApp</button>`:''}
+              <button class="danger" data-del-client="${c.id}">Eliminar</button>
+            </div>
+          </div>`));
+  }
+
+  if(page==='settings'){
+    root.innerHTML=
+      card('⚙️ Datos del negocio',`
+        <form id="settingsForm" class="form">
+          <div class="field full">
+            <label>Nombre del negocio</label>
+            <input name="business" value="${esc(state.business)}" required>
+          </div>
+          <div class="field full">
+            <label>Tu nombre</label>
+            <input name="owner" value="${esc(state.owner)}" placeholder="Cómo querés que te saludemos">
+          </div>
+          <div class="field full">
+            <label>WhatsApp predeterminado (con código de país)</label>
+            <input name="whatsapp" value="${esc(state.whatsapp||'')}" inputmode="tel" placeholder="549...">
+            <small class="muted">Ingresá el número completo, solo números y con código de país. No pongas +, espacios ni guiones.</small>
+          </div>
+          <div class="field full">
+            <label>Logo del negocio</label>
+            <input id="logoFile" type="file" accept="image/*">
+            <input type="hidden" name="logoData" id="logoData">
+            <div id="logoPreview">${state.logo?`<img class="logo-preview" src="${state.logo}" alt="Logo">`:'<span class="muted">Todavía no hay logo cargado.</span>'}</div>
+          </div>
+          <div class="field full"><button>Guardar ajustes</button></div>
+        </form>
+      `)+
+      card('💾 Copia de seguridad',`
+        <p class="muted">Descargá todos los datos guardados en este dispositivo.</p>
+        <div class="actions">
+          <button id="export">Descargar respaldo JSON</button>
+          <label class="btn" for="importFile" style="display:inline-block">Importar respaldo</label>
+          <input class="hide" id="importFile" type="file" accept=".json,application/json">
+        </div>
+        <div class="actions"><button class="secondary" id="shareSales">Compartir resumen de ventas</button></div>
+      `)+
+      card('🗑️ Borrar datos locales',`
+        <p class="muted">Esto elimina los registros de esta versión y no se puede deshacer.</p>
+        <button class="danger" id="clearAll">Borrar datos de esta versión</button>
+      `);
+  }
+
+  prepareImageInputs();
+}
+
+function resizeImage(file,callback){
+  if(!file || !file.type.startsWith('image/')){
+    alert('Elegí un archivo de imagen válido.');
+    return;
+  }
+
+  const reader=new FileReader();
+
+  reader.onerror=()=>alert('No se pudo leer el archivo. Probá con otra imagen.');
+
+  reader.onload=event=>{
+    const img=new Image();
+
+    img.onerror=()=>alert('No se pudo abrir la imagen seleccionada.');
+
+    img.onload=()=>{
+      const maxSize=700;
+      const ratio=Math.min(1,maxSize/Math.max(img.width,img.height));
+      const width=Math.max(1,Math.round(img.width*ratio));
+      const height=Math.max(1,Math.round(img.height*ratio));
+      const canvas=document.createElement('canvas');
+      canvas.width=width;
+      canvas.height=height;
+      const ctx=canvas.getContext('2d');
+
+      if(!ctx){
+        alert('No se pudo procesar la imagen.');
+        return;
+      }
+
+      ctx.drawImage(img,0,0,width,height);
+      callback(canvas.toDataURL('image/jpeg',0.78));
+    };
+
+    img.src=event.target.result;
+  };
+
+  reader.readAsDataURL(file);
+}
+
+function prepareImageInputs(){
+  const productImage=document.getElementById('productImage');
+
+  if(productImage){
+    productImage.addEventListener('change',e=>{
+      const file=e.target.files && e.target.files[0];
+      if(!file)return;
+
+      resizeImage(file,data=>{
+        const input=document.getElementById('imageData');
+        const preview=document.getElementById('productImagePreview');
+        if(input)input.value=data;
+        if(preview)preview.innerHTML=`<img class="product-image" src="${data}" alt="Vista previa">`;
+      });
+    });
+  }
+
+  const logoFile=document.getElementById('logoFile');
+
+  if(logoFile){
+    logoFile.addEventListener('change',e=>{
+      const file=e.target.files && e.target.files[0];
+      if(!file)return;
+
+      resizeImage(file,data=>{
+        const input=document.getElementById('logoData');
+        const preview=document.getElementById('logoPreview');
+        if(input)input.value=data;
+        if(preview)preview.innerHTML=`<img class="logo-preview" src="${data}" alt="Vista previa del logo">`;
+      });
+    });
+  }
+}
+
+function stopScanner(){
+  scanActive=false;
+
+  if(scannerStream){
+    scannerStream.getTracks().forEach(track=>track.stop());
+    scannerStream=null;
+  }
+
+  document.querySelectorAll('video').forEach(v=>v.srcObject=null);
+}
+
+async function startScanner(videoId,messageId,callback){
+  stopScanner();
+
+  const video=document.getElementById(videoId);
+  const message=document.getElementById(messageId);
+  if(!video||!message)return;
+
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    message.textContent='La cámara requiere HTTPS y permisos del navegador. Podés escribir el código manualmente.';
+    return;
+  }
+
+  if(!('BarcodeDetector' in window)){
+    message.textContent='Este navegador no admite escaneo automático. Escribí el código manualmente.';
+    return;
+  }
+
+  try{
+    const detector=new BarcodeDetector({
+      formats:['ean_13','ean_8','upc_a','upc_e','code_128','code_39']
+    });
+
+    scannerStream=await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:{ideal:'environment'}},
+      audio:false
+    });
+
+    video.srcObject=scannerStream;
+    await video.play();
+    scanActive=true;
+    message.textContent='Buscando código...';
+
+    const scan=async()=>{
+      if(!scanActive||!scannerStream)return;
+
+      try{
+        const codes=await detector.detect(video);
+        if(codes.length){
+          const code=codes[0].rawValue;
+          message.textContent='Código detectado: '+code;
+          scanActive=false;
+          stopScanner();
+          callback(code);
+          return;
+        }
+      }catch(e){}
+
+      if(scanActive)requestAnimationFrame(scan);
+    };
+
+    scan();
+  }catch(e){
+    stopScanner();
+    message.textContent='No se pudo abrir la cámara. Revisá los permisos del navegador.';
+  }
+}
+
+function findProductByBarcode(barcode){
+  return state.products.find(p=>String(p.barcode||'').trim()===String(barcode).trim());
+}
+
+function openWhatsApp(message,phone=''){
+  let number=String(phone||'').replace(/\D/g,'');
+
+  if(!number){
+    number=String(state.whatsapp||'').replace(/\D/g,'');
+  }
+
+  const url=number
+    ? `https://wa.me/${number}?text=${encodeURIComponent(message)}`
+    : `https://wa.me/?text=${encodeURIComponent(message)}`;
+
+  // HTTPS evita el error ERR_UNKNOWN_URL_SCHEME de whatsapp://
+  window.location.href=url;
+}
+
+function receipt(saleId){
+  const sale=state.sales.find(s=>s.id===saleId);
+  if(!sale)return;
+
+  const text=
+`${state.business}
+COMPROBANTE INTERNO — NO FISCAL
+Fecha: ${sale.date}
+Cliente: ${sale.client||'Consumidor final'}
+
+${sale.productName} × ${sale.qty}
+Precio unitario: ${money(sale.price)}
+TOTAL: ${money(sale.total)}
+
+¡Gracias por tu compra!`;
+
+  const w=window.open('','_blank');
+
+  if(!w){
+    const send=confirm('El navegador bloqueó la ventana del comprobante. ¿Querés enviar el texto por WhatsApp?');
+    if(send)openWhatsApp(text);
+    return;
+  }
+
+  const safeText=esc(text);
+  const logoHTML=state.logo
+    ? `<img src="${state.logo}" alt="Logo" style="width:80px;height:80px;object-fit:cover;border-radius:15px">`
+    : '<div style="font-size:40px">🌿</div>';
+
+  w.document.write(`<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Comprobante</title>
+<style>
+body{font:16px system-ui;background:#edf6f1;padding:20px;color:#064c40}
+.ticket{background:white;border:2px solid #d8bd63;border-radius:20px;padding:24px;max-width:420px;margin:auto;line-height:1.7;overflow-wrap:anywhere}
+button{padding:12px;background:#006b58;color:white;border:0;border-radius:9px;margin:8px 5px 0 0;font-size:15px}
+.note{font-size:12px;color:#6b8580}
+@media print{button{display:none}body{background:white;padding:0}.ticket{border:1px solid #ccc}}
+</style>
+</head>
+<body>
+<div class="ticket">
+${logoHTML}
+<h2>${esc(state.business)}</h2>
+<pre style="white-space:pre-wrap;font:inherit">${safeText}</pre>
+<button onclick="window.print()">Imprimir / Guardar PDF</button>
+<button onclick="window.location.href='https://wa.me/?text='+encodeURIComponent(document.getElementById('receiptText').value)">Enviar por WhatsApp</button>
+<textarea id="receiptText" style="position:absolute;left:-9999px">${safeText}</textarea>
+<p class="note">Comprobante interno; no es una factura fiscal.</p>
+</div>
+</body>
+</html>`);
+  w.document.close();
+}
+
+function exportData(){
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement('a');
+  link.href=url;
+  link.download='respaldo-negocio-alerta-pro.json';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function shareSummary(){
+  const total=state.sales.reduce((sum,s)=>sum+Number(s.total||0),0);
+  const message=
+`Resumen de ${state.business}
+Ventas registradas: ${state.sales.length}
+Total vendido: ${money(total)}
+Productos: ${state.products.length}
+Stock bajo: ${state.products.filter(low).length}`;
+
+  openWhatsApp(message);
+}
+
+document.addEventListener('click',event=>{
+  const target=event.target;
+  const pageButton=target.closest('[data-page]');
+
+  if(pageButton){
+    setPage(pageButton.dataset.page);
+    return;
+  }
+
+  const delProduct=target.closest('[data-del-product]');
+  if(delProduct){
+    if(confirm('¿Eliminar este producto?')){
+      state.products=state.products.filter(p=>p.id!==delProduct.dataset.delProduct);
+      save();
+    }
+    return;
+  }
+
+  const delClient=target.closest('[data-del-client]');
+  if(delClient){
+    if(confirm('¿Eliminar este cliente?')){
+      state.clients=state.clients.filter(c=>c.id!==delClient.dataset.delClient);
+      save();
+    }
+    return;
+  }
+
+  const receiptButton=target.closest('[data-receipt]');
+  if(receiptButton){
+    receipt(receiptButton.dataset.receipt);
+    return;
+  }
+
+  const clientButton=target.closest('[data-client-whatsapp]');
+  if(clientButton){
+    const client=state.clients.find(c=>c.id===clientButton.dataset.clientWhatsapp);
+    if(client){
+      const phone=String(client.phone||'').replace(/\D/g,'');
+      if(!phone){
+        alert('Este cliente no tiene WhatsApp registrado.');
+        return;
+      }
+      openWhatsApp(`Hola ${client.name}, te contactamos de ${state.business}.`,phone);
+    }
+    return;
+  }
+
+  if(target.closest('#openScannerProduct')){
+    const box=document.getElementById('productScanner');
+    if(box){
+      box.classList.remove('hide');
+      startScanner('scannerVideo','scannerMessage',barcode=>{
+        const input=document.getElementById('productBarcode');
+        if(input)input.value=barcode;
+      });
+    }
+    return;
+  }
+
+  if(target.closest('#closeScannerProduct')){
+    stopScanner();
+    document.getElementById('productScanner')?.classList.add('hide');
+    return;
+  }
+
+  if(target.closest('#openScannerSale')){
+    const box=document.getElementById('saleScanner');
+    if(box){
+      box.classList.remove('hide');
+      startScanner('saleScannerVideo','saleScannerMessage',barcode=>{
+        const product=findProductByBarcode(barcode);
+        if(!product){
+          alert('No existe un producto con ese código. Agregalo primero desde Productos.');
+          return;
+        }
+        const select=document.getElementById('saleProduct');
+        if(select)select.value=product.id;
+      });
+    }
+    return;
+  }
+
+  if(target.closest('#closeScannerSale')){
+    stopScanner();
+    document.getElementById('saleScanner')?.classList.add('hide');
+    return;
+  }
+
+  if(target.closest('#export')){
+    exportData();
+    return;
+  }
+
+  if(target.closest('#shareSales')){
+    shareSummary();
+    return;
+  }
+
+  if(target.closest('#clearAll')){
+    if(confirm('¿Seguro? Se borrarán todos los datos locales. Descargá un respaldo si lo necesitás.')){
+      state=defaultState();
+      save();
+    }
+    return;
+  }
+
+  if(target.closest('#logout')){
+    alert('Esta versión guarda datos localmente. El cierre de sesión real necesita un sistema de usuarios.');
+  }
+});
+
+document.addEventListener('submit',event=>{
+  event.preventDefault();
+
+  const form=event.target;
+  const data=Object.fromEntries(new FormData(form));
+
+  if(form.id==='productForm'){
+    const barcode=String(data.barcode||'').trim();
+
+    if(barcode&&findProductByBarcode(barcode)){
+      alert('Ya existe un producto con ese código de barras.');
+      return;
+    }
+
+    state.products.push({
+      id:id(),
+      name:String(data.name||'').trim(),
+      image:data.imageData||'',
+      barcode,
+      price:Number(data.price||0),
+      cost:Number(data.cost||0),
+      stock:Number(data.stock||0),
+      min:Number(data.min||0)
+    });
+
+    if(save())alert('Producto guardado correctamente.');
+    return;
+  }
+
+  if(form.id==='saleForm'){
+    const product=state.products.find(p=>p.id===data.product);
+    const quantity=Number(data.qty||0);
+
+    if(!product){alert('Seleccioná un producto.');return;}
+    if(quantity<=0){alert('La cantidad debe ser mayor que cero.');return;}
+    if(quantity>Number(product.stock)){
+      alert('No hay suficiente stock. Disponible: '+product.stock);
+      return;
+    }
+
+    product.stock-=quantity;
+    state.sales.push({
+      id:id(),
+      productId:product.id,
+      productName:product.name,
+      qty:quantity,
+      cost:Number(product.cost||0),
+      price:Number(product.price||0),
+      profit:quantity*profit(product),
+      total:quantity*Number(product.price||0),
+      client:String(data.client||'').trim(),
+      date:new Date().toLocaleString('es-AR')
+    });
+
+    if(save())alert('Venta registrada correctamente.');
+    return;
+  }
+
+  if(form.id==='orderForm'){
+    state.orders.push({
+      id:id(),
+      client:String(data.client||'').trim(),
+      detail:String(data.detail||'').trim(),
+      total:Number(data.total||0),
+      status:data.status,
+      date:new Date().toLocaleString('es-AR')
+    });
+    save();
+    return;
+  }
+
+  if(form.id==='clientForm'){
+    state.clients.push({
+      id:id(),
+      name:String(data.name||'').trim(),
+      phone:String(data.phone||'').trim(),
+      notes:String(data.notes||'').trim()
+    });
+    save();
+    return;
+  }
+
+  if(form.id==='settingsForm'){
+    state.business=String(data.business||'Mi negocio').trim();
+    state.owner=String(data.owner||'').trim();
+    state.whatsapp=String(data.whatsapp||'').replace(/\D/g,'');
+
+    if(data.logoData)state.logo=data.logoData;
+
+    if(save())alert('Ajustes guardados correctamente.');
+  }
+});
+
+document.addEventListener('change',event=>{
+  const target=event.target;
+
+  if(target.matches('[data-order-status]')){
+    const order=state.orders.find(o=>o.id===target.dataset.orderStatus);
+    if(order){
+      order.status=target.value;
+      save();
+    }
+  }
+
+  if(target.id==='importFile'){
+    const file=target.files&&target.files[0];
+    if(!file)return;
+
+    const reader=new FileReader();
+    reader.onerror=()=>alert('No se pudo leer el archivo seleccionado.');
+
+    reader.onload=()=>{
+      try{
+        const imported=JSON.parse(reader.result);
+
+        if(!imported||!Array.isArray(imported.products)||!Array.isArray(imported.sales)){
+          throw new Error('Formato inválido');
+        }
+
+        if(confirm('¿Reemplazar los datos actuales con este respaldo?')){
+          state={
+            ...defaultState(),
+            ...imported,
+            products:imported.products||[],
+            sales:imported.sales||[],
+            orders:imported.orders||[],
+            clients:imported.clients||[]
+          };
+
+          if(save())alert('Respaldo importado correctamente.');
+        }
+      }catch(e){
+        alert('El archivo no parece ser un respaldo válido de Negocio Alerta PRO.');
+      }
+      target.value='';
+    };
+
+    reader.readAsText(file);
+  }
+});
+
+render();
+
+})();
+</script>
+</body>
+</html>
