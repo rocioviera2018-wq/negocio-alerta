@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Negocio Alerta PRO</title>
-    <!-- Fuente Poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Iconos FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -20,12 +18,7 @@
             --red: #E53935;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
         body {
             background-color: #e0e0e0;
@@ -35,7 +28,6 @@
             min-height: 100vh;
         }
 
-        /* Contenedor principal simulando pantalla de móvil/PC */
         .app-container {
             width: 100%;
             max-width: 480px;
@@ -44,7 +36,20 @@
             position: relative;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             overflow-x: hidden;
-            padding-bottom: 80px; /* Espacio para la barra inferior */
+            padding-bottom: 80px;
+        }
+
+        /* --- SECCIONES (Páginas) --- */
+        .app-section {
+            display: none; /* Ocultas por defecto */
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .app-section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* --- HEADER --- */
@@ -62,655 +67,374 @@
         }
 
         .logo-icon {
-            width: 45px;
-            height: 45px;
-            border: 2px solid var(--gold);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--gold);
-            font-size: 20px;
+            width: 45px; height: 45px; border: 2px solid var(--gold); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 20px;
         }
 
-        .header-text h1 {
-            font-size: 18px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .pro-badge {
-            background-color: var(--gold);
-            color: black;
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: 700;
-        }
-
-        .header-text p {
-            font-size: 11px;
-            color: rgba(255,255,255,0.8);
-        }
-
-        .header-icons {
-            margin-left: auto;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .notification-icon {
-            position: relative;
-            font-size: 20px;
-        }
-
+        .header-text h1 { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
+        .pro-badge { background-color: var(--gold); color: black; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+        .header-text p { font-size: 11px; color: rgba(255,255,255,0.8); }
+        .header-icons { margin-left: auto; display: flex; align-items: center; gap: 15px; }
+        .notification-icon { position: relative; font-size: 20px; }
         .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background-color: var(--red);
-            color: white;
-            font-size: 9px;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
+            position: absolute; top: -5px; right: -5px; background-color: var(--red); color: white;
+            font-size: 9px; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;
         }
-
-        .profile-icon {
-            width: 35px;
-            height: 35px;
-            background-color: #1B5E46;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
+        .profile-icon { width: 35px; height: 35px; background-color: #1B5E46; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
 
         /* --- WELCOME BANNER --- */
         .welcome-banner {
-            background-color: var(--dark-green);
-            margin: -15px 20px 0;
-            padding: 12px 15px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: white;
-            position: relative;
-            z-index: 2;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            background-color: var(--dark-green); margin: -15px 20px 0; padding: 12px 15px;
+            border-radius: 15px; display: flex; align-items: center; gap: 10px; color: white;
+            position: relative; z-index: 2; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-
-        .welcome-icon {
-            background-color: #1A6B4E;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
-
-        .welcome-text h3 {
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .welcome-text p {
-            font-size: 10px;
-            color: rgba(255,255,255,0.7);
-        }
-
+        .welcome-icon { background-color: #1A6B4E; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .welcome-text h3 { font-size: 13px; font-weight: 600; }
+        .welcome-text p { font-size: 10px; color: rgba(255,255,255,0.7); }
         .logout-btn {
-            margin-left: auto;
-            background: transparent;
-            border: 1px solid var(--gold);
-            color: var(--gold);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-family: 'Poppins', sans-serif;
+            margin-left: auto; background: transparent; border: 1px solid var(--gold); color: var(--gold);
+            padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 500; cursor: pointer;
+            display: flex; align-items: center; gap: 5px; font-family: 'Poppins', sans-serif;
         }
 
         /* --- METRICS --- */
-        .metrics-grid {
-            display: flex;
-            gap: 10px;
-            padding: 15px 20px;
-        }
-
+        .metrics-grid { display: flex; gap: 10px; padding: 15px 20px; }
         .metric-card {
-            flex: 1;
-            background: white;
-            padding: 12px;
-            border-radius: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            position: relative;
+            flex: 1; background: white; padding: 12px; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex; flex-direction: column; gap: 8px; position: relative;
         }
-
         .metric-card.productos { border: 1px solid rgba(10, 59, 44, 0.2); }
         .metric-card.stock { border: 1px solid rgba(229, 57, 53, 0.2); }
         .metric-card.ganancia { border: 1px solid rgba(201, 164, 92, 0.3); }
-
-        .metric-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .metric-icon {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-        }
-
+        .metric-header { display: flex; justify-content: space-between; align-items: center; }
+        .metric-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; }
         .metric-card.productos .metric-icon { background: #e8f5e9; color: var(--primary-green); }
         .metric-card.stock .metric-icon { background: #ffebee; color: var(--red); }
         .metric-card.ganancia .metric-icon { background: #fff8e1; color: var(--gold); }
-
-        .metric-title {
-            font-size: 10px;
-            color: var(--text-gray);
-        }
-
-        .metric-value {
-            font-size: 15px;
-            font-weight: 700;
-        }
-
+        .metric-title { font-size: 10px; color: var(--text-gray); }
+        .metric-value { font-size: 15px; font-weight: 700; }
         .metric-card.productos .metric-value { color: var(--primary-green); }
         .metric-card.stock .metric-value { color: var(--red); }
         .metric-card.ganancia .metric-value { color: var(--gold); }
-
-        .metric-arrow {
-            font-size: 12px;
-            color: inherit;
-            position: absolute;
-            right: 12px;
-            bottom: 12px;
-        }
+        .metric-arrow { font-size: 12px; color: inherit; position: absolute; right: 12px; bottom: 12px; }
 
         /* --- ACTION GRID --- */
-        .actions-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            padding: 0 20px 15px;
-        }
-
+        .actions-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 0 20px 15px; }
         .action-btn {
-            background: white;
-            border-radius: 15px;
-            padding: 15px 5px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            cursor: pointer;
-            transition: transform 0.2s;
+            background: white; border-radius: 15px; padding: 15px 5px; display: flex; flex-direction: column;
+            align-items: center; gap: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.2s;
+        }
+        .action-btn:active { transform: scale(0.95); }
+        .action-btn i { font-size: 20px; color: var(--primary-green); }
+        .action-btn span { font-size: 9px; text-align: center; color: var(--text-dark); font-weight: 500; }
+
+        /* --- CONTENIDO GENÉRICO DE PÁGINAS --- */
+        .page-content { padding: 20px; text-align: center; }
+        .page-content h2 { color: var(--primary-green); margin-top: 50px; font-size: 24px; }
+        .page-content p { color: var(--text-gray); font-size: 14px; margin-top: 10px; }
+        .back-btn {
+            background: var(--primary-green); color: white; border: none; padding: 10px 20px;
+            border-radius: 10px; margin-top: 20px; cursor: pointer; font-family: 'Poppins', sans-serif;
         }
 
-        .action-btn:active {
-            transform: scale(0.95);
-        }
-
-        .action-btn i {
-            font-size: 20px;
-            color: var(--primary-green);
-        }
-
-        .action-btn span {
-            font-size: 9px;
-            text-align: center;
-            color: var(--text-dark);
-            font-weight: 500;
-        }
-
-        /* --- LOW STOCK SECTION --- */
+        /* --- LOW STOCK & MOVIMIENTOS (Solo en Inicio) --- */
         .section-card {
-            background: white;
-            margin: 0 20px 15px;
-            padding: 15px;
-            border-radius: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            background: white; margin: 0 20px 15px; padding: 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .section-icon {
-            background-color: var(--primary-green);
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-        }
-
-        .section-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text-dark);
-        }
-
-        .see-all {
-            margin-left: auto;
-            color: var(--primary-green);
-            font-size: 11px;
-            font-weight: 700;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .alert-badge {
-            display: inline-block;
-            background-color: #ffebee;
-            color: var(--red);
-            font-size: 10px;
-            padding: 4px 10px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            font-weight: 500;
-        }
-
-        .horizontal-scroll {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding-bottom: 5px;
-        }
-
-        .horizontal-scroll::-webkit-scrollbar {
-            display: none;
-        }
-
-        .product-card {
-            min-width: 140px;
-            background: #f9f9f9;
-            border: 1px solid #eee;
-            border-radius: 12px;
-            padding: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .product-card img {
-            width: 35px;
-            height: 35px;
-            border-radius: 8px;
-            object-fit: cover;
-        }
-
-        .product-info h4 {
-            font-size: 11px;
-            font-weight: 700;
-            margin-bottom: 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 80px;
-        }
-
-        .product-info p {
-            font-size: 10px;
-            color: var(--red);
-            font-weight: 500;
-        }
-
-        .product-info span {
-            font-size: 9px;
-            color: var(--text-gray);
-        }
-
-        /* --- RECENT MOVEMENTS --- */
-        .movement-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .movement-item:last-child {
-            border-bottom: none;
-        }
-
-        .movement-icon {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-        }
-
+        .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .section-icon { background-color: var(--primary-green); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        .section-title { font-size: 15px; font-weight: 700; color: var(--text-dark); }
+        .see-all { margin-left: auto; color: var(--primary-green); font-size: 11px; font-weight: 700; text-decoration: none; cursor: pointer; }
+        .alert-badge { display: inline-block; background-color: #ffebee; color: var(--red); font-size: 10px; padding: 4px 10px; border-radius: 10px; margin-bottom: 10px; font-weight: 500; }
+        .horizontal-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; }
+        .horizontal-scroll::-webkit-scrollbar { display: none; }
+        .product-card { min-width: 140px; background: #f9f9f9; border: 1px solid #eee; border-radius: 12px; padding: 10px; display: flex; align-items: center; gap: 8px; }
+        .product-card img { width: 35px; height: 35px; border-radius: 8px; object-fit: cover; }
+        .product-info h4 { font-size: 11px; font-weight: 700; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80px; }
+        .product-info p { font-size: 10px; color: var(--red); font-weight: 500; }
+        .product-info span { font-size: 9px; color: var(--text-gray); }
+        .movement-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+        .movement-item:last-child { border-bottom: none; }
+        .movement-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
         .movement-icon.venta { background: #e8f5e9; color: #43a047; }
         .movement-icon.pedido { background: #e3f2fd; color: #1e88e5; }
         .movement-icon.cliente { background: #f3e5f5; color: #8e24aa; }
-
-        .movement-text {
-            flex: 1;
-            font-size: 11px;
-            color: var(--text-dark);
-            font-weight: 500;
-        }
-
-        .movement-time {
-            font-size: 10px;
-            color: var(--text-gray);
-        }
-
-        .movement-status {
-            font-size: 10px;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-weight: 600;
-        }
-
+        .movement-text { flex: 1; font-size: 11px; color: var(--text-dark); font-weight: 500; }
+        .movement-time { font-size: 10px; color: var(--text-gray); }
+        .movement-status { font-size: 10px; padding: 4px 8px; border-radius: 6px; font-weight: 600; }
         .status-pending { background: #fff3e0; color: #ef6c00; }
         .status-money { color: #43a047; }
-
-        /* --- FOOTER NOTE --- */
-        .footer-note {
-            margin: 0 20px 20px;
-            background-color: var(--light-green);
-            padding: 12px;
-            border-radius: 10px;
-            display: flex;
-            gap: 10px;
-            align-items: flex-start;
-        }
-
-        .footer-note i {
-            color: var(--primary-green);
-            font-size: 14px;
-            margin-top: 2px;
-        }
-
-        .footer-note p {
-            font-size: 9px;
-            color: var(--primary-green);
-            line-height: 1.4;
-        }
+        .footer-note { margin: 0 20px 20px; background-color: var(--light-green); padding: 12px; border-radius: 10px; display: flex; gap: 10px; align-items: flex-start; }
+        .footer-note i { color: var(--primary-green); font-size: 14px; margin-top: 2px; }
+        .footer-note p { font-size: 9px; color: var(--primary-green); line-height: 1.4; }
 
         /* --- BOTTOM NAV --- */
         .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 480px;
-            background-color: var(--primary-green);
-            border-top-left-radius: 25px;
-            border-top-right-radius: 25px;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0 15px;
-            z-index: 100;
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 100%; max-width: 480px; background-color: var(--primary-green);
+            border-top-left-radius: 25px; border-top-right-radius: 25px;
+            display: flex; justify-content: space-around; padding: 10px 0 15px;
+            z-index: 100; box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
         }
-
         .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            color: rgba(255,255,255,0.6);
-            font-size: 9px;
-            cursor: pointer;
-            transition: color 0.3s;
-            width: 16%;
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            color: rgba(255,255,255,0.6); font-size: 9px; cursor: pointer; transition: color 0.3s; width: 16%;
         }
-
-        .nav-item.active {
-            color: var(--gold);
-        }
-
-        .nav-item i {
-            font-size: 18px;
-        }
-
-        .nav-item span {
-            font-weight: 500;
-        }
+        .nav-item.active { color: var(--gold); }
+        .nav-item i { font-size: 18px; }
+        .nav-item span { font-weight: 500; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <!-- HEADER -->
-    <header>
-        <div class="logo-icon">
-            <i class="fas fa-leaf"></i>
-        </div>
-        <div class="header-text">
-            <h1>Negocio Alerta <span class="pro-badge">PRO</span></h1>
-            <p>Tu negocio organizado, desde el celular.</p>
-        </div>
-        <div class="header-icons">
-            <div class="notification-icon">
-                <i class="far fa-bell"></i>
-                <span class="notification-badge">3</span>
+    
+    <!-- ================= SECCIÓN: INICIO ================= -->
+    <div id="section-inicio" class="app-section active">
+        <!-- HEADER -->
+        <header>
+            <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+            <div class="header-text">
+                <h1>Negocio Alerta <span class="pro-badge">PRO</span></h1>
+                <p>Tu negocio organizado, desde el celular.</p>
             </div>
-            <div class="profile-icon">
-                <i class="fas fa-user"></i>
-            </div>
-        </div>
-    </header>
-
-    <!-- WELCOME BANNER -->
-    <div class="welcome-banner">
-        <div class="welcome-icon">
-            <i class="fas fa-store"></i>
-        </div>
-        <div class="welcome-text">
-            <h3>Bienvenido/a</h3>
-            <p>Tu negocio, siempre en control.</p>
-        </div>
-        <button class="logout-btn" onclick="alert('Cerrando sesión...')">
-            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
-        </button>
-    </div>
-
-    <!-- METRICS -->
-    <div class="metrics-grid">
-        <div class="metric-card productos">
-            <div class="metric-header">
-                <div class="metric-icon"><i class="fas fa-box"></i></div>
-            </div>
-            <span class="metric-title">Productos</span>
-            <span class="metric-value">12</span>
-            <i class="fas fa-chevron-right metric-arrow"></i>
-        </div>
-        <div class="metric-card stock">
-            <div class="metric-header">
-                <div class="metric-icon"><i class="fas fa-exclamation-triangle"></i></div>
-            </div>
-            <span class="metric-title">Stock bajo</span>
-            <span class="metric-value">3</span>
-            <i class="fas fa-chevron-right metric-arrow"></i>
-        </div>
-        <div class="metric-card ganancia">
-            <div class="metric-header">
-                <div class="metric-icon"><i class="fas fa-chart-line"></i></div>
-            </div>
-            <span class="metric-title">Ganancia</span>
-            <span class="metric-value">$ 18.750</span>
-            <i class="fas fa-chevron-right metric-arrow"></i>
-        </div>
-    </div>
-
-    <!-- ACTIONS GRID -->
-    <div class="actions-grid">
-        <div class="action-btn" onclick="alert('Ir a Inicio')">
-            <i class="fas fa-home"></i>
-            <span>Inicio</span>
-        </div>
-        <div class="action-btn" onclick="alert('Ir a Productos')">
-            <i class="fas fa-shopping-bag"></i>
-            <span>Productos</span>
-        </div>
-        <div class="action-btn" onclick="alert('Ir a Ventas')">
-            <i class="fas fa-cash-register"></i>
-            <span>Ventas</span>
-        </div>
-        <div class="action-btn" onclick="alert('Ir a Pedidos')">
-            <i class="fas fa-boxes"></i>
-            <span>Pedidos</span>
-        </div>
-        <div class="action-btn" onclick="alert('Ir a Clientes')">
-            <i class="fas fa-users"></i>
-            <span>Clientes y tickets</span>
-        </div>
-        <div class="action-btn" onclick="alert('Ir a Reportes')">
-            <i class="fas fa-chart-bar"></i>
-            <span>Reportes</span>
-        </div>
-        <div class="action-btn" onclick="alert('Ir a Ajustes')">
-            <i class="fas fa-cog"></i>
-            <span>Ajustes</span>
-        </div>
-    </div>
-
-    <!-- LOW STOCK SECTION -->
-    <div class="section-card">
-        <div class="section-header">
-            <div class="section-icon"><i class="fas fa-bell"></i></div>
-            <span class="section-title">Atención para hoy</span>
-            <a href="#" class="see-all" onclick="alert('Ver todos los productos')">Ver todos ></a>
-        </div>
-        <div class="alert-badge">3 productos con stock bajo</div>
-        <div class="horizontal-scroll">
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=150" alt="Pan">
-                <div class="product-info">
-                    <h4>Pan lactal</h4>
-                    <p>Quedan: 2</p>
-                    <span>Mínimo: 5</span>
+            <div class="header-icons">
+                <div class="notification-icon">
+                    <i class="far fa-bell"></i>
+                    <span class="notification-badge">3</span>
                 </div>
+                <div class="profile-icon"><i class="fas fa-user"></i></div>
             </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1613478223719-2ab802602423?w=150" alt="Jugo">
-                <div class="product-info">
-                    <h4>Jugo naranja</h4>
-                    <p>Quedan: 1</p>
-                    <span>Mínimo: 3</span>
+        </header>
+
+        <!-- WELCOME BANNER -->
+        <div class="welcome-banner">
+            <div class="welcome-icon"><i class="fas fa-store"></i></div>
+            <div class="welcome-text">
+                <h3>Bienvenido/a</h3>
+                <p>Tu negocio, siempre en control.</p>
+            </div>
+            <button class="logout-btn" onclick="alert('Cerrando sesión...')">
+                <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+            </button>
+        </div>
+
+        <!-- METRICS -->
+        <div class="metrics-grid">
+            <div class="metric-card productos">
+                <div class="metric-header"><div class="metric-icon"><i class="fas fa-box"></i></div></div>
+                <span class="metric-title">Productos</span>
+                <span class="metric-value">12</span>
+                <i class="fas fa-chevron-right metric-arrow"></i>
+            </div>
+            <div class="metric-card stock">
+                <div class="metric-header"><div class="metric-icon"><i class="fas fa-exclamation-triangle"></i></div></div>
+                <span class="metric-title">Stock bajo</span>
+                <span class="metric-value">3</span>
+                <i class="fas fa-chevron-right metric-arrow"></i>
+            </div>
+            <div class="metric-card ganancia">
+                <div class="metric-header"><div class="metric-icon"><i class="fas fa-chart-line"></i></div></div>
+                <span class="metric-title">Ganancia</span>
+                <span class="metric-value">$ 18.750</span>
+                <i class="fas fa-chevron-right metric-arrow"></i>
+            </div>
+        </div>
+
+        <!-- ACTIONS GRID -->
+        <div class="actions-grid">
+            <div class="action-btn" onclick="navigateTo('inicio')">
+                <i class="fas fa-home"></i><span>Inicio</span>
+            </div>
+            <div class="action-btn" onclick="navigateTo('productos')">
+                <i class="fas fa-shopping-bag"></i><span>Productos</span>
+            </div>
+            <div class="action-btn" onclick="navigateTo('ventas')">
+                <i class="fas fa-cash-register"></i><span>Ventas</span>
+            </div>
+            <div class="action-btn" onclick="navigateTo('pedidos')">
+                <i class="fas fa-boxes"></i><span>Pedidos</span>
+            </div>
+            <div class="action-btn" onclick="navigateTo('clientes')">
+                <i class="fas fa-users"></i><span>Clientes y tickets</span>
+            </div>
+            <div class="action-btn" onclick="navigateTo('reportes')">
+                <i class="fas fa-chart-bar"></i><span>Reportes</span>
+            </div>
+            <div class="action-btn" onclick="navigateTo('ajustes')">
+                <i class="fas fa-cog"></i><span>Ajustes</span>
+            </div>
+        </div>
+
+        <!-- LOW STOCK SECTION -->
+        <div class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-bell"></i></div>
+                <span class="section-title">Atención para hoy</span>
+                <a href="#" class="see-all">Ver todos ></a>
+            </div>
+            <div class="alert-badge">3 productos con stock bajo</div>
+            <div class="horizontal-scroll">
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=150" alt="Pan">
+                    <div class="product-info"><h4>Pan lactal</h4><p>Quedan: 2</p><span>Mínimo: 5</span></div>
                 </div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=150" alt="Papas">
-                <div class="product-info">
-                    <h4>Papas fritas</h4>
-                    <p>Quedan: 2</p>
-                    <span>Mínimo: 5</span>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1613478223719-2ab802602423?w=150" alt="Jugo">
+                    <div class="product-info"><h4>Jugo naranja</h4><p>Quedan: 1</p><span>Mínimo: 3</span></div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=150" alt="Papas">
+                    <div class="product-info"><h4>Papas fritas</h4><p>Quedan: 2</p><span>Mínimo: 5</span></div>
                 </div>
             </div>
         </div>
+
+        <!-- RECENT MOVEMENTS -->
+        <div class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-history"></i></div>
+                <span class="section-title">Últimos movimientos</span>
+                <a href="#" class="see-all">Ver todos ></a>
+            </div>
+            <div class="movement-item">
+                <div class="movement-icon venta"><i class="fas fa-plus"></i></div>
+                <div class="movement-text">Venta registrada - Pan lactal x2</div>
+                <div class="movement-time">17:32</div>
+                <div class="movement-status status-money">$ 2.400</div>
+            </div>
+            <div class="movement-item">
+                <div class="movement-icon pedido"><i class="fas fa-shopping-cart"></i></div>
+                <div class="movement-text">Pedido - Cliente: Ana</div>
+                <div class="movement-time">16:45</div>
+                <div class="movement-status status-pending">Pendiente</div>
+            </div>
+            <div class="movement-item">
+                <div class="movement-icon cliente"><i class="fas fa-user"></i></div>
+                <div class="movement-text">Nuevo cliente - María García</div>
+                <div class="movement-time">15:20</div>
+                <div class="movement-status" style="color: #777;">—</div>
+            </div>
+        </div>
+
+        <!-- FOOTER NOTE -->
+        <div class="footer-note">
+            <i class="fas fa-shield-alt"></i>
+            <p>Los datos se guardan en este navegador y, cuando hay sesión, se sincronizan con tu cuenta de Supabase. Los tickets son comprobantes internos, no facturas fiscales.</p>
+        </div>
     </div>
 
-    <!-- RECENT MOVEMENTS -->
-    <div class="section-card">
-        <div class="section-header">
-            <div class="section-icon"><i class="fas fa-history"></i></div>
-            <span class="section-title">Últimos movimientos</span>
-            <a href="#" class="see-all" onclick="alert('Ver todos los movimientos')">Ver todos ></a>
-        </div>
-        <div class="movement-item">
-            <div class="movement-icon venta"><i class="fas fa-plus"></i></div>
-            <div class="movement-text">Venta registrada - Pan lactal x2</div>
-            <div class="movement-time">17:32</div>
-            <div class="movement-status status-money">$ 2.400</div>
-        </div>
-        <div class="movement-item">
-            <div class="movement-icon pedido"><i class="fas fa-shopping-cart"></i></div>
-            <div class="movement-text">Pedido - Cliente: Ana</div>
-            <div class="movement-time">16:45</div>
-            <div class="movement-status status-pending">Pendiente</div>
-        </div>
-        <div class="movement-item">
-            <div class="movement-icon cliente"><i class="fas fa-user"></i></div>
-            <div class="movement-text">Nuevo cliente - María García</div>
-            <div class="movement-time">15:20</div>
-            <div class="movement-status" style="color: #777;">—</div>
+    <!-- ================= SECCIONES DE PLACEHOLDER (Prueba de Navegación) ================= -->
+    <!-- Puedes ir llenando cada una de estas secciones con el contenido real -->
+    
+    <div id="section-productos" class="app-section">
+        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
+        <div class="page-content">
+            <i class="fas fa-shopping-bag" style="font-size: 50px; color: var(--gold); margin-bottom: 20px;"></i>
+            <h2>Productos</h2>
+            <p>Aquí podrás administrar tu inventario, precios y categorías.</p>
+            <button class="back-btn" onclick="navigateTo('inicio')">Volver al Inicio</button>
         </div>
     </div>
 
-    <!-- FOOTER NOTE -->
-    <div class="footer-note">
-        <i class="fas fa-shield-alt"></i>
-        <p>Los datos se guardan en este navegador y, cuando hay sesión, se sincronizan con tu cuenta de Supabase. Los tickets son comprobantes internos, no facturas fiscales.</p>
+    <div id="section-ventas" class="app-section">
+        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
+        <div class="page-content">
+            <i class="fas fa-cash-register" style="font-size: 50px; color: var(--gold); margin-bottom: 20px;"></i>
+            <h2>Ventas</h2>
+            <p>Registra tus ventas diarias y genera tickets internos.</p>
+            <button class="back-btn" onclick="navigateTo('inicio')">Volver al Inicio</button>
+        </div>
     </div>
 
-    <!-- BOTTOM NAV -->
+    <div id="section-pedidos" class="app-section">
+        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
+        <div class="page-content">
+            <i class="fas fa-boxes" style="font-size: 50px; color: var(--gold); margin-bottom: 20px;"></i>
+            <h2>Pedidos</h2>
+            <p>Gestiona los pedidos de tus clientes y su estado de entrega.</p>
+            <button class="back-btn" onclick="navigateTo('inicio')">Volver al Inicio</button>
+        </div>
+    </div>
+
+    <div id="section-clientes" class="app-section">
+        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
+        <div class="page-content">
+            <i class="fas fa-users" style="font-size: 50px; color: var(--gold); margin-bottom: 20px;"></i>
+            <h2>Clientes y Tickets</h2>
+            <p>Base de datos de clientes y historial de comprobantes.</p>
+            <button class="back-btn" onclick="navigateTo('inicio')">Volver al Inicio</button>
+        </div>
+    </div>
+
+    <div id="section-reportes" class="app-section">
+        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
+        <div class="page-content">
+            <i class="fas fa-chart-bar" style="font-size: 50px; color: var(--gold); margin-bottom: 20px;"></i>
+            <h2>Reportes</h2>
+            <p>Estadísticas de ganancias, productos más vendidos y más.</p>
+            <button class="back-btn" onclick="navigateTo('inicio')">Volver al Inicio</button>
+        </div>
+    </div>
+
+    <div id="section-ajustes" class="app-section">
+        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
+        <div class="page-content">
+            <i class="fas fa-cog" style="font-size: 50px; color: var(--gold); margin-bottom: 20px;"></i>
+            <h2>Ajustes</h2>
+            <p>Configuración de la cuenta, sincronización con Supabase y preferencias.</p>
+            <button class="back-btn" onclick="navigateTo('inicio')">Volver al Inicio</button>
+        </div>
+    </div>
+
+
+    <!-- ================= BOTTOM NAV ================= -->
     <nav class="bottom-nav">
-        <div class="nav-item active" onclick="setActive(this)">
-            <i class="fas fa-home"></i>
-            <span>Inicio</span>
+        <div class="nav-item active" data-target="inicio" onclick="navigateTo('inicio')">
+            <i class="fas fa-home"></i><span>Inicio</span>
         </div>
-        <div class="nav-item" onclick="setActive(this)">
-            <i class="fas fa-shopping-bag"></i>
-            <span>Productos</span>
+        <div class="nav-item" data-target="productos" onclick="navigateTo('productos')">
+            <i class="fas fa-shopping-bag"></i><span>Productos</span>
         </div>
-        <div class="nav-item" onclick="setActive(this)">
-            <i class="fas fa-cash-register"></i>
-            <span>Ventas</span>
+        <div class="nav-item" data-target="ventas" onclick="navigateTo('ventas')">
+            <i class="fas fa-cash-register"></i><span>Ventas</span>
         </div>
-        <div class="nav-item" onclick="setActive(this)">
-            <i class="fas fa-boxes"></i>
-            <span>Pedidos</span>
+        <div class="nav-item" data-target="pedidos" onclick="navigateTo('pedidos')">
+            <i class="fas fa-boxes"></i><span>Pedidos</span>
         </div>
-        <div class="nav-item" onclick="setActive(this)">
-            <i class="fas fa-users"></i>
-            <span>Clientes</span>
+        <div class="nav-item" data-target="clientes" onclick="navigateTo('clientes')">
+            <i class="fas fa-users"></i><span>Clientes</span>
         </div>
-        <div class="nav-item" onclick="setActive(this)">
-            <i class="fas fa-cog"></i>
-            <span>Ajustes</span>
+        <div class="nav-item" data-target="ajustes" onclick="navigateTo('ajustes')">
+            <i class="fas fa-cog"></i><span>Ajustes</span>
         </div>
     </nav>
 </div>
 
 <script>
-    // Función simple para cambiar el estado activo en la barra de navegación
-    function setActive(element) {
-        // Remover clase active de todos los items
+    // Función principal para cambiar de sección
+    function navigateTo(sectionId) {
+        // 1. Ocultar todas las secciones
+        document.querySelectorAll('.app-section').forEach(sec => {
+            sec.classList.remove('active');
+        });
+
+        // 2. Mostrar la sección seleccionada
+        const targetSection = document.getElementById('section-' + sectionId);
+        if (targetSection) {
+            targetSection.classList.add('active');
+        }
+
+        // 3. Actualizar el estado activo en la barra de navegación inferior
         document.querySelectorAll('.nav-item').forEach(item => {
             item.classList.remove('active');
+            if (item.dataset.target === sectionId) {
+                item.classList.add('active');
+            }
         });
-        // Agregar clase active al item clickeado
-        element.classList.add('active');
+
+        // 4. Hacer scroll hasta arriba automáticamente
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 </script>
 
