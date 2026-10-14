@@ -180,7 +180,7 @@ function openModal(html){
 function closeModal(){document.getElementById('modal')?.remove();}
 
 /* =========================================================
-   WHATSAPP — versión móvil confiable
+   WHATSAPP — SOLO HTTPS, nunca whatsapp://
    ========================================================= */
 function cleanPhone(p){return String(p||'').replace(/\D/g,'');}
 
@@ -188,29 +188,16 @@ function openWhatsApp(message, phone=''){
   const number = cleanPhone(phone) || cleanPhone(state.whatsapp);
   const text = encodeURIComponent(message);
 
-  // Guardamos el texto por las dudas (el usuario puede pegarlo a mano)
+  // Guardamos el texto por si el usuario tiene que pegarlo a mano
   copyText(message, true);
 
-  // Sin número: dejamos que el usuario elija el contacto en WhatsApp
-  if(!number){
-    const url = `https://wa.me/?text=${text}`;
-    try{
-      window.location.href = url;
-    }catch(e){
-      window.open(url, '_blank');
-    }
-    return;
-  }
+  // URL SIEMPRE HTTPS. wa.me redirige a la app si está instalada.
+  const url = number
+    ? `https://wa.me/${number}?text=${text}`
+    : `https://wa.me/?text=${text}`;
 
-  // Con número: wa.me es lo más compatible (app nativa + WhatsApp Web)
-  const url = `https://wa.me/${number}?text=${text}`;
-
-  // location.href dispara la app nativa en Android/iOS; si no, cae a Web
-  try{
-    window.location.href = url;
-  }catch(e){
-    window.open(url, '_blank');
-  }
+  // location.href es lo más confiable en móvil
+  window.location.href = url;
 }
 
 async function copyText(text, silent){
@@ -248,7 +235,6 @@ async function shareText(text, title){
 async function saveFile(name, mime, content){
   const blob = new Blob([content], {type: mime});
 
-  // 1) Web Share con archivo (mejor en celular)
   try{
     const file = new File([blob], name, {type: mime});
     if(navigator.canShare && navigator.canShare({files:[file]})){
@@ -257,7 +243,6 @@ async function saveFile(name, mime, content){
     }
   }catch(e){ if(e && e.name==='AbortError') return; }
 
-  // 2) Descarga clásica
   try{
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -683,7 +668,7 @@ function render(){
           <div class="field full">
             <label>WhatsApp predeterminado (con código de país)</label>
             <input name="whatsapp" value="${esc(state.whatsapp||'')}" inputmode="tel" placeholder="549...">
-            <small class="muted">Solo números, con código de país. Sin +, espacios ni guiones.</small>
+            <small class="muted">Solo números, con código de país. Argentina: 54 + 9 + área + número. Ej: 5493755223737</small>
           </div>
           <div class="field full">
             <label>Logo del negocio</label>
