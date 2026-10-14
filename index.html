@@ -40,69 +40,35 @@
         }
 
         /* --- SECCIONES (Páginas) --- */
-        .app-section {
-            display: none; /* Ocultas por defecto */
-            animation: fadeIn 0.3s ease-in-out;
-        }
-        .app-section.active {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .app-section { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .app-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- HEADER --- */
         header {
             background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
-            padding: 20px;
-            border-bottom-left-radius: 30px;
-            border-bottom-right-radius: 30px;
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            position: relative;
-            z-index: 1;
+            padding: 20px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px;
+            color: white; display: flex; align-items: center; gap: 12px; position: relative; z-index: 1;
         }
-
-        .logo-icon {
-            width: 45px; height: 45px; border: 2px solid var(--gold); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 20px;
-        }
-
+        .logo-icon { width: 45px; height: 45px; border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 20px; }
         .header-text h1 { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
         .pro-badge { background-color: var(--gold); color: black; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
         .header-text p { font-size: 11px; color: rgba(255,255,255,0.8); }
         .header-icons { margin-left: auto; display: flex; align-items: center; gap: 15px; }
         .notification-icon { position: relative; font-size: 20px; }
-        .notification-badge {
-            position: absolute; top: -5px; right: -5px; background-color: var(--red); color: white;
-            font-size: 9px; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;
-        }
+        .notification-badge { position: absolute; top: -5px; right: -5px; background-color: var(--red); color: white; font-size: 9px; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
         .profile-icon { width: 35px; height: 35px; background-color: #1B5E46; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
 
         /* --- WELCOME BANNER --- */
-        .welcome-banner {
-            background-color: var(--dark-green); margin: -15px 20px 0; padding: 12px 15px;
-            border-radius: 15px; display: flex; align-items: center; gap: 10px; color: white;
-            position: relative; z-index: 2; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
+        .welcome-banner { background-color: var(--dark-green); margin: -15px 20px 0; padding: 12px 15px; border-radius: 15px; display: flex; align-items: center; gap: 10px; color: white; position: relative; z-index: 2; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .welcome-icon { background-color: #1A6B4E; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
         .welcome-text h3 { font-size: 13px; font-weight: 600; }
         .welcome-text p { font-size: 10px; color: rgba(255,255,255,0.7); }
-        .logout-btn {
-            margin-left: auto; background: transparent; border: 1px solid var(--gold); color: var(--gold);
-            padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 500; cursor: pointer;
-            display: flex; align-items: center; gap: 5px; font-family: 'Poppins', sans-serif;
-        }
+        .logout-btn { margin-left: auto; background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 5px; font-family: 'Poppins', sans-serif; }
 
         /* --- METRICS --- */
         .metrics-grid { display: flex; gap: 10px; padding: 15px 20px; }
-        .metric-card {
-            flex: 1; background: white; padding: 12px; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            display: flex; flex-direction: column; gap: 8px; position: relative;
-        }
+        .metric-card { flex: 1; background: white; padding: 12px; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 8px; position: relative; }
         .metric-card.productos { border: 1px solid rgba(10, 59, 44, 0.2); }
         .metric-card.stock { border: 1px solid rgba(229, 57, 53, 0.2); }
         .metric-card.ganancia { border: 1px solid rgba(201, 164, 92, 0.3); }
@@ -120,27 +86,56 @@
 
         /* --- ACTION GRID --- */
         .actions-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 0 20px 15px; }
-        .action-btn {
-            background: white; border-radius: 15px; padding: 15px 5px; display: flex; flex-direction: column;
-            align-items: center; gap: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.2s;
-        }
+        .action-btn { background: white; border-radius: 15px; padding: 15px 5px; display: flex; flex-direction: column; align-items: center; gap: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.2s; }
         .action-btn:active { transform: scale(0.95); }
         .action-btn i { font-size: 20px; color: var(--primary-green); }
         .action-btn span { font-size: 9px; text-align: center; color: var(--text-dark); font-weight: 500; }
 
-        /* --- CONTENIDO GENÉRICO DE PÁGINAS --- */
-        .page-content { padding: 20px; text-align: center; }
-        .page-content h2 { color: var(--primary-green); margin-top: 50px; font-size: 24px; }
-        .page-content p { color: var(--text-gray); font-size: 14px; margin-top: 10px; }
-        .back-btn {
-            background: var(--primary-green); color: white; border: none; padding: 10px 20px;
-            border-radius: 10px; margin-top: 20px; cursor: pointer; font-family: 'Poppins', sans-serif;
+        /* --- CONTENIDO DE PÁGINAS --- */
+        .page-content { padding: 20px; }
+        .page-title { color: var(--primary-green); font-size: 22px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        
+        /* Botón para agregar */
+        .btn-add {
+            background: var(--primary-green); color: white; border: none; padding: 12px 20px;
+            border-radius: 12px; font-size: 14px; font-weight: 600; width: 100%; margin-bottom: 20px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 4px 10px rgba(10, 59, 44, 0.2);
         }
 
-        /* --- LOW STOCK & MOVIMIENTOS (Solo en Inicio) --- */
-        .section-card {
-            background: white; margin: 0 20px 15px; padding: 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        /* Formulario */
+        .form-container {
+            background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px; display: none; border: 1px solid #eee;
         }
+        .form-container.active { display: block; }
+        .input-group { margin-bottom: 12px; }
+        .input-group label { display: block; font-size: 12px; font-weight: 600; color: var(--primary-green); margin-bottom: 4px; }
+        .input-group input {
+            width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-family: 'Poppins', sans-serif;
+            font-size: 13px; outline: none; transition: border 0.3s;
+        }
+        .input-group input:focus { border-color: var(--primary-green); }
+        .btn-save {
+            background: var(--gold); color: black; border: none; padding: 10px; width: 100%;
+            border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 10px;
+        }
+
+        /* Lista de Productos */
+        .product-list { display: flex; flex-direction: column; gap: 10px; }
+        .product-item {
+            background: white; padding: 15px; border-radius: 12px; display: flex; align-items: center; gap: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 4px solid var(--gold);
+        }
+        .product-item img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: #eee; }
+        .product-item .info { flex: 1; }
+        .product-item h4 { font-size: 14px; font-weight: 700; color: var(--text-dark); }
+        .product-item p { font-size: 12px; color: var(--text-gray); }
+        .product-item .price { font-size: 14px; font-weight: 700; color: var(--primary-green); }
+        .btn-delete { background: #ffebee; color: var(--red); border: none; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+
+        /* --- LOW STOCK & MOVIMIENTOS (Inicio) --- */
+        .section-card { background: white; margin: 0 20px 15px; padding: 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
         .section-icon { background-color: var(--primary-green); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; }
         .section-title { font-size: 15px; font-weight: 700; color: var(--text-dark); }
@@ -176,10 +171,7 @@
             display: flex; justify-content: space-around; padding: 10px 0 15px;
             z-index: 100; box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
         }
-        .nav-item {
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
-            color: rgba(255,255,255,0.6); font-size: 9px; cursor: pointer; transition: color 0.3s; width: 16%;
-        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: rgba(255,255,255,0.6); font-size: 9px; cursor: pointer; transition: color 0.3s; width: 16%; }
         .nav-item.active { color: var(--gold); }
         .nav-item i { font-size: 18px; }
         .nav-item span { font-weight: 500; }
@@ -191,7 +183,6 @@
     
     <!-- ================= SECCIÓN: INICIO ================= -->
     <div id="section-inicio" class="app-section active">
-        <!-- HEADER -->
         <header>
             <div class="logo-icon"><i class="fas fa-leaf"></i></div>
             <div class="header-text">
@@ -199,32 +190,22 @@
                 <p>Tu negocio organizado, desde el celular.</p>
             </div>
             <div class="header-icons">
-                <div class="notification-icon">
-                    <i class="far fa-bell"></i>
-                    <span class="notification-badge">3</span>
-                </div>
+                <div class="notification-icon"><i class="far fa-bell"></i><span class="notification-badge">3</span></div>
                 <div class="profile-icon"><i class="fas fa-user"></i></div>
             </div>
         </header>
 
-        <!-- WELCOME BANNER -->
         <div class="welcome-banner">
             <div class="welcome-icon"><i class="fas fa-store"></i></div>
-            <div class="welcome-text">
-                <h3>Bienvenido/a</h3>
-                <p>Tu negocio, siempre en control.</p>
-            </div>
-            <button class="logout-btn" onclick="alert('Cerrando sesión...')">
-                <i class="fas fa-sign-out-alt"></i> Cerrar sesión
-            </button>
+            <div class="welcome-text"><h3>Bienvenido/a</h3><p>Tu negocio, siempre en control.</p></div>
+            <button class="logout-btn" onclick="alert('Cerrando sesión...')"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</button>
         </div>
 
-        <!-- METRICS -->
         <div class="metrics-grid">
             <div class="metric-card productos">
                 <div class="metric-header"><div class="metric-icon"><i class="fas fa-box"></i></div></div>
                 <span class="metric-title">Productos</span>
-                <span class="metric-value">12</span>
+                <span class="metric-value" id="metric-productos">0</span>
                 <i class="fas fa-chevron-right metric-arrow"></i>
             </div>
             <div class="metric-card stock">
@@ -241,32 +222,16 @@
             </div>
         </div>
 
-        <!-- ACTIONS GRID -->
         <div class="actions-grid">
-            <div class="action-btn" onclick="navigateTo('inicio')">
-                <i class="fas fa-home"></i><span>Inicio</span>
-            </div>
-            <div class="action-btn" onclick="navigateTo('productos')">
-                <i class="fas fa-shopping-bag"></i><span>Productos</span>
-            </div>
-            <div class="action-btn" onclick="navigateTo('ventas')">
-                <i class="fas fa-cash-register"></i><span>Ventas</span>
-            </div>
-            <div class="action-btn" onclick="navigateTo('pedidos')">
-                <i class="fas fa-boxes"></i><span>Pedidos</span>
-            </div>
-            <div class="action-btn" onclick="navigateTo('clientes')">
-                <i class="fas fa-users"></i><span>Clientes y tickets</span>
-            </div>
-            <div class="action-btn" onclick="navigateTo('reportes')">
-                <i class="fas fa-chart-bar"></i><span>Reportes</span>
-            </div>
-            <div class="action-btn" onclick="navigateTo('ajustes')">
-                <i class="fas fa-cog"></i><span>Ajustes</span>
-            </div>
+            <div class="action-btn" onclick="navigateTo('inicio')"><i class="fas fa-home"></i><span>Inicio</span></div>
+            <div class="action-btn" onclick="navigateTo('productos')"><i class="fas fa-shopping-bag"></i><span>Productos</span></div>
+            <div class="action-btn" onclick="navigateTo('ventas')"><i class="fas fa-cash-register"></i><span>Ventas</span></div>
+            <div class="action-btn" onclick="navigateTo('pedidos')"><i class="fas fa-boxes"></i><span>Pedidos</span></div>
+            <div class="action-btn" onclick="navigateTo('clientes')"><i class="fas fa-users"></i><span>Clientes y tickets</span></div>
+            <div class="action-btn" onclick="navigateTo('reportes')"><i class="fas fa-chart-bar"></i><span>Reportes</span></div>
+            <div class="action-btn" onclick="navigateTo('ajustes')"><i class="fas fa-cog"></i><span>Ajustes</span></div>
         </div>
 
-        <!-- LOW STOCK SECTION -->
         <div class="section-card">
             <div class="section-header">
                 <div class="section-icon"><i class="fas fa-bell"></i></div>
@@ -275,167 +240,222 @@
             </div>
             <div class="alert-badge">3 productos con stock bajo</div>
             <div class="horizontal-scroll">
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=150" alt="Pan">
-                    <div class="product-info"><h4>Pan lactal</h4><p>Quedan: 2</p><span>Mínimo: 5</span></div>
-                </div>
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1613478223719-2ab802602423?w=150" alt="Jugo">
-                    <div class="product-info"><h4>Jugo naranja</h4><p>Quedan: 1</p><span>Mínimo: 3</span></div>
-                </div>
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=150" alt="Papas">
-                    <div class="product-info"><h4>Papas fritas</h4><p>Quedan: 2</p><span>Mínimo: 5</span></div>
-                </div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=150" alt="Pan"><div class="product-info"><h4>Pan lactal</h4><p>Quedan: 2</p><span>Mínimo: 5</span></div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1613478223719-2ab802602423?w=150" alt="Jugo"><div class="product-info"><h4>Jugo naranja</h4><p>Quedan: 1</p><span>Mínimo: 3</span></div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=150" alt="Papas"><div class="product-info"><h4>Papas fritas</h4><p>Quedan: 2</p><span>Mínimo: 5</span></div></div>
             </div>
         </div>
 
-        <!-- RECENT MOVEMENTS -->
         <div class="section-card">
             <div class="section-header">
                 <div class="section-icon"><i class="fas fa-history"></i></div>
                 <span class="section-title">Últimos movimientos</span>
                 <a href="#" class="see-all">Ver todos ></a>
             </div>
-            <div class="movement-item">
-                <div class="movement-icon venta"><i class="fas fa-plus"></i></div>
-                <div class="movement-text">Venta registrada - Pan lactal x2</div>
-                <div class="movement-time">17:32</div>
-                <div class="movement-status status-money">$ 2.400</div>
-            </div>
-            <div class="movement-item">
-                <div class="movement-icon pedido"><i class="fas fa-shopping-cart"></i></div>
-                <div class="movement-text">Pedido - Cliente: Ana</div>
-                <div class="movement-time">16:45</div>
-                <div class="movement-status status-pending">Pendiente</div>
-            </div>
-            <div class="movement-item">
-                <div class="movement-icon cliente"><i class="fas fa-user"></i></div>
-                <div class="movement-text">Nuevo cliente - María García</div>
-                <div class="movement-time">15:20</div>
-                <div class="movement-status" style="color: #777;">—</div>
-            </div>
+            <div class="movement-item"><div class="movement-icon venta"><i class="fas fa-plus"></i></div><div class="movement-text">Venta registrada - Pan lactal x2</div><div class="movement-time">17:32</div><div class="movement-status status-money">$ 2.400</div></div>
+            <div class="movement-item"><div class="movement-icon pedido"><i class="fas fa-shopping-cart"></i></div><div class="movement-text">Pedido - Cliente: Ana</div><div class="movement-time">16:45</div><div class="movement-status status-pending">Pendiente</div></div>
+            <div class="movement-item"><div class="movement-icon cliente"><i class="fas fa-user"></i></div><div class="movement-text">Nuevo cliente - María García</div><div class="movement-time">15:20</div><div class="movement-status" style="color: #777;">—</div></div>
         </div>
 
-        <!-- FOOTER NOTE -->
         <div class="footer-note">
             <i class="fas fa-shield-alt"></i>
             <p>Los datos se guardan en este navegador y, cuando hay sesión, se sincronizan con tu cuenta de Supabase. Los tickets son comprobantes internos, no facturas fiscales.</p>
         </div>
     </div>
 
-    <!-- ================= SECCIONES DE PLACEHOLDER (Prueba de Navegación) ================= -->
-    <!-- Puedes ir llenando cada una de estas secciones con el contenido real -->
-    
+    <!-- ================= SECCIÓN: PRODUCTOS (AHORA FUNCIONAL) ================= -->
     <div id="section-productos" class="app-section">
-        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
+        <header>
+            <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+            <div class="header-text"><h1>Negocio Alerta</h1></div>
+        </header>
+        
         <div class="page-content">
-            <i class="fas fa-shopping-bag" style="font-size: 50px; color: var(--gold); margin-bottom: 20px;"></i>
-            <h2>Productos</h2>
-            <p>Aquí podrás administrar tu inventario, precios y categorías.</p>
-            <button class="back-btn" onclick="navigateTo('inicio')">Volver al Inicio</button>
+            <h2 class="page-title"><i class="fas fa-shopping-bag" style="color: var(--gold);"></i> Productos</h2>
+            
+            <!-- Botón para mostrar el formulario -->
+            <button class="btn-add" onclick="toggleForm()">
+                <i class="fas fa-plus-circle"></i> Cargar Nuevo Producto
+            </button>
+
+            <!-- Formulario de carga -->
+            <div id="product-form" class="form-container">
+                <form onsubmit="saveProduct(event)">
+                    <div class="input-group">
+                        <label>Nombre del Producto</label>
+                        <input type="text" id="prod-name" placeholder="Ej: Pan lactal" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Precio ($)</label>
+                        <input type="number" id="prod-price" placeholder="Ej: 1500" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Stock Actual</label>
+                        <input type="number" id="prod-stock" placeholder="Ej: 10" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Stock Mínimo (Alerta)</label>
+                        <input type="number" id="prod-min" placeholder="Ej: 5" required>
+                    </div>
+                    <div class="input-group">
+                        <label>URL de Imagen (Opcional)</label>
+                        <input type="text" id="prod-img" placeholder="https://...">
+                    </div>
+                    <button type="submit" class="btn-save">Guardar Producto</button>
+                </form>
+            </div>
+
+            <!-- Lista de productos cargados -->
+            <div id="product-list" class="product-list">
+                <!-- Aquí se cargarán los productos guardados -->
+            </div>
         </div>
     </div>
 
-    <div id="section-ventas" class="app-section">
-        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
-        <div class="page-content">
-            <i class="fas fa-cash-register" style="font-size: 50px; color: var(--gold); margin-bottom: 20px;"></i>
-            <h2>Ventas</h2>
-            <p>Registra tus ventas diarias y genera tickets internos.</p>
-            <button class="back-btn" onclick="navigateTo('inicio')">Volver al Inicio</button>
-        </div>
-    </div>
-
-    <div id="section-pedidos" class="app-section">
-        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
-        <div class="page-content">
-            <i class="fas fa-boxes" style="font-size: 50px; color: var(--gold); margin-bottom: 20px;"></i>
-            <h2>Pedidos</h2>
-            <p>Gestiona los pedidos de tus clientes y su estado de entrega.</p>
-            <button class="back-btn" onclick="navigateTo('inicio')">Volver al Inicio</button>
-        </div>
-    </div>
-
-    <div id="section-clientes" class="app-section">
-        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
-        <div class="page-content">
-            <i class="fas fa-users" style="font-size: 50px; color: var(--gold); margin-bottom: 20px;"></i>
-            <h2>Clientes y Tickets</h2>
-            <p>Base de datos de clientes y historial de comprobantes.</p>
-            <button class="back-btn" onclick="navigateTo('inicio')">Volver al Inicio</button>
-        </div>
-    </div>
-
-    <div id="section-reportes" class="app-section">
-        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
-        <div class="page-content">
-            <i class="fas fa-chart-bar" style="font-size: 50px; color: var(--gold); margin-bottom: 20px;"></i>
-            <h2>Reportes</h2>
-            <p>Estadísticas de ganancias, productos más vendidos y más.</p>
-            <button class="back-btn" onclick="navigateTo('inicio')">Volver al Inicio</button>
-        </div>
-    </div>
-
-    <div id="section-ajustes" class="app-section">
-        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
-        <div class="page-content">
-            <i class="fas fa-cog" style="font-size: 50px; color: var(--gold); margin-bottom: 20px;"></i>
-            <h2>Ajustes</h2>
-            <p>Configuración de la cuenta, sincronización con Supabase y preferencias.</p>
-            <button class="back-btn" onclick="navigateTo('inicio')">Volver al Inicio</button>
-        </div>
-    </div>
+    <!-- ================= SECCIONES DE PLACEHOLDER (Ventas, Pedidos, etc.) ================= -->
+    <div id="section-ventas" class="app-section"><header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header><div class="page-content"><h2 class="page-title">Ventas</h2><p>Registra tus ventas diarias y genera tickets internos.</p><button class="btn-add" onclick="navigateTo('inicio')">Volver al Inicio</button></div></div>
+    <div id="section-pedidos" class="app-section"><header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header><div class="page-content"><h2 class="page-title">Pedidos</h2><p>Gestiona los pedidos de tus clientes y su estado de entrega.</p><button class="btn-add" onclick="navigateTo('inicio')">Volver al Inicio</button></div></div>
+    <div id="section-clientes" class="app-section"><header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header><div class="page-content"><h2 class="page-title">Clientes y Tickets</h2><p>Base de datos de clientes y historial de comprobantes.</p><button class="btn-add" onclick="navigateTo('inicio')">Volver al Inicio</button></div></div>
+    <div id="section-reportes" class="app-section"><header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header><div class="page-content"><h2 class="page-title">Reportes</h2><p>Estadísticas de ganancias, productos más vendidos y más.</p><button class="btn-add" onclick="navigateTo('inicio')">Volver al Inicio</button></div></div>
+    <div id="section-ajustes" class="app-section"><header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header><div class="page-content"><h2 class="page-title">Ajustes</h2><p>Configuración de la cuenta, sincronización con Supabase y preferencias.</p><button class="btn-add" onclick="navigateTo('inicio')">Volver al Inicio</button></div></div>
 
 
     <!-- ================= BOTTOM NAV ================= -->
     <nav class="bottom-nav">
-        <div class="nav-item active" data-target="inicio" onclick="navigateTo('inicio')">
-            <i class="fas fa-home"></i><span>Inicio</span>
-        </div>
-        <div class="nav-item" data-target="productos" onclick="navigateTo('productos')">
-            <i class="fas fa-shopping-bag"></i><span>Productos</span>
-        </div>
-        <div class="nav-item" data-target="ventas" onclick="navigateTo('ventas')">
-            <i class="fas fa-cash-register"></i><span>Ventas</span>
-        </div>
-        <div class="nav-item" data-target="pedidos" onclick="navigateTo('pedidos')">
-            <i class="fas fa-boxes"></i><span>Pedidos</span>
-        </div>
-        <div class="nav-item" data-target="clientes" onclick="navigateTo('clientes')">
-            <i class="fas fa-users"></i><span>Clientes</span>
-        </div>
-        <div class="nav-item" data-target="ajustes" onclick="navigateTo('ajustes')">
-            <i class="fas fa-cog"></i><span>Ajustes</span>
-        </div>
+        <div class="nav-item active" data-target="inicio" onclick="navigateTo('inicio')"><i class="fas fa-home"></i><span>Inicio</span></div>
+        <div class="nav-item" data-target="productos" onclick="navigateTo('productos')"><i class="fas fa-shopping-bag"></i><span>Productos</span></div>
+        <div class="nav-item" data-target="ventas" onclick="navigateTo('ventas')"><i class="fas fa-cash-register"></i><span>Ventas</span></div>
+        <div class="nav-item" data-target="pedidos" onclick="navigateTo('pedidos')"><i class="fas fa-boxes"></i><span>Pedidos</span></div>
+        <div class="nav-item" data-target="clientes" onclick="navigateTo('clientes')"><i class="fas fa-users"></i><span>Clientes</span></div>
+        <div class="nav-item" data-target="ajustes" onclick="navigateTo('ajustes')"><i class="fas fa-cog"></i><span>Ajustes</span></div>
     </nav>
 </div>
 
 <script>
-    // Función principal para cambiar de sección
+    // --- 1. LÓGICA DE NAVEGACIÓN ---
     function navigateTo(sectionId) {
-        // 1. Ocultar todas las secciones
-        document.querySelectorAll('.app-section').forEach(sec => {
-            sec.classList.remove('active');
-        });
-
-        // 2. Mostrar la sección seleccionada
+        document.querySelectorAll('.app-section').forEach(sec => sec.classList.remove('active'));
         const targetSection = document.getElementById('section-' + sectionId);
-        if (targetSection) {
-            targetSection.classList.add('active');
-        }
+        if (targetSection) targetSection.classList.add('active');
 
-        // 3. Actualizar el estado activo en la barra de navegación inferior
         document.querySelectorAll('.nav-item').forEach(item => {
             item.classList.remove('active');
-            if (item.dataset.target === sectionId) {
-                item.classList.add('active');
-            }
+            if (item.dataset.target === sectionId) item.classList.add('active');
         });
 
-        // 4. Hacer scroll hasta arriba automáticamente
         window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // Si vamos a productos, recargamos la lista
+        if (sectionId === 'productos') {
+            loadProducts();
+        }
     }
+
+    // --- 2. LÓGICA DE PRODUCTOS (CRUD con LocalStorage) ---
+    let products = [];
+
+    // Cargar productos al iniciar
+    function initProducts() {
+        const stored = localStorage.getItem('negocio_productos');
+        if (stored) {
+            products = JSON.parse(stored);
+        } else {
+            // Datos de ejemplo por defecto si está vacío
+            products = [
+                { id: 1, name: 'Pan lactal', price: 1200, stock: 2, min: 5, img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=150' },
+                { id: 2, name: 'Jugo naranja', price: 800, stock: 10, min: 3, img: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?w=150' }
+            ];
+            saveToLocalStorage();
+        }
+        loadProducts();
+    }
+
+    // Guardar en LocalStorage
+    function saveToLocalStorage() {
+        localStorage.setItem('negocio_productos', JSON.stringify(products));
+        updateMetrics();
+    }
+
+    // Mostrar/Ocultar formulario
+    function toggleForm() {
+        const form = document.getElementById('product-form');
+        form.classList.toggle('active');
+    }
+
+    // Guardar un nuevo producto desde el formulario
+    function saveProduct(event) {
+        event.preventDefault(); // Evita que la página se recargue
+
+        const name = document.getElementById('prod-name').value;
+        const price = parseFloat(document.getElementById('prod-price').value);
+        const stock = parseInt(document.getElementById('prod-stock').value);
+        const min = parseInt(document.getElementById('prod-min').value);
+        const img = document.getElementById('prod-img').value || 'https://via.placeholder.com/150';
+
+        const newProduct = {
+            id: Date.now(), // ID único basado en el tiempo
+            name: name,
+            price: price,
+            stock: stock,
+            min: min,
+            img: img
+        };
+
+        products.push(newProduct);
+        saveToLocalStorage();
+        
+        // Limpiar formulario y ocultarlo
+        event.target.reset();
+        toggleForm();
+        loadProducts();
+        
+        alert('¡Producto cargado con éxito!');
+    }
+
+    // Eliminar producto
+    function deleteProduct(id) {
+        if (confirm('¿Estás seguro de eliminar este producto?')) {
+            products = products.filter(p => p.id !== id);
+            saveToLocalStorage();
+            loadProducts();
+        }
+    }
+
+    // Renderizar la lista de productos en el DOM
+    function loadProducts() {
+        const listContainer = document.getElementById('product-list');
+        listContainer.innerHTML = '';
+
+        if (products.length === 0) {
+            listContainer.innerHTML = '<p style="text-align:center; color:#777; font-size:13px;">No hay productos cargados aún.</p>';
+            return;
+        }
+
+        products.forEach(product => {
+            const item = document.createElement('div');
+            item.className = 'product-item';
+            item.innerHTML = `
+                <img src="${product.img}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/150'">
+                <div class="info">
+                    <h4>${product.name}</h4>
+                    <p>Stock: ${product.stock} (Mín: ${product.min})</p>
+                    <span class="price">$${product.price.toLocaleString('es-AR')}</span>
+                </div>
+                <button class="btn-delete" onclick="deleteProduct(${product.id})"><i class="fas fa-trash"></i></button>
+            `;
+            listContainer.appendChild(item);
+        });
+    }
+
+    // Actualizar el contador de la pantalla de Inicio
+    function updateMetrics() {
+        document.getElementById('metric-productos').textContent = products.length;
+    }
+
+    // Inicializar la app
+    window.onload = () => {
+        initProducts();
+    };
 </script>
 
 </body>
