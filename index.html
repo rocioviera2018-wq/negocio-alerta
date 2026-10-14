@@ -3,70 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generar PDF y Compartir</title>
+    <title>Mi Sistema de Ventas</title>
     <!-- Librería para generar PDFs -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 15px; margin: 0; }
+        h2 { text-align: center; color: #333; }
+        .contenedor { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 15px; }
+        input { width: 90%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }
+        button { width: 100%; padding: 12px; margin-top: 10px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .btn-agregar { background-color: #007bff; color: white; }
+        .btn-pdf { background-color: #25D366; color: white; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 14px; }
+        th { background-color: #007bff; color: white; }
+    </style>
 </head>
 <body>
 
-    <h2>Datos de la Venta</h2>
-    
-    <!-- Estos son los datos que irán en el PDF. Puedes cambiarlos por los de tu base de datos -->
-    <input type="text" id="producto" placeholder="Producto" value="Camisa">
-    <input type="number" id="cantidad" placeholder="Cantidad" value="2">
-    <input type="number" id="total" placeholder="Total" value="150.50">
-    
-    <br><br>
-    
-    <!-- Botón que activa la función -->
-    <button onclick="generarYCompartirPDF()" style="padding: 15px; font-size: 16px; background-color: #25D366; color: white; border: none; border-radius: 5px; cursor: pointer;">
-        📄 Generar PDF y Enviar por WhatsApp
-    </button>
+    <h2>📋 Registro de Ventas</h2>
+
+    <!-- Formulario para agregar ventas -->
+    <div class="contenedor">
+        <h3>Agregar Venta</h3>
+        <input type="text" id="producto" placeholder="Nombre del producto">
+        <input type="number" id="cantidad" placeholder="Cantidad">
+        <input type="number" id="total" placeholder="Total ($)">
+        <button class="btn-agregar" onclick="agregarVenta()">➕ Agregar a la lista</button>
+    </div>
+
+    <!-- Tabla donde se verán las ventas -->
+    <div class="contenedor">
+        <h3>Ventas del día</h3>
+        <table id="tablaVentas">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cant.</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Aquí se agregan las filas automáticamente -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Botón de PDF y WhatsApp -->
+    <div class="contenedor">
+        <button class="btn-pdf" onclick="generarYCompartirPDF()">📄 Generar PDF y Enviar por WhatsApp</button>
+    </div>
 
     <script>
-        async function generarYCompartirPDF() {
-            // 1. Capturar los datos de la pantalla
+        // Arreglo temporal para guardar las ventas en memoria
+        let ventas = [];
+
+        // Función para agregar una venta a la tabla
+        function agregarVenta() {
             const producto = document.getElementById('producto').value;
             const cantidad = document.getElementById('cantidad').value;
             const total = document.getElementById('total').value;
 
-            // 2. Crear el PDF con jsPDF
+            if (producto === "" || cantidad === "" || total === "") {
+                alert("Por favor, llena todos los campos");
+                return;
+            }
+
+            // Guardar en el arreglo
+            const nuevaVenta = { producto, cantidad, total };
+            ventas.push(nuevaVenta);
+
+            // Actualizar la tabla visual
+            const tabla = document.getElementById('tablaVentas').getElementsByTagName('tbody')[0];
+            const nuevaFila = tabla.insertRow();
+            nuevaFila.innerHTML = `<td>${producto}</td><td>${cantidad}</td><td>$${total}</td>`;
+
+            // Limpiar los campos
+            document.getElementById('producto').value = "";
+            document.getElementById('cantidad').value = "";
+            document.getElementById('total').value = "";
+        }
+
+        // Función para generar el PDF y compartirlo
+        async function generarYCompartirPDF() {
+            if (ventas.length === 0) {
+                alert("No hay ventas para generar el PDF");
+                return;
+            }
+
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            
-            // Diseño del PDF (puedes personalizar esto)
+
+            // Título del PDF
             doc.setFontSize(18);
-            doc.text("Recibo de Venta", 10, 20);
+            doc.text("Recibo de Ventas", 10, 20);
             doc.setFontSize(12);
-            doc.text("Producto: " + producto, 10, 40);
-            doc.text("Cantidad: " + cantidad, 10, 50);
-            doc.text("Total: $" + total, 10, 60);
-            doc.text("¡Gracias por su compra!", 10, 80);
+            doc.text("Fecha: " + new Date().toLocaleDateString(), 10, 30);
 
-            // 3. Convertir el PDF a un archivo (Blob)
+            // Encabezados de la tabla en el PDF
+            let y = 45;
+            doc.text("Producto", 10, y);
+            doc.text("Cant.", 100, y);
+            doc.text("Total", 150, y);
+            y += 10;
+
+            // Recorrer las ventas y agregarlas al PDF
+            ventas.forEach(venta => {
+                doc.text(venta.producto, 10, y);
+                doc.text(venta.cantidad.toString(), 100, y);
+                doc.text("$" + venta.total, 150, y);
+                y += 10;
+            });
+
+            // Convertir el PDF a un archivo para compartir
             const pdfBlob = doc.output('blob');
-            const file = new File([pdfBlob], 'recibo_venta.pdf', { type: 'application/pdf' });
+            const file = new File([pdfBlob], 'recibo_ventas.pdf', { type: 'application/pdf' });
 
-            // 4. Intentar compartir por WhatsApp usando el menú nativo de Android
+            // Intentar compartir usando el menú nativo de Android (WhatsApp)
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 try {
                     await navigator.share({
                         files: [file],
-                        title: 'Recibo de Venta',
-                        text: 'Aquí tienes tu recibo en PDF.'
+                        title: 'Recibo de Ventas',
+                        text: 'Aquí tienes el recibo de las ventas.'
                     });
                 } catch (error) {
                     console.error('Error al compartir:', error);
-                    alert("Cancelaste el envío o hubo un error.");
                 }
             } else {
-                // 5. Plan B: Si la app no soporta compartir archivos, descarga el PDF y abre WhatsApp con un texto
-                alert("Tu app actual no soporta compartir archivos directamente. Se descargará el PDF y se abrirá WhatsApp.");
-                doc.save('recibo_venta.pdf'); // Descarga el PDF
-                
-                // Abre WhatsApp con un mensaje de texto (no adjunta el PDF automáticamente por seguridad de WhatsApp)
-                const mensaje = encodeURIComponent("Hola, aquí está tu recibo de venta. Te adjunto el PDF que acabo de descargar.");
-                window.open(`https://wa.me/?text=${mensaje}`, '_blank');
+                // Si no se puede compartir, descargar el PDF y abrir WhatsApp
+                alert("Tu navegador no soporta compartir archivos. Se descargará el PDF y se abrirá WhatsApp.");
+                doc.save('recibo_ventas.pdf');
+                window.open(`https://wa.me/?text=Hola, aquí está el recibo de ventas. Te adjunto el PDF.`, '_blank');
             }
         }
     </script>
