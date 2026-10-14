@@ -327,17 +327,18 @@
 
     <script>
         // ==========================================
-        // 1. CONEXIÓN A SUPABASE
+        // 1. CONEXIÓN A SUPABASE (TUS LLAVES REALES)
         // ==========================================
-        // ⚠️ REEMPLAZA ESTAS DOS LÍNEAS CON TUS DATOS REALES DE SUPABASE:
-        const SUPABASE_URL = 'TU_SUPABASE_URL_AQUI';
-        const SUPABASE_KEY = 'TU_SUPABASE_ANON_KEY_AQUI';
+        const SUPABASE_URL = 'https://eyvsvtsbgwccbtytkuju.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_4Mfk_ZP_BnVz9luy8CeF0A_Jh4zYV9R';
 
         let supabaseClient = null;
 
-        if (SUPABASE_URL !== 'TU_SUPABASE_URL_AQUI' && SUPABASE_KEY !== 'TU_SUPABASE_ANON_KEY_AQUI') {
+        // Verificación de seguridad para asegurarnos de que las llaves están puestas
+        if (SUPABASE_URL && SUPABASE_URL !== 'TU_SUPABASE_URL_AQUI') {
             try {
                 supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                console.log("¡Conexión a Supabase lista!");
             } catch (e) {
                 console.warn("Error al iniciar Supabase:", e.message);
             }
