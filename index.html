@@ -2,5533 +2,1739 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width,initial-scale=1,viewport-fit=cover">
-
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#004c3d">
-
 <title>Negocio Alerta PRO</title>
 
 <style>
-
 :root{
---verde:#006b55;
---verde2:#00866b;
---verde3:#00a77f;
---verdeOscuro:#003d32;
---verdeMuyOscuro:#002c25;
-
---dorado:#dfb52e;
---dorado2:#f8da67;
-
---fondo:#edf8f5;
---blanco:#ffffff;
---texto:#123f36;
---gris:#70847d;
-
---borde:#d6ebe5;
-
---rojo:#d92f38;
---rojoBg:#fff0f1;
-
---azul:#315ddd;
---morado:#7443c5;
-
+--verde:#006b55;--verde2:#00866b;--verde3:#00a77f;
+--verdeOscuro:#003d32;--verdeMuyOscuro:#002c25;
+--dorado:#dfb52e;--dorado2:#f8da67;
+--fondo:#edf8f5;--blanco:#ffffff;--texto:#123f36;--gris:#70847d;
+--borde:#d6ebe5;--rojo:#d92f38;--rojoBg:#fff0f1;
+--azul:#315ddd;--morado:#7443c5;
 --sombra:0 8px 24px rgba(0,75,60,.10);
 }
 
-*{
-box-sizing:border-box;
--webkit-tap-highlight-color:transparent;
-}
-
-html{
-scroll-behavior:smooth;
-}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
 
 body{
 margin:0;
-font-family:
-system-ui,
--apple-system,
-BlinkMacSystemFont,
-"Segoe UI",
-Roboto,
-sans-serif;
-
+font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
 color:var(--texto);
-
 background:
-radial-gradient(
-circle at 0 25%,
-rgba(0,167,127,.08),
-transparent 230px
-),
-
-radial-gradient(
-circle at 100% 60%,
-rgba(224,183,47,.08),
-transparent 220px
-),
-
-linear-gradient(
-#e8f7f3,
-#f8fcfb
-);
-
+radial-gradient(circle at 0 25%,rgba(0,167,127,.08),transparent 230px),
+radial-gradient(circle at 100% 60%,rgba(224,183,47,.08),transparent 220px),
+linear-gradient(#e8f7f3,#f8fcfb);
 padding-bottom:95px;
 }
 
-
-/* =====================================================
-HEADER
-===================================================== */
-
+/* HEADER CORREGIDO */
 .header{
-
 position:relative;
-
 overflow:hidden;
-
 color:white;
-
-min-height:207px;
-
-padding:25px 15px 48px;
-
-background:
-linear-gradient(
-135deg,
-#00382e 0%,
-#006b55 48%,
-#00a77f 100%
-);
-
+min-height:0;
+padding:25px 15px 16px;
+background:linear-gradient(135deg,#00382e 0%,#006b55 48%,#00a77f 100%);
 border-radius:0 0 38px 38px;
-
-box-shadow:
-0 12px 32px rgba(0,65,50,.24);
+box-shadow:0 12px 32px rgba(0,65,50,.24);
 }
 
 .header:before{
-
 content:"";
-
 position:absolute;
-
-width:300px;
-height:300px;
-
-right:-130px;
-top:-170px;
-
-border:
-1px solid rgba(255,255,255,.15);
-
+width:300px;height:300px;
+right:-130px;top:-170px;
+border:1px solid rgba(255,255,255,.15);
 border-radius:50%;
+pointer-events:none;
 }
 
 .header:after{
-
 content:"";
-
 position:absolute;
-
-width:230px;
-height:230px;
-
-left:-170px;
-bottom:-180px;
-
-border:
-1px solid rgba(255,255,255,.10);
-
+width:230px;height:230px;
+left:-170px;bottom:-180px;
+border:1px solid rgba(255,255,255,.10);
 border-radius:50%;
+pointer-events:none;
 }
 
 .headerTop{
-
 position:relative;
-
-z-index:2;
-
+z-index:6;
 display:flex;
-
 align-items:center;
-
 justify-content:space-between;
+gap:10px;
 }
 
 .brand{
-
 display:flex;
-
 align-items:center;
-
 gap:11px;
+min-width:0;
 }
 
 .logo{
-
-width:58px;
-height:58px;
-
+width:58px;height:58px;
 flex-shrink:0;
-
 display:flex;
-
 align-items:center;
 justify-content:center;
-
 overflow:hidden;
-
 border-radius:19px;
-
 font-size:31px;
-
-background:
-linear-gradient(
-145deg,
-#fff3a1,
-#d5a91e
-);
-
-border:
-2px solid rgba(255,255,255,.5);
-
-box-shadow:
-0 5px 18px rgba(0,0,0,.18);
+background:linear-gradient(145deg,#fff3a1,#d5a91e);
+border:2px solid rgba(255,255,255,.5);
+box-shadow:0 5px 18px rgba(0,0,0,.18);
 }
 
 .logo img{
-
 display:none;
-
-width:100%;
-height:100%;
-
+width:100%;height:100%;
 object-fit:cover;
 }
 
 .brand h1{
-
 margin:0;
-
 font-size:21px;
-
 line-height:1.05;
-
 letter-spacing:-.6px;
 }
 
 .brand p{
-
 margin:6px 0 0;
-
 font-size:10px;
-
 color:#d9eee8;
 }
 
-.pro{
-
-color:var(--dorado2);
-}
-
-.crown{
-
-font-size:14px;
-
-color:var(--dorado2);
-}
+.pro{color:var(--dorado2)}
+.crown{font-size:14px;color:var(--dorado2)}
 
 .headerActions{
-
+position:relative;
+z-index:10;
 display:flex;
-
+align-items:center;
 gap:5px;
+flex-shrink:0;
 }
 
 .headerBtn{
-
 position:relative;
-
-width:38px;
-height:38px;
-
+width:38px;height:38px;
+flex-shrink:0;
 border:0;
-
 border-radius:14px;
-
-background:
-rgba(255,255,255,.13);
-
+background:rgba(255,255,255,.13);
 color:white;
-
 font-size:18px;
+cursor:pointer;
 }
 
 .dot{
-
 position:absolute;
-
-top:-4px;
-right:-3px;
-
-width:19px;
-height:19px;
-
+top:-4px;right:-3px;
+width:19px;height:19px;
 display:flex;
-
 align-items:center;
 justify-content:center;
-
 border-radius:50%;
-
 background:#ed3942;
-
 border:2px solid #00624f;
-
 font-size:9px;
-
 font-weight:900;
 }
 
-
-/* WELCOME */
-
+/* BIENVENIDA: YA NO QUEDA FUERA DEL HEADER */
 .welcome{
-
-position:absolute;
-
+position:relative;
 z-index:5;
-
-left:11px;
-right:11px;
-
-bottom:-34px;
-
+left:auto;
+right:auto;
+bottom:auto;
+width:100%;
 min-height:70px;
-
 display:flex;
-
 align-items:center;
-
 gap:10px;
-
+margin:20px 0 0;
 padding:10px 11px;
-
-border:
-1px solid rgba(255,255,255,.35);
-
+border:1px solid rgba(255,255,255,.35);
 border-radius:22px;
-
-background:
-linear-gradient(
-135deg,
-rgba(0,95,76,.97),
-rgba(0,62,51,.97)
-);
-
-box-shadow:
-0 10px 25px rgba(0,55,45,.22);
+background:linear-gradient(135deg,rgba(0,95,76,.97),rgba(0,62,51,.97));
+box-shadow:0 10px 25px rgba(0,55,45,.22);
 }
 
 .welcomeIcon{
-
-width:47px;
-height:47px;
-
+width:47px;height:47px;
 display:flex;
-
 align-items:center;
 justify-content:center;
-
 flex-shrink:0;
-
 border-radius:15px;
-
-background:
-linear-gradient(
-145deg,
-#14ac87,
-#00715b
-);
-
+background:linear-gradient(145deg,#14ac87,#00715b);
 font-size:22px;
 }
 
-.welcomeText{
-
-flex:1;
-}
-
-.welcomeText strong{
-
-display:block;
-
-font-size:15px;
-}
-
+.welcomeText{flex:1;min-width:0}
+.welcomeText strong{display:block;font-size:15px}
 .welcomeText small{
-
 display:block;
-
 margin-top:2px;
-
 color:#cbe7df;
-
 font-size:10px;
 }
 
 .logout{
-
-border:
-2px solid var(--dorado2);
-
+position:relative;
+z-index:10;
+flex-shrink:0;
+border:2px solid var(--dorado2);
 background:transparent;
-
 color:var(--dorado2);
-
 border-radius:14px;
-
 padding:8px 10px;
-
 font-size:10px;
-
 font-weight:900;
+white-space:nowrap;
+cursor:pointer;
 }
 
-
-/* =====================================================
-CONTENEDOR
-===================================================== */
-
+/* CONTENEDOR CORREGIDO */
 .container{
-
+width:100%;
 max-width:950px;
-
 margin:auto;
-
-padding:
-58px 10px
-105px;
+padding:20px 10px 105px;
 }
 
-
-/* =====================================================
-STATS
-===================================================== */
-
+/* ESTADÍSTICAS */
 .stats{
-
 display:grid;
-
-grid-template-columns:
-repeat(3,1fr);
-
+grid-template-columns:repeat(3,1fr);
 gap:8px;
-
 margin-bottom:15px;
 }
 
 .stat{
-
+min-width:0;
 min-height:96px;
-
 display:flex;
-
 align-items:center;
-
 gap:7px;
-
 padding:10px 8px;
-
 background:white;
-
-border:
-1px solid var(--borde);
-
+border:1px solid var(--borde);
 border-radius:19px;
-
 box-shadow:var(--sombra);
 }
 
-.stat:nth-child(1){
-
-border-color:#00a77f;
-}
-
-.stat:nth-child(2){
-
-border-color:#ffb6bb;
-
-background:#fffafa;
-}
-
-.stat:nth-child(3){
-
-border-color:#e5c448;
-
-background:#fffefa;
-}
+.stat:nth-child(1){border-color:#00a77f}
+.stat:nth-child(2){border-color:#ffb6bb;background:#fffafa}
+.stat:nth-child(3){border-color:#e5c448;background:#fffefa}
 
 .statIcon{
-
-width:37px;
-height:37px;
-
+width:37px;height:37px;
 display:flex;
-
 align-items:center;
 justify-content:center;
-
 flex-shrink:0;
-
 border-radius:50%;
-
 color:white;
-
 font-size:19px;
-
-background:
-linear-gradient(
-145deg,
-#11a981,
-#006b55
-);
+background:linear-gradient(145deg,#11a981,#006b55);
 }
 
-.stat:nth-child(2) .statIcon{
-
-background:
-linear-gradient(
-145deg,
-#ff686d,
-#ce252e
-);
-}
-
-.stat:nth-child(3) .statIcon{
-
-background:
-linear-gradient(
-145deg,
-#f4d75d,
-#c79813
-);
-}
+.stat:nth-child(2) .statIcon{background:linear-gradient(145deg,#ff686d,#ce252e)}
+.stat:nth-child(3) .statIcon{background:linear-gradient(145deg,#f4d75d,#c79813)}
 
 .stat small{
-
 display:block;
-
 font-size:9px;
-
 font-weight:850;
-
 color:#60746e;
 }
 
 .stat strong{
-
 display:block;
-
 margin-top:4px;
-
 font-size:17px;
-
 line-height:1;
-
 color:var(--verdeOscuro);
 }
 
-.stat:nth-child(2) strong{
+.stat:nth-child(2) strong{color:#b9272f}
+.stat:nth-child(3) strong{color:#765b0b}
 
-color:#b9272f;
-}
-
-.stat:nth-child(3) strong{
-
-color:#765b0b;
-}
-
-
-/* =====================================================
-MENU
-===================================================== */
-
+/* MENÚ */
 .menu{
-
 display:grid;
-
-grid-template-columns:
-repeat(4,1fr);
-
+grid-template-columns:repeat(4,1fr);
 gap:7px;
-
 margin-bottom:15px;
 }
 
 .menuItem{
-
 min-height:91px;
-
-border:
-1px solid var(--borde);
-
+border:1px solid var(--borde);
 border-radius:18px;
-
 background:white;
-
 color:var(--verdeOscuro);
-
 box-shadow:var(--sombra);
-
 display:flex;
-
 flex-direction:column;
-
 align-items:center;
-
 justify-content:center;
-
 gap:7px;
-
 font-size:11px;
-
 font-weight:900;
-
 cursor:pointer;
-
 transition:.15s;
 }
 
-.menuItem:active{
+.menuItem:active{transform:scale(.96)}
 
-transform:scale(.96);
-}
-
-.menuIcon{
-
-font-size:25px;
-
-line-height:1;
-}
+.menuIcon{font-size:25px;line-height:1}
 
 .menuItem.active{
-
 color:white;
-
-background:
-linear-gradient(
-145deg,
-#00755c,
-#003e32
-);
-
-border:
-2px solid var(--dorado);
-
-box-shadow:
-0 9px 22px rgba(0,70,55,.25);
+background:linear-gradient(145deg,#00755c,#003e32);
+border:2px solid var(--dorado);
+box-shadow:0 9px 22px rgba(0,70,55,.25);
 }
 
 .menuItem.active:after{
-
 content:"";
-
-width:46px;
-height:3px;
-
+width:46px;height:3px;
 border-radius:20px;
-
-background:
-var(--dorado2);
+background:var(--dorado2);
 }
 
-
-/* =====================================================
-CARDS
-===================================================== */
-
+/* TARJETAS */
 .card{
-
-background:
-rgba(255,255,255,.97);
-
-border:
-1px solid var(--borde);
-
+background:rgba(255,255,255,.97);
+border:1px solid var(--borde);
 border-radius:24px;
-
 padding:16px;
-
 margin-bottom:14px;
-
 box-shadow:var(--sombra);
 }
 
 .cardHeader{
-
 display:flex;
-
 align-items:center;
-
 justify-content:space-between;
-
 gap:10px;
-
 margin-bottom:13px;
 }
 
-.cardTitle{
-
-display:flex;
-
-align-items:center;
-
-gap:10px;
-}
+.cardTitle{display:flex;align-items:center;gap:10px}
 
 .cardIcon{
-
-width:42px;
-height:42px;
-
+width:42px;height:42px;
 display:flex;
-
 align-items:center;
 justify-content:center;
-
 border-radius:50%;
-
-background:
-linear-gradient(
-145deg,
-#12a982,
-#006b55
-);
-
+background:linear-gradient(145deg,#12a982,#006b55);
 color:white;
-
 font-size:20px;
 }
 
-.card h2{
+.card h2{margin:0;font-size:19px;color:var(--verdeOscuro)}
+.seeAll{color:var(--verde2);font-size:11px;font-weight:900}
 
-margin:0;
-
-font-size:19px;
-
-color:var(--verdeOscuro);
-}
-
-.seeAll{
-
-color:var(--verde2);
-
-font-size:11px;
-
-font-weight:900;
-}
-
-
-/* =====================================================
-ALERTAS
-===================================================== */
-
+/* ALERTAS */
 .lowCount{
-
 display:inline-block;
-
-margin:
-0 0 12px 52px;
-
+margin:0 0 12px 52px;
 padding:6px 12px;
-
 border-radius:999px;
-
 background:#ffe0e2;
-
 color:#c4262f;
-
 font-size:11px;
-
 font-weight:900;
 }
 
 .alertProducts{
-
 display:grid;
-
-grid-template-columns:
-repeat(3,1fr);
-
+grid-template-columns:repeat(3,1fr);
 gap:9px;
 }
 
 .alertProduct{
-
 display:flex;
-
 align-items:center;
-
 gap:8px;
-
 padding:7px;
-
-border:
-1px solid #edf2f0;
-
+border:1px solid #edf2f0;
 border-radius:16px;
 }
 
 .alertImg{
-
-width:56px;
-height:56px;
-
+width:56px;height:56px;
 flex-shrink:0;
-
 display:flex;
-
 align-items:center;
 justify-content:center;
-
 border-radius:13px;
-
-background:
-linear-gradient(
-135deg,
-#eef7f3,
-#d9eee8
-);
-
+background:linear-gradient(135deg,#eef7f3,#d9eee8);
 font-size:27px;
-
 overflow:hidden;
 }
 
-.alertImg img{
+.alertImg img{width:100%;height:100%;object-fit:cover}
+.alertProduct strong{display:block;font-size:11px}
+.remaining{margin-top:3px;color:#cf2931;font-size:10px;font-weight:900}
+.alertProduct small{font-size:9px;color:var(--gris)}
 
-width:100%;
-height:100%;
-
-object-fit:cover;
-}
-
-.alertProduct strong{
-
-display:block;
-
-font-size:11px;
-}
-
-.remaining{
-
-margin-top:3px;
-
-color:#cf2931;
-
-font-size:10px;
-
-font-weight:900;
-}
-
-.alertProduct small{
-
-font-size:9px;
-
-color:var(--gris);
-}
-
-
-/* =====================================================
-MOVIMIENTOS
-===================================================== */
-
+/* MOVIMIENTOS */
 .movement{
-
 display:grid;
-
-grid-template-columns:
-35px 1fr auto;
-
+grid-template-columns:35px 1fr auto;
 gap:8px;
-
 align-items:center;
-
 padding:10px 0;
-
-border-bottom:
-1px solid #e7efec;
+border-bottom:1px solid #e7efec;
 }
 
-.movement:last-child{
-
-border-bottom:0;
-}
+.movement:last-child{border-bottom:0}
 
 .movementIcon{
-
-width:33px;
-height:33px;
-
+width:33px;height:33px;
 display:flex;
-
 align-items:center;
 justify-content:center;
-
 border-radius:50%;
-
 color:white;
-
 font-size:15px;
 }
 
-.green{
-
-background:#00a77f;
-}
-
-.blue{
-
-background:#315ddd;
-}
-
-.purple{
-
-background:#7443c5;
-}
-
-.movementText{
-
-font-size:11px;
-}
-
-.movementText strong{
-
-color:#126079;
-}
-
-.movementTime{
-
-font-size:10px;
-
-color:#70847d;
-}
+.green{background:#00a77f}
+.blue{background:#315ddd}
+.purple{background:#7443c5}
+.movementText{font-size:11px}
+.movementText strong{color:#126079}
+.movementTime{font-size:10px;color:#70847d}
 
 .pending{
-
 padding:5px 8px;
-
 border-radius:999px;
-
 background:#ffe7aa;
-
 color:#a36b00;
-
 font-size:9px;
-
 font-weight:900;
 }
 
-
-/* =====================================================
-AVISO
-===================================================== */
-
+/* AVISO */
 .info{
-
 display:flex;
-
 align-items:center;
-
 gap:10px;
-
 padding:10px 12px;
-
 background:#dff4ee;
-
-border:
-1px solid #c5e8df;
-
+border:1px solid #c5e8df;
 border-radius:17px;
-
 color:#17705e;
-
 font-size:9px;
-
 line-height:1.4;
 }
 
-.infoIcon{
+.infoIcon{font-size:21px}
 
-font-size:21px;
-}
-
-
-/* =====================================================
-PAGINAS
-===================================================== */
-
-.page{
-
-display:none;
-}
-
-.page.active{
-
-display:block;
-
-animation:fade .2s ease;
-}
+/* PÁGINAS */
+.page{display:none}
+.page.active{display:block;animation:fade .2s ease}
 
 @keyframes fade{
-
-from{
-
-opacity:0;
-
-transform:translateY(5px);
-
+from{opacity:0;transform:translateY(5px)}
+to{opacity:1;transform:translateY(0)}
 }
 
-to{
-
-opacity:1;
-
-transform:translateY(0);
-
-}
-}
-
-
-/* =====================================================
-FORMULARIOS
-===================================================== */
-
+/* FORMULARIOS */
 .form{
-
 display:grid;
-
-grid-template-columns:
-repeat(2,1fr);
-
+grid-template-columns:repeat(2,1fr);
 gap:10px;
 }
 
-.field{
-
-display:flex;
-
-flex-direction:column;
-
-gap:5px;
-}
-
-.full{
-
-grid-column:1/-1;
-}
+.field{display:flex;flex-direction:column;gap:5px}
+.full{grid-column:1/-1}
 
 .field label{
-
 font-size:10px;
-
 font-weight:900;
-
 color:var(--gris);
 }
 
-.field input,
-.field select{
-
+.field input,.field select{
 width:100%;
-
 padding:12px;
-
-border:
-1px solid var(--borde);
-
+border:1px solid var(--borde);
 border-radius:14px;
-
 background:#fbfdfc;
-
 font-size:14px;
-
 color:var(--texto);
-
 outline:none;
 }
 
-.field input:focus,
-.field select:focus{
-
+.field input:focus,.field select:focus{
 border-color:var(--verde2);
-
-box-shadow:
-0 0 0 3px rgba(0,134,107,.10);
+box-shadow:0 0 0 3px rgba(0,134,107,.10);
 }
 
-
-/* =====================================================
-BOTONES
-===================================================== */
-
+/* BOTONES */
 .btn{
-
 border:0;
-
 border-radius:14px;
-
 padding:12px 15px;
-
 font-weight:900;
-
 font-size:12px;
-
 cursor:pointer;
 }
 
-.btnPrimary{
+.btnPrimary{color:white;background:linear-gradient(145deg,#007c61,#00523f)}
+.btnGold{color:#4b3a06;background:linear-gradient(145deg,#f5d75d,#d3a921)}
+.btnDanger{color:#c4262f;background:#fff0f1}
+.btnLight{color:var(--verde);background:#e9f6f2}
 
-color:white;
-
-background:
-linear-gradient(
-145deg,
-#007c61,
-#00523f
-);
-}
-
-.btnGold{
-
-color:#4b3a06;
-
-background:
-linear-gradient(
-145deg,
-#f5d75d,
-#d3a921
-);
-}
-
-.btnDanger{
-
-color:#c4262f;
-
-background:#fff0f1;
-}
-
-.btnLight{
-
-color:var(--verde);
-
-background:#e9f6f2;
-}
-
-
-/* =====================================================
-PRODUCTOS
-===================================================== */
-
-.search{
-
-margin-bottom:12px;
-}
+/* PRODUCTOS */
+.search{margin-bottom:12px}
 
 .search input{
-
 width:100%;
-
 padding:13px;
-
-border:
-1px solid var(--borde);
-
+border:1px solid var(--borde);
 border-radius:15px;
-
 outline:none;
-
 background:white;
 }
 
 .product{
-
 display:flex;
-
 align-items:center;
-
 gap:10px;
-
 padding:10px;
-
 margin-bottom:8px;
-
-border:
-1px solid var(--borde);
-
+border:1px solid var(--borde);
 border-radius:18px;
-
 background:white;
 }
 
 .productImage{
-
-width:68px;
-height:68px;
-
+width:68px;height:68px;
 flex-shrink:0;
-
 display:flex;
-
 align-items:center;
 justify-content:center;
-
 border-radius:15px;
-
-background:
-linear-gradient(
-135deg,
-#eaf7f3,
-#d9eee8
-);
-
+background:linear-gradient(135deg,#eaf7f3,#d9eee8);
 font-size:30px;
-
 overflow:hidden;
 }
 
-.productImage img{
-
-width:100%;
-height:100%;
-
-object-fit:cover;
-}
-
-.productData{
-
-flex:1;
-
-min-width:0;
-}
-
-.productName{
-
-font-size:14px;
-
-font-weight:900;
-
-color:var(--verdeOscuro);
-}
-
-.productCode{
-
-font-size:9px;
-
-color:var(--gris);
-
-margin-top:2px;
-}
-
-.badges{
-
-display:flex;
-
-gap:5px;
-
-flex-wrap:wrap;
-
-margin-top:6px;
-}
+.productImage img{width:100%;height:100%;object-fit:cover}
+.productData{flex:1;min-width:0}
+.productName{font-size:14px;font-weight:900;color:var(--verdeOscuro)}
+.productCode{font-size:9px;color:var(--gris);margin-top:2px}
+.badges{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
 
 .badge{
-
 padding:5px 8px;
-
 border-radius:999px;
-
 background:#e7f6f1;
-
 color:#08765d;
-
 font-size:9px;
-
 font-weight:900;
 }
 
-.badgeLow{
-
-background:#ffe3e5;
-
-color:#c4262f;
-}
+.badgeLow{background:#ffe3e5;color:#c4262f}
 
 .productPrice{
-
 font-size:14px;
-
 font-weight:900;
-
 color:#826710;
-
 white-space:nowrap;
 }
 
-.productButtons{
-
-display:flex;
-
-gap:5px;
-
-margin-top:7px;
-}
+.productButtons{display:flex;gap:5px;margin-top:7px}
 
 .smallBtn{
-
 border:0;
-
 border-radius:8px;
-
 padding:6px 8px;
-
 font-size:9px;
-
 font-weight:900;
+cursor:pointer;
 }
 
-.edit{
+.edit{background:#e8f6f1;color:#006b55}
+.delete{background:#fff0f1;color:#c4262f}
 
-background:#e8f6f1;
-
-color:#006b55;
-}
-
-.delete{
-
-background:#fff0f1;
-
-color:#c4262f;
-}
-
-
-/* =====================================================
-IMAGEN DEL PRODUCTO
-===================================================== */
-
+/* CARGA DE IMÁGENES */
 .imageUpload{
-
 display:flex;
-
 align-items:center;
-
 gap:12px;
-
 padding:12px;
-
-border:
-1px dashed #b9d7ce;
-
+border:1px dashed #b9d7ce;
 border-radius:17px;
-
 background:#f8fcfa;
 }
 
 .imagePreview{
-
-width:72px;
-height:72px;
-
+width:72px;height:72px;
 display:flex;
-
 align-items:center;
 justify-content:center;
-
 flex-shrink:0;
-
 overflow:hidden;
-
 border-radius:16px;
-
-background:
-linear-gradient(
-135deg,
-#e7f5f0,
-#d7eee7
-);
-
+background:linear-gradient(135deg,#e7f5f0,#d7eee7);
 font-size:30px;
 }
 
-.imagePreview img{
-
-width:100%;
-height:100%;
-
-object-fit:cover;
-}
+.imagePreview img{width:100%;height:100%;object-fit:cover}
 
 .imageUploadText{
-
 flex:1;
-
 font-size:11px;
-
 color:var(--gris);
-
 line-height:1.4;
 }
 
 .fileButton{
-
 display:inline-block;
-
 margin-top:7px;
-
 padding:8px 10px;
-
 border-radius:10px;
-
 background:#e5f5f0;
-
 color:var(--verde);
-
 font-weight:900;
-
 font-size:10px;
-
 cursor:pointer;
 }
 
-
-/* =====================================================
-VENTA
-===================================================== */
-
+/* VENTA */
 .saleProduct{
-
 display:flex;
-
 align-items:center;
-
 gap:9px;
-
 padding:9px;
-
-border:
-1px solid var(--borde);
-
+border:1px solid var(--borde);
 border-radius:14px;
-
 margin-bottom:7px;
 }
 
 .saleProduct img{
-
-width:50px;
-height:50px;
-
+width:50px;height:50px;
 object-fit:cover;
-
 border-radius:11px;
 }
 
-.saleProductInfo{
-
-flex:1;
-}
-
-.saleProductInfo strong{
-
-display:block;
-
-font-size:12px;
-}
-
-.saleProductInfo small{
-
-color:var(--gris);
-
-font-size:9px;
-}
+.saleProductInfo{flex:1;min-width:0}
+.saleProductInfo strong{display:block;font-size:12px}
+.saleProductInfo small{color:var(--gris);font-size:9px}
 
 .qty{
-
 width:70px !important;
-
 padding:9px !important;
 }
 
-
-/* =====================================================
-COMPROBANTE
-===================================================== */
-
+/* COMPROBANTE */
 .receipt{
-
 background:white;
-
-border:
-1px solid #d9eae5;
-
+border:1px solid #d9eae5;
 border-radius:18px;
-
 padding:18px;
-
-font-family:
-Arial,
-sans-serif;
-
+font-family:Arial,sans-serif;
 color:#173d35;
 }
 
 .receiptHeader{
-
 text-align:center;
-
-border-bottom:
-1px dashed #bdd3cc;
-
+border-bottom:1px dashed #bdd3cc;
 padding-bottom:12px;
-
 margin-bottom:12px;
 }
 
-.receiptHeader h2{
-
-margin:0;
-
-color:#006b55;
-
-font-size:20px;
-}
-
-.receiptHeader small{
-
-color:#70847d;
-}
+.receiptHeader h2{margin:0;color:#006b55;font-size:20px}
+.receiptHeader small{color:#70847d}
 
 .receiptRow{
-
 display:flex;
-
 justify-content:space-between;
-
 gap:10px;
-
 padding:7px 0;
-
 font-size:12px;
 }
 
 .receiptTotal{
-
 display:flex;
-
 justify-content:space-between;
-
 padding-top:12px;
-
 margin-top:7px;
-
-border-top:
-2px solid #006b55;
-
+border-top:2px solid #006b55;
 font-size:18px;
-
 font-weight:900;
-
 color:#006b55;
 }
 
 .receiptFooter{
-
 text-align:center;
-
 margin-top:15px;
-
 padding-top:12px;
-
-border-top:
-1px dashed #bdd3cc;
-
+border-top:1px dashed #bdd3cc;
 font-size:9px;
-
 color:#70847d;
 }
 
-
-/* =====================================================
-BOTTOM NAV
-===================================================== */
-
+/* NAVEGACIÓN INFERIOR */
 .bottomNav{
-
 position:fixed;
-
 z-index:40;
-
-left:0;
-right:0;
-bottom:0;
-
+left:0;right:0;bottom:0;
 height:79px;
-
 display:grid;
-
-grid-template-columns:
-repeat(6,1fr);
-
-padding:
-6px 4px
-env(safe-area-inset-bottom);
-
-background:
-linear-gradient(
-180deg,
-#004c3d,
-#002e27
-);
-
-border-top:
-2px solid var(--dorado);
-
-box-shadow:
-0 -8px 25px rgba(0,55,45,.25);
+grid-template-columns:repeat(6,1fr);
+padding:6px 4px env(safe-area-inset-bottom);
+background:linear-gradient(180deg,#004c3d,#002e27);
+border-top:2px solid var(--dorado);
+box-shadow:0 -8px 25px rgba(0,55,45,.25);
 }
 
 .bottomBtn{
-
 border:0;
-
 background:transparent;
-
 color:white;
-
 display:flex;
-
 flex-direction:column;
-
 align-items:center;
 justify-content:center;
-
 gap:3px;
-
 font-size:9px;
-
 font-weight:800;
+cursor:pointer;
 }
 
-.bottomIcon{
-
-font-size:21px;
-}
-
-.bottomBtn.active{
-
-color:var(--dorado2);
-}
+.bottomIcon{font-size:21px}
+.bottomBtn.active{color:var(--dorado2)}
 
 .bottomBtn.active:after{
-
 content:"";
-
-width:50px;
-height:3px;
-
+width:50px;height:3px;
 border-radius:10px;
-
 background:var(--dorado2);
 }
 
-
-/* =====================================================
-TOAST
-===================================================== */
-
+/* MENSAJES */
 .toast{
-
 position:fixed;
-
 z-index:100;
-
 left:50%;
-
 bottom:94px;
-
-transform:
-translate(-50%,120px);
-
+transform:translate(-50%,120px);
 background:#003d32;
-
 color:white;
-
 padding:12px 17px;
-
 border-radius:14px;
-
 font-size:11px;
-
 font-weight:900;
-
-box-shadow:
-0 10px 30px rgba(0,0,0,.25);
-
+box-shadow:0 10px 30px rgba(0,0,0,.25);
 transition:.3s;
 }
 
-.toast.show{
+.toast.show{transform:translate(-50%,0)}
 
-transform:
-translate(-50%,0);
-}
-
-
-/* =====================================================
-MODAL
-===================================================== */
-
+/* MODAL */
 .modal{
-
 position:fixed;
-
 inset:0;
-
 z-index:80;
-
 display:none;
-
 align-items:flex-end;
-
 justify-content:center;
-
 padding:10px;
-
-background:
-rgba(0,40,32,.58);
-
+background:rgba(0,40,32,.58);
 backdrop-filter:blur(5px);
 }
 
-.modal.show{
-
-display:flex;
-}
+.modal.show{display:flex}
 
 .modalBox{
-
 width:min(520px,100%);
-
 max-height:90vh;
-
 overflow:auto;
-
 background:white;
-
-border-radius:
-27px 27px 18px 18px;
-
+border-radius:27px 27px 18px 18px;
 padding:19px;
-
-box-shadow:
-0 -10px 50px rgba(0,0,0,.25);
+box-shadow:0 -10px 50px rgba(0,0,0,.25);
 }
 
 .modalHeader{
-
 display:flex;
-
 align-items:center;
-
 justify-content:space-between;
-
 margin-bottom:15px;
 }
 
-.modalHeader h2{
-
-margin:0;
-
-font-size:18px;
-
-color:var(--verdeOscuro);
-}
+.modalHeader h2{margin:0;font-size:18px;color:var(--verdeOscuro)}
 
 .close{
-
-width:35px;
-height:35px;
-
+width:35px;height:35px;
 border:0;
-
 border-radius:11px;
-
 background:#e9f5f1;
-
 color:var(--verde);
-
 font-size:20px;
+cursor:pointer;
 }
 
-
-/* =====================================================
-RESPONSIVE
-===================================================== */
-
+/* CELULARES */
 @media(max-width:650px){
-
-.header{
-
-min-height:204px;
-
-padding:
-23px 13px
-46px;
+.header{min-height:0;padding:23px 13px 16px}
+.brand h1{font-size:19px}
+.brand p{font-size:9px}
+.logo{width:55px;height:55px}
+.headerTop{gap:8px}
+.headerActions{gap:5px}
+.headerBtn{width:35px;height:35px}
+.welcome{left:auto;right:auto;margin-top:18px;padding:10px}
+.welcomeIcon{width:42px;height:42px}
+.welcomeText strong{font-size:14px}
+.welcomeText small{font-size:9px}
+.logout{padding:8px 9px;font-size:9px}
+.container{padding:16px 9px 105px}
+.stat{padding:9px 6px;min-height:91px}
+.statIcon{width:34px;height:34px;font-size:17px}
+.stat small{font-size:8px}
+.stat strong{font-size:16px}
+.menu{gap:6px}
+.menuItem{min-height:88px;font-size:10px}
+.menuIcon{font-size:22px}
+.alertProducts{grid-template-columns:1fr}
+.form{grid-template-columns:1fr}
+.full{grid-column:auto}
+.product{align-items:flex-start}
+.productPrice{font-size:13px}
 }
 
-.brand h1{
-
-font-size:19px;
+@media(max-width:360px){
+.brand{gap:7px}
+.logo{width:46px;height:46px;border-radius:14px}
+.brand h1{font-size:16px}
+.brand p{font-size:8px}
+.headerBtn{width:31px;height:34px}
+.welcome{gap:7px}
+.welcomeIcon{width:36px;height:36px;font-size:18px}
+.welcomeText strong{font-size:12px}
+.welcomeText small{font-size:8px}
+.logout{padding:7px 6px;font-size:8px}
 }
-
-.brand p{
-
-font-size:9px;
-}
-
-.logo{
-
-width:55px;
-height:55px;
-}
-
-.welcome{
-
-left:9px;
-right:9px;
-}
-
-.logout{
-
-padding:8px;
-
-font-size:9px;
-}
-
-.container{
-
-padding-left:9px;
-
-padding-right:9px;
-}
-
-.stat{
-
-padding:9px 6px;
-
-min-height:91px;
-}
-
-.statIcon{
-
-width:34px;
-height:34px;
-
-font-size:17px;
-}
-
-.stat small{
-
-font-size:8px;
-}
-
-.stat strong{
-
-font-size:16px;
-}
-
-.menu{
-
-gap:6px;
-}
-
-.menuItem{
-
-min-height:88px;
-
-font-size:10px;
-}
-
-.menuIcon{
-
-font-size:22px;
-}
-
-.alertProducts{
-
-grid-template-columns:1fr;
-}
-
-.form{
-
-grid-template-columns:1fr;
-}
-
-.full{
-
-grid-column:auto;
-}
-
-.product{
-
-align-items:flex-start;
-}
-
-.productPrice{
-
-font-size:13px;
-}
-
-}
-
 
 /* TABLET */
-
 @media(min-width:700px){
-
-.modal{
-
-align-items:center;
+.modal{align-items:center}
+.modalBox{border-radius:27px}
 }
-
-.modalBox{
-
-border-radius:27px;
-}
-
-}
-
 </style>
 </head>
 
-
 <body>
 
-
-<!-- =====================================================
-HEADER
-===================================================== -->
-
 <header class="header">
+  <div class="headerTop">
+    <div class="brand">
+      <div class="logo">
+        <span id="logoDefault">🌿</span>
+        <img id="headerLogo" alt="Logo del negocio">
+      </div>
+      <div>
+        <h1>Negocio Alerta <span class="pro"><span class="crown">♛</span> PRO</span></h1>
+        <p>Tu negocio organizado, desde el celular.</p>
+      </div>
+    </div>
 
-<div class="headerTop">
+    <div class="headerActions">
+      <button class="headerBtn" onclick="showToast('Tenés alertas pendientes')" aria-label="Alertas">
+        🔔 <span class="dot">3</span>
+      </button>
+      <button class="headerBtn" onclick="goTo('ajustes')" aria-label="Ajustes">👤</button>
+    </div>
+  </div>
 
-<div class="brand">
-
-<div class="logo">
-
-<span id="logoDefault">🌿</span>
-
-<img
-id="headerLogo"
-alt="Logo del negocio">
-
-</div>
-
-<div>
-
-<h1>
-Negocio Alerta
-<span class="pro">
-<span class="crown">♛</span> PRO
-</span>
-</h1>
-
-<p>
-Tu negocio organizado, desde el celular.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="headerActions">
-
-<button
-class="headerBtn"
-onclick="showToast('Tenés alertas pendientes')">
-
-🔔
-
-<span class="dot">
-3
-</span>
-
-</button>
-
-<button
-class="headerBtn"
-onclick="goTo('ajustes')">
-
-👤
-
-</button>
-
-</div>
-
-</div>
-
-
-<div class="welcome">
-
-<div class="welcomeIcon">
-🏪
-</div>
-
-<div class="welcomeText">
-
-<strong>
-Bienvenido/a
-</strong>
-
-<small>
-Tu negocio, siempre en control.
-</small>
-
-</div>
-
-<button
-class="logout"
-onclick="showToast('Sesión cerrada')">
-
-⇥ Cerrar
-
-</button>
-
-</div>
-
+  <div class="welcome">
+    <div class="welcomeIcon">🏪</div>
+    <div class="welcomeText">
+      <strong>Bienvenido/a</strong>
+      <small>Tu negocio, siempre en control.</small>
+    </div>
+    <button class="logout" onclick="showToast('Sesión cerrada')">⇥ Cerrar</button>
+  </div>
 </header>
-
-
 
 <main class="container">
 
-
-<!-- =====================================================
-INICIO
-===================================================== -->
-
-<section
-id="inicio"
-class="page active">
-
-
-<div class="stats">
-
-
-<div class="stat">
-
-<div class="statIcon">
-📦
-</div>
-
-<div>
-
-<small>
-PRODUCTOS
-</small>
-
-<strong id="totalProducts">
-0
-</strong>
-
-</div>
-
-</div>
-
-
-<div class="stat">
-
-<div class="statIcon">
-⚠
-</div>
-
-<div>
-
-<small>
-STOCK BAJO
-</small>
-
-<strong id="lowStock">
-0
-</strong>
-
-</div>
-
-</div>
-
-
-<div class="stat">
-
-<div class="statIcon">
-↗
-</div>
-
-<div>
-
-<small>
-GANANCIA
-</small>
-
-<strong id="totalProfit">
-$0
-</strong>
-
-</div>
-
-</div>
-
-
-</div>
-
-
-
-<!-- MENU PRINCIPAL -->
-
-<div class="menu">
-
-<button
-class="menuItem active"
-onclick="goTo('inicio')">
-
-<span class="menuIcon">
-⌂
-</span>
-
-Inicio
-
-</button>
-
-
-<button
-class="menuItem"
-onclick="goTo('productos')">
-
-<span class="menuIcon">
-🛍
-</span>
-
-Productos
-
-</button>
-
-
-<button
-class="menuItem"
-onclick="goTo('ventas')">
-
-<span class="menuIcon">
-▣
-</span>
-
-Ventas
-
-</button>
-
-
-<button
-class="menuItem"
-onclick="goTo('pedidos')">
-
-<span class="menuIcon">
-📦
-</span>
-
-Pedidos
-
-</button>
-
-
-<button
-class="menuItem"
-onclick="goTo('clientes')">
-
-<span class="menuIcon">
-👥
-</span>
-
-Clientes<br>
-y tickets
-
-</button>
-
-
-<button
-class="menuItem"
-onclick="goTo('reportes')">
-
-<span class="menuIcon">
-↗
-</span>
-
-Reportes
-
-</button>
-
-
-<button
-class="menuItem"
-onclick="goTo('ajustes')">
-
-<span class="menuIcon">
-⚙
-</span>
-
-Ajustes
-
-</button>
-
-</div>
-
-
-
-<!-- ATENCION -->
-
-<div class="card">
-
-<div class="cardHeader">
-
-<div class="cardTitle">
-
-<div class="cardIcon">
-🔔
-</div>
-
-<h2>
-Atención para hoy
-</h2>
-
-</div>
-
-<span class="seeAll">
-Ver todos ›
-</span>
-
-</div>
-
-
-<div
-class="lowCount"
-id="lowCountText">
-
-0 productos con stock bajo
-
-</div>
-
-
-<div
-id="homeAlerts"
-class="alertProducts">
-
-</div>
-
-</div>
-
-
-
-<!-- MOVIMIENTOS -->
-
-<div class="card">
-
-<div class="cardHeader">
-
-<div class="cardTitle">
-
-<div class="cardIcon">
-◷
-</div>
-
-<h2>
-Últimos movimientos
-</h2>
-
-</div>
-
-<span class="seeAll">
-Ver todos ›
-</span>
-
-</div>
-
-
-<div class="movement">
-
-<div class="movementIcon green">
-＋
-</div>
-
-<div class="movementText">
-
-<strong>
-Venta registrada
-</strong>
-
-- Pan lactal x2
-
-</div>
-
-<div class="movementTime">
-17:32
-</div>
-
-</div>
-
-
-<div class="movement">
-
-<div class="movementIcon blue">
-🛒
-</div>
-
-<div class="movementText">
-
-<strong>
-Pedido
-</strong>
-
-- Cliente: Ana
-
-</div>
-
-<div class="pending">
-Pendiente
-</div>
-
-</div>
-
-
-<div class="movement">
-
-<div class="movementIcon purple">
-●
-</div>
-
-<div class="movementText">
-
-<strong>
-Nuevo cliente
-</strong>
-
-- María García
-
-</div>
-
-<div class="movementTime">
-15:20
-</div>
-
-</div>
-
-
-</div>
-
-
-<div class="info">
-
-<div class="infoIcon">
-🛡
-</div>
-
-<div>
-
-Los datos se guardan en este navegador.
-Los comprobantes son comprobantes internos,
-no facturas fiscales.
-
-</div>
-
-</div>
-
-
+<section id="inicio" class="page active">
+  <div class="stats">
+    <div class="stat">
+      <div class="statIcon">📦</div>
+      <div><small>PRODUCTOS</small><strong id="totalProducts">0</strong></div>
+    </div>
+    <div class="stat">
+      <div class="statIcon">⚠</div>
+      <div><small>STOCK BAJO</small><strong id="lowStock">0</strong></div>
+    </div>
+    <div class="stat">
+      <div class="statIcon">↗</div>
+      <div><small>GANANCIA</small><strong id="totalProfit">$0</strong></div>
+    </div>
+  </div>
+
+  <div class="menu">
+    <button class="menuItem active" onclick="goTo('inicio')"><span class="menuIcon">⌂</span>Inicio</button>
+    <button class="menuItem" onclick="goTo('productos')"><span class="menuIcon">🛍</span>Productos</button>
+    <button class="menuItem" onclick="goTo('ventas')"><span class="menuIcon">▣</span>Ventas</button>
+    <button class="menuItem" onclick="goTo('pedidos')"><span class="menuIcon">📦</span>Pedidos</button>
+    <button class="menuItem" onclick="goTo('clientes')"><span class="menuIcon">👥</span>Clientes<br>y tickets</button>
+    <button class="menuItem" onclick="goTo('reportes')"><span class="menuIcon">↗</span>Reportes</button>
+    <button class="menuItem" onclick="goTo('ajustes')"><span class="menuIcon">⚙</span>Ajustes</button>
+  </div>
+
+  <div class="card">
+    <div class="cardHeader">
+      <div class="cardTitle"><div class="cardIcon">🔔</div><h2>Atención para hoy</h2></div>
+      <span class="seeAll">Ver todos ›</span>
+    </div>
+    <div class="lowCount" id="lowCountText">0 productos con stock bajo</div>
+    <div id="homeAlerts" class="alertProducts"></div>
+  </div>
+
+  <div class="card">
+    <div class="cardHeader">
+      <div class="cardTitle"><div class="cardIcon">◷</div><h2>Últimos movimientos</h2></div>
+      <span class="seeAll">Ver todos ›</span>
+    </div>
+    <div class="movement">
+      <div class="movementIcon green">＋</div>
+      <div class="movementText"><strong>Venta registrada</strong> - Pan lactal x2</div>
+      <div class="movementTime">17:32</div>
+    </div>
+    <div class="movement">
+      <div class="movementIcon blue">🛒</div>
+      <div class="movementText"><strong>Pedido</strong> - Cliente: Ana</div>
+      <div class="pending">Pendiente</div>
+    </div>
+    <div class="movement">
+      <div class="movementIcon purple">●</div>
+      <div class="movementText"><strong>Nuevo cliente</strong> - María García</div>
+      <div class="movementTime">15:20</div>
+    </div>
+  </div>
+
+  <div class="info">
+    <div class="infoIcon">🛡</div>
+    <div>Los datos se guardan en este navegador. Los comprobantes son comprobantes internos, no facturas fiscales.</div>
+  </div>
 </section>
 
-
-
-<!-- =====================================================
-PRODUCTOS
-===================================================== -->
-
-<section
-id="productos"
-class="page">
-
-
-<div class="card">
-
-<div class="cardHeader">
-
-<div class="cardTitle">
-
-<div class="cardIcon">
-📦
-</div>
-
-<h2>
-Productos
-</h2>
-
-</div>
-
-<span
-class="seeAll"
-id="productCounter">
-0 productos
-</span>
-
-</div>
-
-
-<div class="search">
-
-<input
-id="productSearch"
-type="search"
-placeholder="🔎 Buscar producto..."
-oninput="renderProducts()">
-
-</div>
-
-
-<div id="productList">
-</div>
-
-</div>
-
-
-
-<!-- NUEVO PRODUCTO -->
-
-<div class="card">
-
-<div class="cardHeader">
-
-<div class="cardTitle">
-
-<div class="cardIcon">
-＋
-</div>
-
-<h2>
-Nuevo producto
-</h2>
-
-</div>
-
-</div>
-
-
-<div class="form">
-
-
-<div class="field full">
-
-<label>
-Nombre del producto
-</label>
-
-<input
-id="newName"
-placeholder="Ej: Pan lactal">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Código
-</label>
-
-<input
-id="newCode"
-placeholder="PAN001">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Precio
-</label>
-
-<input
-id="newPrice"
-type="number"
-min="0"
-placeholder="0">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Stock
-</label>
-
-<input
-id="newStock"
-type="number"
-min="0"
-placeholder="0">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Stock mínimo
-</label>
-
-<input
-id="newMin"
-type="number"
-min="0"
-value="2">
-
-</div>
-
-
-</div>
-
-
-<br>
-
-
-<div class="imageUpload">
-
-<div
-class="imagePreview"
-id="newImagePreview">
-
-📷
-
-</div>
-
-
-<div class="imageUploadText">
-
-<strong>
-Foto del producto
-</strong>
-
-<br>
-
-Podés elegir una imagen de tu galería
-o tomar una foto con la cámara.
-
-<label class="fileButton">
-
-📸 Elegir imagen
-
-<input
-id="newImage"
-type="file"
-accept="image/*"
-capture="environment"
-style="display:none"
-onchange="previewNewImage(event)">
-
-</label>
-
-</div>
-
-</div>
-
-
-<br>
-
-
-<button
-class="btn btnPrimary"
-onclick="addProduct()">
-
-＋ Agregar producto
-
-</button>
-
-
-</div>
-
+<section id="productos" class="page">
+  <div class="card">
+    <div class="cardHeader">
+      <div class="cardTitle"><div class="cardIcon">📦</div><h2>Productos</h2></div>
+      <span class="seeAll" id="productCounter">0 productos</span>
+    </div>
+    <div class="search">
+      <input id="productSearch" type="search" placeholder="🔎 Buscar producto..." oninput="renderProducts()">
+    </div>
+    <div id="productList"></div>
+  </div>
+
+  <div class="card">
+    <div class="cardHeader">
+      <div class="cardTitle"><div class="cardIcon">＋</div><h2>Nuevo producto</h2></div>
+    </div>
+
+    <div class="form">
+      <div class="field full"><label>Nombre del producto</label><input id="newName" placeholder="Ej: Pan lactal"></div>
+      <div class="field"><label>Código</label><input id="newCode" placeholder="PAN001"></div>
+      <div class="field"><label>Precio</label><input id="newPrice" type="number" min="0" placeholder="0"></div>
+      <div class="field"><label>Stock</label><input id="newStock" type="number" min="0" placeholder="0"></div>
+      <div class="field"><label>Stock mínimo</label><input id="newMin" type="number" min="0" value="2"></div>
+    </div>
+
+    <br>
+    <div class="imageUpload">
+      <div class="imagePreview" id="newImagePreview">📷</div>
+      <div class="imageUploadText">
+        <strong>Foto del producto</strong><br>
+        Podés elegir una imagen de tu galería o tomar una foto con la cámara.
+        <label class="fileButton">📸 Elegir imagen
+          <input id="newImage" type="file" accept="image/*" capture="environment" style="display:none" onchange="previewNewImage(event)">
+        </label>
+      </div>
+    </div>
+    <br>
+    <button class="btn btnPrimary" onclick="addProduct()">＋ Agregar producto</button>
+  </div>
 </section>
 
-
-
-<!-- =====================================================
-VENTAS
-===================================================== -->
-
-<section
-id="ventas"
-class="page">
-
-
-<div class="card">
-
-<div class="cardHeader">
-
-<div class="cardTitle">
-
-<div class="cardIcon">
-💳
-</div>
-
-<h2>
-Nueva venta
-</h2>
-
-</div>
-
-</div>
-
-
-<div class="form">
-
-
-<div class="field">
-
-<label>
-Cliente
-</label>
-
-<input
-id="saleClient"
-placeholder="Nombre">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Teléfono
-</label>
-
-<input
-id="salePhone"
-type="tel"
-placeholder="3755...">
-
-</div>
-
-
-</div>
-
-
-<br>
-
-
-<h3
-style="
-margin:5px 0 10px;
-font-size:14px;
-color:var(--verdeOscuro);
-">
-
-Seleccionar productos
-
-</h3>
-
-
-<div id="saleProducts">
-</div>
-
-
-<div
-style="
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-top:15px;
-padding-top:13px;
-border-top:2px solid var(--verde);
-">
-
-<strong>
-TOTAL
-</strong>
-
-<strong
-id="saleTotal"
-style="
-font-size:20px;
-color:var(--verde);
-">
-
-$0
-
-</strong>
-
-</div>
-
-
-<br>
-
-
-<button
-class="btn btnPrimary"
-onclick="createSale()">
-
-🧾 Generar comprobante
-
-</button>
-
-</div>
-
-
-
-<!-- COMPROBANTE -->
-
-<div
-class="card"
-id="receiptCard"
-style="display:none">
-
-<div class="cardHeader">
-
-<div class="cardTitle">
-
-<div class="cardIcon">
-🧾
-</div>
-
-<h2>
-Comprobante
-</h2>
-
-</div>
-
-</div>
-
-
-<div
-id="receiptContent"
-class="receipt">
-</div>
-
-
-<br>
-
-
-<div
-style="
-display:flex;
-gap:7px;
-flex-wrap:wrap;
-">
-
-<button
-class="btn btnGold"
-onclick="downloadReceipt()">
-
-⬇ Descargar
-
-</button>
-
-
-<button
-class="btn btnPrimary"
-onclick="shareReceipt()">
-
-📤 Enviar
-
-</button>
-
-
-<button
-class="btn btnLight"
-onclick="sendWhatsApp()">
-
-💬 WhatsApp
-
-</button>
-
-</div>
-
-</div>
-
+<section id="ventas" class="page">
+  <div class="card">
+    <div class="cardHeader">
+      <div class="cardTitle"><div class="cardIcon">💳</div><h2>Nueva venta</h2></div>
+    </div>
+
+    <div class="form">
+      <div class="field"><label>Cliente</label><input id="saleClient" placeholder="Nombre"></div>
+      <div class="field"><label>Teléfono</label><input id="salePhone" type="tel" placeholder="3755..."></div>
+    </div>
+
+    <br>
+    <h3 style="margin:5px 0 10px;font-size:14px;color:var(--verdeOscuro)">Seleccionar productos</h3>
+    <div id="saleProducts"></div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:15px;padding-top:13px;border-top:2px solid var(--verde)">
+      <strong>TOTAL</strong>
+      <strong id="saleTotal" style="font-size:20px;color:var(--verde)">$0</strong>
+    </div>
+
+    <br>
+    <button class="btn btnPrimary" onclick="createSale()">🧾 Generar comprobante</button>
+  </div>
+
+  <div class="card" id="receiptCard" style="display:none">
+    <div class="cardHeader">
+      <div class="cardTitle"><div class="cardIcon">🧾</div><h2>Comprobante</h2></div>
+    </div>
+    <div id="receiptContent" class="receipt"></div>
+    <br>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <button class="btn btnGold" onclick="downloadReceipt()">⬇ Descargar</button>
+      <button class="btn btnPrimary" onclick="shareReceipt()">📤 Enviar</button>
+      <button class="btn btnLight" onclick="sendWhatsApp()">💬 WhatsApp</button>
+    </div>
+  </div>
 </section>
 
-
-
-<!-- =====================================================
-PEDIDOS
-===================================================== -->
-
-<section
-id="pedidos"
-class="page">
-
-
-<div class="card">
-
-<div class="cardHeader">
-
-<div class="cardTitle">
-
-<div class="cardIcon">
-📦
-</div>
-
-<h2>
-Pedidos
-</h2>
-
-</div>
-
-</div>
-
-
-<div class="movement">
-
-<div class="movementIcon blue">
-🛒
-</div>
-
-<div class="movementText">
-
-<strong>
-Pedido #001
-</strong>
-
-<br>
-
-Cliente: Ana
-
-</div>
-
-<div class="pending">
-Pendiente
-</div>
-
-</div>
-
-
-<div class="movement">
-
-<div class="movementIcon green">
-✓
-</div>
-
-<div class="movementText">
-
-<strong>
-Pedido #002
-</strong>
-
-<br>
-
-Cliente: Carlos
-
-</div>
-
-<div class="badge">
-Entregado
-</div>
-
-</div>
-
-</div>
-
+<section id="pedidos" class="page">
+  <div class="card">
+    <div class="cardHeader"><div class="cardTitle"><div class="cardIcon">📦</div><h2>Pedidos</h2></div></div>
+    <div class="movement">
+      <div class="movementIcon blue">🛒</div>
+      <div class="movementText"><strong>Pedido #001</strong><br>Cliente: Ana</div>
+      <div class="pending">Pendiente</div>
+    </div>
+    <div class="movement">
+      <div class="movementIcon green">✓</div>
+      <div class="movementText"><strong>Pedido #002</strong><br>Cliente: Carlos</div>
+      <div class="badge">Entregado</div>
+    </div>
+  </div>
 </section>
 
-
-
-<!-- =====================================================
-CLIENTES
-===================================================== -->
-
-<section
-id="clientes"
-class="page">
-
-
-<div class="card">
-
-<div class="cardHeader">
-
-<div class="cardTitle">
-
-<div class="cardIcon">
-👥
-</div>
-
-<h2>
-Clientes
-</h2>
-
-</div>
-
-</div>
-
-
-<div class="form">
-
-
-<div class="field full">
-
-<label>
-Nombre
-</label>
-
-<input
-placeholder="Ej: María García">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Teléfono
-</label>
-
-<input
-type="tel"
-placeholder="3755...">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Notas
-</label>
-
-<input
-placeholder="Observaciones">
-
-</div>
-
-</div>
-
-
-<br>
-
-
-<button
-class="btn btnPrimary"
-onclick="showToast('Cliente agregado')">
-
-＋ Agregar cliente
-
-</button>
-
-</div>
-
+<section id="clientes" class="page">
+  <div class="card">
+    <div class="cardHeader"><div class="cardTitle"><div class="cardIcon">👥</div><h2>Clientes</h2></div></div>
+    <div class="form">
+      <div class="field full"><label>Nombre</label><input placeholder="Ej: María García"></div>
+      <div class="field"><label>Teléfono</label><input type="tel" placeholder="3755..."></div>
+      <div class="field"><label>Notas</label><input placeholder="Observaciones"></div>
+    </div>
+    <br>
+    <button class="btn btnPrimary" onclick="showToast('Cliente agregado')">＋ Agregar cliente</button>
+  </div>
 </section>
 
-
-
-<!-- =====================================================
-REPORTES
-===================================================== -->
-
-<section
-id="reportes"
-class="page">
-
-
-<div class="card">
-
-<div class="cardHeader">
-
-<div class="cardTitle">
-
-<div class="cardIcon">
-↗
-</div>
-
-<h2>
-Reportes
-</h2>
-
-</div>
-
-</div>
-
-
-<div class="stats">
-
-
-<div class="stat">
-
-<div>
-
-<small>
-VENTAS
-</small>
-
-<strong>
-$18.750
-</strong>
-
-</div>
-
-</div>
-
-
-<div class="stat">
-
-<div>
-
-<small>
-GANANCIA
-</small>
-
-<strong>
-$7.850
-</strong>
-
-</div>
-
-</div>
-
-
-<div class="stat">
-
-<div>
-
-<small>
-TICKETS
-</small>
-
-<strong>
-8
-</strong>
-
-</div>
-
-</div>
-
-</div>
-
-
-</div>
-
+<section id="reportes" class="page">
+  <div class="card">
+    <div class="cardHeader"><div class="cardTitle"><div class="cardIcon">↗</div><h2>Reportes</h2></div></div>
+    <div class="stats">
+      <div class="stat"><div><small>VENTAS</small><strong>$18.750</strong></div></div>
+      <div class="stat"><div><small>GANANCIA</small><strong>$7.850</strong></div></div>
+      <div class="stat"><div><small>TICKETS</small><strong>8</strong></div></div>
+    </div>
+  </div>
 </section>
 
-
-
-<!-- =====================================================
-AJUSTES
-===================================================== -->
-
-<section
-id="ajustes"
-class="page">
-
-
-<div class="card">
-
-<div class="cardHeader">
-
-<div class="cardTitle">
-
-<div class="cardIcon">
-⚙
-</div>
-
-<h2>
-Ajustes
-</h2>
-
-</div>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Nombre del negocio
-</label>
-
-<input
-id="businessName"
-value="Negocio Alerta"
-onchange="saveBusinessName()">
-
-</div>
-
-
-<br>
-
-
-<div class="imageUpload">
-
-<div
-class="imagePreview"
-id="businessLogoPreview">
-
-🌿
-
-<img
-id="businessLogoImage"
-style="display:none">
-
-</div>
-
-
-<div class="imageUploadText">
-
-<strong>
-Logo del negocio
-</strong>
-
-<br>
-
-Elegí el logo que aparecerá
-en la aplicación.
-
-<label class="fileButton">
-
-🖼 Cargar logo
-
-<input
-type="file"
-accept="image/*"
-style="display:none"
-onchange="loadBusinessLogo(event)">
-
-</label>
-
-</div>
-
-</div>
-
-
-<br>
-
-
-<button
-class="btn btnDanger"
-onclick="deleteAllProducts()">
-
-🗑 Borrar inventario
-
-</button>
-
-</div>
-
+<section id="ajustes" class="page">
+  <div class="card">
+    <div class="cardHeader"><div class="cardTitle"><div class="cardIcon">⚙</div><h2>Ajustes</h2></div></div>
+    <div class="field">
+      <label>Nombre del negocio</label>
+      <input id="businessName" value="Negocio Alerta" onchange="saveBusinessName()">
+    </div>
+    <br>
+    <div class="imageUpload">
+      <div class="imagePreview" id="businessLogoPreview">
+        🌿<img id="businessLogoImage" style="display:none" alt="Logo del negocio">
+      </div>
+      <div class="imageUploadText">
+        <strong>Logo del negocio</strong><br>
+        Elegí el logo que aparecerá en la aplicación.
+        <label class="fileButton">🖼 Cargar logo
+          <input type="file" accept="image/*" style="display:none" onchange="loadBusinessLogo(event)">
+        </label>
+      </div>
+    </div>
+    <br>
+    <button class="btn btnDanger" onclick="deleteAllProducts()">🗑 Borrar inventario</button>
+  </div>
 </section>
-
 
 </main>
 
-
-
-<!-- =====================================================
-BOTTOM NAV
-===================================================== -->
-
 <nav class="bottomNav">
-
-
-<button
-class="bottomBtn active"
-onclick="goTo('inicio')">
-
-<span class="bottomIcon">
-⌂
-</span>
-
-Inicio
-
-</button>
-
-
-<button
-class="bottomBtn"
-onclick="goTo('productos')">
-
-<span class="bottomIcon">
-🛍
-</span>
-
-Productos
-
-</button>
-
-
-<button
-class="bottomBtn"
-onclick="goTo('ventas')">
-
-<span class="bottomIcon">
-▣
-</span>
-
-Ventas
-
-</button>
-
-
-<button
-class="bottomBtn"
-onclick="goTo('pedidos')">
-
-<span class="bottomIcon">
-📦
-</span>
-
-Pedidos
-
-</button>
-
-
-<button
-class="bottomBtn"
-onclick="goTo('clientes')">
-
-<span class="bottomIcon">
-👥
-</span>
-
-Clientes
-
-</button>
-
-
-<button
-class="bottomBtn"
-onclick="goTo('ajustes')">
-
-<span class="bottomIcon">
-⚙
-</span>
-
-Ajustes
-
-</button>
-
+  <button class="bottomBtn active" onclick="goTo('inicio')"><span class="bottomIcon">⌂</span>Inicio</button>
+  <button class="bottomBtn" onclick="goTo('productos')"><span class="bottomIcon">🛍</span>Productos</button>
+  <button class="bottomBtn" onclick="goTo('ventas')"><span class="bottomIcon">▣</span>Ventas</button>
+  <button class="bottomBtn" onclick="goTo('pedidos')"><span class="bottomIcon">📦</span>Pedidos</button>
+  <button class="bottomBtn" onclick="goTo('clientes')"><span class="bottomIcon">👥</span>Clientes</button>
+  <button class="bottomBtn" onclick="goTo('ajustes')"><span class="bottomIcon">⚙</span>Ajustes</button>
 </nav>
 
+<div id="toast" class="toast"></div>
 
+<div id="editModal" class="modal">
+  <div class="modalBox">
+    <div class="modalHeader">
+      <h2>Editar producto</h2>
+      <button class="close" onclick="closeEdit()">×</button>
+    </div>
 
-<div
-id="toast"
-class="toast">
+    <div class="form">
+      <div class="field full"><label>Nombre</label><input id="editName"></div>
+      <div class="field"><label>Código</label><input id="editCode"></div>
+      <div class="field"><label>Precio</label><input id="editPrice" type="number"></div>
+      <div class="field"><label>Stock</label><input id="editStock" type="number"></div>
+      <div class="field"><label>Stock mínimo</label><input id="editMin" type="number"></div>
+    </div>
+
+    <br>
+    <div class="imageUpload">
+      <div class="imagePreview" id="editImagePreview">📷</div>
+      <div class="imageUploadText">
+        <strong>Foto del producto</strong>
+        <label class="fileButton">📸 Cambiar imagen
+          <input id="editImage" type="file" accept="image/*" capture="environment" style="display:none" onchange="previewEditImage(event)">
+        </label>
+      </div>
+    </div>
+    <br>
+    <button class="btn btnPrimary" onclick="saveEdit()">Guardar cambios</button>
+  </div>
 </div>
-
-
-
-<!-- =====================================================
-MODAL EDITAR PRODUCTO
-===================================================== -->
-
-<div
-id="editModal"
-class="modal">
-
-<div class="modalBox">
-
-
-<div class="modalHeader">
-
-<h2>
-Editar producto
-</h2>
-
-<button
-class="close"
-onclick="closeEdit()">
-
-×
-
-</button>
-
-</div>
-
-
-<div class="form">
-
-
-<div class="field full">
-
-<label>
-Nombre
-</label>
-
-<input id="editName">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Código
-</label>
-
-<input id="editCode">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Precio
-</label>
-
-<input
-id="editPrice"
-type="number">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Stock
-</label>
-
-<input
-id="editStock"
-type="number">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Stock mínimo
-</label>
-
-<input
-id="editMin"
-type="number">
-
-</div>
-
-</div>
-
-
-<br>
-
-
-<div class="imageUpload">
-
-<div
-class="imagePreview"
-id="editImagePreview">
-
-📷
-
-</div>
-
-<div class="imageUploadText">
-
-<strong>
-Foto del producto
-</strong>
-
-<label class="fileButton">
-
-📸 Cambiar imagen
-
-<input
-id="editImage"
-type="file"
-accept="image/*"
-capture="environment"
-style="display:none"
-onchange="previewEditImage(event)">
-
-</label>
-
-</div>
-
-</div>
-
-
-<br>
-
-
-<button
-class="btn btnPrimary"
-onclick="saveEdit()">
-
-Guardar cambios
-
-</button>
-
-</div>
-
-</div>
-
-
 
 <script>
-
-/* =====================================================
-DATOS
-===================================================== */
-
-let products =
-JSON.parse(
-localStorage.getItem(
-"negocioAlertaProducts"
-) || "[]"
-);
-
-
-/* PRODUCTOS DE EJEMPLO */
+let products=JSON.parse(localStorage.getItem("negocioAlertaProducts")||"[]");
 
 if(products.length===0){
-
 products=[
-
-{
-id:1,
-name:"Pan lactal",
-code:"PAN001",
-price:1200,
-stock:2,
-min:5,
-image:"",
-},
-
-{
-id:2,
-name:"Jugo naranja",
-code:"JUG002",
-price:950,
-stock:1,
-min:3,
-image:"",
-},
-
-{
-id:3,
-name:"Papas fritas",
-code:"PAP003",
-price:850,
-stock:2,
-min:5,
-image:"",
-}
-
+{id:1,name:"Pan lactal",code:"PAN001",price:1200,stock:2,min:5,image:""},
+{id:2,name:"Jugo naranja",code:"JUG002",price:950,stock:1,min:3,image:""},
+{id:3,name:"Papas fritas",code:"PAP003",price:850,stock:2,min:5,image:""}
 ];
-
 saveProducts();
-
 }
-
 
 let newImageData="";
-
 let editImageData="";
-
 let currentReceipt=null;
 
-
-/* =====================================================
-NAVEGACION
-===================================================== */
-
 function goTo(page){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+const target=document.getElementById(page);
+if(target)target.classList.add("active");
 
-document
-.querySelectorAll(".page")
-.forEach(
-p=>p.classList.remove("active")
-);
-
-const target=
-document.getElementById(page);
-
-if(target){
-
-target.classList.add("active");
-
-}
-
-const pages=[
-"inicio",
-"productos",
-"ventas",
-"pedidos",
-"clientes",
-"ajustes"
-];
-
-document
-.querySelectorAll(".bottomBtn")
-.forEach(
-(btn,index)=>{
-
-btn.classList.toggle(
-"active",
-pages[index]===page
-);
-
-}
-);
-
-
-/* MENU SUPERIOR */
-
-document
-.querySelectorAll(".menuItem")
-.forEach(
-btn=>btn.classList.remove("active")
-);
-
-if(page==="inicio"){
-
-const first=
-document.querySelector(".menuItem");
-
-if(first)
-first.classList.add("active");
-
-}
-
-window.scrollTo({
-top:0,
-behavior:"smooth"
+const pages=["inicio","productos","ventas","pedidos","clientes","ajustes"];
+document.querySelectorAll(".bottomBtn").forEach((btn,index)=>{
+btn.classList.toggle("active",pages[index]===page);
 });
 
-
-if(page==="productos"){
-
-renderProducts();
-
+document.querySelectorAll(".menuItem").forEach(btn=>btn.classList.remove("active"));
+if(page==="inicio"){
+const first=document.querySelector(".menuItem");
+if(first)first.classList.add("active");
+}else{
+document.querySelectorAll(".menuItem").forEach(btn=>{
+if(btn.getAttribute("onclick")===`goTo('${page}')`)btn.classList.add("active");
+});
 }
 
-if(page==="ventas"){
-
-renderSaleProducts();
-
+window.scrollTo({top:0,behavior:"smooth"});
+if(page==="productos")renderProducts();
+if(page==="ventas")renderSaleProducts();
 }
-
-}
-
-
-/* =====================================================
-GUARDAR
-===================================================== */
 
 function saveProducts(){
-
-localStorage.setItem(
-"negocioAlertaProducts",
-JSON.stringify(products)
-);
-
+localStorage.setItem("negocioAlertaProducts",JSON.stringify(products));
 }
-
-
-/* =====================================================
-IMAGEN NUEVO PRODUCTO
-===================================================== */
 
 function previewNewImage(event){
-
-const file=
-event.target.files[0];
-
-if(!file)
-return;
-
+const file=event.target.files[0];
+if(!file)return;
 if(!file.type.startsWith("image/")){
-
-showToast(
-"Elegí una imagen válida"
-);
-
+showToast("Elegí una imagen válida");
 return;
-
 }
-
-compressImage(
-file,
-function(data){
-
+compressImage(file,function(data){
 newImageData=data;
-
-const preview=
-document.getElementById(
-"newImagePreview"
-);
-
-preview.innerHTML=
-`<img src="${data}">`;
-
+document.getElementById("newImagePreview").innerHTML=`<img src="${data}" alt="Vista previa">`;
 });
-
 }
-
-
-/* =====================================================
-COMPRIMIR IMAGEN
-===================================================== */
 
 function compressImage(file,callback){
-
-const reader=
-new FileReader();
-
+const reader=new FileReader();
 reader.onload=function(e){
-
-const img=
-new Image();
-
+const img=new Image();
 img.onload=function(){
-
 const max=800;
-
 let width=img.width;
 let height=img.height;
-
-if(width>max){
-
-height=
-height*max/width;
-
-width=max;
-
-}
-
-if(height>max){
-
-width=
-width*max/height;
-
-height=max;
-
-}
-
-const canvas=
-document.createElement("canvas");
-
+if(width>max){height=height*max/width;width=max;}
+if(height>max){width=width*max/height;height=max;}
+const canvas=document.createElement("canvas");
 canvas.width=width;
 canvas.height=height;
-
-const ctx=
-canvas.getContext("2d");
-
-ctx.drawImage(
-img,
-0,
-0,
-width,
-height
-);
-
-callback(
-canvas.toDataURL(
-"image/jpeg",
-0.78
-)
-);
-
+const ctx=canvas.getContext("2d");
+ctx.drawImage(img,0,0,width,height);
+callback(canvas.toDataURL("image/jpeg",0.78));
 };
-
+img.onerror=function(){showToast("No se pudo abrir la imagen");};
 img.src=e.target.result;
-
 };
-
+reader.onerror=function(){showToast("No se pudo leer el archivo");};
 reader.readAsDataURL(file);
-
 }
-
-
-/* =====================================================
-AGREGAR PRODUCTO
-===================================================== */
 
 function addProduct(){
+const name=document.getElementById("newName").value.trim();
+const code=document.getElementById("newCode").value.trim();
+const price=Number(document.getElementById("newPrice").value);
+const stock=Number(document.getElementById("newStock").value);
+const min=Number(document.getElementById("newMin").value);
 
-const name=
-document
-.getElementById("newName")
-.value
-.trim();
-
-const code=
-document
-.getElementById("newCode")
-.value
-.trim();
-
-const price=
-Number(
-document
-.getElementById("newPrice")
-.value
-);
-
-const stock=
-Number(
-document
-.getElementById("newStock")
-.value
-);
-
-const min=
-Number(
-document
-.getElementById("newMin")
-.value
-);
-
-
-if(!name){
-
-showToast(
-"Escribí el nombre del producto"
-);
-
-return;
-
-}
-
+if(!name){showToast("Escribí el nombre del producto");return;}
 
 products.push({
-
 id:Date.now(),
-
 name:name,
-
-code:code || "SIN-CODIGO",
-
-price:price || 0,
-
-stock:stock || 0,
-
-min:min || 0,
-
-image:newImageData || ""
-
+code:code||"SIN-CODIGO",
+price:Math.max(0,price||0),
+stock:Math.max(0,stock||0),
+min:Math.max(0,min||0),
+image:newImageData||""
 });
 
-
 saveProducts();
-
 clearNewProduct();
-
 renderProducts();
-
 updateStats();
-
-showToast(
-"Producto agregado correctamente"
-);
-
+showToast("Producto agregado correctamente");
 }
-
-
-/* =====================================================
-LIMPIAR NUEVO
-===================================================== */
 
 function clearNewProduct(){
-
-document
-.getElementById("newName")
-.value="";
-
-document
-.getElementById("newCode")
-.value="";
-
-document
-.getElementById("newPrice")
-.value="";
-
-document
-.getElementById("newStock")
-.value="";
-
-document
-.getElementById("newMin")
-.value="2";
-
+document.getElementById("newName").value="";
+document.getElementById("newCode").value="";
+document.getElementById("newPrice").value="";
+document.getElementById("newStock").value="";
+document.getElementById("newMin").value="2";
+document.getElementById("newImage").value="";
 newImageData="";
-
-document
-.getElementById("newImagePreview")
-.innerHTML="📷";
-
+document.getElementById("newImagePreview").innerHTML="📷";
 }
-
-
-/* =====================================================
-LISTA PRODUCTOS
-===================================================== */
 
 function renderProducts(){
+const list=document.getElementById("productList");
+if(!list)return;
 
-const list=
-document.getElementById(
-"productList"
+const search=(document.getElementById("productSearch")?.value||"").toLowerCase().trim();
+const filtered=products.filter(p=>
+String(p.name).toLowerCase().includes(search)||
+String(p.code).toLowerCase().includes(search)
 );
 
-if(!list)
-return;
-
-
-const search=
-(
-document
-.getElementById("productSearch")
-?.value || ""
-)
-.toLowerCase()
-.trim();
-
-
-const filtered=
-products.filter(
-p=>
-p.name
-.toLowerCase()
-.includes(search)
-||
-p.code
-.toLowerCase()
-.includes(search)
-);
-
-
-document
-.getElementById(
-"productCounter"
-)
-.textContent=
-filtered.length+
-(
-filtered.length===1
-?
-" producto"
-:
-" productos"
-);
-
+document.getElementById("productCounter").textContent=
+filtered.length+(filtered.length===1?" producto":" productos");
 
 if(filtered.length===0){
-
-list.innerHTML=`
-
-<div style="
-text-align:center;
-padding:35px;
-color:#70847d">
-
-<div style="
-font-size:40px">
-📦
-</div>
-
-<br>
-
-No hay productos.
-
-</div>
-
-`;
-
+list.innerHTML=`<div style="text-align:center;padding:35px;color:#70847d">
+<div style="font-size:40px">📦</div><br>No hay productos.
+</div>`;
 return;
-
 }
 
-
-list.innerHTML=
-filtered
-.map(p=>`
-
+list.innerHTML=filtered.map(p=>`
 <div class="product">
-
-
-<div class="productImage">
-
-${
-p.image
-?
-`<img
-src="${p.image}"
-alt="${safe(p.name)}">`
-:
-"📦"
+  <div class="productImage">
+    ${p.image?`<img src="${p.image}" alt="${safe(p.name)}">`:"📦"}
+  </div>
+  <div class="productData">
+    <div class="productName">${safe(p.name)}</div>
+    <div class="productCode">Código: ${safe(p.code)}</div>
+    <div class="badges">
+      <span class="badge">Stock: ${p.stock}</span>
+      ${p.stock<=p.min?`<span class="badge badgeLow">Stock bajo</span>`:""}
+    </div>
+    <div class="productButtons">
+      <button class="smallBtn edit" onclick="openEdit(${p.id})">✏ Editar</button>
+      <button class="smallBtn delete" onclick="deleteProduct(${p.id})">🗑 Eliminar</button>
+    </div>
+  </div>
+  <div class="productPrice">${money(p.price)}</div>
+</div>`).join("");
 }
-
-</div>
-
-
-<div class="productData">
-
-<div class="productName">
-
-${safe(p.name)}
-
-</div>
-
-
-<div class="productCode">
-
-Código:
-${safe(p.code)}
-
-</div>
-
-
-<div class="badges">
-
-<span class="badge">
-
-Stock:
-${p.stock}
-
-</span>
-
-
-${
-p.stock<=p.min
-?
-`<span class="badge badgeLow">
-Stock bajo
-</span>`
-:
-""
-}
-
-</div>
-
-
-<div class="productButtons">
-
-<button
-class="smallBtn edit"
-onclick="openEdit(${p.id})">
-
-✏ Editar
-
-</button>
-
-
-<button
-class="smallBtn delete"
-onclick="deleteProduct(${p.id})">
-
-🗑 Eliminar
-
-</button>
-
-</div>
-
-</div>
-
-
-<div class="productPrice">
-
-${money(p.price)}
-
-</div>
-
-
-</div>
-
-`)
-.join("");
-
-}
-
-
-/* =====================================================
-EDITAR
-===================================================== */
 
 function openEdit(id){
+const product=products.find(p=>p.id===id);
+if(!product)return;
 
-const product=
-products.find(
-p=>p.id===id
-);
-
-if(!product)
-return;
-
-
-document
-.getElementById("editModal")
-.classList.add("show");
-
-
-document
-.getElementById("editModal")
-.dataset.id=id;
-
-
-document
-.getElementById("editName")
-.value=product.name;
-
-document
-.getElementById("editCode")
-.value=product.code;
-
-document
-.getElementById("editPrice")
-.value=product.price;
-
-document
-.getElementById("editStock")
-.value=product.stock;
-
-document
-.getElementById("editMin")
-.value=product.min;
-
-
-editImageData=
-product.image || "";
-
-
-document
-.getElementById("editImagePreview")
-.innerHTML=
-product.image
-?
-`<img src="${product.image}">`
-:
-"📷";
-
+document.getElementById("editModal").classList.add("show");
+document.getElementById("editModal").dataset.id=id;
+document.getElementById("editName").value=product.name;
+document.getElementById("editCode").value=product.code;
+document.getElementById("editPrice").value=product.price;
+document.getElementById("editStock").value=product.stock;
+document.getElementById("editMin").value=product.min;
+document.getElementById("editImage").value="";
+editImageData=product.image||"";
+document.getElementById("editImagePreview").innerHTML=
+product.image?`<img src="${product.image}" alt="Foto del producto">`:"📷";
 }
-
 
 function previewEditImage(event){
-
-const file=
-event.target.files[0];
-
-if(!file)
-return;
-
-
-compressImage(
-file,
-function(data){
-
+const file=event.target.files[0];
+if(!file)return;
+if(!file.type.startsWith("image/")){showToast("Elegí una imagen válida");return;}
+compressImage(file,function(data){
 editImageData=data;
-
-document
-.getElementById(
-"editImagePreview"
-)
-.innerHTML=
-`<img src="${data}">`;
-
+document.getElementById("editImagePreview").innerHTML=`<img src="${data}" alt="Vista previa">`;
 });
-
 }
-
 
 function saveEdit(){
+const id=Number(document.getElementById("editModal").dataset.id);
+const product=products.find(p=>p.id===id);
+if(!product)return;
 
-const id=
-Number(
-document
-.getElementById("editModal")
-.dataset.id
-);
+const name=document.getElementById("editName").value.trim();
+if(!name){showToast("El nombre no puede quedar vacío");return;}
 
-const product=
-products.find(
-p=>p.id===id
-);
-
-if(!product)
-return;
-
-
-product.name=
-document
-.getElementById("editName")
-.value
-.trim();
-
-
-product.code=
-document
-.getElementById("editCode")
-.value
-.trim()
-||
-"SIN-CODIGO";
-
-
-product.price=
-Number(
-document
-.getElementById("editPrice")
-.value
-)
-||0;
-
-
-product.stock=
-Number(
-document
-.getElementById("editStock")
-.value
-)
-||0;
-
-
-product.min=
-Number(
-document
-.getElementById("editMin")
-.value
-)
-||0;
-
-
-product.image=
-editImageData;
-
+product.name=name;
+product.code=document.getElementById("editCode").value.trim()||"SIN-CODIGO";
+product.price=Math.max(0,Number(document.getElementById("editPrice").value)||0);
+product.stock=Math.max(0,Number(document.getElementById("editStock").value)||0);
+product.min=Math.max(0,Number(document.getElementById("editMin").value)||0);
+product.image=editImageData;
 
 saveProducts();
-
 closeEdit();
-
 renderProducts();
-
 updateStats();
-
-showToast(
-"Producto actualizado"
-);
-
+renderSaleProducts();
+showToast("Producto actualizado");
 }
-
 
 function closeEdit(){
-
-document
-.getElementById("editModal")
-.classList.remove("show");
-
+document.getElementById("editModal").classList.remove("show");
 }
-
-
-/* =====================================================
-ELIMINAR PRODUCTO
-===================================================== */
 
 function deleteProduct(id){
+const product=products.find(p=>p.id===id);
+if(!product)return;
+if(!confirm(`¿Eliminar "${product.name}"?`))return;
 
-const product=
-products.find(
-p=>p.id===id
-);
-
-if(!product)
-return;
-
-
-if(
-!confirm(
-`¿Eliminar "${product.name}"?`
-)
-)
-return;
-
-
-products=
-products.filter(
-p=>p.id!==id
-);
-
+products=products.filter(p=>p.id!==id);
 saveProducts();
-
 renderProducts();
-
 updateStats();
-
-showToast(
-"Producto eliminado"
-);
-
+renderSaleProducts();
+showToast("Producto eliminado");
 }
-
-
-/* =====================================================
-ESTADISTICAS
-===================================================== */
 
 function updateStats(){
+const total=products.length;
+const low=products.filter(p=>p.stock<=p.min).length;
+const value=products.reduce((sum,p)=>sum+(p.price*p.stock),0);
 
-const total=
-products.length;
+document.getElementById("totalProducts").textContent=total;
+document.getElementById("lowStock").textContent=low;
+document.getElementById("totalProfit").textContent=money(value);
 
-const low=
-products.filter(
-p=>p.stock<=p.min
-).length;
-
-const value=
-products.reduce(
-(sum,p)=>
-sum+(p.price*p.stock),
-0
-);
-
-
-document
-.getElementById(
-"totalProducts"
-)
-.textContent=total;
-
-
-document
-.getElementById(
-"lowStock"
-)
-.textContent=low;
-
-
-document
-.getElementById(
-"totalProfit"
-)
-.textContent=
-money(value);
-
-
-/* ALERTAS */
-
-document
-.getElementById(
-"lowCountText"
-)
-.textContent=
-low+
-(
-low===1
-?
-" producto con stock bajo"
-:
-" productos con stock bajo"
-);
-
+document.getElementById("lowCountText").textContent=
+low+(low===1?" producto con stock bajo":" productos con stock bajo");
 
 renderHomeAlerts();
-
 }
-
-
-/* =====================================================
-ALERTAS INICIO
-===================================================== */
 
 function renderHomeAlerts(){
-
-const box=
-document.getElementById(
-"homeAlerts"
-);
-
-const low=
-products.filter(
-p=>p.stock<=p.min
-)
-.slice(0,3);
-
+const box=document.getElementById("homeAlerts");
+const low=products.filter(p=>p.stock<=p.min).slice(0,3);
 
 if(low.length===0){
-
-box.innerHTML=`
-
-<div style="
-padding:20px;
-text-align:center;
-color:#70847d">
-
-✅ Todo está en orden.
-
-</div>
-
-`;
-
+box.innerHTML=`<div style="padding:20px;text-align:center;color:#70847d">✅ Todo está en orden.</div>`;
 return;
-
 }
 
-
-box.innerHTML=
-low.map(p=>`
-
+box.innerHTML=low.map(p=>`
 <div class="alertProduct">
-
-<div class="alertImg">
-
-${
-p.image
-?
-`<img src="${p.image}">`
-:
-"📦"
+  <div class="alertImg">${p.image?`<img src="${p.image}" alt="${safe(p.name)}">`:"📦"}</div>
+  <div>
+    <strong>${safe(p.name)}</strong>
+    <div class="remaining">Quedan: ${p.stock}</div>
+    <small>Mínimo: ${p.min}</small>
+  </div>
+</div>`).join("");
 }
-
-</div>
-
-<div>
-
-<strong>
-${safe(p.name)}
-</strong>
-
-<div class="remaining">
-
-Quedan:
-${p.stock}
-
-</div>
-
-<small>
-
-Mínimo:
-${p.min}
-
-</small>
-
-</div>
-
-</div>
-
-`)
-.join("");
-
-}
-
-
-/* =====================================================
-VENTA
-===================================================== */
 
 function renderSaleProducts(){
+const box=document.getElementById("saleProducts");
+if(!box)return;
 
-const box=
-document.getElementById(
-"saleProducts"
-);
+const available=products.filter(p=>p.stock>0);
 
-if(!box)
+if(available.length===0){
+box.innerHTML=`<div style="padding:20px;text-align:center;color:#70847d">No hay productos con stock disponible.</div>`;
+document.getElementById("saleTotal").textContent=money(0);
 return;
-
-
-if(products.length===0){
-
-box.innerHTML=`
-
-<div style="
-padding:20px;
-text-align:center;
-color:#70847d">
-
-No hay productos cargados.
-
-</div>
-
-`;
-
-return;
-
 }
 
-
-box.innerHTML=
-products
-.filter(p=>p.stock>0)
-.map(p=>`
-
+box.innerHTML=available.map(p=>`
 <div class="saleProduct">
-
-
-${
-p.image
-?
-`<img src="${p.image}">`
-:
-`<div
-style="
-width:50px;
-height:50px;
-display:flex;
-align-items:center;
-justify-content:center;
-background:#eaf7f3;
-border-radius:11px;
-font-size:25px">
-📦
-</div>`
+  ${p.image?`<img src="${p.image}" alt="${safe(p.name)}">`:
+  `<div style="width:50px;height:50px;display:flex;align-items:center;justify-content:center;background:#eaf7f3;border-radius:11px;font-size:25px">📦</div>`}
+  <div class="saleProductInfo">
+    <strong>${safe(p.name)}</strong>
+    <small>${money(p.price)} · Stock ${p.stock}</small>
+  </div>
+  <input class="qty saleQty" data-id="${p.id}" type="number" min="0" max="${p.stock}" value="0" oninput="validateSaleQty(this);calculateSale()" placeholder="0" aria-label="Cantidad de ${safe(p.name)}">
+</div>`).join("");
 }
 
-
-<div class="saleProductInfo">
-
-<strong>
-${safe(p.name)}
-</strong>
-
-<small>
-${money(p.price)} · Stock ${p.stock}
-</small>
-
-</div>
-
-
-<input
-class="qty saleQty"
-data-id="${p.id}"
-type="number"
-min="0"
-max="${p.stock}"
-value="0"
-oninput="calculateSale()"
-placeholder="0">
-
-</div>
-
-`)
-.join("");
-
+function validateSaleQty(input){
+const product=products.find(p=>p.id===Number(input.dataset.id));
+if(!product)return;
+let qty=Math.max(0,Number(input.value)||0);
+if(qty>product.stock){
+qty=product.stock;
+input.value=qty;
+showToast("La cantidad supera el stock disponible");
 }
-
+}
 
 function calculateSale(){
-
 let total=0;
-
-document
-.querySelectorAll(".saleQty")
-.forEach(input=>{
-
-const qty=
-Number(input.value)||0;
-
-const id=
-Number(input.dataset.id);
-
-const product=
-products.find(
-p=>p.id===id
-);
-
-if(product){
-
-total+=
-qty*product.price;
-
-}
-
+document.querySelectorAll(".saleQty").forEach(input=>{
+const qty=Math.max(0,Number(input.value)||0);
+const product=products.find(p=>p.id===Number(input.dataset.id));
+if(product)total+=qty*product.price;
 });
-
-
-document
-.getElementById(
-"saleTotal"
-)
-.textContent=
-money(total);
-
+document.getElementById("saleTotal").textContent=money(total);
 return total;
-
 }
-
-
-/* =====================================================
-CREAR VENTA
-===================================================== */
 
 function createSale(){
-
-const client=
-document
-.getElementById("saleClient")
-.value
-.trim();
-
-
-const phone=
-document
-.getElementById("salePhone")
-.value
-.trim();
-
-
+const client=document.getElementById("saleClient").value.trim();
+const phone=document.getElementById("salePhone").value.trim();
 const items=[];
+let invalidStock=false;
 
-
-document
-.querySelectorAll(".saleQty")
-.forEach(input=>{
-
-const qty=
-Number(input.value)||0;
-
+document.querySelectorAll(".saleQty").forEach(input=>{
+const qty=Math.max(0,Number(input.value)||0);
 if(qty>0){
-
-const id=
-Number(input.dataset.id);
-
-const product=
-products.find(
-p=>p.id===id
-);
-
+const product=products.find(p=>p.id===Number(input.dataset.id));
 if(product){
-
-items.push({
-
-id:product.id,
-
-name:product.name,
-
-price:product.price,
-
-qty:qty,
-
-total:
-product.price*qty
-
+if(qty>product.stock){invalidStock=true;return;}
+items.push({id:product.id,name:product.name,price:product.price,qty:qty,total:product.price*qty});
+}
+}
 });
 
-}
-
-}
-
-});
-
-
-if(items.length===0){
-
-showToast(
-"Seleccioná al menos un producto"
-);
-
-return;
-
-}
-
-
-/* DESCONTAR STOCK */
+if(invalidStock){showToast("Revisá el stock disponible");renderSaleProducts();return;}
+if(items.length===0){showToast("Seleccioná al menos un producto");return;}
 
 items.forEach(item=>{
-
-const product=
-products.find(
-p=>p.id===item.id
-);
-
-if(product){
-
-product.stock=
-Math.max(
-0,
-product.stock-item.qty
-);
-
-}
-
+const product=products.find(p=>p.id===item.id);
+if(product)product.stock-=item.qty;
 });
 
-
 saveProducts();
-
 updateStats();
 
+const number=Number(localStorage.getItem("receiptNumber")||0)+1;
+localStorage.setItem("receiptNumber",number);
 
-const number=
-Number(
-localStorage.getItem(
-"receiptNumber"
-) || 0
-)+1;
-
-
-localStorage.setItem(
-"receiptNumber",
-number
-);
-
-
-const total=
-items.reduce(
-(sum,item)=>
-sum+item.total,
-0
-);
-
+const total=items.reduce((sum,item)=>sum+item.total,0);
 
 currentReceipt={
-
 number:number,
-
 date:new Date(),
-
-client:
-client || "Consumidor final",
-
+client:client||"Consumidor final",
 phone:phone,
-
 items:items,
-
 total:total
-
 };
 
-
 renderReceipt();
-
+renderProducts();
 renderSaleProducts();
-
 calculateSale();
 
-
-document
-.getElementById(
-"receiptCard"
-)
-.style.display="block";
-
-
-showToast(
-"Comprobante generado"
-);
-
+document.getElementById("receiptCard").style.display="block";
+showToast("Comprobante generado");
 }
-
-
-/* =====================================================
-COMPROBANTE
-===================================================== */
 
 function renderReceipt(){
+const r=currentReceipt;
+if(!r)return;
 
-const r=
-currentReceipt;
+const date=r.date.toLocaleString("es-AR");
 
-if(!r)
-return;
-
-
-const date=
-r.date.toLocaleString(
-"es-AR"
-);
-
-
-document
-.getElementById(
-"receiptContent"
-)
-.innerHTML=`
-
+document.getElementById("receiptContent").innerHTML=`
 <div class="receiptHeader">
-
-<h2>
-NEGOCIO ALERTA PRO
-</h2>
-
-<small>
-Comprobante interno
-</small>
-
-<br>
-
-<small>
-N° ${String(r.number).padStart(6,"0")}
-</small>
-
+  <h2>NEGOCIO ALERTA PRO</h2>
+  <small>Comprobante interno</small><br>
+  <small>N° ${String(r.number).padStart(6,"0")}</small>
 </div>
-
-
+<div class="receiptRow"><strong>Fecha</strong><span>${safe(date)}</span></div>
+<div class="receiptRow"><strong>Cliente</strong><span>${safe(r.client)}</span></div>
+${r.phone?`<div class="receiptRow"><strong>Teléfono</strong><span>${safe(r.phone)}</span></div>`:""}
+<hr style="border:0;border-top:1px dashed #bdd3cc;margin:10px 0">
+${r.items.map(item=>`
 <div class="receiptRow">
-
-<strong>
-Fecha
-</strong>
-
-<span>
-${date}
-</span>
-
-</div>
-
-
-<div class="receiptRow">
-
-<strong>
-Cliente
-</strong>
-
-<span>
-${safe(r.client)}
-</span>
-
-</div>
-
-
-${
-r.phone
-?
-`
-<div class="receiptRow">
-
-<strong>
-Teléfono
-</strong>
-
-<span>
-${safe(r.phone)}
-</span>
-
-</div>
-`
-:
-""
+  <span>${item.qty} x ${safe(item.name)}</span>
+  <strong>${money(item.total)}</strong>
+</div>`).join("")}
+<div class="receiptTotal"><span>TOTAL</span><span>${money(r.total)}</span></div>
+<div class="receiptFooter">Gracias por su compra ❤️<br>Este comprobante es interno y no constituye una factura fiscal.</div>`;
 }
-
-
-<hr
-style="
-border:0;
-border-top:1px dashed #bdd3cc;
-margin:10px 0">
-
-
-${
-r.items
-.map(item=>`
-
-<div class="receiptRow">
-
-<span>
-${item.qty} x
-${safe(item.name)}
-</span>
-
-<strong>
-${money(item.total)}
-</strong>
-
-</div>
-
-`)
-.join("")
-}
-
-
-<div class="receiptTotal">
-
-<span>
-TOTAL
-</span>
-
-<span>
-${money(r.total)}
-</span>
-
-</div>
-
-
-<div class="receiptFooter">
-
-Gracias por su compra ❤️
-
-<br>
-
-Este comprobante es interno
-y no constituye una factura fiscal.
-
-</div>
-
-`;
-
-}
-
-
-/* =====================================================
-TEXTO COMPROBANTE
-===================================================== */
 
 function receiptText(){
+const r=currentReceipt;
+if(!r)return "";
 
-const r=
-currentReceipt;
-
-if(!r)
-return "";
-
-
-let text=
-"NEGOCIO ALERTA PRO\n";
-
-text+=
-"COMPROBANTE INTERNO\n";
-
-text+=
-"--------------------------\n";
-
-text+=
-"Comprobante: "+
-String(r.number)
-.padStart(6,"0")+
-"\n";
-
-text+=
-"Fecha: "+
-r.date.toLocaleString("es-AR")+
-"\n";
-
-text+=
-"Cliente: "+
-r.client+
-"\n";
-
-
-if(r.phone){
-
-text+=
-"Teléfono: "+
-r.phone+
-"\n";
-
-}
-
-
-text+=
-"--------------------------\n";
-
+let text="NEGOCIO ALERTA PRO\nCOMPROBANTE INTERNO\n--------------------------\n";
+text+="Comprobante: "+String(r.number).padStart(6,"0")+"\n";
+text+="Fecha: "+r.date.toLocaleString("es-AR")+"\n";
+text+="Cliente: "+r.client+"\n";
+if(r.phone)text+="Teléfono: "+r.phone+"\n";
+text+="--------------------------\n";
 
 r.items.forEach(item=>{
-
-text+=
-item.qty+
-" x "+
-item.name+
-" = "+
-money(item.total)+
-"\n";
-
+text+=item.qty+" x "+item.name+" = "+money(item.total)+"\n";
 });
 
-
-text+=
-"--------------------------\n";
-
-text+=
-"TOTAL: "+
-money(r.total)+
-"\n";
-
-text+=
-"--------------------------\n";
-
-text+=
-"Gracias por su compra ❤️\n";
-
-text+=
-"Comprobante interno.";
-
+text+="--------------------------\nTOTAL: "+money(r.total)+"\n";
+text+="--------------------------\nGracias por su compra ❤️\nComprobante interno.";
 return text;
-
 }
-
-
-/* =====================================================
-DESCARGAR COMPROBANTE
-===================================================== */
 
 function downloadReceipt(){
+if(!currentReceipt){showToast("No hay comprobante");return;}
 
-if(!currentReceipt){
-
-showToast(
-"No hay comprobante"
-);
-
-return;
-
-}
-
-
-const html=`
-
-<!DOCTYPE html>
-
+const html=`<!DOCTYPE html>
 <html lang="es">
-
 <head>
-
 <meta charset="UTF-8">
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Comprobante</title>
-
 <style>
-
-body{
-font-family:Arial,sans-serif;
-padding:25px;
-color:#123f36;
-}
-
-h1{
-color:#006b55;
-}
-
-.line{
-border-bottom:1px dashed #aaa;
-margin:15px 0;
-}
-
-.row{
-display:flex;
-justify-content:space-between;
-padding:6px 0;
-}
-
-.total{
-border-top:2px solid #006b55;
-padding-top:12px;
-font-size:20px;
-font-weight:bold;
-display:flex;
-justify-content:space-between;
-}
-
+body{font-family:Arial,sans-serif;padding:25px;color:#123f36;max-width:650px;margin:auto}
+h1{color:#006b55}
+.line{border-bottom:1px dashed #aaa;margin:15px 0}
+.row{display:flex;justify-content:space-between;gap:15px;padding:6px 0}
+.total{border-top:2px solid #006b55;padding-top:12px;font-size:20px;font-weight:bold;display:flex;justify-content:space-between}
 </style>
-
 </head>
-
 <body>
-
-<h1>
-NEGOCIO ALERTA PRO
-</h1>
-
-<p>
-Comprobante interno
-</p>
-
+<h1>NEGOCIO ALERTA PRO</h1>
+<p>Comprobante interno</p>
 <div class="line"></div>
-
-<p>
-<strong>N°:</strong>
-${String(currentReceipt.number).padStart(6,"0")}
-</p>
-
-<p>
-<strong>Fecha:</strong>
-${currentReceipt.date.toLocaleString("es-AR")}
-</p>
-
-<p>
-<strong>Cliente:</strong>
-${safe(currentReceipt.client)}
-</p>
-
+<p><strong>N°:</strong> ${String(currentReceipt.number).padStart(6,"0")}</p>
+<p><strong>Fecha:</strong> ${safe(currentReceipt.date.toLocaleString("es-AR"))}</p>
+<p><strong>Cliente:</strong> ${safe(currentReceipt.client)}</p>
+${currentReceipt.phone?`<p><strong>Teléfono:</strong> ${safe(currentReceipt.phone)}</p>`:""}
 <div class="line"></div>
-
-${
-currentReceipt.items
-.map(item=>`
-
-<div class="row">
-
-<span>
-${item.qty} x ${safe(item.name)}
-</span>
-
-<strong>
-${money(item.total)}
-</strong>
-
-</div>
-
-`)
-.join("")
-}
-
-<div class="total">
-
-<span>
-TOTAL
-</span>
-
-<span>
-${money(currentReceipt.total)}
-</span>
-
-</div>
-
+${currentReceipt.items.map(item=>`
+<div class="row"><span>${item.qty} x ${safe(item.name)}</span><strong>${money(item.total)}</strong></div>`).join("")}
+<div class="total"><span>TOTAL</span><span>${money(currentReceipt.total)}</span></div>
 <br>
-
-<p>
-Gracias por su compra ❤️
-</p>
-
-<p>
-Este comprobante es interno y no constituye una factura fiscal.
-</p>
-
+<p>Gracias por su compra ❤️</p>
+<p>Este comprobante es interno y no constituye una factura fiscal.</p>
 </body>
+</html>`;
 
-</html>
-`;
-
-
-const blob=
-new Blob(
-[html],
-{
-type:"text/html;charset=utf-8"
-}
-);
-
-
-const url=
-URL.createObjectURL(blob);
-
-
-const a=
-document.createElement("a");
-
+const blob=new Blob([html],{type:"text/html;charset=utf-8"});
+const url=URL.createObjectURL(blob);
+const a=document.createElement("a");
 a.href=url;
-
-a.download=
-"comprobante-"+
-String(currentReceipt.number)
-.padStart(6,"0")+
-".html";
-
+a.download="comprobante-"+String(currentReceipt.number).padStart(6,"0")+".html";
 document.body.appendChild(a);
-
 a.click();
-
 a.remove();
-
-URL.revokeObjectURL(url);
-
-
-showToast(
-"Comprobante descargado"
-);
-
+setTimeout(()=>URL.revokeObjectURL(url),1000);
+showToast("Comprobante descargado");
 }
-
-
-/* =====================================================
-COMPARTIR
-===================================================== */
 
 async function shareReceipt(){
+if(!currentReceipt){showToast("No hay comprobante");return;}
+const text=receiptText();
 
-if(!currentReceipt){
-
-showToast(
-"No hay comprobante"
-);
-
-return;
-
-}
-
-
-const text=
-receiptText();
-
-
-if(
-navigator.share
-){
-
+if(navigator.share){
 try{
-
-await navigator.share({
-
-title:
-"Comprobante Negocio Alerta PRO",
-
-text:text
-
-});
-
-showToast(
-"Comprobante compartido"
-);
-
+await navigator.share({title:"Comprobante Negocio Alerta PRO",text:text});
+showToast("Comprobante compartido");
 return;
-
 }catch(error){
-
-if(error.name==="AbortError")
-return;
-
+if(error.name==="AbortError")return;
+}
 }
 
+await copyText(text);
+showToast("Comprobante copiado. Podés pegarlo en WhatsApp.");
 }
-
-
-/* SI NO EXISTE SHARE */
-
-copyText(text);
-
-showToast(
-"Comprobante copiado. Podés pegarlo en WhatsApp."
-);
-
-}
-
-
-/* =====================================================
-WHATSAPP
-===================================================== */
 
 function sendWhatsApp(){
+if(!currentReceipt){showToast("No hay comprobante");return;}
 
-if(!currentReceipt){
+const text=encodeURIComponent(receiptText());
+let phone=currentReceipt.phone?currentReceipt.phone.replace(/\D/g,""):"";
 
-showToast(
-"No hay comprobante"
-);
+if(phone.startsWith("0"))phone=phone.substring(1);
+if(phone&&!phone.startsWith("54"))phone="54"+phone;
 
-return;
+const url=phone
+?"https://wa.me/"+phone+"?text="+text
+:"https://wa.me/?text="+text;
 
+window.open(url,"_blank","noopener,noreferrer");
 }
-
-
-const text=
-encodeURIComponent(
-receiptText()
-);
-
-
-/*
-Si el cliente tiene teléfono,
-intentamos abrir WhatsApp con ese número.
-*/
-
-let phone=
-currentReceipt.phone
-?
-currentReceipt.phone
-.replace(/\D/g,"")
-:
-"";
-
-
-if(phone){
-
-/*
-Argentina:
-si el número empieza en 0,
-lo eliminamos.
-*/
-
-if(phone.startsWith("0")){
-
-phone=
-phone.substring(1);
-
-}
-
-
-/*
-Si no tiene código de país,
-agregamos Argentina +54.
-*/
-
-if(!phone.startsWith("54")){
-
-phone="54"+phone;
-
-}
-
-
-window.open(
-"https://wa.me/"+
-phone+
-"?text="+
-text,
-"_blank"
-);
-
-}else{
-
-window.open(
-"https://wa.me/?text="+
-text,
-"_blank"
-);
-
-}
-
-}
-
-
-/* =====================================================
-COPIAR
-===================================================== */
 
 async function copyText(text){
-
 try{
-
+if(navigator.clipboard&&window.isSecureContext){
 await navigator.clipboard.writeText(text);
+return;
+}
+}catch(e){}
 
-}catch(e){
-
-const area=
-document.createElement("textarea");
-
+const area=document.createElement("textarea");
 area.value=text;
-
+area.style.position="fixed";
+area.style.opacity="0";
 document.body.appendChild(area);
-
 area.select();
-
-document.execCommand("copy");
-
+try{document.execCommand("copy");}catch(e){}
 area.remove();
-
 }
-
-}
-
-
-/* =====================================================
-LOGO NEGOCIO
-===================================================== */
 
 function loadBusinessLogo(event){
+const file=event.target.files[0];
+if(!file)return;
 
-const file=
-event.target.files[0];
-
-if(!file)
+if(!file.type.startsWith("image/")){
+showToast("Elegí una imagen válida");
 return;
-
-
-compressImage(
-file,
-function(data){
-
-localStorage.setItem(
-"negocioAlertaLogo",
-data
-);
-
-
-document
-.getElementById(
-"headerLogo"
-)
-.src=data;
-
-
-document
-.getElementById(
-"headerLogo"
-)
-.style.display="block";
-
-
-document
-.getElementById(
-"logoDefault"
-)
-.style.display="none";
-
-
-document
-.getElementById(
-"businessLogoImage"
-)
-.src=data;
-
-
-document
-.getElementById(
-"businessLogoImage"
-)
-.style.display="block";
-
-
-showToast(
-"Logo guardado"
-);
-
-});
-
 }
 
+compressImage(file,function(data){
+try{
+localStorage.setItem("negocioAlertaLogo",data);
+}catch(e){
+showToast("La imagen es demasiado grande para guardar");
+return;
+}
 
-/* =====================================================
-NOMBRE NEGOCIO
-===================================================== */
+applyBusinessLogo(data);
+showToast("Logo guardado");
+});
+}
+
+function applyBusinessLogo(data){
+document.getElementById("headerLogo").src=data;
+document.getElementById("headerLogo").style.display="block";
+document.getElementById("logoDefault").style.display="none";
+document.getElementById("businessLogoImage").src=data;
+document.getElementById("businessLogoImage").style.display="block";
+
+const preview=document.getElementById("businessLogoPreview");
+if(preview&&!preview.contains(document.getElementById("businessLogoImage"))){
+preview.innerHTML="";
+preview.appendChild(document.getElementById("businessLogoImage"));
+}
+}
 
 function saveBusinessName(){
-
-const name=
-document
-.getElementById(
-"businessName"
-)
-.value;
-
-localStorage.setItem(
-"negocioAlertaName",
-name
-);
-
-showToast(
-"Nombre guardado"
-);
-
+const name=document.getElementById("businessName").value.trim();
+localStorage.setItem("negocioAlertaName",name);
+document.querySelector(".brand h1").childNodes[0].textContent=(name||"Negocio Alerta")+" ";
+showToast("Nombre guardado");
 }
-
-
-/* =====================================================
-BORRAR INVENTARIO
-===================================================== */
 
 function deleteAllProducts(){
-
-if(products.length===0){
-
-showToast(
-"No hay productos"
-);
-
-return;
-
-}
-
-
-if(
-!confirm(
-"¿Seguro que querés borrar todo el inventario?"
-)
-)
-return;
-
+if(products.length===0){showToast("No hay productos");return;}
+if(!confirm("¿Seguro que querés borrar todo el inventario?"))return;
 
 products=[];
-
 saveProducts();
-
 updateStats();
-
 renderProducts();
-
 renderSaleProducts();
-
-showToast(
-"Inventario eliminado"
-);
-
+showToast("Inventario eliminado");
 }
 
-
-/* =====================================================
-FORMATO DINERO
-===================================================== */
-
 function money(value){
-
-return new Intl.NumberFormat(
-"es-AR",
-{
+return new Intl.NumberFormat("es-AR",{
 style:"currency",
 currency:"ARS",
 maximumFractionDigits:0
+}).format(Number(value)||0);
 }
-).format(
-Number(value)||0
-);
-
-}
-
-
-/* =====================================================
-SEGURIDAD HTML
-===================================================== */
 
 function safe(text){
-
 return String(text)
-
 .replaceAll("&","&amp;")
-
 .replaceAll("<","&lt;")
-
 .replaceAll(">","&gt;")
-
 .replaceAll('"',"&quot;")
-
 .replaceAll("'","&#039;");
-
 }
-
-
-/* =====================================================
-TOAST
-===================================================== */
 
 let toastTimer;
 
-
 function showToast(text){
-
-const toast=
-document.getElementById(
-"toast"
-);
-
+const toast=document.getElementById("toast");
 toast.textContent=text;
-
 toast.classList.add("show");
-
-clearTimeout(
-toastTimer
-);
-
-toastTimer=
-setTimeout(
-()=>{
-toast.classList.remove("show");
-},
-2400
-);
-
+clearTimeout(toastTimer);
+toastTimer=setTimeout(()=>toast.classList.remove("show"),2400);
 }
 
+/* CARGAR LOGO GUARDADO */
+const savedLogo=localStorage.getItem("negocioAlertaLogo");
+if(savedLogo)applyBusinessLogo(savedLogo);
 
-/* =====================================================
-CARGAR LOGO GUARDADO
-===================================================== */
-
-const savedLogo=
-localStorage.getItem(
-"negocioAlertaLogo"
-);
-
-
-if(savedLogo){
-
-document
-.getElementById(
-"logoDefault"
-)
-.style.display="none";
-
-
-document
-.getElementById(
-"headerLogo"
-)
-.src=savedLogo;
-
-
-document
-.getElementById(
-"headerLogo"
-)
-.style.display="block";
-
-
-document
-.getElementById(
-"businessLogoImage"
-)
-.src=savedLogo;
-
-
-document
-.getElementById(
-"businessLogoImage"
-)
-.style.display="block";
-
-}
-
-
-/* =====================================================
-CARGAR NOMBRE
-===================================================== */
-
-const savedName=
-localStorage.getItem(
-"negocioAlertaName"
-);
-
-
+/* CARGAR NOMBRE GUARDADO */
+const savedName=localStorage.getItem("negocioAlertaName");
 if(savedName){
-
-document
-.getElementById(
-"businessName"
-)
-.value=savedName;
-
+document.getElementById("businessName").value=savedName;
+document.querySelector(".brand h1").childNodes[0].textContent=savedName+" ";
 }
 
-
-/* =====================================================
-INICIO
-===================================================== */
-
+/* INICIO */
 updateStats();
-
 renderProducts();
-
 renderSaleProducts();
 
-
 /* CERRAR MODAL TOCANDO AFUERA */
-
-document
-.getElementById("editModal")
-.addEventListener(
-"click",
-function(e){
-
-if(e.target===this){
-
-closeEdit();
-
-}
-
+document.getElementById("editModal").addEventListener("click",function(e){
+if(e.target===this)closeEdit();
 });
-
-
 </script>
 
 </body>
