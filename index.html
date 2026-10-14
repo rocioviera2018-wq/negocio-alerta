@@ -143,7 +143,7 @@ function defaultState(){
     business:'Mi negocio',
     owner:'',
     logo:'',
-    whatsapp:'5493755223737',   // <-- TU NÚMERO PRECARGADO
+    whatsapp:'5493755223737',
     products:[],
     sales:[],
     orders:[],
@@ -189,22 +189,34 @@ function openModal(html){
 function closeModal(){document.getElementById('modal')?.remove();}
 
 /* =========================================================
-   WHATSAPP — SOLO HTTPS
+   WHATSAPP — intent:// en Android, wa.me en el resto
    ========================================================= */
 function cleanPhone(p){return String(p||'').replace(/\D/g,'');}
 
 function openWhatsApp(message, phone=''){
-  const number = cleanPhone(phone) || cleanPhone(state.whatsapp);
+  const number = cleanPhone(phone) || cleanPhone(state.whatsapp) || '5493755223737';
   const text = encodeURIComponent(message);
 
-  // Copiamos por las dudas
   copyText(message, true);
 
-  // Si no hay número, usar el tuyo por defecto
-  const finalNumber = number || '5493755223737';
+  const waUrl = `https://wa.me/${number}?text=${text}`;
 
-  const url = `https://wa.me/${finalNumber}?text=${text}`;
-  window.location.href = url;
+  // Android: intent:// fuerza abrir la app nativa
+  const isAndroid = /android/i.test(navigator.userAgent);
+  if(isAndroid){
+    const fallback = encodeURIComponent(waUrl);
+    const intentUrl =
+      `intent://send?phone=${number}&text=${text}` +
+      `#Intent;scheme=whatsapp;package=com.whatsapp;` +
+      `S.browser_fallback_url=${fallback};end`;
+    try{
+      window.location.href = intentUrl;
+      return;
+    }catch(e){/* sigue al fallback */}
+  }
+
+  // iOS, escritorio, o si intent:// falló
+  window.location.href = waUrl;
 }
 
 async function copyText(text, silent){
@@ -403,7 +415,7 @@ async function startScanner(videoId, messageId, callback){
   const message = document.getElementById(messageId);
   if(!video || !message) return;
   if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
-    message.textContent = 'La cámara requiere HTTPS y permisos del navegador.';
+    message.textContent = 'La cámara requiere HTTPS. Subí el archivo a Netlify Drop o GitHub Pages.';
     return;
   }
   if(!('BarcodeDetector' in window)){
@@ -437,7 +449,7 @@ async function startScanner(videoId, messageId, callback){
     scan();
   }catch(e){
     stopScanner();
-    message.textContent = 'No se pudo abrir la cámara. Revisá los permisos.';
+    message.textContent = 'No se pudo abrir la cámara. Revisá los permisos de Chrome o subí el archivo a HTTPS.';
   }
 }
 function findProductByBarcode(bc){
