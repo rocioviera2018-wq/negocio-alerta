@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#005b4c">
 <title>Negocio Alerta PRO</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root{--green:#006b58;--deep:#003d35;--gold:#d9b44a;--bg:#eef7f3;--ink:#123d37;--muted:#6b8580;--red:#c74646}
 *{box-sizing:border-box}
@@ -57,13 +58,10 @@ textarea{min-height:80px}
 .bottom button.active{color:#f0d36d}
 .notice{background:#e4f4ed;border-radius:12px;padding:11px;font-size:12px;color:#426d61}
 .hide{display:none!important}
-.scanner-box{border:2px dashed var(--green);border-radius:14px;padding:12px;margin-top:10px;background:#f4fbf8}
-.scanner-box video{width:100%;max-height:280px;object-fit:cover;border-radius:12px;background:#123d37}
-.barcode-result{margin-top:8px;padding:9px;border-radius:9px;background:#e4f4ed;color:var(--green);font-weight:700}
-.logo-preview{width:90px;height:90px;object-fit:cover;border-radius:18px;border:2px solid #cfe1da;background:#eef7f3}
 .file-row{display:grid;gap:8px;margin-top:6px}
 .file-row label.file-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border:1px dashed var(--green);border-radius:11px;background:#e9f4ef;color:var(--green);font-weight:700;cursor:pointer;font-size:14px;text-align:center;width:100%}
 .file-row input[type=file]{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}
+.logo-preview{width:90px;height:90px;object-fit:cover;border-radius:18px;border:2px solid #cfe1da;background:#eef7f3}
 #modal{position:fixed;inset:0;background:#000000a0;z-index:50;display:flex;align-items:flex-start;justify-content:center;padding:20px 14px;overflow-y:auto}
 .modal-box{background:#fff;border-radius:20px;padding:20px;width:100%;max-width:460px;border:2px solid var(--gold)}
 .modal-box h2{margin:0 0 10px;font-size:18px}
@@ -130,13 +128,12 @@ textarea{min-height:80px}
 (() => {
 'use strict';
 
-const KEY='negocioAlertaPro_v4';
+const KEY='negocioAlertaPro_v5';
 let state=load();
 let page='home';
-let scannerStream=null;
-let scanActive=false;
 let modalText='';
 let modalPhone='';
+let modalSaleId='';
 
 function defaultState(){
   return{
@@ -178,7 +175,6 @@ function toast(msg){
   clearTimeout(toast._t);
   toast._t=setTimeout(()=>t.remove(),3800);
 }
-
 function openModal(html){
   closeModal();
   const m=document.createElement('div');
@@ -189,23 +185,18 @@ function openModal(html){
 function closeModal(){document.getElementById('modal')?.remove();}
 
 /* =========================================================
-   WHATSAPP — solo wa.me (deja elegir entre las dos apps)
+   WHATSAPP — solo wa.me
    ========================================================= */
 function cleanPhone(p){return String(p||'').replace(/\D/g,'');}
-
 function openWhatsApp(message, phone=''){
   const number = cleanPhone(phone) || cleanPhone(state.whatsapp);
   const text = encodeURIComponent(message);
-
   copyText(message, true);
-
   const url = number
     ? `https://wa.me/${number}?text=${text}`
     : `https://wa.me/?text=${text}`;
-
   window.location.href = url;
 }
-
 async function copyText(text, silent){
   try{
     if(navigator.clipboard && window.isSecureContext){
@@ -227,20 +218,219 @@ async function copyText(text, silent){
   }
 }
 
-async function shareText(text, title){
-  if(navigator.share){
-    try{ await navigator.share({title: title||state.business, text}); return; }
-    catch(e){ if(e && e.name==='AbortError') return; }
+/* =========================================================
+   PDF — generación con jsPDF
+   ========================================================= */
+function generarPDF(sale){
+  if(!window.jspdf || !window.jspdf.jsPDF){
+    alert('La librería de PDF no se cargó. Necesitás conexión a internet la primera vez.');
+    return null;
   }
-  openWhatsApp(text, modalPhone);
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({unit:'mm', format:'a5'});
+  const w = doc.internal.pageSize.getWidth();
+  let y = 15;
+
+  // Encabezado
+  doc.setFontSize(16);
+  doc.setFont('helvetica','bold');
+  doc.setTextColor(0,107,88);
+  doc.text(state.business || 'Mi negocio', w/2, y, {align:'center'});
+  y += 7;
+
+  doc.setFontSize(9);
+  doc.setFont('helvetica','normal');
+  doc.setTextColor(120);
+  doc.text('COMPROBANTE INTERNO — NO FISCAL', w/2, y, {align:'center'});
+  y += 3;
+
+  doc.setDrawColor(200);
+  doc.line(10, y, w-10, y);
+  y += 8;
+
+  // Datos
+  doc.setTextColor(30);
+  doc.setFontSize(10);
+  doc.text('Fecha:', 10, y);
+  doc.setFont('helvetica','bold');
+  doc.text(String(sale.date||''), 30, y);
+  y += 6;
+
+  doc.setFont('helvetica','normal');
+  doc.text('Cliente:', 10, y);
+  doc.setFont('helvetica','bold');
+  doc.text(String(sale.client || 'Consumidor final'), 30, y);
+  y += 10;
+
+  // Detalle
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(11);
+  doc.text('Detalle', 10, y);
+  y += 6;
+
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(10);
+  const nombre = String(sale.productName || 'Producto');
+  const cant = sale.qty || 1;
+  doc.text(`${nombre}  x${cant}`, 10, y);
+  doc.text(`${money(sale.price)} c/u`, w-10, y, {align:'right'});
+  y += 8;
+
+  doc.setDrawColor(200);
+  doc.line(10, y, w-10, y);
+  y += 8;
+
+  // Total
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(14);
+  doc.text('TOTAL:', 10, y);
+  doc.text(money(sale.total), w-10, y, {align:'right'});
+  y += 15;
+
+  // Pie
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(9);
+  doc.setTextColor(120);
+  doc.text('¡Gracias por tu compra!', w/2, y, {align:'center'});
+
+  return doc.output('blob');
+}
+
+function nombreArchivoPDF(sale){
+  const f = String(sale.date||'').replace(/[\/:,\s]/g,'-');
+  return `comprobante-${f}.pdf`;
+}
+
+async function descargarBlob(blob, nombre){
+  try{
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = nombre; a.rel = 'noopener';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 4000);
+    return true;
+  }catch(e){ return false; }
+}
+
+// Compartir PDF por WhatsApp (o cualquier app) usando Web Share API
+async function compartirPDF(blob, nombre, mensaje){
+  const file = new File([blob], nombre, {type:'application/pdf'});
+
+  if(navigator.canShare && navigator.canShare({files:[file]})){
+    try{
+      await navigator.share({
+        files:[file],
+        text: mensaje,
+        title: 'Comprobante'
+      });
+      return true;
+    }catch(e){
+      if(e && e.name === 'AbortError') return true; // el usuario canceló
+    }
+  }
+  return false;
 }
 
 /* =========================================================
-   DESCARGA DE ARCHIVOS
+   Comprobante: menú con PDF
+   ========================================================= */
+function receipt(saleId){
+  const sale = state.sales.find(s=>s.id===saleId);
+  if(!sale) return;
+
+  modalSaleId = saleId;
+  modalText =
+`${state.business}
+COMPROBANTE INTERNO — NO FISCAL
+Fecha: ${sale.date}
+Cliente: ${sale.client || 'Consumidor final'}
+
+${sale.productName} × ${sale.qty}
+Precio unitario: ${money(sale.price)}
+TOTAL: ${money(sale.total)}
+
+¡Gracias por tu compra!`;
+
+  const cl = state.clients.find(c=>c.name.trim().toLowerCase() === String(sale.client||'').trim().toLowerCase());
+  modalPhone = cl ? cl.phone : '';
+
+  const logoHTML = state.logo
+    ? `<img src="${state.logo}" alt="Logo" style="width:80px;height:80px;object-fit:cover;border-radius:15px">`
+    : '<div style="font-size:40px">🌿</div>';
+
+  openModal(`
+    <div class="ticket">
+      ${logoHTML}
+      <h2>${esc(state.business)}</h2>
+      <pre>${esc(modalText)}</pre>
+    </div>
+    <div class="actions noprint">
+      <button class="wa" data-act="pdf-wa">📄 Enviar PDF por WhatsApp</button>
+      <button data-act="pdf-down">⬇️ Descargar PDF</button>
+      <button class="secondary" data-act="pdf-share">📤 Compartir PDF</button>
+      <button class="secondary" data-act="wa-modal">💬 Enviar texto</button>
+      <button class="secondary" data-act="print-modal">🖨️ Imprimir / PDF del navegador</button>
+      <button class="danger" data-act="close">Cerrar</button>
+    </div>`);
+}
+
+async function enviarPDFporWhatsApp(){
+  const sale = state.sales.find(s=>s.id===modalSaleId);
+  if(!sale){ toast('No se encontró la venta'); return; }
+
+  const blob = generarPDF(sale);
+  if(!blob) return;
+
+  const nombre = nombreArchivoPDF(sale);
+
+  // 1) Intento con Web Share (permite adjuntar PDF a WhatsApp)
+  const compartido = await compartirPDF(blob, nombre, modalText);
+  if(compartido) return;
+
+  // 2) Fallback: descargar PDF + abrir WhatsApp con el texto
+  await descargarBlob(blob, nombre);
+  toast('PDF descargado. Ahora elegí el chat y adjuntá el PDF.');
+  setTimeout(()=>openWhatsApp(modalText, modalPhone), 800);
+}
+
+async function descargarPDF(){
+  const sale = state.sales.find(s=>s.id===modalSaleId);
+  if(!sale){ toast('No se encontró la venta'); return; }
+  const blob = generarPDF(sale);
+  if(!blob) return;
+  const ok = await descargarBlob(blob, nombreArchivoPDF(sale));
+  if(ok) toast('PDF descargado correctamente');
+  else toast('No se pudo descargar el PDF');
+}
+
+async function compartirPDFSolo(){
+  const sale = state.sales.find(s=>s.id===modalSaleId);
+  if(!sale){ toast('No se encontró la venta'); return; }
+  const blob = generarPDF(sale);
+  if(!blob) return;
+  const ok = await compartirPDF(blob, nombreArchivoPDF(sale), modalText);
+  if(!ok){
+    toast('Tu celular no soporta compartir archivos. Se descargó.');
+    await descargarBlob(blob, nombreArchivoPDF(sale));
+  }
+}
+
+function shareSummary(){
+  const total = state.sales.reduce((s,x)=>s+Number(x.total||0),0);
+  const msg =
+`Resumen de ${state.business}
+Ventas registradas: ${state.sales.length}
+Total vendido: ${money(total)}
+Productos: ${state.products.length}
+Stock bajo: ${state.products.filter(low).length}`;
+  openWhatsApp(msg);
+}
+
+/* =========================================================
+   Descargas genéricas
    ========================================================= */
 async function saveFile(name, mime, content){
   const blob = new Blob([content], {type: mime});
-
   try{
     const file = new File([blob], name, {type: mime});
     if(navigator.canShare && navigator.canShare({files:[file]})){
@@ -249,23 +439,9 @@ async function saveFile(name, mime, content){
     }
   }catch(e){ if(e && e.name==='AbortError') return; }
 
-  try{
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = name; a.rel = 'noopener';
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url), 4000);
-    toast('Descarga iniciada: ' + name);
-  }catch(e){
-    openModal(`
-      <h2>Copiá el contenido</h2>
-      <p class="muted">Tu navegador no permitió la descarga. Copiá este texto y guardalo como ${esc(name)}.</p>
-      <textarea id="fallbackText" style="min-height:200px" readonly>${esc(content)}</textarea>
-      <div class="actions">
-        <button data-act="copy-fallback">Copiar todo</button>
-        <button class="secondary" data-act="close">Cerrar</button>
-      </div>`);
-  }
+  const ok = await descargarBlob(blob, name);
+  if(ok) toast('Descarga iniciada: ' + name);
+  else toast('No se pudo descargar');
 }
 
 function exportData(){
@@ -299,7 +475,6 @@ function importFromText(text){
 
 /* -------- Navegación -------- */
 function setPage(next){
-  stopScanner();
   page = next;
   document.querySelectorAll('[data-page]').forEach(b=>{
     b.classList.toggle('active', b.dataset.page === next);
@@ -328,19 +503,15 @@ function renderHeader(){
 }
 
 /* =========================================================
-   GALERÍA / CÁMARA
+   Imágenes (solo galería, sin cámara)
    ========================================================= */
 function filePickerHTML(idBase, label){
   return `
     <div class="file-row">
       <label class="file-btn" for="${idBase}_gal">🖼️ ${label} — Galería / Archivos</label>
       <input id="${idBase}_gal" type="file" accept="image/*" data-img-input="${idBase}">
-
-      <label class="file-btn" for="${idBase}_cam">📸 ${label} — Sacar foto</label>
-      <input id="${idBase}_cam" type="file" accept="image/*" capture="environment" data-img-input="${idBase}">
     </div>`;
 }
-
 function attachImageInputs(){
   document.querySelectorAll('[data-img-input]').forEach(input=>{
     if(input.dataset.bound === '1') return;
@@ -365,7 +536,6 @@ function attachImageInputs(){
     });
   });
 }
-
 function resizeImage(file, callback){
   if(!file || !file.type.startsWith('image/')){ alert('Elegí una imagen válida.'); return; }
   const reader = new FileReader();
@@ -388,111 +558,6 @@ function resizeImage(file, callback){
     img.src = ev.target.result;
   };
   reader.readAsDataURL(file);
-}
-
-/* -------- Escáner -------- */
-function stopScanner(){
-  scanActive = false;
-  if(scannerStream){ scannerStream.getTracks().forEach(t=>t.stop()); scannerStream = null; }
-  document.querySelectorAll('video').forEach(v=>v.srcObject = null);
-}
-async function startScanner(videoId, messageId, callback){
-  stopScanner();
-  const video = document.getElementById(videoId);
-  const message = document.getElementById(messageId);
-  if(!video || !message) return;
-
-  if(location.protocol === 'file:'){
-    message.textContent = 'La cámara NO funciona con archivos locales (file://). Subí la app a HTTPS (Netlify Drop, GitHub Pages) y abrilo desde ese link.';
-    return;
-  }
-  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
-    message.textContent = 'Tu navegador no permite usar la cámara.';
-    return;
-  }
-  if(!('BarcodeDetector' in window)){
-    message.textContent = 'Este navegador no admite escaneo automático. Escribí el código manualmente.';
-    return;
-  }
-  try{
-    const detector = new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','code_128','code_39']});
-    scannerStream = await navigator.mediaDevices.getUserMedia({
-      video: {facingMode: {ideal:'environment'}}, audio:false
-    });
-    video.srcObject = scannerStream;
-    await video.play();
-    scanActive = true;
-    message.textContent = 'Buscando código...';
-    const scan = async ()=>{
-      if(!scanActive || !scannerStream) return;
-      try{
-        const codes = await detector.detect(video);
-        if(codes.length){
-          const code = codes[0].rawValue;
-          message.textContent = 'Código detectado: ' + code;
-          scanActive = false;
-          stopScanner();
-          callback(code);
-          return;
-        }
-      }catch(e){}
-      if(scanActive) requestAnimationFrame(scan);
-    };
-    scan();
-  }catch(e){
-    stopScanner();
-    message.textContent = 'No se pudo abrir la cámara: ' + (e.message || 'revisá los permisos de Chrome.');
-  }
-}
-function findProductByBarcode(bc){
-  return state.products.find(p => String(p.barcode||'').trim() === String(bc).trim());
-}
-
-/* -------- Comprobante -------- */
-function receipt(saleId){
-  const sale = state.sales.find(s=>s.id===saleId);
-  if(!sale) return;
-  modalText =
-`${state.business}
-COMPROBANTE INTERNO — NO FISCAL
-Fecha: ${sale.date}
-Cliente: ${sale.client || 'Consumidor final'}
-
-${sale.productName} × ${sale.qty}
-Precio unitario: ${money(sale.price)}
-TOTAL: ${money(sale.total)}
-
-¡Gracias por tu compra!`;
-  const cl = state.clients.find(c=>c.name.trim().toLowerCase() === String(sale.client||'').trim().toLowerCase());
-  modalPhone = cl ? cl.phone : '';
-  const logoHTML = state.logo
-    ? `<img src="${state.logo}" alt="Logo" style="width:80px;height:80px;object-fit:cover;border-radius:15px">`
-    : '<div style="font-size:40px">🌿</div>';
-  openModal(`
-    <div class="ticket">
-      ${logoHTML}
-      <h2>${esc(state.business)}</h2>
-      <pre>${esc(modalText)}</pre>
-      <p class="muted">Comprobante interno; no es una factura fiscal.</p>
-    </div>
-    <div class="actions noprint">
-      <button class="wa" data-act="wa-modal">💬 WhatsApp</button>
-      <button data-act="share-modal">📤 Compartir</button>
-      <button class="secondary" data-act="copy-modal">📋 Copiar</button>
-      <button class="secondary" data-act="txt-modal">⬇️ Descargar .txt</button>
-      <button class="secondary" data-act="print-modal">🖨️ Imprimir / PDF</button>
-      <button class="danger" data-act="close">Cerrar</button>
-    </div>`);
-}
-function shareSummary(){
-  const total = state.sales.reduce((s,x)=>s+Number(x.total||0),0);
-  const msg =
-`Resumen de ${state.business}
-Ventas registradas: ${state.sales.length}
-Total vendido: ${money(total)}
-Productos: ${state.products.length}
-Stock bajo: ${state.products.filter(low).length}`;
-  openWhatsApp(msg);
 }
 
 /* =========================================================
@@ -525,7 +590,7 @@ function render(){
           ...state.orders.slice(-2).reverse().map(o=>({label:'Pedido', detail:o.client||'Cliente', value:o.status||'Pendiente'}))
         ], x=>`<div class="item"><div><strong>${esc(x.label)}</strong><small>${esc(x.detail)}</small></div><b>${esc(x.value)}</b></div>`)
       ) +
-      '<div class="notice">🔒 Los datos se guardan en este navegador y dispositivo. Descargá respaldos regularmente.</div>';
+      '<div class="notice">📄 Los comprobantes se generan como PDF listos para enviar por WhatsApp.</div>';
   }
 
   if(page==='products'){
@@ -537,36 +602,30 @@ function render(){
             <input name="name" required placeholder="Ej. Pan lactal">
           </div>
           <div class="field full">
-            <label>Foto del producto</label>
+            <label>Foto del producto (opcional)</label>
             ${filePickerHTML('prodImg','Foto')}
             <input type="hidden" name="imageData" id="prodImg_data">
             <div id="prodImg_preview"></div>
           </div>
           <div class="field">
-            <label>Código de barras</label>
-            <input name="barcode" id="productBarcode" placeholder="Código opcional">
+            <label>Código de barras (opcional)</label>
+            <input name="barcode" placeholder="Código">
           </div>
-          <div class="field" style="align-content:end">
-            <button type="button" class="secondary" id="openScannerProduct">📷 Escanear código</button>
+          <div class="field">
+            <label>Stock mínimo</label>
+            <input name="min" type="number" min="0" step="1" value="3">
           </div>
           <div class="field"><label>Precio de costo ($)</label><input name="cost" type="number" min="0" step="0.01" value="0" required></div>
           <div class="field"><label>Precio de venta ($)</label><input name="price" type="number" min="0" step="0.01" required></div>
           <div class="field"><label>Stock actual</label><input name="stock" type="number" min="0" step="1" value="0" required></div>
-          <div class="field"><label>Stock mínimo</label><input name="min" type="number" min="0" step="1" value="3"></div>
           <div class="field full"><button>Guardar producto</button></div>
         </form>
-        <div id="productScanner" class="scanner-box hide">
-          <video id="scannerVideo" autoplay playsinline muted></video>
-          <div id="scannerMessage" class="barcode-result">Apuntá la cámara al código de barras.</div>
-          <button type="button" class="danger" id="closeScannerProduct" style="margin-top:8px">Cerrar cámara</button>
-        </div>
       `) +
       card('📦 Mis productos',
         list(state.products, p=>`
           <div class="item">
             <div class="product-info">${imageHTML(p)}<div>
               <strong>${esc(p.name)}</strong>
-              <small>Código: ${esc(p.barcode||'Sin código')}</small>
               <small>Costo: ${money(p.cost)} · Venta: ${money(p.price)}</small>
               <small>Ganancia/unidad: ${money(profit(p))} · Stock: ${p.stock}${low(p)?' · ⚠️ Bajo':''}</small>
             </div></div>
@@ -577,15 +636,7 @@ function render(){
   if(page==='sales'){
     root.innerHTML =
       card('🧾 Registrar venta', `
-        <div class="actions">
-          <button type="button" class="secondary" id="openScannerSale">📷 Escanear producto</button>
-        </div>
-        <div id="saleScanner" class="scanner-box hide">
-          <video id="saleScannerVideo" autoplay playsinline muted></video>
-          <div id="saleScannerMessage" class="barcode-result">Apuntá la cámara al código de barras.</div>
-          <button type="button" class="danger" id="closeScannerSale" style="margin-top:8px">Cerrar cámara</button>
-        </div>
-        <form id="saleForm" class="form" style="margin-top:12px">
+        <form id="saleForm" class="form">
           <div class="field full">
             <label>Producto</label>
             <select name="product" id="saleProduct" required>
@@ -612,7 +663,7 @@ function render(){
             </div>
             <div style="text-align:right">
               <b>${money(s.total)}</b><br>
-              <button class="secondary" data-receipt="${s.id}" style="margin-top:6px">Comprobante</button>
+              <button class="secondary" data-receipt="${s.id}" style="margin-top:6px">Comprobante PDF</button>
             </div>
           </div>`));
   }
@@ -682,7 +733,7 @@ function render(){
             <small class="muted">Solo números, con código de país. Argentina: 54 + 9 + área + número. Ej: 5493755222727</small>
           </div>
           <div class="field full">
-            <label>Logo del negocio</label>
+            <label>Logo del negocio (opcional)</label>
             ${filePickerHTML('logoImg','Logo')}
             <input type="hidden" name="logoData" id="logoImg_data">
             <div id="logoImg_preview">${state.logo?`<img class="logo-preview" src="${state.logo}" alt="Logo">`:'<span class="muted">Todavía no hay logo cargado.</span>'}</div>
@@ -691,7 +742,7 @@ function render(){
         </form>
       `) +
       card('💾 Copia de seguridad', `
-        <p class="muted">Descargá o restaurá todos los datos. En el celular se abre el menú de compartir para guardar el archivo.</p>
+        <p class="muted">Descargá o restaurá todos los datos.</p>
         <div class="actions">
           <button id="export">⬇️ Descargar respaldo</button>
           <button class="secondary" id="importBtn">⬆️ Subir respaldo</button>
@@ -725,10 +776,10 @@ document.addEventListener('click', event=>{
   if(act){
     const a = act.dataset.act;
     if(a==='close') closeModal();
+    if(a==='pdf-wa') enviarPDFporWhatsApp();
+    if(a==='pdf-down') descargarPDF();
+    if(a==='pdf-share') compartirPDFSolo();
     if(a==='wa-modal') openWhatsApp(modalText, modalPhone);
-    if(a==='share-modal') shareText(modalText, 'Comprobante');
-    if(a==='copy-modal') copyText(modalText);
-    if(a==='txt-modal') saveFile('comprobante.txt','text/plain',modalText);
     if(a==='print-modal') window.print();
     if(a==='copy-fallback'){ const t = document.getElementById('fallbackText'); if(t) copyText(t.value); }
     if(a==='import-pasted'){ const t = document.getElementById('pasteArea'); if(t && t.value.trim()) importFromText(t.value); else toast('Pegá primero el contenido'); }
@@ -748,7 +799,6 @@ document.addEventListener('click', event=>{
     }
     return;
   }
-
   const delClient = target.closest('[data-del-client]');
   if(delClient){
     if(confirm('¿Eliminar este cliente?')){
@@ -786,41 +836,6 @@ Estado: ${o.status}`, cl ? cl.phone : '');
     return;
   }
 
-  if(target.closest('#openScannerProduct')){
-    const box = document.getElementById('productScanner');
-    if(box){
-      box.classList.remove('hide');
-      startScanner('scannerVideo','scannerMessage', bc=>{
-        const input = document.getElementById('productBarcode');
-        if(input) input.value = bc;
-      });
-    }
-    return;
-  }
-  if(target.closest('#closeScannerProduct')){
-    stopScanner();
-    document.getElementById('productScanner')?.classList.add('hide');
-    return;
-  }
-  if(target.closest('#openScannerSale')){
-    const box = document.getElementById('saleScanner');
-    if(box){
-      box.classList.remove('hide');
-      startScanner('saleScannerVideo','saleScannerMessage', bc=>{
-        const p = findProductByBarcode(bc);
-        if(!p){ alert('No existe un producto con ese código. Agregalo primero.'); return; }
-        const sel = document.getElementById('saleProduct');
-        if(sel) sel.value = p.id;
-      });
-    }
-    return;
-  }
-  if(target.closest('#closeScannerSale')){
-    stopScanner();
-    document.getElementById('saleScanner')?.classList.add('hide');
-    return;
-  }
-
   if(target.closest('#export')){ exportData(); return; }
   if(target.closest('#exportCSV')){
     if(!state.sales.length){ alert('Todavía no hay ventas para exportar.'); return; }
@@ -851,7 +866,7 @@ Estado: ${o.status}`, cl ? cl.phone : '');
     return;
   }
   if(target.closest('#logout')){
-    alert('Esta versión guarda datos localmente. El cierre de sesión real necesita un sistema de usuarios.');
+    alert('Esta versión guarda datos localmente.');
   }
 });
 
@@ -861,16 +876,11 @@ document.addEventListener('submit', event=>{
   const data = Object.fromEntries(new FormData(form));
 
   if(form.id==='productForm'){
-    const barcode = String(data.barcode||'').trim();
-    if(barcode && findProductByBarcode(barcode)){
-      alert('Ya existe un producto con ese código de barras.');
-      return;
-    }
     state.products.push({
       id: uid(),
       name: String(data.name||'').trim(),
       image: data.imageData || '',
-      barcode,
+      barcode: String(data.barcode||'').trim(),
       price: Number(data.price||0),
       cost: Number(data.cost||0),
       stock: Number(data.stock||0),
