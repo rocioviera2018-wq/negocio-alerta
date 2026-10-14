@@ -159,17 +159,17 @@
                 <div class="card-stat products">
                     <i class="fas fa-box icon"></i>
                     <h4>Productos</h4>
-                    <p id="stat-productos">12</p>
+                    <p id="stat-productos">0</p>
                 </div>
                 <div class="card-stat stock">
                     <i class="fas fa-exclamation-triangle icon"></i>
                     <h4>Stock bajo</h4>
-                    <p id="stat-stock" style="color: var(--danger);">3</p>
+                    <p id="stat-stock" style="color: var(--danger);">0</p>
                 </div>
                 <div class="card-stat earnings">
                     <i class="fas fa-chart-line icon"></i>
                     <h4>Ganancia</h4>
-                    <p id="stat-ganancia">$ 18.750</p>
+                    <p id="stat-ganancia">$ 0</p>
                 </div>
             </div>
 
@@ -189,27 +189,7 @@
                     <a href="#">Ver todos ></a>
                 </div>
                 <div id="lista-alertas">
-                    <div class="alert-item">
-                        <div class="alert-img">🍞</div>
-                        <div class="alert-info">
-                            <h4>Pan lactal</h4>
-                            <p>Quedan: 2 <span style="color: var(--text-light);">(Mínimo: 5)</span></p>
-                        </div>
-                    </div>
-                    <div class="alert-item">
-                        <div class="alert-img">🧃</div>
-                        <div class="alert-info">
-                            <h4>Jugo naranja</h4>
-                            <p>Quedan: 1 <span style="color: var(--text-light);">(Mínimo: 3)</span></p>
-                        </div>
-                    </div>
-                    <div class="alert-item">
-                        <div class="alert-img">🍟</div>
-                        <div class="alert-info">
-                            <h4>Papas fritas</h4>
-                            <p>Quedan: 2 <span style="color: var(--text-light);">(Mínimo: 5)</span></p>
-                        </div>
-                    </div>
+                    <p class="empty-text">No hay alertas de stock.</p>
                 </div>
             </div>
 
@@ -219,16 +199,7 @@
                     <a href="#">Ver todos ></a>
                 </div>
                 <div id="lista-movimientos">
-                    <div class="mov-item">
-                        <div class="mov-left">
-                            <div class="mov-icon"><i class="fas fa-plus"></i></div>
-                            <div class="mov-text">
-                                <h4>Venta registrada - Pan lactal x2</h4>
-                                <span>17:32</span>
-                            </div>
-                        </div>
-                        <div class="mov-right"><p>$ 2.400</p></div>
-                    </div>
+                    <p class="empty-text">No hay movimientos recientes.</p>
                 </div>
             </div>
         </div>
@@ -338,11 +309,17 @@
         const SUPABASE_URL = 'TU_SUPABASE_URL_AQUI';
         const SUPABASE_KEY = 'TU_SUPABASE_ANON_KEY_AQUI';
 
-        let supabase = null;
-        try {
-            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        } catch (e) {
-            console.warn("Supabase no configurado. Usando datos de prueba.");
+        let supabaseClient = null;
+        
+        // Solo intentamos conectar si el usuario puso las claves reales
+        if (SUPABASE_URL !== 'TU_SUPABASE_URL_AQUI' && SUPABASE_KEY !== 'TU_SUPABASE_ANON_KEY_AQUI') {
+            try {
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            } catch (e) {
+                console.warn("Error al iniciar Supabase:", e.message);
+            }
+        } else {
+            console.log("Supabase no configurado. Usando datos de prueba.");
         }
 
         // ==========================================
@@ -351,15 +328,11 @@
         function cambiarSeccion(nombreSeccion, elementoClickeado) {
             // Ocultar todas las secciones
             const secciones = document.querySelectorAll('.container > div');
-            secciones.forEach(seccion => {
-                seccion.style.display = 'none';
-            });
+            secciones.forEach(seccion => { seccion.style.display = 'none'; });
 
             // Mostrar la sección seleccionada
             const seccionActiva = document.getElementById('seccion-' + nombreSeccion);
-            if (seccionActiva) {
-                seccionActiva.style.display = 'block';
-            }
+            if (seccionActiva) seccionActiva.style.display = 'block';
 
             // Mostrar u ocultar el botón de PDF según la sección
             const botonPdf = document.getElementById('boton-pdf-inicio');
@@ -370,21 +343,17 @@
             }
 
             // Quitar 'active' de todos los botones
-            document.querySelectorAll('.menu-item, .nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
+            document.querySelectorAll('.menu-item, .nav-item').forEach(item => { item.classList.remove('active'); });
 
             // Poner 'active' al botón que se tocó
             if (elementoClickeado) {
                 elementoClickeado.classList.add('active');
-
-                // Sincronizar menú superior e inferior
                 const esMenuSuperior = elementoClickeado.classList.contains('menu-item');
                 if (esMenuSuperior) {
-                    const navItemAbajo = document.querySelector(`.bottom-nav .nav-item[onclick*="${nombreSeccion}"]`);
+                    const navItemAbajo = document.querySelector('.bottom-nav .nav-item[onclick*="' + nombreSeccion + '"]');
                     if (navItemAbajo) navItemAbajo.classList.add('active');
                 } else {
-                    const menuItemArriba = document.querySelector(`.menu-grid .menu-item[onclick*="${nombreSeccion}"]`);
+                    const menuItemArriba = document.querySelector('.menu-grid .menu-item[onclick*="' + nombreSeccion + '"]');
                     if (menuItemArriba) menuItemArriba.classList.add('active');
                 }
             }
@@ -394,43 +363,37 @@
         // 3. CARGAR DATOS DESDE SUPABASE
         // ==========================================
         async function cargarDatos() {
-            if (!supabase || SUPABASE_URL === 'TU_SUPABASE_URL_AQUI') {
+            if (!supabaseClient) {
                 console.log("Supabase no configurado. Mostrando datos de prueba.");
                 return;
             }
 
             try {
                 // Cargar Productos
-                const { data: productos, error: errProd } = await supabase.from('productos').select('*');
-                if (errProd) throw errProd;
+                const resProd = await supabaseClient.from('productos').select('*');
+                if (resProd.error) throw resProd.error;
+                const productos = resProd.data;
 
                 if (productos && productos.length > 0) {
                     document.getElementById('stat-productos').innerText = productos.length;
-                    
-                    // Mostrar lista de productos
                     const listaProd = document.getElementById('lista-productos');
                     listaProd.innerHTML = '';
                     productos.forEach(p => {
-                        listaProd.innerHTML += `
-                            <div class="mov-item">
-                                <div class="mov-text">
-                                    <h4>${p.nombre || p.producto}</h4>
-                                    <span>Stock: ${p.stock || 0} | $${p.precio || 0}</span>
-                                </div>
-                            </div>
-                        `;
+                        listaProd.innerHTML += '<div class="mov-item"><div class="mov-text"><h4>' + (p.nombre || p.producto) + '</h4><span>Stock: ' + (p.stock || 0) + ' | $' + (p.precio || 0) + '</span></div></div>';
                     });
+                } else {
+                    document.getElementById('lista-productos').innerHTML = '<p class="empty-text">No hay productos registrados.</p>';
                 }
 
                 // Cargar Ventas
-                const { data: ventas, error: errVentas } = await supabase.from('ventas').select('*');
-                if (errVentas) throw errVentas;
+                const resVentas = await supabaseClient.from('ventas').select('*');
+                if (resVentas.error) throw resVentas.error;
+                const ventas = resVentas.data;
 
                 if (ventas && ventas.length > 0) {
                     const totalGanancia = ventas.reduce((sum, v) => sum + (Number(v.total) || 0), 0);
                     document.getElementById('stat-ganancia').innerText = '$ ' + totalGanancia.toLocaleString();
                 }
-
             } catch (error) {
                 console.error("Error al cargar Supabase:", error.message);
             }
@@ -444,32 +407,22 @@
             const stock = document.getElementById('prod-stock').value;
             const precio = document.getElementById('prod-precio').value;
 
-            if (!nombre || !stock || !precio) {
-                alert("Completa todos los campos");
-                return;
-            }
+            if (!nombre || !stock || !precio) { alert("Completa todos los campos"); return; }
 
-            if (!supabase || SUPABASE_URL === 'TU_SUPABASE_URL_AQUI') {
-                alert("Producto guardado (modo local). Configura Supabase para guardar en la nube.");
-                document.getElementById('prod-nombre').value = '';
-                document.getElementById('prod-stock').value = '';
-                document.getElementById('prod-precio').value = '';
+            if (!supabaseClient) {
+                alert("Faltan las claves de Supabase. Configúralas en el código.");
                 return;
             }
 
             try {
-                const { error } = await supabase.from('productos').insert([
-                    { nombre: nombre, stock: parseInt(stock), precio: parseFloat(precio) }
-                ]);
+                const { error } = await supabaseClient.from('productos').insert([{ nombre: nombre, stock: parseInt(stock), precio: parseFloat(precio) }]);
                 if (error) throw error;
                 alert("¡Producto guardado!");
                 document.getElementById('prod-nombre').value = '';
                 document.getElementById('prod-stock').value = '';
                 document.getElementById('prod-precio').value = '';
                 cargarDatos();
-            } catch (error) {
-                alert("Error: " + error.message);
-            }
+            } catch (error) { alert("Error: " + error.message); }
         }
 
         // ==========================================
@@ -480,32 +433,22 @@
             const cantidad = document.getElementById('venta-cantidad').value;
             const total = document.getElementById('venta-total').value;
 
-            if (!producto || !cantidad || !total) {
-                alert("Completa todos los campos");
-                return;
-            }
+            if (!producto || !cantidad || !total) { alert("Completa todos los campos"); return; }
 
-            if (!supabase || SUPABASE_URL === 'TU_SUPABASE_URL_AQUI') {
-                alert("Venta registrada (modo local).");
-                document.getElementById('venta-producto').value = '';
-                document.getElementById('venta-cantidad').value = '';
-                document.getElementById('venta-total').value = '';
+            if (!supabaseClient) {
+                alert("Faltan las claves de Supabase. Configúralas en el código.");
                 return;
             }
 
             try {
-                const { error } = await supabase.from('ventas').insert([
-                    { producto: producto, cantidad: parseInt(cantidad), total: parseFloat(total) }
-                ]);
+                const { error } = await supabaseClient.from('ventas').insert([{ producto: producto, cantidad: parseInt(cantidad), total: parseFloat(total) }]);
                 if (error) throw error;
                 alert("¡Venta registrada!");
                 document.getElementById('venta-producto').value = '';
                 document.getElementById('venta-cantidad').value = '';
                 document.getElementById('venta-total').value = '';
                 cargarDatos();
-            } catch (error) {
-                alert("Error: " + error.message);
-            }
+            } catch (error) { alert("Error: " + error.message); }
         }
 
         // ==========================================
@@ -513,12 +456,19 @@
         // ==========================================
         async function generarYCompartirPDF() {
             try {
-                // Datos de ejemplo (puedes reemplazarlos con datos reales de Supabase)
+                alert("1. Iniciando generación de PDF..."); // Aviso de depuración
+
                 const cliente = "Cliente General";
                 const fecha = new Date().toLocaleDateString();
-                const producto = document.getElementById('venta-producto')?.value || "Pan lactal";
-                const cantidad = document.getElementById('venta-cantidad')?.value || "2";
-                const total = document.getElementById('venta-total')?.value || "2400";
+                
+                // Evitamos el error de "Optional Chaining" que rompía todo en Android
+                const inputProd = document.getElementById('venta-producto');
+                const inputCant = document.getElementById('venta-cantidad');
+                const inputTot = document.getElementById('venta-total');
+                
+                const producto = inputProd ? inputProd.value : "Pan lactal";
+                const cantidad = inputCant ? inputCant.value : "2";
+                const total = inputTot ? inputTot.value : "2400";
 
                 // Crear PDF
                 const { jsPDF } = window.jspdf;
@@ -527,7 +477,6 @@
                 doc.setFontSize(22);
                 doc.setTextColor(10, 61, 46);
                 doc.text("Negocio Alerta PRO", 10, 20);
-
                 doc.setFontSize(12);
                 doc.setTextColor(0, 0, 0);
                 doc.text("Comprobante de Venta", 10, 30);
@@ -541,27 +490,30 @@
                 doc.setTextColor(150, 150, 150);
                 doc.text("¡Gracias por su compra!", 10, 100);
 
-                // Intentar compartir
+                alert("2. PDF creado en memoria. Preparando para compartir..."); // Aviso
+
                 const pdfBlob = doc.output('blob');
                 const file = new File([pdfBlob], 'ticket_venta.pdf', { type: 'application/pdf' });
 
+                // Intentar compartir
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    alert("3. El dispositivo SOPORTA compartir archivos. Abriendo menú..."); // Aviso
                     await navigator.share({
                         files: [file],
                         title: 'Ticket de Venta',
                         text: 'Aquí tienes tu ticket.'
                     });
                 } else {
-                    // Plan B: descargar y abrir WhatsApp
+                    alert("3. El dispositivo NO SOPORTA compartir archivos. Se descargará el PDF y se abrirá WhatsApp."); // Aviso
                     doc.save('ticket_venta.pdf');
-                    setTimeout(() => {
+                    setTimeout(function() {
                         window.open('https://wa.me/?text=Hola, aquí está tu ticket de venta. Te adjunto el PDF que acabo de descargar.', '_blank');
                     }, 500);
                 }
 
             } catch (error) {
+                alert("❌ ERROR: " + error.message); // Si algo falla, te dirá qué es
                 console.error(error);
-                alert("Error al generar PDF: " + error.message);
             }
         }
 
