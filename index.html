@@ -48,7 +48,6 @@ button.danger{background:#fff0f0;color:#a22;border:1px solid #f0caca}
 .field.full{grid-column:1/-1}
 label{font-size:12px;font-weight:750;color:#456a62}
 input,select,textarea{width:100%;min-width:0;padding:11px;border:1px solid #cfe1da;border-radius:10px;background:#fbfefd;color:var(--ink);font:inherit}
-input[type=file]{font-size:13px;padding:9px}
 textarea{min-height:80px}
 .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .empty{padding:18px;text-align:center;color:var(--muted)}
@@ -57,7 +56,6 @@ textarea{min-height:80px}
 .bottom button span{display:block;font-size:19px}
 .bottom button.active{color:#f0d36d}
 .notice{background:#e4f4ed;border-radius:12px;padding:11px;font-size:12px;color:#426d61}
-.hide{display:none!important}
 .file-row{display:grid;gap:8px;margin-top:6px}
 .file-row label.file-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border:1px dashed var(--green);border-radius:11px;background:#e9f4ef;color:var(--green);font-weight:700;cursor:pointer;font-size:14px;text-align:center;width:100%}
 .file-row input[type=file]{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}
@@ -67,12 +65,6 @@ textarea{min-height:80px}
 .modal-box h2{margin:0 0 10px;font-size:18px}
 .ticket pre{white-space:pre-wrap;font:inherit;line-height:1.7;margin:10px 0;overflow-wrap:anywhere}
 #toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);background:#003e36;color:#fff;padding:11px 16px;border-radius:12px;z-index:60;font-size:13px;max-width:90%;text-align:center;border:1px solid var(--gold)}
-@media print{
-  body>*:not(#modal){display:none!important}
-  #modal{position:static;background:#fff;padding:0}
-  .modal-box{border:1px solid #ccc;box-shadow:none}
-  .noprint{display:none!important}
-}
 @media(min-width:650px){.nav{grid-template-columns:repeat(6,1fr)}.stats{gap:14px}.stat{padding:16px}.hero{padding-left:max(16px,calc((100% - 870px)/2));padding-right:max(16px,calc((100% - 870px)/2))}}
 @media(max-width:390px){.brand h1{font-size:19px}.stats{gap:6px}.stat strong{font-size:16px}.stat{padding:9px 7px}.form{grid-template-columns:1fr}.field.full{grid-column:auto}.item{align-items:flex-start;flex-wrap:wrap}}
 </style>
@@ -128,7 +120,7 @@ textarea{min-height:80px}
 (() => {
 'use strict';
 
-const KEY='negocioAlertaPro_v5';
+const KEY='negocioAlertaPro_v6';
 let state=load();
 let page='home';
 let modalText='';
@@ -160,7 +152,7 @@ function load(){
 }
 function save(){
   try{localStorage.setItem(KEY,JSON.stringify(state));render();return true;}
-  catch(e){alert('No hay espacio suficiente para guardar. Probá con fotos más chicas.');return false;}
+  catch(e){alert('No hay espacio suficiente para guardar.');return false;}
 }
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function money(v){return new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:2}).format(Number(v)||0);}
@@ -185,18 +177,48 @@ function openModal(html){
 function closeModal(){document.getElementById('modal')?.remove();}
 
 /* =========================================================
-   WHATSAPP — solo wa.me
+   COMPARTIR — usa navigator.share (menú nativo Android)
+   Sin URLs raras, sin whatsapp://, sin wa.me obligatorio
    ========================================================= */
 function cleanPhone(p){return String(p||'').replace(/\D/g,'');}
-function openWhatsApp(message, phone=''){
-  const number = cleanPhone(phone) || cleanPhone(state.whatsapp);
-  const text = encodeURIComponent(message);
-  copyText(message, true);
+
+async function compartirTexto(mensaje){
+  copyText(mensaje, true);
+
+  // Método 1: menú nativo de Android (muestra WhatsApp, Business, etc)
+  if(navigator.share){
+    try{
+      await navigator.share({text: mensaje});
+      return true;
+    }catch(e){
+      if(e && e.name === 'AbortError') return true;
+      // si falla, seguimos al siguiente método
+    }
+  }
+
+  // Método 2: wa.me (WhatsApp Web)
+  const number = cleanPhone(state.whatsapp);
   const url = number
-    ? `https://wa.me/${number}?text=${text}`
-    : `https://wa.me/?text=${text}`;
+    ? `https://wa.me/${number}?text=${encodeURIComponent(mensaje)}`
+    : `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
   window.location.href = url;
+  return false;
 }
+
+async function compartirArchivo(blob, nombre, mensaje){
+  const file = new File([blob], nombre, {type: blob.type || 'application/octet-stream'});
+
+  if(navigator.canShare && navigator.canShare({files:[file]})){
+    try{
+      await navigator.share({files:[file], text: mensaje, title: nombre});
+      return true;
+    }catch(e){
+      if(e && e.name === 'AbortError') return true;
+    }
+  }
+  return false;
+}
+
 async function copyText(text, silent){
   try{
     if(navigator.clipboard && window.isSecureContext){
@@ -213,17 +235,17 @@ async function copyText(text, silent){
     if(!silent) toast('Copiado al portapapeles');
     return true;
   }catch(e){
-    if(!silent) toast('No se pudo copiar automáticamente');
+    if(!silent) toast('No se pudo copiar');
     return false;
   }
 }
 
 /* =========================================================
-   PDF — generación con jsPDF
+   PDF
    ========================================================= */
 function generarPDF(sale){
   if(!window.jspdf || !window.jspdf.jsPDF){
-    alert('La librería de PDF no se cargó. Necesitás conexión a internet la primera vez.');
+    alert('Necesitás conexión a internet para generar PDF la primera vez.');
     return null;
   }
   const { jsPDF } = window.jspdf;
@@ -231,63 +253,50 @@ function generarPDF(sale){
   const w = doc.internal.pageSize.getWidth();
   let y = 15;
 
-  // Encabezado
   doc.setFontSize(16);
   doc.setFont('helvetica','bold');
   doc.setTextColor(0,107,88);
   doc.text(state.business || 'Mi negocio', w/2, y, {align:'center'});
   y += 7;
-
   doc.setFontSize(9);
   doc.setFont('helvetica','normal');
   doc.setTextColor(120);
   doc.text('COMPROBANTE INTERNO — NO FISCAL', w/2, y, {align:'center'});
   y += 3;
-
   doc.setDrawColor(200);
   doc.line(10, y, w-10, y);
   y += 8;
 
-  // Datos
   doc.setTextColor(30);
   doc.setFontSize(10);
   doc.text('Fecha:', 10, y);
   doc.setFont('helvetica','bold');
   doc.text(String(sale.date||''), 30, y);
   y += 6;
-
   doc.setFont('helvetica','normal');
   doc.text('Cliente:', 10, y);
   doc.setFont('helvetica','bold');
   doc.text(String(sale.client || 'Consumidor final'), 30, y);
   y += 10;
 
-  // Detalle
   doc.setFont('helvetica','bold');
   doc.setFontSize(11);
   doc.text('Detalle', 10, y);
   y += 6;
-
   doc.setFont('helvetica','normal');
   doc.setFontSize(10);
-  const nombre = String(sale.productName || 'Producto');
-  const cant = sale.qty || 1;
-  doc.text(`${nombre}  x${cant}`, 10, y);
+  doc.text(`${String(sale.productName||'Producto')}  x${sale.qty||1}`, 10, y);
   doc.text(`${money(sale.price)} c/u`, w-10, y, {align:'right'});
   y += 8;
-
   doc.setDrawColor(200);
   doc.line(10, y, w-10, y);
   y += 8;
 
-  // Total
   doc.setFont('helvetica','bold');
   doc.setFontSize(14);
   doc.text('TOTAL:', 10, y);
   doc.text(money(sale.total), w-10, y, {align:'right'});
   y += 15;
-
-  // Pie
   doc.setFont('helvetica','normal');
   doc.setFontSize(9);
   doc.setTextColor(120);
@@ -312,27 +321,17 @@ async function descargarBlob(blob, nombre){
   }catch(e){ return false; }
 }
 
-// Compartir PDF por WhatsApp (o cualquier app) usando Web Share API
-async function compartirPDF(blob, nombre, mensaje){
-  const file = new File([blob], nombre, {type:'application/pdf'});
-
-  if(navigator.canShare && navigator.canShare({files:[file]})){
-    try{
-      await navigator.share({
-        files:[file],
-        text: mensaje,
-        title: 'Comprobante'
-      });
-      return true;
-    }catch(e){
-      if(e && e.name === 'AbortError') return true; // el usuario canceló
-    }
-  }
-  return false;
+async function saveFile(name, mime, content){
+  const blob = new Blob([content], {type: mime});
+  const ok = await compartirArchivo(blob, name, '');
+  if(ok) return;
+  const desc = await descargarBlob(blob, name);
+  if(desc) toast('Descarga iniciada');
+  else toast('No se pudo descargar');
 }
 
 /* =========================================================
-   Comprobante: menú con PDF
+   Comprobante
    ========================================================= */
 function receipt(saleId){
   const sale = state.sales.find(s=>s.id===saleId);
@@ -365,57 +364,48 @@ TOTAL: ${money(sale.total)}
       <pre>${esc(modalText)}</pre>
     </div>
     <div class="actions noprint">
-      <button class="wa" data-act="pdf-wa">📄 Enviar PDF por WhatsApp</button>
-      <button data-act="pdf-down">⬇️ Descargar PDF</button>
-      <button class="secondary" data-act="pdf-share">📤 Compartir PDF</button>
-      <button class="secondary" data-act="wa-modal">💬 Enviar texto</button>
-      <button class="secondary" data-act="print-modal">🖨️ Imprimir / PDF del navegador</button>
+      <button class="wa" data-act="share-text">📤 Compartir texto (WhatsApp, etc.)</button>
+      <button data-act="pdf-share">📄 Compartir PDF</button>
+      <button class="secondary" data-act="pdf-down">⬇️ Descargar PDF</button>
+      <button class="secondary" data-act="copy-modal">📋 Copiar texto</button>
       <button class="danger" data-act="close">Cerrar</button>
     </div>`);
 }
 
-async function enviarPDFporWhatsApp(){
+async function compartirTextoComprobante(){
   const sale = state.sales.find(s=>s.id===modalSaleId);
-  if(!sale){ toast('No se encontró la venta'); return; }
+  if(!sale){ toast('Venta no encontrada'); return; }
+  const numero = cleanPhone(modalPhone) || cleanPhone(state.whatsapp);
+  const textoConNumero = numero ? `Para: ${numero}\n\n${modalText}` : modalText;
+  await compartirTexto(textoConNumero);
+}
 
+async function compartirPDFComprobante(){
+  const sale = state.sales.find(s=>s.id===modalSaleId);
+  if(!sale){ toast('Venta no encontrada'); return; }
   const blob = generarPDF(sale);
   if(!blob) return;
-
   const nombre = nombreArchivoPDF(sale);
-
-  // 1) Intento con Web Share (permite adjuntar PDF a WhatsApp)
-  const compartido = await compartirPDF(blob, nombre, modalText);
-  if(compartido) return;
-
-  // 2) Fallback: descargar PDF + abrir WhatsApp con el texto
-  await descargarBlob(blob, nombre);
-  toast('PDF descargado. Ahora elegí el chat y adjuntá el PDF.');
-  setTimeout(()=>openWhatsApp(modalText, modalPhone), 800);
-}
-
-async function descargarPDF(){
-  const sale = state.sales.find(s=>s.id===modalSaleId);
-  if(!sale){ toast('No se encontró la venta'); return; }
-  const blob = generarPDF(sale);
-  if(!blob) return;
-  const ok = await descargarBlob(blob, nombreArchivoPDF(sale));
-  if(ok) toast('PDF descargado correctamente');
-  else toast('No se pudo descargar el PDF');
-}
-
-async function compartirPDFSolo(){
-  const sale = state.sales.find(s=>s.id===modalSaleId);
-  if(!sale){ toast('No se encontró la venta'); return; }
-  const blob = generarPDF(sale);
-  if(!blob) return;
-  const ok = await compartirPDF(blob, nombreArchivoPDF(sale), modalText);
+  const ok = await compartirArchivo(blob, nombre, modalText);
   if(!ok){
-    toast('Tu celular no soporta compartir archivos. Se descargó.');
-    await descargarBlob(blob, nombreArchivoPDF(sale));
+    toast('Tu celu no permite compartir archivos. Se descargó.');
+    await descargarBlob(blob, nombre);
   }
 }
 
-function shareSummary(){
+async function descargarPDFComprobante(){
+  const sale = state.sales.find(s=>s.id===modalSaleId);
+  if(!sale){ toast('Venta no encontrada'); return; }
+  const blob = generarPDF(sale);
+  if(!blob) return;
+  const ok = await descargarBlob(blob, nombreArchivoPDF(sale));
+  if(ok) toast('PDF descargado');
+}
+
+/* =========================================================
+   Resumen
+   ========================================================= */
+async function shareSummary(){
   const total = state.sales.reduce((s,x)=>s+Number(x.total||0),0);
   const msg =
 `Resumen de ${state.business}
@@ -423,57 +413,12 @@ Ventas registradas: ${state.sales.length}
 Total vendido: ${money(total)}
 Productos: ${state.products.length}
 Stock bajo: ${state.products.filter(low).length}`;
-  openWhatsApp(msg);
+  await compartirTexto(msg);
 }
 
 /* =========================================================
-   Descargas genéricas
+   Navegación
    ========================================================= */
-async function saveFile(name, mime, content){
-  const blob = new Blob([content], {type: mime});
-  try{
-    const file = new File([blob], name, {type: mime});
-    if(navigator.canShare && navigator.canShare({files:[file]})){
-      await navigator.share({files:[file], title:name});
-      return;
-    }
-  }catch(e){ if(e && e.name==='AbortError') return; }
-
-  const ok = await descargarBlob(blob, name);
-  if(ok) toast('Descarga iniciada: ' + name);
-  else toast('No se pudo descargar');
-}
-
-function exportData(){
-  saveFile('respaldo-negocio-alerta-pro.json','application/json',JSON.stringify(state,null,2));
-}
-function csvCell(v){const s=String(v??'');return /[",\n;]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
-function exportSalesCSV(){
-  const rows=[['Fecha','Producto','Cantidad','Precio unitario','Total','Ganancia','Cliente']];
-  state.sales.forEach(s=>rows.push([s.date,s.productName,s.qty,s.price,s.total,s.profit??'',s.client||'']));
-  saveFile('ventas-negocio-alerta-pro.csv','text/csv','\uFEFF'+rows.map(r=>r.map(csvCell).join(',')).join('\n'));
-}
-function importFromText(text){
-  try{
-    const imported = JSON.parse(text);
-    if(!imported || !Array.isArray(imported.products) || !Array.isArray(imported.sales)){
-      throw new Error('Formato inválido');
-    }
-    if(confirm('¿Reemplazar los datos actuales con este respaldo?')){
-      state = {...defaultState(), ...imported,
-        products: imported.products||[],
-        sales: imported.sales||[],
-        orders: imported.orders||[],
-        clients: imported.clients||[]};
-      closeModal();
-      if(save()) alert('Respaldo importado correctamente.');
-    }
-  }catch(e){
-    alert('El archivo no parece ser un respaldo válido de Negocio Alerta PRO.');
-  }
-}
-
-/* -------- Navegación -------- */
 function setPage(next){
   page = next;
   document.querySelectorAll('[data-page]').forEach(b=>{
@@ -486,7 +431,7 @@ function card(title, body){ return `<section class="card"><h2>${title}</h2>${bod
 function list(items, fn){
   return items.length
     ? `<div class="list">${items.map(fn).join('')}</div>`
-    : '<div class="empty">Todavía no hay registros. Podés agregar el primero.</div>';
+    : '<div class="empty">Todavía no hay registros.</div>';
 }
 function imageHTML(p){
   return p.image
@@ -503,7 +448,7 @@ function renderHeader(){
 }
 
 /* =========================================================
-   Imágenes (solo galería, sin cámara)
+   Imágenes (solo galería)
    ========================================================= */
 function filePickerHTML(idBase, label){
   return `
@@ -539,10 +484,8 @@ function attachImageInputs(){
 function resizeImage(file, callback){
   if(!file || !file.type.startsWith('image/')){ alert('Elegí una imagen válida.'); return; }
   const reader = new FileReader();
-  reader.onerror = ()=>alert('No se pudo leer el archivo.');
   reader.onload = ev=>{
     const img = new Image();
-    img.onerror = ()=>alert('No se pudo abrir la imagen.');
     img.onload = ()=>{
       const max = 700;
       const ratio = Math.min(1, max / Math.max(img.width, img.height));
@@ -550,9 +493,7 @@ function resizeImage(file, callback){
       const h = Math.max(1, Math.round(img.height * ratio));
       const c = document.createElement('canvas');
       c.width = w; c.height = h;
-      const ctx = c.getContext('2d');
-      if(!ctx){ alert('No se pudo procesar la imagen.'); return; }
-      ctx.drawImage(img, 0, 0, w, h);
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
       callback(c.toDataURL('image/jpeg', 0.78));
     };
     img.src = ev.target.result;
@@ -590,7 +531,7 @@ function render(){
           ...state.orders.slice(-2).reverse().map(o=>({label:'Pedido', detail:o.client||'Cliente', value:o.status||'Pendiente'}))
         ], x=>`<div class="item"><div><strong>${esc(x.label)}</strong><small>${esc(x.detail)}</small></div><b>${esc(x.value)}</b></div>`)
       ) +
-      '<div class="notice">📄 Los comprobantes se generan como PDF listos para enviar por WhatsApp.</div>';
+      '<div class="notice">📄 Los comprobantes se comparten como PDF o texto con el menú nativo del celular.</div>';
   }
 
   if(page==='products'){
@@ -627,7 +568,7 @@ function render(){
             <div class="product-info">${imageHTML(p)}<div>
               <strong>${esc(p.name)}</strong>
               <small>Costo: ${money(p.cost)} · Venta: ${money(p.price)}</small>
-              <small>Ganancia/unidad: ${money(profit(p))} · Stock: ${p.stock}${low(p)?' · ⚠️ Bajo':''}</small>
+              <small>Ganancia: ${money(profit(p))} · Stock: ${p.stock}${low(p)?' · ⚠️ Bajo':''}</small>
             </div></div>
             <button class="danger" data-del-product="${p.id}">Eliminar</button>
           </div>`));
@@ -639,7 +580,7 @@ function render(){
         <form id="saleForm" class="form">
           <div class="field full">
             <label>Producto</label>
-            <select name="product" id="saleProduct" required>
+            <select name="product" required>
               <option value="">Seleccioná un producto</option>
               ${state.products.map(p=>`<option value="${p.id}">${esc(p.name)} — ${money(p.price)} — stock ${p.stock}</option>`).join('')}
             </select>
@@ -663,7 +604,7 @@ function render(){
             </div>
             <div style="text-align:right">
               <b>${money(s.total)}</b><br>
-              <button class="secondary" data-receipt="${s.id}" style="margin-top:6px">Comprobante PDF</button>
+              <button class="secondary" data-receipt="${s.id}" style="margin-top:6px">Comprobante</button>
             </div>
           </div>`));
   }
@@ -686,10 +627,10 @@ function render(){
           <div class="item">
             <div><strong>${esc(o.client)} — ${esc(o.detail)}</strong><small>${money(o.total)} · ${esc(o.date)}</small></div>
             <div class="actions" style="margin:0">
-              <select data-order-status="${o.id}" aria-label="Estado del pedido">
+              <select data-order-status="${o.id}">
                 ${['Pendiente','Preparando','Entregado','Cancelado'].map(s=>`<option ${o.status===s?'selected':''}>${s}</option>`).join('')}
               </select>
-              <button class="wa" data-order-wa="${o.id}">WhatsApp</button>
+              <button class="wa" data-order-share="${o.id}">Compartir</button>
             </div>
           </div>`));
   }
@@ -709,7 +650,7 @@ function render(){
           <div class="item">
             <div><strong>${esc(c.name)}</strong><small>${esc(c.phone||'Sin teléfono')}</small>${c.notes?`<small>${esc(c.notes)}</small>`:''}</div>
             <div class="actions" style="margin:0">
-              ${c.phone?`<button class="wa" data-client-whatsapp="${c.id}">WhatsApp</button>`:''}
+              ${c.phone?`<button class="wa" data-client-share="${c.id}">Compartir</button>`:''}
               <button class="danger" data-del-client="${c.id}">Eliminar</button>
             </div>
           </div>`));
@@ -725,41 +666,35 @@ function render(){
           </div>
           <div class="field full">
             <label>Tu nombre</label>
-            <input name="owner" value="${esc(state.owner)}" placeholder="Cómo querés que te saludemos">
+            <input name="owner" value="${esc(state.owner)}">
           </div>
           <div class="field full">
-            <label>WhatsApp predeterminado (con código de país)</label>
+            <label>WhatsApp predeterminado</label>
             <input name="whatsapp" value="${esc(state.whatsapp||'')}" inputmode="tel" placeholder="549...">
-            <small class="muted">Solo números, con código de país. Argentina: 54 + 9 + área + número. Ej: 5493755222727</small>
+            <small class="muted">Solo números con código de país. Ej: 5493755222727</small>
           </div>
           <div class="field full">
-            <label>Logo del negocio (opcional)</label>
+            <label>Logo del negocio</label>
             ${filePickerHTML('logoImg','Logo')}
             <input type="hidden" name="logoData" id="logoImg_data">
-            <div id="logoImg_preview">${state.logo?`<img class="logo-preview" src="${state.logo}" alt="Logo">`:'<span class="muted">Todavía no hay logo cargado.</span>'}</div>
+            <div id="logoImg_preview">${state.logo?`<img class="logo-preview" src="${state.logo}" alt="Logo">`:'<span class="muted">Sin logo cargado.</span>'}</div>
           </div>
           <div class="field full"><button>Guardar ajustes</button></div>
         </form>
       `) +
       card('💾 Copia de seguridad', `
-        <p class="muted">Descargá o restaurá todos los datos.</p>
         <div class="actions">
           <button id="export">⬇️ Descargar respaldo</button>
           <button class="secondary" id="importBtn">⬆️ Subir respaldo</button>
           <input id="importFile" type="file" accept=".json,application/json,text/plain" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none">
         </div>
         <div class="actions">
-          <button class="secondary" id="copyBackup">📋 Copiar respaldo</button>
-          <button class="secondary" id="pasteBackup">📥 Pegar respaldo</button>
-        </div>
-        <div class="actions">
           <button class="secondary" id="exportCSV">📊 Descargar ventas (CSV)</button>
-          <button class="wa" id="shareSales">💬 Resumen por WhatsApp</button>
+          <button class="wa" id="shareSales">📤 Compartir resumen</button>
         </div>
       `) +
-      card('🗑️ Borrar datos locales', `
-        <p class="muted">Esto elimina los registros de esta versión y no se puede deshacer.</p>
-        <button class="danger" id="clearAll">Borrar datos de esta versión</button>
+      card('🗑️ Borrar datos', `
+        <button class="danger" id="clearAll">Borrar datos locales</button>
       `);
   }
 
@@ -769,20 +704,17 @@ function render(){
 /* =========================================================
    EVENTOS
    ========================================================= */
-document.addEventListener('click', event=>{
+document.addEventListener('click', async event=>{
   const target = event.target;
 
   const act = target.closest('[data-act]');
   if(act){
     const a = act.dataset.act;
     if(a==='close') closeModal();
-    if(a==='pdf-wa') enviarPDFporWhatsApp();
-    if(a==='pdf-down') descargarPDF();
-    if(a==='pdf-share') compartirPDFSolo();
-    if(a==='wa-modal') openWhatsApp(modalText, modalPhone);
-    if(a==='print-modal') window.print();
-    if(a==='copy-fallback'){ const t = document.getElementById('fallbackText'); if(t) copyText(t.value); }
-    if(a==='import-pasted'){ const t = document.getElementById('pasteArea'); if(t && t.value.trim()) importFromText(t.value); else toast('Pegá primero el contenido'); }
+    if(a==='share-text') await compartirTextoComprobante();
+    if(a==='pdf-share') await compartirPDFComprobante();
+    if(a==='pdf-down') await descargarPDFComprobante();
+    if(a==='copy-modal') copyText(modalText);
     return;
   }
 
@@ -811,62 +743,54 @@ document.addEventListener('click', event=>{
   const receiptButton = target.closest('[data-receipt]');
   if(receiptButton){ receipt(receiptButton.dataset.receipt); return; }
 
-  const clientButton = target.closest('[data-client-whatsapp]');
-  if(clientButton){
-    const client = state.clients.find(c=>c.id === clientButton.dataset.clientWhatsapp);
+  const clientShare = target.closest('[data-client-share]');
+  if(clientShare){
+    const client = state.clients.find(c=>c.id === clientShare.dataset.clientShare);
     if(client){
-      const phone = cleanPhone(client.phone);
-      if(!phone){ alert('Este cliente no tiene WhatsApp registrado.'); return; }
-      openWhatsApp(`Hola ${client.name}, te contactamos de ${state.business}.`, phone);
+      await compartirTexto(`Hola ${client.name}, te contactamos de ${state.business}.`);
     }
     return;
   }
 
-  const orderWa = target.closest('[data-order-wa]');
-  if(orderWa){
-    const o = state.orders.find(x=>x.id === orderWa.dataset.orderWa);
+  const orderShare = target.closest('[data-order-share]');
+  if(orderShare){
+    const o = state.orders.find(x=>x.id === orderShare.dataset.orderShare);
     if(o){
-      const cl = state.clients.find(c=>c.name.trim().toLowerCase() === String(o.client||'').trim().toLowerCase());
-      openWhatsApp(
+      await compartirTexto(
 `Hola ${o.client}, tu pedido en ${state.business}:
 ${o.detail}
 Total: ${money(o.total)}
-Estado: ${o.status}`, cl ? cl.phone : '');
+Estado: ${o.status}`);
     }
     return;
   }
 
-  if(target.closest('#export')){ exportData(); return; }
-  if(target.closest('#exportCSV')){
-    if(!state.sales.length){ alert('Todavía no hay ventas para exportar.'); return; }
-    exportSalesCSV(); return;
+  if(target.closest('#export')){
+    await saveFile('respaldo-negocio-alerta-pro.json','application/json',JSON.stringify(state,null,2));
+    return;
   }
-  if(target.closest('#copyBackup')){ copyText(JSON.stringify(state,null,2)); return; }
-  if(target.closest('#pasteBackup')){
-    openModal(`
-      <h2>Pegar respaldo</h2>
-      <p class="muted">Pegá el contenido completo del archivo (JSON).</p>
-      <textarea id="pasteArea" style="min-height:180px" placeholder='{"business": ...}'></textarea>
-      <div class="actions">
-        <button data-act="import-pasted">Importar</button>
-        <button class="secondary" data-act="close">Cancelar</button>
-      </div>`);
+  if(target.closest('#exportCSV')){
+    if(!state.sales.length){ alert('Todavía no hay ventas.'); return; }
+    const rows=[['Fecha','Producto','Cantidad','Precio unitario','Total','Ganancia','Cliente']];
+    state.sales.forEach(s=>rows.push([s.date,s.productName,s.qty,s.price,s.total,s.profit??'',s.client||'']));
+    const csv='\uFEFF'+rows.map(r=>r.map(v=>{const s=String(v??'');return /[",\n;]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}).join(',')).join('\n');
+    await saveFile('ventas-negocio-alerta-pro.csv','text/csv',csv);
     return;
   }
   if(target.closest('#importBtn')){
     document.getElementById('importFile')?.click();
     return;
   }
-  if(target.closest('#shareSales')){ shareSummary(); return; }
+  if(target.closest('#shareSales')){ await shareSummary(); return; }
   if(target.closest('#clearAll')){
-    if(confirm('¿Seguro? Se borrarán todos los datos locales. Descargá un respaldo si lo necesitás.')){
+    if(confirm('¿Seguro? Se borrarán todos los datos.')){
       state = defaultState();
       save();
     }
     return;
   }
   if(target.closest('#logout')){
-    alert('Esta versión guarda datos localmente.');
+    alert('Los datos se guardan localmente.');
   }
 });
 
@@ -886,7 +810,7 @@ document.addEventListener('submit', event=>{
       stock: Number(data.stock||0),
       min: Number(data.min||0)
     });
-    if(save()) alert('Producto guardado correctamente.');
+    if(save()) alert('Producto guardado.');
     return;
   }
 
@@ -894,8 +818,8 @@ document.addEventListener('submit', event=>{
     const product = state.products.find(p=>p.id === data.product);
     const qty = Number(data.qty||0);
     if(!product){ alert('Seleccioná un producto.'); return; }
-    if(qty<=0){ alert('La cantidad debe ser mayor que cero.'); return; }
-    if(qty > Number(product.stock)){ alert('No hay suficiente stock. Disponible: ' + product.stock); return; }
+    if(qty<=0){ alert('Cantidad inválida.'); return; }
+    if(qty > Number(product.stock)){ alert('Stock insuficiente. Disponible: ' + product.stock); return; }
     product.stock -= qty;
     state.sales.push({
       id: uid(),
@@ -909,7 +833,7 @@ document.addEventListener('submit', event=>{
       client: String(data.client||'').trim(),
       date: new Date().toLocaleString('es-AR')
     });
-    if(save()) alert('Venta registrada correctamente.');
+    if(save()) alert('Venta registrada.');
     return;
   }
 
@@ -942,7 +866,7 @@ document.addEventListener('submit', event=>{
     state.owner = String(data.owner||'').trim();
     state.whatsapp = cleanPhone(data.whatsapp);
     if(data.logoData) state.logo = data.logoData;
-    if(save()) alert('Ajustes guardados correctamente.');
+    if(save()) alert('Ajustes guardados.');
   }
 });
 
@@ -956,8 +880,21 @@ document.addEventListener('change', event=>{
     const file = target.files && target.files[0];
     if(!file) return;
     const reader = new FileReader();
-    reader.onerror = ()=>alert('No se pudo leer el archivo seleccionado.');
-    reader.onload = ()=>{ importFromText(String(reader.result||'')); target.value = ''; };
+    reader.onload = ()=>{
+      try{
+        const imported = JSON.parse(String(reader.result||''));
+        if(imported && Array.isArray(imported.products)){
+          if(confirm('¿Reemplazar datos con este respaldo?')){
+            state = {...defaultState(), ...imported};
+            save();
+            alert('Respaldo importado.');
+          }
+        }else{
+          alert('Archivo inválido.');
+        }
+      }catch(e){ alert('Archivo inválido.'); }
+      target.value = '';
+    };
     reader.readAsText(file);
   }
 });
