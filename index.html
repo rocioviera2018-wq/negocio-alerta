@@ -139,7 +139,16 @@ let modalText='';
 let modalPhone='';
 
 function defaultState(){
-  return{business:'Mi negocio',owner:'',logo:'',whatsapp:'',products:[],sales:[],orders:[],clients:[]};
+  return{
+    business:'Mi negocio',
+    owner:'',
+    logo:'',
+    whatsapp:'5493755223737',   // <-- TU NÚMERO PRECARGADO
+    products:[],
+    sales:[],
+    orders:[],
+    clients:[]
+  };
 }
 function load(){
   try{
@@ -180,7 +189,7 @@ function openModal(html){
 function closeModal(){document.getElementById('modal')?.remove();}
 
 /* =========================================================
-   WHATSAPP — SOLO HTTPS, nunca whatsapp://
+   WHATSAPP — SOLO HTTPS
    ========================================================= */
 function cleanPhone(p){return String(p||'').replace(/\D/g,'');}
 
@@ -188,15 +197,13 @@ function openWhatsApp(message, phone=''){
   const number = cleanPhone(phone) || cleanPhone(state.whatsapp);
   const text = encodeURIComponent(message);
 
-  // Guardamos el texto por si el usuario tiene que pegarlo a mano
+  // Copiamos por las dudas
   copyText(message, true);
 
-  // URL SIEMPRE HTTPS. wa.me redirige a la app si está instalada.
-  const url = number
-    ? `https://wa.me/${number}?text=${text}`
-    : `https://wa.me/?text=${text}`;
+  // Si no hay número, usar el tuyo por defecto
+  const finalNumber = number || '5493755223737';
 
-  // location.href es lo más confiable en móvil
+  const url = `https://wa.me/${finalNumber}?text=${text}`;
   window.location.href = url;
 }
 
