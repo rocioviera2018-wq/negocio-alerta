@@ -3,194 +3,318 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Ventas - Pro</title>
+    <title>Negocio Alerta PRO</title>
+    <!-- Iconos FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Librería para generar PDFs -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        /* Estilos Modernos */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-        
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 20px; 
-            margin: 0; 
-            min-height: 100vh;
+        :root {
+            --primary-dark: #0a3d2e;
+            --primary-mid: #16634a;
+            --primary-light: #e8f5f1;
+            --gold: #d4af37;
+            --bg-color: #f4f7f6;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --danger: #e74c3c;
         }
-        .header { text-align: center; margin-bottom: 20px; }
-        .header h2 { color: #2c3e50; margin: 0; font-weight: 700; }
-        
-        .contenedor { 
-            background: white; 
-            padding: 20px; 
-            border-radius: 16px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08); 
-            margin-bottom: 20px; 
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body { background-color: var(--bg-color); padding-bottom: 80px; color: var(--text-dark); }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-mid));
+            color: white;
+            padding: 20px;
+            border-bottom-left-radius: 25px;
+            border-bottom-right-radius: 25px;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .logo-area { display: flex; align-items: center; gap: 10px; }
+        .logo-icon { background: white; color: var(--primary-dark); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; border: 2px solid var(--gold); }
+        .header-title h1 { font-size: 20px; margin: 0; }
+        .header-title span { color: var(--gold); font-size: 12px; font-weight: bold; }
+        .header-icons { display: flex; gap: 15px; font-size: 20px; }
         
-        h3 { color: #34495e; margin-top: 0; font-size: 18px; }
-        
-        input { 
-            width: 100%; 
-            padding: 12px; 
-            margin: 8px 0; 
-            border: 2px solid #e0e6ed; 
-            border-radius: 10px; 
-            font-size: 16px; 
-            box-sizing: border-box;
-            transition: border-color 0.3s;
+        .welcome-box {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(5px);
         }
-        input:focus { border-color: #3498db; outline: none; }
-        
-        button { 
-            width: 100%; 
-            padding: 14px; 
-            margin-top: 10px; 
-            border: none; 
-            border-radius: 10px; 
-            font-size: 16px; 
-            font-weight: 600; 
-            cursor: pointer; 
-            transition: transform 0.1s, opacity 0.3s;
-        }
-        button:active { transform: scale(0.98); }
-        
-        .btn-agregar { background: #3498db; color: white; }
-        .btn-agregar:hover { background: #2980b9; }
-        
-        .btn-pdf { background: #25D366; color: white; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-pdf:hover { background: #1ebe5d; }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ecf0f1; font-size: 14px; }
-        th { background-color: #f8f9fa; color: #7f8c8d; font-weight: 600; text-transform: uppercase; font-size: 12px; }
-        tr:hover { background-color: #f9fbff; }
-        
-        .empty-msg { text-align: center; color: #bdc3c7; font-style: italic; padding: 20px; }
+        .welcome-text h3 { font-size: 14px; margin-bottom: 5px; }
+        .welcome-text p { font-size: 12px; opacity: 0.8; }
+        .btn-logout { background: transparent; border: 1px solid rgba(255,255,255,0.5); color: white; padding: 8px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; }
+
+        /* Contenedor principal */
+        .container { padding: 15px; max-width: 600px; margin: 0 auto; }
+
+        /* Tarjetas de Resumen */
+        .summary-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: -20px; margin-bottom: 20px; }
+        .card-stat { background: white; padding: 12px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eee; }
+        .card-stat .icon { font-size: 18px; margin-bottom: 5px; }
+        .card-stat.products .icon { color: var(--primary-mid); }
+        .card-stat.stock .icon { color: var(--danger); }
+        .card-stat.earnings .icon { color: var(--gold); }
+        .card-stat h4 { font-size: 12px; color: var(--text-light); margin-bottom: 5px; font-weight: normal; }
+        .card-stat p { font-size: 16px; font-weight: bold; margin: 0; }
+
+        /* Menú Grid */
+        .menu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+        .menu-item { background: white; padding: 15px 5px; border-radius: 15px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); cursor: pointer; border: 1px solid #eee; transition: 0.3s; }
+        .menu-item:active { transform: scale(0.95); }
+        .menu-item.active { background: var(--primary-dark); color: white; border-color: var(--primary-dark); }
+        .menu-item i { font-size: 20px; margin-bottom: 8px; color: var(--primary-mid); }
+        .menu-item.active i { color: var(--gold); }
+        .menu-item span { font-size: 11px; font-weight: 600; display: block; }
+
+        /* Secciones */
+        .section-card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 15px; border: 1px solid #eee; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .section-header h3 { font-size: 16px; margin: 0; color: var(--primary-dark); }
+        .section-header a { font-size: 12px; color: var(--primary-mid); text-decoration: none; font-weight: bold; }
+
+        /* Alertas */
+        .alert-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+        .alert-item:last-child { border-bottom: none; }
+        .alert-img { width: 40px; height: 40px; border-radius: 8px; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .alert-info { flex: 1; }
+        .alert-info h4 { font-size: 14px; margin: 0 0 3px 0; }
+        .alert-info p { font-size: 12px; color: var(--danger); margin: 0; }
+        .alert-info span { font-size: 10px; color: var(--text-light); }
+
+        /* Movimientos */
+        .mov-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+        .mov-item:last-child { border-bottom: none; }
+        .mov-left { display: flex; align-items: center; gap: 10px; }
+        .mov-icon { width: 30px; height: 30px; border-radius: 50%; background: var(--primary-light); color: var(--primary-mid); display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        .mov-text h4 { font-size: 13px; margin: 0 0 3px 0; }
+        .mov-text span { font-size: 11px; color: var(--text-light); }
+        .mov-right { text-align: right; }
+        .mov-right p { font-size: 13px; font-weight: bold; margin: 0; color: var(--primary-dark); }
+
+        /* Botón PDF */
+        .btn-pdf { width: 100%; padding: 15px; background: #25D366; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
+        .btn-pdf:active { transform: scale(0.98); }
+
+        /* Menú Inferior */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 10px 0; box-shadow: 0 -4px 15px rgba(0,0,0,0.05); border-top: 1px solid #eee; z-index: 100; }
+        .nav-item { text-align: center; color: var(--text-light); font-size: 11px; cursor: pointer; }
+        .nav-item i { font-size: 18px; display: block; margin-bottom: 5px; }
+        .nav-item.active { color: var(--primary-dark); font-weight: bold; }
+        .nav-item.active i { color: var(--gold); }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h2>📋 Registro de Ventas</h2>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-top">
+            <div class="logo-area">
+                <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+                <div class="header-title">
+                    <h1>Negocio Alerta <span>PRO</span></h1>
+                    <p style="font-size: 11px; opacity: 0.8;">Tu negocio organizado, desde el celular.</p>
+                </div>
+            </div>
+            <div class="header-icons">
+                <i class="fas fa-bell"></i>
+                <i class="fas fa-user-circle"></i>
+            </div>
+        </div>
+        <div class="welcome-box">
+            <div class="welcome-text">
+                <h3>Bienvenido/a</h3>
+                <p>Tu negocio, siempre en control.</p>
+            </div>
+            <button class="btn-logout">Cerrar sesión</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Tarjetas Resumen -->
+        <div class="summary-cards">
+            <div class="card-stat products">
+                <i class="fas fa-box icon"></i>
+                <h4>Productos</h4>
+                <p>12</p>
+            </div>
+            <div class="card-stat stock">
+                <i class="fas fa-exclamation-triangle icon"></i>
+                <h4>Stock bajo</h4>
+                <p style="color: var(--danger);">3</p>
+            </div>
+            <div class="card-stat earnings">
+                <i class="fas fa-chart-line icon"></i>
+                <h4>Ganancia</h4>
+                <p>$ 18.750</p>
+            </div>
+        </div>
+
+        <!-- Menú Grid -->
+        <div class="menu-grid">
+            <div class="menu-item active"><i class="fas fa-home"></i><span>Inicio</span></div>
+            <div class="menu-item"><i class="fas fa-shopping-bag"></i><span>Productos</span></div>
+            <div class="menu-item"><i class="fas fa-credit-card"></i><span>Ventas</span></div>
+            <div class="menu-item"><i class="fas fa-box-open"></i><span>Pedidos</span></div>
+            <div class="menu-item"><i class="fas fa-users"></i><span>Clientes</span></div>
+            <div class="menu-item"><i class="fas fa-chart-bar"></i><span>Reportes</span></div>
+            <div class="menu-item"><i class="fas fa-cog"></i><span>Ajustes</span></div>
+        </div>
+
+        <!-- Alerta de Stock -->
+        <div class="section-card">
+            <div class="section-header">
+                <h3><i class="fas fa-bell" style="color: var(--gold); margin-right: 5px;"></i> Atención para hoy</h3>
+                <a href="#">Ver todos ></a>
+            </div>
+            <div class="alert-item">
+                <div class="alert-img">🍞</div>
+                <div class="alert-info">
+                    <h4>Pan lactal</h4>
+                    <p>Quedan: 2 <span style="color: var(--text-light);">(Mínimo: 5)</span></p>
+                </div>
+            </div>
+            <div class="alert-item">
+                <div class="alert-img">🧃</div>
+                <div class="alert-info">
+                    <h4>Jugo naranja</h4>
+                    <p>Quedan: 1 <span style="color: var(--text-light);">(Mínimo: 3)</span></p>
+                </div>
+            </div>
+            <div class="alert-item">
+                <div class="alert-img">🍟</div>
+                <div class="alert-info">
+                    <h4>Papas fritas</h4>
+                    <p>Quedan: 2 <span style="color: var(--text-light);">(Mínimo: 5)</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Últimos Movimientos -->
+        <div class="section-card">
+            <div class="section-header">
+                <h3><i class="fas fa-clock" style="color: var(--primary-mid); margin-right: 5px;"></i> Últimos movimientos</h3>
+                <a href="#">Ver todos ></a>
+            </div>
+            <div class="mov-item">
+                <div class="mov-left">
+                    <div class="mov-icon"><i class="fas fa-plus"></i></div>
+                    <div class="mov-text">
+                        <h4>Venta registrada - Pan lactal x2</h4>
+                        <span>17:32</span>
+                    </div>
+                </div>
+                <div class="mov-right">
+                    <p>$ 2.400</p>
+                </div>
+            </div>
+            <div class="mov-item">
+                <div class="mov-left">
+                    <div class="mov-icon" style="background: #fdf2e9; color: #e67e22;"><i class="fas fa-shopping-cart"></i></div>
+                    <div class="mov-text">
+                        <h4>Pedido - Cliente: Ana</h4>
+                        <span>16:45</span>
+                    </div>
+                </div>
+                <div class="mov-right">
+                    <p style="color: #e67e22; font-size: 11px; background: #fdf2e9; padding: 2px 6px; border-radius: 5px;">Pendiente</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botón de PDF -->
+        <div class="section-card">
+            <button class="btn-pdf" onclick="generarYCompartirPDF()">
+                <i class="fas fa-file-pdf"></i> Generar Ticket PDF (Venta Pan lactal)
+            </button>
+        </div>
     </div>
 
-    <!-- Formulario -->
-    <div class="contenedor">
-        <h3>Agregar Venta</h3>
-        <input type="text" id="producto" placeholder="Nombre del producto">
-        <input type="number" id="cantidad" placeholder="Cantidad">
-        <input type="number" id="total" placeholder="Total ($)">
-        <button class="btn-agregar" onclick="agregarVenta()">➕ Agregar a la lista</button>
-    </div>
-
-    <!-- Tabla de Ventas -->
-    <div class="contenedor">
-        <h3>Ventas del día</h3>
-        <table id="tablaVentas">
-            <thead>
-                <tr>
-                    <th>Producto</th>
-                    <th>Cant.</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody id="cuerpoTabla">
-                <tr><td colspan="3" class="empty-msg">No hay ventas registradas aún</td></tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Botón PDF -->
-    <div class="contenedor">
-        <button class="btn-pdf" onclick="generarYCompartirPDF()">📄 Generar PDF y Enviar por WhatsApp</button>
-    </div>
+    <!-- Menú Inferior -->
+    <nav class="bottom-nav">
+        <div class="nav-item active"><i class="fas fa-home"></i>Inicio</div>
+        <div class="nav-item"><i class="fas fa-shopping-bag"></i>Productos</div>
+        <div class="nav-item"><i class="fas fa-credit-card"></i>Ventas</div>
+        <div class="nav-item"><i class="fas fa-box-open"></i>Pedidos</div>
+        <div class="nav-item"><i class="fas fa-users"></i>Clientes</div>
+        <div class="nav-item"><i class="fas fa-cog"></i>Ajustes</div>
+    </nav>
 
     <script>
-        let ventas = [];
-
-        function agregarVenta() {
-            const producto = document.getElementById('producto').value;
-            const cantidad = document.getElementById('cantidad').value;
-            const total = document.getElementById('total').value;
-
-            if (producto === "" || cantidad === "" || total === "") {
-                alert("Por favor, llena todos los campos");
-                return;
-            }
-
-            const nuevaVenta = { producto, cantidad, total };
-            ventas.push(nuevaVenta);
-            renderizarTabla();
-
-            document.getElementById('producto').value = "";
-            document.getElementById('cantidad').value = "";
-            document.getElementById('total').value = "";
-        }
-
-        function renderizarTabla() {
-            const tbody = document.getElementById('cuerpoTabla');
-            tbody.innerHTML = ""; // Limpiar tabla
-
-            if (ventas.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="3" class="empty-msg">No hay ventas registradas aún</td></tr>';
-                return;
-            }
-
-            ventas.forEach(venta => {
-                const fila = document.createElement('tr');
-                fila.innerHTML = `<td>${venta.producto}</td><td>${venta.cantidad}</td><td>$${venta.total}</td>`;
-                tbody.appendChild(fila);
-            });
-        }
-
+        // ==========================================
+        // LÓGICA DE PDF Y WHATSAPP
+        // ==========================================
+        
         async function generarYCompartirPDF() {
-            if (ventas.length === 0) {
-                alert("No hay ventas para generar el PDF");
-                return;
-            }
+            // 1. DATOS DE LA VENTA (Aquí conectarías con Supabase para traer los datos reales)
+            // TODO: CONECTAR A SUPABASE (Reemplazar estos datos por los de tu base de datos)
+            const cliente = "Cliente General";
+            const producto = "Pan lactal";
+            const cantidad = 2;
+            const total = "$ 2.400";
+            const fecha = new Date().toLocaleDateString();
 
+            // 2. CREAR EL PDF
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
-            doc.setFontSize(18);
-            doc.text("Recibo de Ventas", 10, 20);
+            // Diseño del ticket
+            doc.setFontSize(22);
+            doc.setTextColor(10, 61, 46); // Verde oscuro
+            doc.text("Negocio Alerta PRO", 10, 20);
+            
             doc.setFontSize(12);
-            doc.text("Fecha: " + new Date().toLocaleDateString(), 10, 30);
+            doc.setTextColor(0, 0, 0);
+            doc.text("Comprobante de Venta Interno", 10, 30);
+            doc.text("Fecha: " + fecha, 10, 40);
+            doc.text("Cliente: " + cliente, 10, 50);
+            
+            doc.line(10, 55, 200, 55); // Línea divisoria
 
-            let y = 45;
-            doc.text("Producto", 10, y);
-            doc.text("Cant.", 100, y);
-            doc.text("Total", 150, y);
-            y += 10;
+            doc.text("Producto", 10, 65);
+            doc.text("Cant.", 100, 65);
+            doc.text("Total", 150, 65);
+            
+            doc.text(producto, 10, 75);
+            doc.text(cantidad.toString(), 100, 75);
+            doc.text(total, 150, 75);
 
-            ventas.forEach(venta => {
-                doc.text(venta.producto, 10, y);
-                doc.text(venta.cantidad.toString(), 100, y);
-                doc.text("$" + venta.total, 150, y);
-                y += 10;
-            });
+            doc.line(10, 85, 200, 85);
+            doc.setFontSize(14);
+            doc.text("TOTAL: " + total, 150, 95);
 
+            doc.setFontSize(10);
+            doc.setTextColor(150, 150, 150);
+            doc.text("¡Gracias por su compra!", 10, 110);
+
+            // 3. COMPARTIR POR WHATSAPP
             const pdfBlob = doc.output('blob');
-            const file = new File([pdfBlob], 'recibo_ventas.pdf', { type: 'application/pdf' });
+            const file = new File([pdfBlob], 'ticket_venta.pdf', { type: 'application/pdf' });
 
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 try {
                     await navigator.share({
                         files: [file],
-                        title: 'Recibo de Ventas',
-                        text: 'Aquí tienes el recibo de las ventas.'
+                        title: 'Ticket de Venta',
+                        text: 'Aquí tienes tu ticket de compra.'
                     });
                 } catch (error) {
                     console.error('Error al compartir:', error);
                 }
             } else {
-                alert("Tu navegador no soporta compartir archivos. Se descargará el PDF y se abrirá WhatsApp.");
-                doc.save('recibo_ventas.pdf');
-                window.open(`https://wa.me/?text=Hola, aquí está el recibo de ventas. Te adjunto el PDF.`, '_blank');
+                // Plan B: Si la app no soporta compartir archivos, descarga el PDF y abre WhatsApp
+                alert("Tu app no soporta compartir archivos directamente. Se descargará el PDF y se abrirá WhatsApp.");
+                doc.save('ticket_venta.pdf');
+                window.open(`https://wa.me/?text=Hola, aquí está tu ticket de venta. Te adjunto el PDF que acabo de descargar.`, '_blank');
             }
         }
     </script>
