@@ -5,20 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#005b4c">
 <title>Negocio Alerta PRO</title>
-
 <style>
-:root {
-  --green:#006b58;
-  --deep:#003d35;
-  --gold:#d9b44a;
-  --bg:#eef7f3;
-  --ink:#123d37;
-  --muted:#6b8580;
-  --red:#c74646;
-}
+:root{--green:#006b58;--deep:#003d35;--gold:#d9b44a;--bg:#eef7f3;--ink:#123d37;--muted:#6b8580;--red:#c74646}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,sans-serif}
-.hero{background:radial-gradient(circle at top right,#168c76,var(--deep) 68%);color:white;padding:20px 16px 24px;border-radius:0 0 28px 28px;box-shadow:0 8px 24px #003d3525}
+.hero{background:radial-gradient(circle at top right,#168c76,var(--deep) 68%);color:#fff;padding:20px 16px 24px;border-radius:0 0 28px 28px;box-shadow:0 8px 24px #003d3525}
 .brand{display:flex;gap:12px;align-items:center}
 .logo{width:58px;height:58px;flex-shrink:0;border-radius:16px;object-fit:cover;background:#ffffff22;border:2px solid #ffffff55;display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden}
 .brand h1{font-size:23px;margin:0}
@@ -26,7 +17,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,sans-ser
 .bar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:20px;background:#ffffff15;padding:12px;border:1px solid #ffffff20;border-radius:16px}
 .wrap{max-width:900px;margin:auto;padding:14px 14px 100px}
 .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:4px 0 16px}
-.stat,.card,.tile{background:white;border:1px solid #d4e8e1;border-radius:17px;box-shadow:0 3px 12px #164e4010}
+.stat,.card,.tile{background:#fff;border:1px solid #d4e8e1;border-radius:17px;box-shadow:0 3px 12px #164e4010}
 .stat{padding:12px 10px;min-width:0}
 .stat small{font-weight:700;font-size:11px;color:var(--muted)}
 .stat strong{display:block;font-size:20px;margin-top:4px;overflow-wrap:anywhere}
@@ -34,10 +25,9 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,sans-ser
 .nav{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:16px}
 .tile{padding:13px 6px;text-align:center;color:var(--ink);font-weight:700;cursor:pointer;min-height:76px}
 .tile span{display:block;font-size:23px;margin-bottom:4px}
-.tile.active{background:linear-gradient(145deg,#00836b,#00483e);color:white;border:2px solid var(--gold)}
+.tile.active{background:linear-gradient(145deg,#00836b,#00483e);color:#fff;border:2px solid var(--gold)}
 .card{padding:16px;margin-bottom:13px;min-width:0}
 .card h2{font-size:17px;margin:0 0 12px}
-.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .muted{color:var(--muted);font-size:13px}
 .list{display:grid;gap:8px}
 .item{padding:11px;border:1px solid #e1eee9;border-radius:12px;display:flex;justify-content:space-between;align-items:center;gap:10px;min-width:0}
@@ -67,20 +57,21 @@ textarea{min-height:80px}
 .bottom button.active{color:#f0d36d}
 .notice{background:#e4f4ed;border-radius:12px;padding:11px;font-size:12px;color:#426d61}
 .hide{display:none!important}
-.vh{position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
 .scanner-box{border:2px dashed var(--green);border-radius:14px;padding:12px;margin-top:10px;background:#f4fbf8}
 .scanner-box video{width:100%;max-height:280px;object-fit:cover;border-radius:12px;background:#123d37}
 .barcode-result{margin-top:8px;padding:9px;border-radius:9px;background:#e4f4ed;color:var(--green);font-weight:700}
 .logo-preview{width:90px;height:90px;object-fit:cover;border-radius:18px;border:2px solid #cfe1da;background:#eef7f3}
-/* Ventana emergente interna (reemplaza window.open) */
+.file-row{display:grid;gap:8px;margin-top:6px}
+.file-row label.file-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border:1px dashed var(--green);border-radius:11px;background:#e9f4ef;color:var(--green);font-weight:700;cursor:pointer;font-size:14px;text-align:center;width:100%}
+.file-row input[type=file]{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}
 #modal{position:fixed;inset:0;background:#000000a0;z-index:50;display:flex;align-items:flex-start;justify-content:center;padding:20px 14px;overflow-y:auto}
-.modal-box{background:white;border-radius:20px;padding:20px;width:100%;max-width:460px;border:2px solid var(--gold)}
+.modal-box{background:#fff;border-radius:20px;padding:20px;width:100%;max-width:460px;border:2px solid var(--gold)}
 .modal-box h2{margin:0 0 10px;font-size:18px}
 .ticket pre{white-space:pre-wrap;font:inherit;line-height:1.7;margin:10px 0;overflow-wrap:anywhere}
 #toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);background:#003e36;color:#fff;padding:11px 16px;border-radius:12px;z-index:60;font-size:13px;max-width:90%;text-align:center;border:1px solid var(--gold)}
 @media print{
   body>*:not(#modal){display:none!important}
-  #modal{position:static;background:white;padding:0}
+  #modal{position:static;background:#fff;padding:0}
   .modal-box{border:1px solid #ccc;box-shadow:none}
   .noprint{display:none!important}
 }
@@ -88,8 +79,8 @@ textarea{min-height:80px}
 @media(max-width:390px){.brand h1{font-size:19px}.stats{gap:6px}.stat strong{font-size:16px}.stat{padding:9px 7px}.form{grid-template-columns:1fr}.field.full{grid-column:auto}.item{align-items:flex-start;flex-wrap:wrap}}
 </style>
 </head>
-
 <body>
+
 <header class="hero">
   <div class="brand">
     <div class="logo" id="headerLogo">🌿</div>
@@ -139,92 +130,47 @@ textarea{min-height:80px}
 (() => {
 'use strict';
 
-const KEY = 'negocioAlertaPro_v3';
-let state = load();
-let page = 'home';
-let scannerStream = null;
-let scanActive = false;
-let modalText = '';
-let modalPhone = '';
+const KEY='negocioAlertaPro_v3';
+let state=load();
+let page='home';
+let scannerStream=null;
+let scanActive=false;
+let modalText='';
+let modalPhone='';
 
 function defaultState(){
-  return {
-    business:'Mi negocio',
-    owner:'',
-    logo:'',
-    whatsapp:'',
-    products:[],
-    sales:[],
-    orders:[],
-    clients:[]
-  };
+  return{business:'Mi negocio',owner:'',logo:'',whatsapp:'',products:[],sales:[],orders:[],clients:[]};
 }
-
 function load(){
   try{
-    const saved = JSON.parse(localStorage.getItem(KEY));
-    if(!saved || typeof saved !== 'object') return defaultState();
-    return {
-      ...defaultState(),
-      ...saved,
-      products:Array.isArray(saved.products)?saved.products:[],
-      sales:Array.isArray(saved.sales)?saved.sales:[],
-      orders:Array.isArray(saved.orders)?saved.orders:[],
-      clients:Array.isArray(saved.clients)?saved.clients:[]
-    };
-  }catch(e){
-    return defaultState();
-  }
+    const s=JSON.parse(localStorage.getItem(KEY));
+    if(!s||typeof s!=='object')return defaultState();
+    return{...defaultState(),...s,
+      products:Array.isArray(s.products)?s.products:[],
+      sales:Array.isArray(s.sales)?s.sales:[],
+      orders:Array.isArray(s.orders)?s.orders:[],
+      clients:Array.isArray(s.clients)?s.clients:[]};
+  }catch(e){return defaultState();}
 }
-
 function save(){
-  try{
-    localStorage.setItem(KEY,JSON.stringify(state));
-    render();
-    return true;
-  }catch(e){
-    alert('No hay espacio suficiente para guardar los datos. Probá usar fotos más pequeñas o descargar un respaldo.');
-    return false;
-  }
+  try{localStorage.setItem(KEY,JSON.stringify(state));render();return true;}
+  catch(e){alert('No hay espacio suficiente para guardar. Probá con fotos más chicas.');return false;}
 }
-
-function esc(value){
-  return String(value ?? '').replace(/[&<>"']/g,c=>({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-  }[c]));
-}
-
-function money(value){
-  return new Intl.NumberFormat('es-AR',{
-    style:'currency',currency:'ARS',maximumFractionDigits:2
-  }).format(Number(value)||0);
-}
-
-function id(){
-  return Date.now().toString(36)+Math.random().toString(36).slice(2,8);
-}
-
-function low(p){
-  return Number(p.stock)<=Number(p.min||0);
-}
-
-function profit(p){
-  return Number(p.price||0)-Number(p.cost||0);
-}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function money(v){return new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:2}).format(Number(v)||0);}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
+function low(p){return Number(p.stock)<=Number(p.min||0);}
+function profit(p){return Number(p.price||0)-Number(p.cost||0);}
 
 function toast(msg){
   let t=document.getElementById('toast');
-  if(!t){
-    t=document.createElement('div');
-    t.id='toast';
-    document.body.appendChild(t);
-  }
+  if(!t){t=document.createElement('div');t.id='toast';document.body.appendChild(t);}
   t.textContent=msg;
   clearTimeout(toast._t);
-  toast._t=setTimeout(()=>t.remove(),3500);
+  toast._t=setTimeout(()=>t.remove(),3800);
 }
 
-/* ---------- Ventana emergente interna ---------- */
+/* -------- Modal interno -------- */
 function openModal(html){
   closeModal();
   const m=document.createElement('div');
@@ -232,43 +178,79 @@ function openModal(html){
   m.innerHTML=`<div class="modal-box">${html}</div>`;
   document.body.appendChild(m);
 }
-function closeModal(){
-  document.getElementById('modal')?.remove();
-}
+function closeModal(){document.getElementById('modal')?.remove();}
 
-/* ---------- WhatsApp ---------- */
-function cleanPhone(p){
-  return String(p||'').replace(/\D/g,'');
-}
-
-// Abre un enlace de forma compatible con celulares, apps instaladas y vistas incrustadas
-function openLink(url){
-  try{
-    const a=document.createElement('a');
-    a.href=url;
-    a.target='_blank';
-    a.rel='noopener noreferrer';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-  }catch(e){
-    window.location.href=url;
-  }
-}
+/* =========================================================
+   WHATSAPP — apertura en cascada, compatible con TODO
+   ========================================================= */
+function cleanPhone(p){return String(p||'').replace(/\D/g,'');}
 
 function openWhatsApp(message,phone=''){
   const number=cleanPhone(phone)||cleanPhone(state.whatsapp);
-  const url=number
-    ? `https://wa.me/${number}?text=${encodeURIComponent(message)}`
-    : `https://wa.me/?text=${encodeURIComponent(message)}`;
-  openLink(url);
-  // Respaldo: si el navegador bloquea la apertura, el texto queda copiado
+  const text=encodeURIComponent(message);
+
+  // Respaldos en cascada
+  const urls=[];
+  if(number){
+    urls.push(`whatsapp://send?phone=${number}&text=${text}`);
+    urls.push(`https://wa.me/${number}?text=${text}`);
+    urls.push(`https://api.whatsapp.com/send?phone=${number}&text=${text}`);
+  }else{
+    urls.push(`whatsapp://send?text=${text}`);
+    urls.push(`https://wa.me/?text=${text}`);
+    urls.push(`https://api.whatsapp.com/send?text=${text}`);
+    urls.push(`https://web.whatsapp.com/send?text=${text}`);
+  }
+
+  // Copiamos siempre por las dudas
   copyText(message,true);
+
+  let i=0;
+  const started=Date.now();
+
+  function tryNext(){
+    if(i>=urls.length){
+      toast('No se pudo abrir WhatsApp. El mensaje quedó copiado.');
+      return;
+    }
+    const url=urls[i++];
+
+    // Detectar si el navegador sigue visible -> no se abrió nada
+    const timer=setTimeout(()=>{
+      if(document.visibilityState==='visible'&&Date.now()-started<4000){
+        tryNext();
+      }
+    },1200);
+
+    // Al volver a la pestaña, cancelamos el temporizador
+    const onVis=()=>{
+      if(document.visibilityState==='hidden'){
+        clearTimeout(timer);
+        document.removeEventListener('visibilitychange',onVis);
+        window.removeEventListener('pagehide',onVis);
+      }
+    };
+    document.addEventListener('visibilitychange',onVis);
+    window.addEventListener('pagehide',onVis);
+
+    try{
+      const a=document.createElement('a');
+      a.href=url;
+      if(!url.startsWith('whatsapp:')){a.target='_blank';a.rel='noopener';}
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }catch(e){
+      window.location.href=url;
+    }
+  }
+
+  tryNext();
 }
 
 async function copyText(text,silent){
   try{
-    if(navigator.clipboard && window.isSecureContext){
+    if(navigator.clipboard&&window.isSecureContext){
       await navigator.clipboard.writeText(text);
     }else{
       const ta=document.createElement('textarea');
@@ -289,48 +271,39 @@ async function copyText(text,silent){
 
 async function shareText(text,title){
   if(navigator.share){
-    try{
-      await navigator.share({title:title||state.business,text});
-      return;
-    }catch(e){
-      if(e&&e.name==='AbortError')return;
-    }
+    try{await navigator.share({title:title||state.business,text});return;}
+    catch(e){if(e&&e.name==='AbortError')return;}
   }
   openWhatsApp(text,modalPhone);
 }
 
-/* ---------- Descargas / archivos ---------- */
+/* =========================================================
+   DESCARGA DE ARCHIVOS — compatible celular y escritorio
+   ========================================================= */
 async function saveFile(name,mime,content){
   const blob=new Blob([content],{type:mime});
 
-  // 1) En celulares: abre el menú de compartir para guardar en Archivos, Drive, WhatsApp, etc.
+  // 1) Web Share con archivo (mejor en móvil)
   try{
     const file=new File([blob],name,{type:mime});
-    if(navigator.canShare && navigator.canShare({files:[file]})){
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
       await navigator.share({files:[file],title:name});
       return;
     }
-  }catch(e){
-    if(e&&e.name==='AbortError')return;
-  }
+  }catch(e){if(e&&e.name==='AbortError')return;}
 
   // 2) Descarga clásica
   try{
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');
-    a.href=url;
-    a.download=name;
-    a.rel='noopener';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
+    a.href=url;a.download=name;a.rel='noopener';
+    document.body.appendChild(a);a.click();a.remove();
     setTimeout(()=>URL.revokeObjectURL(url),4000);
     toast('Descarga iniciada: '+name);
   }catch(e){
-    // 3) Último recurso: mostrar el contenido para copiarlo
     openModal(`
       <h2>Copiá el contenido</h2>
-      <p class="muted">Tu navegador no permitió la descarga. Copiá este texto y guardalo en un archivo ${esc(name)}.</p>
+      <p class="muted">Tu navegador no permitió la descarga. Copiá este texto y guardalo como ${esc(name)}.</p>
       <textarea id="fallbackText" style="min-height:200px" readonly>${esc(content)}</textarea>
       <div class="actions">
         <button data-act="copy-fallback">Copiar todo</button>
@@ -342,36 +315,24 @@ async function saveFile(name,mime,content){
 function exportData(){
   saveFile('respaldo-negocio-alerta-pro.json','application/json',JSON.stringify(state,null,2));
 }
-
-function csvCell(v){
-  const s=String(v??'');
-  return /[",\n;]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;
-}
-
+function csvCell(v){const s=String(v??'');return /[",\n;]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
 function exportSalesCSV(){
   const rows=[['Fecha','Producto','Cantidad','Precio unitario','Total','Ganancia','Cliente']];
   state.sales.forEach(s=>rows.push([s.date,s.productName,s.qty,s.price,s.total,s.profit??'',s.client||'']));
-  const csv='\uFEFF'+rows.map(r=>r.map(csvCell).join(',')).join('\n');
-  saveFile('ventas-negocio-alerta-pro.csv','text/csv',csv);
+  saveFile('ventas-negocio-alerta-pro.csv','text/csv','\uFEFF'+rows.map(r=>r.map(csvCell).join(',')).join('\n'));
 }
-
 function importFromText(text){
   try{
     const imported=JSON.parse(text);
-
     if(!imported||!Array.isArray(imported.products)||!Array.isArray(imported.sales)){
       throw new Error('Formato inválido');
     }
-
     if(confirm('¿Reemplazar los datos actuales con este respaldo?')){
-      state={
-        ...defaultState(),
-        ...imported,
+      state={...defaultState(),...imported,
         products:imported.products||[],
         sales:imported.sales||[],
         orders:imported.orders||[],
-        clients:imported.clients||[]
-      };
+        clients:imported.clients||[]};
       closeModal();
       if(save())alert('Respaldo importado correctamente.');
     }
@@ -380,54 +341,202 @@ function importFromText(text){
   }
 }
 
-/* ---------- Navegación ---------- */
+/* -------- Navegación -------- */
 function setPage(next){
   stopScanner();
   page=next;
-  document.querySelectorAll('[data-page]').forEach(b=>{
-    b.classList.toggle('active',b.dataset.page===next);
-  });
+  document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===next));
   render();
   window.scrollTo({top:0,behavior:'smooth'});
 }
-
-function card(title,body){
-  return `<section class="card"><h2>${title}</h2>${body}</section>`;
-}
-
+function card(title,body){return `<section class="card"><h2>${title}</h2>${body}</section>`;}
 function list(items,fn){
   return items.length
     ? `<div class="list">${items.map(fn).join('')}</div>`
     : '<div class="empty">Todavía no hay registros. Podés agregar el primero.</div>';
 }
-
 function imageHTML(p){
   return p.image
     ? `<img class="product-image" src="${p.image}" alt="${esc(p.name)}">`
     : '<div class="product-image" style="display:flex;align-items:center;justify-content:center;font-size:25px">📦</div>';
 }
-
 function renderHeader(){
-  document.getElementById('welcome').textContent =
-    state.owner ? `Bienvenido/a, ${state.owner}` : 'Bienvenido/a';
-  document.getElementById('businessTitle').textContent =
-    state.business||'Negocio Alerta';
-
+  document.getElementById('welcome').textContent=state.owner?`Bienvenido/a, ${state.owner}`:'Bienvenido/a';
+  document.getElementById('businessTitle').textContent=state.business||'Negocio Alerta';
   const logo=document.getElementById('headerLogo');
-  logo.innerHTML=state.logo
-    ? `<img src="${state.logo}" alt="Logo" style="width:100%;height:100%;object-fit:cover">`
-    : '🌿';
+  logo.innerHTML=state.logo?`<img src="${state.logo}" alt="Logo" style="width:100%;height:100%;object-fit:cover">`:'🌿';
 }
 
+/* =========================================================
+   GALERÍA / CÁMARA — inputs visibles, doble vía
+   ========================================================= */
+function filePickerHTML(idBase,label){
+  return `
+    <div class="file-row">
+      <label class="file-btn" for="${idBase}_gal">
+        🖼️ ${label} — Galería / Archivos
+      </label>
+      <input id="${idBase}_gal" type="file" accept="image/*" data-img-input="${idBase}">
+
+      <label class="file-btn" for="${idBase}_cam">
+        📸 ${label} — Sacar foto
+      </label>
+      <input id="${idBase}_cam" type="file" accept="image/*" capture="environment" data-img-input="${idBase}">
+    </div>`;
+}
+
+function attachImageInputs(){
+  document.querySelectorAll('[data-img-input]').forEach(input=>{
+    if(input.dataset.bound==='1')return;
+    input.dataset.bound='1';
+    input.addEventListener('change',e=>{
+      const file=e.target.files&&e.target.files[0];
+      if(!file)return;
+      const base=input.dataset.imgInput;
+      resizeImage(file,data=>{
+        const hidden=document.getElementById(base+'_data');
+        const preview=document.getElementById(base+'_preview');
+        if(hidden)hidden.value=data;
+        if(preview){
+          if(base==='logoImg'){
+            preview.innerHTML=`<img class="logo-preview" src="${data}" alt="Vista previa">`;
+          }else{
+            preview.innerHTML=`<img class="product-image" src="${data}" alt="Vista previa" style="margin-top:6px">`;
+          }
+        }
+      });
+      input.value='';
+    });
+  });
+}
+
+function resizeImage(file,callback){
+  if(!file||!file.type.startsWith('image/')){alert('Elegí una imagen válida.');return;}
+  const reader=new FileReader();
+  reader.onerror=()=>alert('No se pudo leer el archivo.');
+  reader.onload=ev=>{
+    const img=new Image();
+    img.onerror=()=>alert('No se pudo abrir la imagen.');
+    img.onload=()=>{
+      const max=700;
+      const ratio=Math.min(1,max/Math.max(img.width,img.height));
+      const w=Math.max(1,Math.round(img.width*ratio));
+      const h=Math.max(1,Math.round(img.height*ratio));
+      const c=document.createElement('canvas');
+      c.width=w;c.height=h;
+      const ctx=c.getContext('2d');
+      if(!ctx){alert('No se pudo procesar la imagen.');return;}
+      ctx.drawImage(img,0,0,w,h);
+      callback(c.toDataURL('image/jpeg',0.78));
+    };
+    img.src=ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+/* -------- Escáner de barras -------- */
+function stopScanner(){
+  scanActive=false;
+  if(scannerStream){scannerStream.getTracks().forEach(t=>t.stop());scannerStream=null;}
+  document.querySelectorAll('video').forEach(v=>v.srcObject=null);
+}
+async function startScanner(videoId,messageId,callback){
+  stopScanner();
+  const video=document.getElementById(videoId);
+  const message=document.getElementById(messageId);
+  if(!video||!message)return;
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    message.textContent='La cámara requiere HTTPS y permisos del navegador.';
+    return;
+  }
+  if(!('BarcodeDetector' in window)){
+    message.textContent='Este navegador no admite escaneo automático. Escribí el código manualmente.';
+    return;
+  }
+  try{
+    const detector=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','code_128','code_39']});
+    scannerStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});
+    video.srcObject=scannerStream;
+    await video.play();
+    scanActive=true;
+    message.textContent='Buscando código...';
+    const scan=async()=>{
+      if(!scanActive||!scannerStream)return;
+      try{
+        const codes=await detector.detect(video);
+        if(codes.length){
+          const code=codes[0].rawValue;
+          message.textContent='Código detectado: '+code;
+          scanActive=false;stopScanner();callback(code);return;
+        }
+      }catch(e){}
+      if(scanActive)requestAnimationFrame(scan);
+    };
+    scan();
+  }catch(e){
+    stopScanner();
+    message.textContent='No se pudo abrir la cámara. Revisá los permisos.';
+  }
+}
+function findProductByBarcode(bc){
+  return state.products.find(p=>String(p.barcode||'').trim()===String(bc).trim());
+}
+
+/* -------- Comprobante -------- */
+function receipt(saleId){
+  const sale=state.sales.find(s=>s.id===saleId);
+  if(!sale)return;
+  modalText=
+`${state.business}
+COMPROBANTE INTERNO — NO FISCAL
+Fecha: ${sale.date}
+Cliente: ${sale.client||'Consumidor final'}
+
+${sale.productName} × ${sale.qty}
+Precio unitario: ${money(sale.price)}
+TOTAL: ${money(sale.total)}
+
+¡Gracias por tu compra!`;
+  const cl=state.clients.find(c=>c.name.trim().toLowerCase()===String(sale.client||'').trim().toLowerCase());
+  modalPhone=cl?cl.phone:'';
+  const logoHTML=state.logo
+    ? `<img src="${state.logo}" alt="Logo" style="width:80px;height:80px;object-fit:cover;border-radius:15px">`
+    : '<div style="font-size:40px">🌿</div>';
+  openModal(`
+    <div class="ticket">
+      ${logoHTML}
+      <h2>${esc(state.business)}</h2>
+      <pre>${esc(modalText)}</pre>
+      <p class="muted">Comprobante interno; no es una factura fiscal.</p>
+    </div>
+    <div class="actions noprint">
+      <button class="wa" data-act="wa-modal">💬 WhatsApp</button>
+      <button data-act="share-modal">📤 Compartir</button>
+      <button class="secondary" data-act="copy-modal">📋 Copiar</button>
+      <button class="secondary" data-act="txt-modal">⬇️ Descargar .txt</button>
+      <button class="secondary" data-act="print-modal">🖨️ Imprimir / PDF</button>
+      <button class="danger" data-act="close">Cerrar</button>
+    </div>`);
+}
+function shareSummary(){
+  const total=state.sales.reduce((s,x)=>s+Number(x.total||0),0);
+  const msg=
+`Resumen de ${state.business}
+Ventas registradas: ${state.sales.length}
+Total vendido: ${money(total)}
+Productos: ${state.products.length}
+Stock bajo: ${state.products.filter(low).length}`;
+  openWhatsApp(msg);
+}
+
+/* =========================================================
+   RENDER
+   ========================================================= */
 function render(){
   renderHeader();
-
   document.getElementById('statProducts').textContent=state.products.length;
   document.getElementById('statLow').textContent=state.products.filter(low).length;
-  document.getElementById('statSales').textContent=money(
-    state.sales.reduce((sum,s)=>sum+Number(s.total||0),0)
-  );
-
+  document.getElementById('statSales').textContent=money(state.sales.reduce((s,x)=>s+Number(x.total||0),0));
   const root=document.getElementById('page');
 
   if(page==='home'){
@@ -446,12 +555,8 @@ function render(){
       )+
       card('🕘 Últimos movimientos',
         list([
-          ...state.sales.slice(-3).reverse().map(s=>({
-            label:'Venta registrada',detail:s.client||'Cliente ocasional',value:money(s.total)
-          })),
-          ...state.orders.slice(-2).reverse().map(o=>({
-            label:'Pedido',detail:o.client||'Cliente',value:o.status||'Pendiente'
-          }))
+          ...state.sales.slice(-3).reverse().map(s=>({label:'Venta registrada',detail:s.client||'Cliente ocasional',value:money(s.total)})),
+          ...state.orders.slice(-2).reverse().map(o=>({label:'Pedido',detail:o.client||'Cliente',value:o.status||'Pendiente'}))
         ],x=>`<div class="item"><div><strong>${esc(x.label)}</strong><small>${esc(x.detail)}</small></div><b>${esc(x.value)}</b></div>`)
       )+
       '<div class="notice">🔒 Los datos se guardan en este navegador y dispositivo. Descargá respaldos regularmente.</div>';
@@ -467,14 +572,9 @@ function render(){
           </div>
           <div class="field full">
             <label>Foto del producto</label>
-            <div class="actions" style="margin-top:0">
-              <button type="button" class="secondary" data-pick="productImage">🖼️ Galería / archivos</button>
-              <button type="button" class="secondary" data-pick="productImageCam">📸 Sacar foto</button>
-            </div>
-            <input class="vh" id="productImage" type="file" accept="image/*">
-            <input class="vh" id="productImageCam" type="file" accept="image/*" capture="environment">
-            <input type="hidden" name="imageData" id="imageData">
-            <div id="productImagePreview"></div>
+            ${filePickerHTML('prodImg','Foto')}
+            <input type="hidden" name="imageData" id="prodImg_data">
+            <div id="prodImg_preview"></div>
           </div>
           <div class="field">
             <label>Código de barras</label>
@@ -483,22 +583,10 @@ function render(){
           <div class="field" style="align-content:end">
             <button type="button" class="secondary" id="openScannerProduct">📷 Escanear código</button>
           </div>
-          <div class="field">
-            <label>Precio de costo ($)</label>
-            <input name="cost" type="number" min="0" step="0.01" value="0" required>
-          </div>
-          <div class="field">
-            <label>Precio de venta ($)</label>
-            <input name="price" type="number" min="0" step="0.01" required>
-          </div>
-          <div class="field">
-            <label>Stock actual</label>
-            <input name="stock" type="number" min="0" step="1" value="0" required>
-          </div>
-          <div class="field">
-            <label>Stock mínimo</label>
-            <input name="min" type="number" min="0" step="1" value="3">
-          </div>
+          <div class="field"><label>Precio de costo ($)</label><input name="cost" type="number" min="0" step="0.01" value="0" required></div>
+          <div class="field"><label>Precio de venta ($)</label><input name="price" type="number" min="0" step="0.01" required></div>
+          <div class="field"><label>Stock actual</label><input name="stock" type="number" min="0" step="1" value="0" required></div>
+          <div class="field"><label>Stock mínimo</label><input name="min" type="number" min="0" step="1" value="3"></div>
           <div class="field full"><button>Guardar producto</button></div>
         </form>
         <div id="productScanner" class="scanner-box hide">
@@ -539,10 +627,7 @@ function render(){
               ${state.products.map(p=>`<option value="${p.id}">${esc(p.name)} — ${money(p.price)} — stock ${p.stock}</option>`).join('')}
             </select>
           </div>
-          <div class="field">
-            <label>Cantidad</label>
-            <input name="qty" type="number" min="1" step="1" value="1" required>
-          </div>
+          <div class="field"><label>Cantidad</label><input name="qty" type="number" min="1" step="1" value="1" required></div>
           <div class="field">
             <label>Cliente opcional</label>
             <input name="client" placeholder="Nombre" list="clientList">
@@ -628,26 +713,23 @@ function render(){
           <div class="field full">
             <label>WhatsApp predeterminado (con código de país)</label>
             <input name="whatsapp" value="${esc(state.whatsapp||'')}" inputmode="tel" placeholder="549...">
-            <small class="muted">Ingresá el número completo, solo números y con código de país. No pongas +, espacios ni guiones.</small>
+            <small class="muted">Solo números, con código de país. Sin +, espacios ni guiones.</small>
           </div>
           <div class="field full">
             <label>Logo del negocio</label>
-            <div class="actions" style="margin-top:0">
-              <button type="button" class="secondary" data-pick="logoFile">🖼️ Elegir imagen</button>
-            </div>
-            <input class="vh" id="logoFile" type="file" accept="image/*">
-            <input type="hidden" name="logoData" id="logoData">
-            <div id="logoPreview">${state.logo?`<img class="logo-preview" src="${state.logo}" alt="Logo">`:'<span class="muted">Todavía no hay logo cargado.</span>'}</div>
+            ${filePickerHTML('logoImg','Logo')}
+            <input type="hidden" name="logoData" id="logoImg_data">
+            <div id="logoImg_preview">${state.logo?`<img class="logo-preview" src="${state.logo}" alt="Logo">`:'<span class="muted">Todavía no hay logo cargado.</span>'}</div>
           </div>
           <div class="field full"><button>Guardar ajustes</button></div>
         </form>
       `)+
       card('💾 Copia de seguridad',`
-        <p class="muted">Descargá o restaurá todos los datos de este dispositivo. En el celular se abre el menú de compartir para guardar el archivo donde quieras.</p>
+        <p class="muted">Descargá o restaurá todos los datos. En el celular se abre el menú de compartir para guardar el archivo.</p>
         <div class="actions">
           <button id="export">⬇️ Descargar respaldo</button>
-          <button class="secondary" data-pick="importFile">⬆️ Subir respaldo</button>
-          <input class="vh" id="importFile" type="file" accept=".json,application/json,text/plain">
+          <button class="secondary" id="importBtn">⬆️ Subir respaldo</button>
+          <input id="importFile" type="file" accept=".json,application/json,text/plain" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none">
         </div>
         <div class="actions">
           <button class="secondary" id="copyBackup">📋 Copiar respaldo</button>
@@ -664,223 +746,16 @@ function render(){
       `);
   }
 
-  prepareImageInputs();
+  attachImageInputs();
 }
 
-/* ---------- Imágenes ---------- */
-function resizeImage(file,callback){
-  if(!file || !file.type.startsWith('image/')){
-    alert('Elegí un archivo de imagen válido.');
-    return;
-  }
-
-  const reader=new FileReader();
-
-  reader.onerror=()=>alert('No se pudo leer el archivo. Probá con otra imagen.');
-
-  reader.onload=event=>{
-    const img=new Image();
-
-    img.onerror=()=>alert('No se pudo abrir la imagen seleccionada.');
-
-    img.onload=()=>{
-      const maxSize=700;
-      const ratio=Math.min(1,maxSize/Math.max(img.width,img.height));
-      const width=Math.max(1,Math.round(img.width*ratio));
-      const height=Math.max(1,Math.round(img.height*ratio));
-      const canvas=document.createElement('canvas');
-      canvas.width=width;
-      canvas.height=height;
-      const ctx=canvas.getContext('2d');
-
-      if(!ctx){
-        alert('No se pudo procesar la imagen.');
-        return;
-      }
-
-      ctx.drawImage(img,0,0,width,height);
-      callback(canvas.toDataURL('image/jpeg',0.78));
-    };
-
-    img.src=event.target.result;
-  };
-
-  reader.readAsDataURL(file);
-}
-
-function prepareImageInputs(){
-  ['productImage','productImageCam'].forEach(inputId=>{
-    const el=document.getElementById(inputId);
-    if(!el)return;
-    el.addEventListener('change',e=>{
-      const file=e.target.files && e.target.files[0];
-      if(!file)return;
-
-      resizeImage(file,data=>{
-        const input=document.getElementById('imageData');
-        const preview=document.getElementById('productImagePreview');
-        if(input)input.value=data;
-        if(preview)preview.innerHTML=`<img class="product-image" src="${data}" alt="Vista previa" style="margin-top:6px">`;
-      });
-    });
-  });
-
-  const logoFile=document.getElementById('logoFile');
-
-  if(logoFile){
-    logoFile.addEventListener('change',e=>{
-      const file=e.target.files && e.target.files[0];
-      if(!file)return;
-
-      resizeImage(file,data=>{
-        const input=document.getElementById('logoData');
-        const preview=document.getElementById('logoPreview');
-        if(input)input.value=data;
-        if(preview)preview.innerHTML=`<img class="logo-preview" src="${data}" alt="Vista previa del logo">`;
-      });
-    });
-  }
-}
-
-/* ---------- Escáner ---------- */
-function stopScanner(){
-  scanActive=false;
-
-  if(scannerStream){
-    scannerStream.getTracks().forEach(track=>track.stop());
-    scannerStream=null;
-  }
-
-  document.querySelectorAll('video').forEach(v=>v.srcObject=null);
-}
-
-async function startScanner(videoId,messageId,callback){
-  stopScanner();
-
-  const video=document.getElementById(videoId);
-  const message=document.getElementById(messageId);
-  if(!video||!message)return;
-
-  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
-    message.textContent='La cámara requiere HTTPS y permisos del navegador. Podés escribir el código manualmente.';
-    return;
-  }
-
-  if(!('BarcodeDetector' in window)){
-    message.textContent='Este navegador no admite escaneo automático. Escribí el código manualmente.';
-    return;
-  }
-
-  try{
-    const detector=new BarcodeDetector({
-      formats:['ean_13','ean_8','upc_a','upc_e','code_128','code_39']
-    });
-
-    scannerStream=await navigator.mediaDevices.getUserMedia({
-      video:{facingMode:{ideal:'environment'}},
-      audio:false
-    });
-
-    video.srcObject=scannerStream;
-    await video.play();
-    scanActive=true;
-    message.textContent='Buscando código...';
-
-    const scan=async()=>{
-      if(!scanActive||!scannerStream)return;
-
-      try{
-        const codes=await detector.detect(video);
-        if(codes.length){
-          const code=codes[0].rawValue;
-          message.textContent='Código detectado: '+code;
-          scanActive=false;
-          stopScanner();
-          callback(code);
-          return;
-        }
-      }catch(e){}
-
-      if(scanActive)requestAnimationFrame(scan);
-    };
-
-    scan();
-  }catch(e){
-    stopScanner();
-    message.textContent='No se pudo abrir la cámara. Revisá los permisos del navegador.';
-  }
-}
-
-function findProductByBarcode(barcode){
-  return state.products.find(p=>String(p.barcode||'').trim()===String(barcode).trim());
-}
-
-/* ---------- Comprobante (ventana interna, sin popups) ---------- */
-function receipt(saleId){
-  const sale=state.sales.find(s=>s.id===saleId);
-  if(!sale)return;
-
-  modalText=
-`${state.business}
-COMPROBANTE INTERNO — NO FISCAL
-Fecha: ${sale.date}
-Cliente: ${sale.client||'Consumidor final'}
-
-${sale.productName} × ${sale.qty}
-Precio unitario: ${money(sale.price)}
-TOTAL: ${money(sale.total)}
-
-¡Gracias por tu compra!`;
-
-  // Si el cliente está en la agenda, se usa su número
-  const cl=state.clients.find(c=>c.name.trim().toLowerCase()===String(sale.client||'').trim().toLowerCase());
-  modalPhone=cl?cl.phone:'';
-
-  const logoHTML=state.logo
-    ? `<img src="${state.logo}" alt="Logo" style="width:80px;height:80px;object-fit:cover;border-radius:15px">`
-    : '<div style="font-size:40px">🌿</div>';
-
-  openModal(`
-    <div class="ticket">
-      ${logoHTML}
-      <h2>${esc(state.business)}</h2>
-      <pre>${esc(modalText)}</pre>
-      <p class="muted">Comprobante interno; no es una factura fiscal.</p>
-    </div>
-    <div class="actions noprint">
-      <button class="wa" data-act="wa-modal">💬 WhatsApp</button>
-      <button data-act="share-modal">📤 Compartir</button>
-      <button class="secondary" data-act="copy-modal">📋 Copiar</button>
-      <button class="secondary" data-act="txt-modal">⬇️ Descargar .txt</button>
-      <button class="secondary" data-act="print-modal">🖨️ Imprimir / PDF</button>
-      <button class="danger" data-act="close">Cerrar</button>
-    </div>`);
-}
-
-function shareSummary(){
-  const total=state.sales.reduce((sum,s)=>sum+Number(s.total||0),0);
-  const message=
-`Resumen de ${state.business}
-Ventas registradas: ${state.sales.length}
-Total vendido: ${money(total)}
-Productos: ${state.products.length}
-Stock bajo: ${state.products.filter(low).length}`;
-
-  openWhatsApp(message);
-}
-
-/* ---------- Eventos ---------- */
+/* =========================================================
+   EVENTOS
+   ========================================================= */
 document.addEventListener('click',event=>{
   const target=event.target;
 
-  // Botones que abren el selector de archivos
-  const pick=target.closest('[data-pick]');
-  if(pick){
-    document.getElementById(pick.dataset.pick)?.click();
-    return;
-  }
-
-  // Acciones de la ventana emergente
+  // Acciones del modal
   const act=target.closest('[data-act]');
   if(act){
     const a=act.dataset.act;
@@ -890,29 +765,15 @@ document.addEventListener('click',event=>{
     if(a==='copy-modal')copyText(modalText);
     if(a==='txt-modal')saveFile('comprobante.txt','text/plain',modalText);
     if(a==='print-modal')window.print();
-    if(a==='copy-fallback'){
-      const t=document.getElementById('fallbackText');
-      if(t)copyText(t.value);
-    }
-    if(a==='import-pasted'){
-      const t=document.getElementById('pasteArea');
-      if(t&&t.value.trim())importFromText(t.value);
-      else toast('Pegá primero el contenido del respaldo');
-    }
+    if(a==='copy-fallback'){const t=document.getElementById('fallbackText');if(t)copyText(t.value);}
+    if(a==='import-pasted'){const t=document.getElementById('pasteArea');if(t&&t.value.trim())importFromText(t.value);else toast('Pegá primero el contenido');}
     return;
   }
 
-  if(target.id==='modal'){
-    closeModal();
-    return;
-  }
+  if(target.id==='modal'){closeModal();return;}
 
   const pageButton=target.closest('[data-page]');
-
-  if(pageButton){
-    setPage(pageButton.dataset.page);
-    return;
-  }
+  if(pageButton){setPage(pageButton.dataset.page);return;}
 
   const delProduct=target.closest('[data-del-product]');
   if(delProduct){
@@ -933,20 +794,14 @@ document.addEventListener('click',event=>{
   }
 
   const receiptButton=target.closest('[data-receipt]');
-  if(receiptButton){
-    receipt(receiptButton.dataset.receipt);
-    return;
-  }
+  if(receiptButton){receipt(receiptButton.dataset.receipt);return;}
 
   const clientButton=target.closest('[data-client-whatsapp]');
   if(clientButton){
     const client=state.clients.find(c=>c.id===clientButton.dataset.clientWhatsapp);
     if(client){
       const phone=cleanPhone(client.phone);
-      if(!phone){
-        alert('Este cliente no tiene WhatsApp registrado.');
-        return;
-      }
+      if(!phone){alert('Este cliente no tiene WhatsApp registrado.');return;}
       openWhatsApp(`Hola ${client.name}, te contactamos de ${state.business}.`,phone);
     }
     return;
@@ -970,63 +825,43 @@ Estado: ${o.status}`,cl?cl.phone:'');
     const box=document.getElementById('productScanner');
     if(box){
       box.classList.remove('hide');
-      startScanner('scannerVideo','scannerMessage',barcode=>{
+      startScanner('scannerVideo','scannerMessage',bc=>{
         const input=document.getElementById('productBarcode');
-        if(input)input.value=barcode;
+        if(input)input.value=bc;
       });
     }
     return;
   }
-
   if(target.closest('#closeScannerProduct')){
-    stopScanner();
-    document.getElementById('productScanner')?.classList.add('hide');
-    return;
+    stopScanner();document.getElementById('productScanner')?.classList.add('hide');return;
   }
-
   if(target.closest('#openScannerSale')){
     const box=document.getElementById('saleScanner');
     if(box){
       box.classList.remove('hide');
-      startScanner('saleScannerVideo','saleScannerMessage',barcode=>{
-        const product=findProductByBarcode(barcode);
-        if(!product){
-          alert('No existe un producto con ese código. Agregalo primero desde Productos.');
-          return;
-        }
-        const select=document.getElementById('saleProduct');
-        if(select)select.value=product.id;
+      startScanner('saleScannerVideo','saleScannerMessage',bc=>{
+        const p=findProductByBarcode(bc);
+        if(!p){alert('No existe un producto con ese código. Agregalo primero.');return;}
+        const sel=document.getElementById('saleProduct');
+        if(sel)sel.value=p.id;
       });
     }
     return;
   }
-
   if(target.closest('#closeScannerSale')){
-    stopScanner();
-    document.getElementById('saleScanner')?.classList.add('hide');
-    return;
+    stopScanner();document.getElementById('saleScanner')?.classList.add('hide');return;
   }
 
-  if(target.closest('#export')){
-    exportData();
-    return;
-  }
-
+  if(target.closest('#export')){exportData();return;}
   if(target.closest('#exportCSV')){
     if(!state.sales.length){alert('Todavía no hay ventas para exportar.');return;}
-    exportSalesCSV();
-    return;
+    exportSalesCSV();return;
   }
-
-  if(target.closest('#copyBackup')){
-    copyText(JSON.stringify(state,null,2));
-    return;
-  }
-
+  if(target.closest('#copyBackup')){copyText(JSON.stringify(state,null,2));return;}
   if(target.closest('#pasteBackup')){
     openModal(`
       <h2>Pegar respaldo</h2>
-      <p class="muted">Pegá acá el contenido completo del archivo de respaldo (JSON).</p>
+      <p class="muted">Pegá el contenido completo del archivo (JSON).</p>
       <textarea id="pasteArea" style="min-height:180px" placeholder='{"business": ...}'></textarea>
       <div class="actions">
         <button data-act="import-pasted">Importar</button>
@@ -1034,20 +869,17 @@ Estado: ${o.status}`,cl?cl.phone:'');
       </div>`);
     return;
   }
-
-  if(target.closest('#shareSales')){
-    shareSummary();
+  if(target.closest('#importBtn')){
+    document.getElementById('importFile')?.click();
     return;
   }
-
+  if(target.closest('#shareSales')){shareSummary();return;}
   if(target.closest('#clearAll')){
     if(confirm('¿Seguro? Se borrarán todos los datos locales. Descargá un respaldo si lo necesitás.')){
-      state=defaultState();
-      save();
+      state=defaultState();save();
     }
     return;
   }
-
   if(target.closest('#logout')){
     alert('Esta versión guarda datos localmente. El cierre de sesión real necesita un sistema de usuarios.');
   }
@@ -1055,20 +887,17 @@ Estado: ${o.status}`,cl?cl.phone:'');
 
 document.addEventListener('submit',event=>{
   event.preventDefault();
-
   const form=event.target;
   const data=Object.fromEntries(new FormData(form));
 
   if(form.id==='productForm'){
     const barcode=String(data.barcode||'').trim();
-
     if(barcode&&findProductByBarcode(barcode)){
       alert('Ya existe un producto con ese código de barras.');
       return;
     }
-
     state.products.push({
-      id:id(),
+      id:uid(),
       name:String(data.name||'').trim(),
       image:data.imageData||'',
       barcode,
@@ -1077,43 +906,36 @@ document.addEventListener('submit',event=>{
       stock:Number(data.stock||0),
       min:Number(data.min||0)
     });
-
     if(save())alert('Producto guardado correctamente.');
     return;
   }
 
   if(form.id==='saleForm'){
     const product=state.products.find(p=>p.id===data.product);
-    const quantity=Number(data.qty||0);
-
+    const qty=Number(data.qty||0);
     if(!product){alert('Seleccioná un producto.');return;}
-    if(quantity<=0){alert('La cantidad debe ser mayor que cero.');return;}
-    if(quantity>Number(product.stock)){
-      alert('No hay suficiente stock. Disponible: '+product.stock);
-      return;
-    }
-
-    product.stock-=quantity;
+    if(qty<=0){alert('La cantidad debe ser mayor que cero.');return;}
+    if(qty>Number(product.stock)){alert('No hay suficiente stock. Disponible: '+product.stock);return;}
+    product.stock-=qty;
     state.sales.push({
-      id:id(),
+      id:uid(),
       productId:product.id,
       productName:product.name,
-      qty:quantity,
+      qty,
       cost:Number(product.cost||0),
       price:Number(product.price||0),
-      profit:quantity*profit(product),
-      total:quantity*Number(product.price||0),
+      profit:qty*profit(product),
+      total:qty*Number(product.price||0),
       client:String(data.client||'').trim(),
       date:new Date().toLocaleString('es-AR')
     });
-
     if(save())alert('Venta registrada correctamente.');
     return;
   }
 
   if(form.id==='orderForm'){
     state.orders.push({
-      id:id(),
+      id:uid(),
       client:String(data.client||'').trim(),
       detail:String(data.detail||'').trim(),
       total:Number(data.total||0),
@@ -1126,7 +948,7 @@ document.addEventListener('submit',event=>{
 
   if(form.id==='clientForm'){
     state.clients.push({
-      id:id(),
+      id:uid(),
       name:String(data.name||'').trim(),
       phone:cleanPhone(data.phone),
       notes:String(data.notes||'').trim()
@@ -1139,42 +961,28 @@ document.addEventListener('submit',event=>{
     state.business=String(data.business||'Mi negocio').trim();
     state.owner=String(data.owner||'').trim();
     state.whatsapp=cleanPhone(data.whatsapp);
-
     if(data.logoData)state.logo=data.logoData;
-
     if(save())alert('Ajustes guardados correctamente.');
   }
 });
 
 document.addEventListener('change',event=>{
   const target=event.target;
-
   if(target.matches('[data-order-status]')){
     const order=state.orders.find(o=>o.id===target.dataset.orderStatus);
-    if(order){
-      order.status=target.value;
-      save();
-    }
+    if(order){order.status=target.value;save();}
   }
-
   if(target.id==='importFile'){
     const file=target.files&&target.files[0];
     if(!file)return;
-
     const reader=new FileReader();
     reader.onerror=()=>alert('No se pudo leer el archivo seleccionado.');
-
-    reader.onload=()=>{
-      importFromText(String(reader.result||''));
-      target.value='';
-    };
-
+    reader.onload=()=>{importFromText(String(reader.result||''));target.value='';};
     reader.readAsText(file);
   }
 });
 
 render();
-
 })();
 </script>
 </body>
