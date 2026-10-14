@@ -3,27 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Sistema de Ventas</title>
+    <title>Registro de Ventas - Pro</title>
     <!-- Librería para generar PDFs -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 15px; margin: 0; }
-        h2 { text-align: center; color: #333; }
-        .contenedor { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 15px; }
-        input { width: 90%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }
-        button { width: 100%; padding: 12px; margin-top: 10px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; }
-        .btn-agregar { background-color: #007bff; color: white; }
-        .btn-pdf { background-color: #25D366; color: white; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 14px; }
-        th { background-color: #007bff; color: white; }
+        /* Estilos Modernos */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px; 
+            margin: 0; 
+            min-height: 100vh;
+        }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h2 { color: #2c3e50; margin: 0; font-weight: 700; }
+        
+        .contenedor { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08); 
+            margin-bottom: 20px; 
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        h3 { color: #34495e; margin-top: 0; font-size: 18px; }
+        
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 8px 0; 
+            border: 2px solid #e0e6ed; 
+            border-radius: 10px; 
+            font-size: 16px; 
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        input:focus { border-color: #3498db; outline: none; }
+        
+        button { 
+            width: 100%; 
+            padding: 14px; 
+            margin-top: 10px; 
+            border: none; 
+            border-radius: 10px; 
+            font-size: 16px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: transform 0.1s, opacity 0.3s;
+        }
+        button:active { transform: scale(0.98); }
+        
+        .btn-agregar { background: #3498db; color: white; }
+        .btn-agregar:hover { background: #2980b9; }
+        
+        .btn-pdf { background: #25D366; color: white; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-pdf:hover { background: #1ebe5d; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ecf0f1; font-size: 14px; }
+        th { background-color: #f8f9fa; color: #7f8c8d; font-weight: 600; text-transform: uppercase; font-size: 12px; }
+        tr:hover { background-color: #f9fbff; }
+        
+        .empty-msg { text-align: center; color: #bdc3c7; font-style: italic; padding: 20px; }
     </style>
 </head>
 <body>
 
-    <h2>📋 Registro de Ventas</h2>
+    <div class="header">
+        <h2>📋 Registro de Ventas</h2>
+    </div>
 
-    <!-- Formulario para agregar ventas -->
+    <!-- Formulario -->
     <div class="contenedor">
         <h3>Agregar Venta</h3>
         <input type="text" id="producto" placeholder="Nombre del producto">
@@ -32,7 +87,7 @@
         <button class="btn-agregar" onclick="agregarVenta()">➕ Agregar a la lista</button>
     </div>
 
-    <!-- Tabla donde se verán las ventas -->
+    <!-- Tabla de Ventas -->
     <div class="contenedor">
         <h3>Ventas del día</h3>
         <table id="tablaVentas">
@@ -43,22 +98,20 @@
                     <th>Total</th>
                 </tr>
             </thead>
-            <tbody>
-                <!-- Aquí se agregan las filas automáticamente -->
+            <tbody id="cuerpoTabla">
+                <tr><td colspan="3" class="empty-msg">No hay ventas registradas aún</td></tr>
             </tbody>
         </table>
     </div>
 
-    <!-- Botón de PDF y WhatsApp -->
+    <!-- Botón PDF -->
     <div class="contenedor">
         <button class="btn-pdf" onclick="generarYCompartirPDF()">📄 Generar PDF y Enviar por WhatsApp</button>
     </div>
 
     <script>
-        // Arreglo temporal para guardar las ventas en memoria
         let ventas = [];
 
-        // Función para agregar una venta a la tabla
         function agregarVenta() {
             const producto = document.getElementById('producto').value;
             const cantidad = document.getElementById('cantidad').value;
@@ -69,22 +122,31 @@
                 return;
             }
 
-            // Guardar en el arreglo
             const nuevaVenta = { producto, cantidad, total };
             ventas.push(nuevaVenta);
+            renderizarTabla();
 
-            // Actualizar la tabla visual
-            const tabla = document.getElementById('tablaVentas').getElementsByTagName('tbody')[0];
-            const nuevaFila = tabla.insertRow();
-            nuevaFila.innerHTML = `<td>${producto}</td><td>${cantidad}</td><td>$${total}</td>`;
-
-            // Limpiar los campos
             document.getElementById('producto').value = "";
             document.getElementById('cantidad').value = "";
             document.getElementById('total').value = "";
         }
 
-        // Función para generar el PDF y compartirlo
+        function renderizarTabla() {
+            const tbody = document.getElementById('cuerpoTabla');
+            tbody.innerHTML = ""; // Limpiar tabla
+
+            if (ventas.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" class="empty-msg">No hay ventas registradas aún</td></tr>';
+                return;
+            }
+
+            ventas.forEach(venta => {
+                const fila = document.createElement('tr');
+                fila.innerHTML = `<td>${venta.producto}</td><td>${venta.cantidad}</td><td>$${venta.total}</td>`;
+                tbody.appendChild(fila);
+            });
+        }
+
         async function generarYCompartirPDF() {
             if (ventas.length === 0) {
                 alert("No hay ventas para generar el PDF");
@@ -94,20 +156,17 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
-            // Título del PDF
             doc.setFontSize(18);
             doc.text("Recibo de Ventas", 10, 20);
             doc.setFontSize(12);
             doc.text("Fecha: " + new Date().toLocaleDateString(), 10, 30);
 
-            // Encabezados de la tabla en el PDF
             let y = 45;
             doc.text("Producto", 10, y);
             doc.text("Cant.", 100, y);
             doc.text("Total", 150, y);
             y += 10;
 
-            // Recorrer las ventas y agregarlas al PDF
             ventas.forEach(venta => {
                 doc.text(venta.producto, 10, y);
                 doc.text(venta.cantidad.toString(), 100, y);
@@ -115,11 +174,9 @@
                 y += 10;
             });
 
-            // Convertir el PDF a un archivo para compartir
             const pdfBlob = doc.output('blob');
             const file = new File([pdfBlob], 'recibo_ventas.pdf', { type: 'application/pdf' });
 
-            // Intentar compartir usando el menú nativo de Android (WhatsApp)
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 try {
                     await navigator.share({
@@ -131,7 +188,6 @@
                     console.error('Error al compartir:', error);
                 }
             } else {
-                // Si no se puede compartir, descargar el PDF y abrir WhatsApp
                 alert("Tu navegador no soporta compartir archivos. Se descargará el PDF y se abrirá WhatsApp.");
                 doc.save('recibo_ventas.pdf');
                 window.open(`https://wa.me/?text=Hola, aquí está el recibo de ventas. Te adjunto el PDF.`, '_blank');
