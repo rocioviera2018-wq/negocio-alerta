@@ -771,7 +771,7 @@ t+="N°: "+String(r.number).padStart(6,"0")+"\n";
 t+="Fecha: "+r.date.toLocaleString("es-AR")+"\n";
 t+="Cliente: "+r.client+"\n--------------------------\n";
 r.items.forEach(i=>{t+=i.qty+" x "+i.name+" = "+money(i.total)+"\n";});
-t+="--------------------------\nTOTAL: "+money(r.total)+"\n--------------------------\nGracias por su compra ❤️";
+t+="--------------------------\nTOTAL: "+money(r.total)+"\n--------------------------\nGracias por su compra";
 const bw=localStorage.getItem("waBusiness");
 if(bw)t+="\nConsultas: WhatsApp "+bw;
 return t;
@@ -827,10 +827,9 @@ if(cc==="54"&&!n.startsWith("9"))n="9"+n; /* celulares de Argentina: 549 + área
 return cc+n;
 }
 
+/* Abre WhatsApp navegando directo (funciona en Chrome y en navegadores internos) */
 function openWA(phone,text){
-const url="https://wa.me/"+(phone||"")+"?text="+encodeURIComponent(text);
-const w=window.open(url,"_blank","noopener,noreferrer");
-if(!w)location.href=url;
+location.href="https://wa.me/"+(phone||"")+"?text="+encodeURIComponent(text);
 }
 
 function sendWhatsApp(){
@@ -843,8 +842,8 @@ openWA(phone,receiptText());
 function sendStockAlert(){
 const low=products.filter(p=>p.stock<=p.min);
 if(low.length===0){showToast("No hay productos con stock bajo ✅");return;}
-let t="⚠ ALERTA DE STOCK - "+bizName()+"\n\n";
-low.forEach(p=>{t+="• "+p.name+": quedan "+p.stock+" (mínimo "+p.min+")\n";});
+let t="ALERTA DE STOCK - "+bizName()+"\n\n";
+low.forEach(p=>{t+="- "+p.name+": quedan "+p.stock+" (mínimo "+p.min+")\n";});
 t+="\nReponer lo antes posible.";
 const phone=waNumber(localStorage.getItem("waBusiness"));
 if(!phone)showToast("Configurá tu WhatsApp en Ajustes para enviártelo directo");
@@ -853,7 +852,7 @@ openWA(phone,t);
 
 function sendReport(){
 const t=reportData();
-const text="📊 RESUMEN - "+bizName()+"\nVentas: "+money(t.total)+"\nUnidades: "+t.units+"\nTickets: "+t.tickets;
+const text="RESUMEN - "+bizName()+"\nVentas: "+money(t.total)+"\nUnidades: "+t.units+"\nTickets: "+t.tickets;
 openWA(waNumber(localStorage.getItem("waBusiness")),text);
 }
 
@@ -869,7 +868,7 @@ function testWhatsApp(){
 saveWhatsApp();
 const phone=waNumber(localStorage.getItem("waBusiness"));
 if(!phone){showToast("Escribí tu número de WhatsApp");return;}
-openWA(phone,"✅ Prueba de "+bizName()+": WhatsApp vinculado correctamente.");
+openWA(phone,"Prueba de "+bizName()+": WhatsApp vinculado correctamente.");
 }
 
 /* ---------- CLIENTES ---------- */
