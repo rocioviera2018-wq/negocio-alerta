@@ -130,7 +130,7 @@ textarea{min-height:80px}
 (() => {
 'use strict';
 
-const KEY='negocioAlertaPro_v3';
+const KEY='negocioAlertaPro_v4';
 let state=load();
 let page='home';
 let scannerStream=null;
@@ -143,7 +143,7 @@ function defaultState(){
     business:'Mi negocio',
     owner:'',
     logo:'',
-    whatsapp:'',
+    whatsapp:'5493755222727',
     products:[],
     sales:[],
     orders:[],
@@ -189,7 +189,7 @@ function openModal(html){
 function closeModal(){document.getElementById('modal')?.remove();}
 
 /* =========================================================
-   WHATSAPP — solo wa.me (HTTPS)
+   WHATSAPP — solo wa.me (deja elegir entre las dos apps)
    ========================================================= */
 function cleanPhone(p){return String(p||'').replace(/\D/g,'');}
 
@@ -679,7 +679,7 @@ function render(){
           <div class="field full">
             <label>WhatsApp predeterminado (con código de país)</label>
             <input name="whatsapp" value="${esc(state.whatsapp||'')}" inputmode="tel" placeholder="549...">
-            <small class="muted">Solo números, con código de país. Argentina: 54 + 9 + área + número. Ej: 5493755223737</small>
+            <small class="muted">Solo números, con código de país. Argentina: 54 + 9 + área + número. Ej: 5493755222727</small>
           </div>
           <div class="field full">
             <label>Logo del negocio</label>
