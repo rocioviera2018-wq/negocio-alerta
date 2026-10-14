@@ -10,9 +10,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <!-- Librería Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Librería Escáner de Códigos -->
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-    
+    <!-- Librería Escáner de Códigos (versión fija) -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
     <style>
         :root {
             --primary-dark: #0a3d2e;
@@ -41,16 +41,15 @@
         }
         .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .logo-area { display: flex; align-items: center; gap: 10px; }
-        
-        /* Estilos para el logo personalizado */
-        .logo-container { background: white; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--gold); overflow: hidden; position: relative; }
+
+        .logo-container { background: white; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--gold); overflow: hidden; position: relative; flex-shrink: 0; }
         .logo-container img { width: 100%; height: 100%; object-fit: cover; }
         .logo-container i { color: var(--primary-dark); font-size: 24px; }
 
         .header-title h1 { font-size: 20px; margin: 0; }
         .header-title span { color: var(--gold); font-size: 12px; font-weight: bold; }
         .header-icons { display: flex; gap: 15px; font-size: 20px; }
-        
+
         .welcome-box {
             background: rgba(255,255,255,0.1);
             padding: 15px;
@@ -132,8 +131,8 @@
         .empty-text { text-align: center; color: var(--text-light); font-size: 14px; padding: 20px; }
 
         /* Estilos del escáner */
-        #reader { width: 100%; border-radius: 15px; overflow: hidden; border: 2px dashed var(--primary-mid); margin-top: 10px; }
-        #reader video { border-radius: 15px; }
+        #reader { width: 100%; border-radius: 15px; overflow: hidden; border: 2px dashed var(--primary-mid); margin-top: 10px; min-height: 60px; }
+        #reader video { border-radius: 15px; width: 100% !important; }
     </style>
 </head>
 <body>
@@ -143,7 +142,6 @@
         <div class="header-top">
             <div class="logo-area">
                 <div class="logo-container">
-                    <!-- Aquí se cargará tu logo. Por defecto muestra una hoja -->
                     <img id="custom-logo" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Logo" style="display: none;">
                     <i class="fas fa-leaf" id="default-logo-icon"></i>
                 </div>
@@ -162,12 +160,12 @@
                 <h3>Bienvenido/a</h3>
                 <p>Tu negocio, siempre en control.</p>
             </div>
-            <button class="btn-logout">Cerrar sesión</button>
+            <button class="btn-logout" onclick="cerrarSesion()">Cerrar sesión</button>
         </div>
     </header>
 
     <div class="container">
-        
+
         <!-- ================= SECCIÓN INICIO ================= -->
         <div id="seccion-inicio">
             <div class="summary-cards">
@@ -180,7 +178,6 @@
                 <div class="menu-item active" onclick="cambiarSeccion('inicio', this)"><i class="fas fa-home"></i><span>Inicio</span></div>
                 <div class="menu-item" onclick="cambiarSeccion('productos', this)"><i class="fas fa-shopping-bag"></i><span>Productos</span></div>
                 <div class="menu-item" onclick="cambiarSeccion('ventas', this)"><i class="fas fa-credit-card"></i><span>Ventas</span></div>
-                <!-- NUEVO BOTÓN DE ESCANEAR EN EL MENÚ -->
                 <div class="menu-item" onclick="cambiarSeccion('escaner', this)"><i class="fas fa-qrcode"></i><span>Escanear</span></div>
                 <div class="menu-item" onclick="cambiarSeccion('pedidos', this)"><i class="fas fa-box-open"></i><span>Pedidos</span></div>
                 <div class="menu-item" onclick="cambiarSeccion('clientes', this)"><i class="fas fa-users"></i><span>Clientes</span></div>
@@ -205,12 +202,37 @@
             </div>
         </div>
 
-        <!-- ================= SECCIÓN ESCÁNER (NUEVA) ================= -->
+        <!-- ================= SECCIÓN ESCÁNER ================= -->
         <div id="seccion-escaner" style="display: none;">
             <div class="section-card">
-                <h3 style="color: var(--primary-dark); margin-bottom: 15px; text-align: center;"><i class="fas fa-qrcode"></i> Escanear Producto</h3>
-                <p class="empty-text" style="padding: 10px; font-size: 13px;">Apunta la cámara al código de barras o QR. Al escanearlo, se irá a la pestaña de Ventas automáticamente.</p>
+                <h3 style="color: var(--primary-dark); margin-bottom: 15px; text-align: center;">
+                    <i class="fas fa-qrcode"></i> Escanear Producto
+                </h3>
+                <p class="empty-text" style="padding: 10px; font-size: 13px;">
+                    Apunta la cámara al código. Si no abre, revisa permisos o usa la entrada manual.
+                </p>
+
+                <button class="btn-primary" onclick="iniciarScanner()" style="margin-bottom:10px;">
+                    <i class="fas fa-camera"></i> Activar cámara
+                </button>
+                <button class="btn-primary" onclick="detenerScanner()" style="background:#e74c3c; margin-bottom:10px;">
+                    <i class="fas fa-stop"></i> Detener cámara
+                </button>
+
                 <div id="reader"></div>
+                <div id="scanner-status" style="text-align:center; font-size:12px; color:var(--text-light); padding:8px;">
+                    Cámara apagada.
+                </div>
+
+                <hr style="margin:15px 0; border:none; border-top:1px solid #eee;">
+
+                <h4 style="font-size:13px; color:var(--primary-dark); margin-bottom:8px;">
+                    <i class="fas fa-keyboard"></i> Entrada manual (por si falla la cámara)
+                </h4>
+                <div class="form-group">
+                    <input type="text" id="input-manual-codigo" placeholder="Ej: 7791234567890">
+                </div>
+                <button class="btn-primary" onclick="usarCodigoManual()">Usar este código</button>
             </div>
         </div>
 
@@ -244,17 +266,40 @@
         <div id="seccion-pedidos" style="display: none;"><div class="section-card"><h3><i class="fas fa-box-open"></i> Pedidos</h3><p class="empty-text">Aquí aparecerán tus pedidos.</p></div></div>
         <div id="seccion-clientes" style="display: none;"><div class="section-card"><h3><i class="fas fa-users"></i> Clientes</h3><p class="empty-text">Aquí aparecerán tus clientes.</p></div></div>
         <div id="seccion-reportes" style="display: none;"><div class="section-card"><h3><i class="fas fa-chart-bar"></i> Reportes</h3><button class="btn-pdf" onclick="generarYCompartirPDF()"><i class="fas fa-file-pdf"></i> Descargar Reporte PDF</button></div></div>
-        
-        <!-- ================= SECCIÓN AJUSTES (CON SUBIDA DE LOGO) ================= -->
+
+        <!-- ================= SECCIÓN AJUSTES ================= -->
         <div id="seccion-ajustes" style="display: none;">
             <div class="section-card">
                 <h3 style="color: var(--primary-dark); margin-bottom: 15px;"><i class="fas fa-cog"></i> Ajustes</h3>
-                
+
                 <div class="form-group" style="background: var(--primary-light); padding: 15px; border-radius: 10px; border: 1px solid #d1e7dd;">
-                    <label style="font-weight: bold; color: var(--primary-dark);"><i class="fas fa-image"></i> Mi Logo Personalizado</label>
-                    <p style="font-size: 11px; color: var(--text-light); margin-bottom: 10px;">Sube una foto cuadrada desde tu galería. Se guardará en este dispositivo.</p>
-                    <input type="file" id="logo-upload" accept="image/*" onchange="subirLogo(event)" style="background: white; padding: 5px;">
-                    <button class="btn-primary" onclick="borrarLogo()" style="background: var(--danger); margin-top: 10px;"><i class="fas fa-trash"></i> Restaurar logo por defecto</button>
+                    <label style="font-weight: bold; color: var(--primary-dark);">
+                        <i class="fas fa-image"></i> Mi Logo Personalizado
+                    </label>
+                    <p style="font-size: 11px; color: var(--text-light); margin-bottom: 10px;">
+                        Sube una foto cuadrada. Se guardará en este dispositivo.
+                    </p>
+
+                    <div style="text-align:center; margin-bottom:10px;">
+                        <img id="preview-logo" src="" alt=""
+                             style="display:none; width:100px; height:100px; border-radius:50%; object-fit:cover; border:3px solid var(--gold);">
+                    </div>
+
+                    <input type="file" id="logo-upload" accept="image/*" style="display:none" onchange="subirLogo(event)">
+                    <button class="btn-primary" onclick="document.getElementById('logo-upload').click()">
+                        <i class="fas fa-upload"></i> Elegir foto de galería
+                    </button>
+
+                    <input type="file" id="logo-camera" accept="image/*" capture="environment" style="display:none" onchange="subirLogo(event)">
+                    <button class="btn-primary" style="background:var(--gold); color:#000; margin-top:8px;"
+                            onclick="document.getElementById('logo-camera').click()">
+                        <i class="fas fa-camera"></i> Tomar foto con la cámara
+                    </button>
+
+                    <button class="btn-primary" onclick="borrarLogo()"
+                            style="background: var(--danger); margin-top: 10px;">
+                        <i class="fas fa-trash"></i> Restaurar logo por defecto
+                    </button>
                 </div>
 
                 <p class="empty-text">Más configuraciones próximamente.</p>
@@ -289,7 +334,7 @@
         const SUPABASE_KEY = 'TU_SUPABASE_ANON_KEY_AQUI';
 
         let supabaseClient = null;
-        
+
         if (SUPABASE_URL !== 'TU_SUPABASE_URL_AQUI' && SUPABASE_KEY !== 'TU_SUPABASE_ANON_KEY_AQUI') {
             try {
                 supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -297,63 +342,96 @@
                 console.warn("Error al iniciar Supabase:", e.message);
             }
         } else {
-            console.log("Supabase no configurado. Usando datos de prueba.");
+            console.log("Supabase no configurado. La app funcionará sin datos remotos.");
         }
 
         // ==========================================
         // 2. LÓGICA DEL ESCÁNER DE CÓDIGOS
         // ==========================================
         let html5QrcodeScanner = null;
+        let scannerActivo = false;
 
-        function iniciarScanner() {
-            if (html5QrcodeScanner) return; // Evitar duplicados
-            
-            html5QrcodeScanner = new Html5QrcodeScanner(
-                "reader", 
-                { fps: 10, qrbox: {width: 250, height: 250} },
-                /* verbose= */ false
-            );
-            html5QrcodeScanner.render(onScanSuccess, onScanError);
+        function setScannerStatus(msg, color) {
+            const el = document.getElementById('scanner-status');
+            if (el) { el.innerText = msg; el.style.color = color || 'var(--text-light)'; }
         }
 
-        function detenerScanner() {
-            if (html5QrcodeScanner) {
-                html5QrcodeScanner.clear().then(() => {
-                    html5QrcodeScanner = null;
-                }).catch(err => console.error("Error al detener escáner", err));
+        function iniciarScanner() {
+            if (scannerActivo) return;
+
+            // Verificar HTTPS (la cámara sólo funciona en https o localhost)
+            if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+                setScannerStatus('⚠️ La cámara requiere HTTPS. Abre la página desde un dominio seguro.', '#e74c3c');
+                alert('La cámara del celular solo funciona si la página se abre por HTTPS.\n\n' +
+                      'Si estás probando en local, súbela a Netlify, Vercel o GitHub Pages.');
+                return;
+            }
+
+            if (typeof Html5QrcodeScanner === 'undefined') {
+                setScannerStatus('⚠️ La librería no cargó. Recarga la página.', '#e74c3c');
+                return;
+            }
+
+            setScannerStatus('Iniciando cámara…');
+
+            try {
+                html5QrcodeScanner = new Html5QrcodeScanner(
+                    "reader",
+                    { fps: 10, qrbox: { width: 250, height: 250 } },
+                    false
+                );
+                html5QrcodeScanner.render(onScanSuccess, onScanError);
+                scannerActivo = true;
+                setScannerStatus('📷 Cámara activa. Apunta al código…', '#16634a');
+            } catch (e) {
+                console.error(e);
+                setScannerStatus('Error al iniciar: ' + e.message, '#e74c3c');
+                scannerActivo = false;
             }
         }
 
-        function onScanSuccess(decodedText, decodedResult) {
-            // Detener escáner al encontrar un código
+        function detenerScanner() {
+            if (!html5QrcodeScanner) { setScannerStatus('Cámara apagada.'); scannerActivo = false; return; }
+            html5QrcodeScanner.clear()
+                .then(() => {
+                    html5QrcodeScanner = null;
+                    scannerActivo = false;
+                    setScannerStatus('Cámara apagada.');
+                })
+                .catch(err => {
+                    console.error("Error al detener escáner", err);
+                    html5QrcodeScanner = null;
+                    scannerActivo = false;
+                });
+        }
+
+        function onScanSuccess(decodedText) {
             detenerScanner();
-            
-            // Poner el código escaneado en el campo de producto de Ventas
             document.getElementById('venta-producto').value = decodedText;
-            
-            alert("✅ Código escaneado: " + decodedText + "\n\nSe ha cargado en el formulario de Ventas.");
-            
-            // Cambiar automáticamente a la pestaña de Ventas
+            alert("✅ Código escaneado: " + decodedText);
             cambiarSeccion('ventas', document.querySelector('.menu-item[onclick*="ventas"]'));
         }
 
-        function onScanError(errorMessage) {
-            // Errores comunes de lectura (ej. no hay código en cámara), se ignoran para no llenar de alertas
+        function onScanError() { /* ignorar errores normales de lectura */ }
+
+        function usarCodigoManual() {
+            const val = document.getElementById('input-manual-codigo').value.trim();
+            if (!val) { alert("Escribe un código."); return; }
+            document.getElementById('venta-producto').value = val;
+            document.getElementById('input-manual-codigo').value = '';
+            cambiarSeccion('ventas', document.querySelector('.menu-item[onclick*="ventas"]'));
         }
 
         // ==========================================
         // 3. NAVEGACIÓN (Cambiar secciones)
         // ==========================================
         function cambiarSeccion(nombreSeccion, elementoClickeado) {
-            // Ocultar todas las secciones
             const secciones = document.querySelectorAll('.container > div');
             secciones.forEach(seccion => { seccion.style.display = 'none'; });
 
-            // Mostrar la sección seleccionada
             const seccionActiva = document.getElementById('seccion-' + nombreSeccion);
             if (seccionActiva) seccionActiva.style.display = 'block';
 
-            // Controlar el botón de PDF (solo en Inicio)
             const botonPdf = document.getElementById('boton-pdf-inicio');
             if (nombreSeccion === 'inicio') {
                 botonPdf.style.display = 'block';
@@ -361,18 +439,14 @@
                 botonPdf.style.display = 'none';
             }
 
-            // CONTROLAR EL ESCÁNER (Encender solo en su pestaña, apagar en las demás)
             if (nombreSeccion === 'escaner') {
-                // Pequeño retraso para que el div sea visible antes de encender la cámara
-                setTimeout(iniciarScanner, 300); 
+                setScannerStatus('Cámara apagada. Pulsa "Activar cámara".');
             } else {
                 detenerScanner();
             }
 
-            // Quitar 'active' de todos los botones
             document.querySelectorAll('.menu-item, .nav-item').forEach(item => { item.classList.remove('active'); });
 
-            // Poner 'active' al botón que se tocó
             if (elementoClickeado) {
                 elementoClickeado.classList.add('active');
                 const esMenuSuperior = elementoClickeado.classList.contains('menu-item');
@@ -390,42 +464,72 @@
         // 4. LÓGICA DEL LOGO PERSONALIZADO
         // ==========================================
         function cargarLogoGuardado() {
-            const logoGuardado = localStorage.getItem('negocio_logo');
-            if (logoGuardado) {
-                const img = document.getElementById('custom-logo');
-                const icon = document.getElementById('default-logo-icon');
-                img.src = logoGuardado;
+            const logo = localStorage.getItem('negocio_logo');
+            if (logo) aplicarLogo(logo, false);
+        }
+
+        function aplicarLogo(base64, guardarEnStorage) {
+            const img = document.getElementById('custom-logo');
+            const icon = document.getElementById('default-logo-icon');
+            const prev = document.getElementById('preview-logo');
+
+            if (base64) {
+                img.src = base64;
                 img.style.display = 'block';
                 icon.style.display = 'none';
+                if (prev) { prev.src = base64; prev.style.display = 'inline-block'; }
+                if (guardarEnStorage) {
+                    try { localStorage.setItem('negocio_logo', base64); }
+                    catch (e) { alert("No se pudo guardar (almacenamiento lleno)."); }
+                }
+            } else {
+                img.style.display = 'none';
+                icon.style.display = 'block';
+                if (prev) prev.style.display = 'none';
             }
         }
 
         function subirLogo(event) {
-            const file = event.target.files[0];
+            const file = event.target.files && event.target.files[0];
             if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                alert("Selecciona una imagen válida.");
+                return;
+            }
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                const base64 = e.target.result;
-                try {
-                    localStorage.setItem('negocio_logo', base64);
-                    document.getElementById('custom-logo').src = base64;
-                    document.getElementById('custom-logo').style.display = 'block';
-                    document.getElementById('default-logo-icon').style.display = 'none';
-                    alert("¡Logo guardado con éxito!");
-                } catch (error) {
-                    alert("La imagen es muy grande. Intenta con una más pequeña.");
-                }
+                const img = new Image();
+                img.onload = function() {
+                    const size = 400;
+                    const canvas = document.createElement('canvas');
+                    canvas.width = size;
+                    canvas.height = size;
+                    const ctx = canvas.getContext('2d');
+
+                    const min = Math.min(img.width, img.height);
+                    const sx = (img.width - min) / 2;
+                    const sy = (img.height - min) / 2;
+                    ctx.drawImage(img, sx, sy, min, min, 0, 0, size, size);
+
+                    const base64 = canvas.toDataURL('image/jpeg', 0.85);
+                    aplicarLogo(base64, true);
+                    alert("✅ ¡Logo guardado!");
+                };
+                img.onerror = function() { alert("No se pudo leer la imagen."); };
+                img.src = e.target.result;
             };
+            reader.onerror = function() { alert("Error al leer el archivo."); };
             reader.readAsDataURL(file);
+
+            event.target.value = '';
         }
 
         function borrarLogo() {
-            if(confirm("¿Seguro que quieres borrar tu logo personalizado?")) {
+            if (confirm("¿Seguro que quieres borrar tu logo personalizado?")) {
                 localStorage.removeItem('negocio_logo');
-                document.getElementById('custom-logo').style.display = 'none';
-                document.getElementById('default-logo-icon').style.display = 'block';
-                document.getElementById('logo-upload').value = '';
+                aplicarLogo(null, false);
             }
         }
 
@@ -434,33 +538,68 @@
         // ==========================================
         async function cargarDatos() {
             if (!supabaseClient) return;
-
             try {
-                const resProd = await supabaseClient.from('productos').select('*');
-                if (resProd.error) throw resProd.error;
-                const productos = resProd.data;
+                // --- PRODUCTOS ---
+                const { data: productos, error: errProd } = await supabaseClient.from('productos').select('*');
+                if (errProd) throw errProd;
+                const lista = productos || [];
 
-                if (productos && productos.length > 0) {
-                    document.getElementById('stat-productos').innerText = productos.length;
-                    const listaProd = document.getElementById('lista-productos');
-                    listaProd.innerHTML = '';
-                    productos.forEach(p => {
-                        listaProd.innerHTML += '<div class="mov-item"><div class="mov-text"><h4>' + (p.nombre || p.producto) + '</h4><span>Stock: ' + (p.stock || 0) + ' | $' + (p.precio || 0) + '</span></div></div>';
-                    });
+                document.getElementById('stat-productos').innerText = lista.length;
+
+                const listaProd = document.getElementById('lista-productos');
+                const listaAlertas = document.getElementById('lista-alertas');
+                listaProd.innerHTML = '';
+                listaAlertas.innerHTML = '';
+
+                const STOCK_MINIMO = 5;
+                const bajos = lista.filter(p => Number(p.stock || 0) <= STOCK_MINIMO);
+                document.getElementById('stat-stock').innerText = bajos.length;
+
+                if (lista.length === 0) {
+                    listaProd.innerHTML = '<p class="empty-text">No hay productos registrados.</p>';
                 } else {
-                    document.getElementById('lista-productos').innerHTML = '<p class="empty-text">No hay productos registrados.</p>';
+                    lista.forEach(p => {
+                        listaProd.innerHTML += '<div class="mov-item"><div class="mov-text"><h4>' +
+                            (p.nombre || p.producto) + '</h4><span>Stock: ' + (p.stock || 0) +
+                            ' | $' + (p.precio || 0) + '</span></div></div>';
+                    });
                 }
 
-                const resVentas = await supabaseClient.from('ventas').select('*');
-                if (resVentas.error) throw resVentas.error;
-                const ventas = resVentas.data;
-
-                if (ventas && ventas.length > 0) {
-                    const totalGanancia = ventas.reduce((sum, v) => sum + (Number(v.total) || 0), 0);
-                    document.getElementById('stat-ganancia').innerText = '$ ' + totalGanancia.toLocaleString();
+                if (bajos.length === 0) {
+                    listaAlertas.innerHTML = '<p class="empty-text">No hay alertas de stock.</p>';
+                } else {
+                    bajos.forEach(p => {
+                        listaAlertas.innerHTML += '<div class="alert-item"><div class="alert-img">📦</div>' +
+                            '<div class="alert-info"><h4>' + (p.nombre || p.producto) + '</h4>' +
+                            '<p>Quedan ' + (p.stock || 0) + ' unidades</p>' +
+                            '<span>Stock mínimo: ' + STOCK_MINIMO + '</span></div></div>';
+                    });
                 }
-            } catch (error) {
-                console.error("Error al cargar Supabase:", error.message);
+
+                // --- VENTAS ---
+                const { data: ventas, error: errVentas } = await supabaseClient.from('ventas').select('*');
+                if (errVentas) throw errVentas;
+                const v = ventas || [];
+
+                const total = v.reduce((s, x) => s + (Number(x.total) || 0), 0);
+                document.getElementById('stat-ganancia').innerText = '$ ' + total.toLocaleString();
+
+                const listaMov = document.getElementById('lista-movimientos');
+                listaMov.innerHTML = '';
+                if (v.length === 0) {
+                    listaMov.innerHTML = '<p class="empty-text">No hay movimientos recientes.</p>';
+                } else {
+                    v.slice(-5).reverse().forEach(x => {
+                        listaMov.innerHTML += '<div class="mov-item"><div class="mov-left">' +
+                            '<div class="mov-icon"><i class="fas fa-credit-card"></i></div>' +
+                            '<div class="mov-text"><h4>' + x.producto + '</h4>' +
+                            '<span>' + x.cantidad + ' u.</span></div></div>' +
+                            '<div class="mov-right"><p>$' + x.total + '</p></div></div>';
+                    });
+                }
+
+            } catch (e) {
+                console.error("Error al cargar Supabase:", e.message);
             }
         }
 
@@ -513,18 +652,16 @@
         // ==========================================
         async function generarYCompartirPDF() {
             try {
-                alert("1. Iniciando generación de PDF...");
-
                 const cliente = "Cliente General";
                 const fecha = new Date().toLocaleDateString();
-                
+
                 const inputProd = document.getElementById('venta-producto');
                 const inputCant = document.getElementById('venta-cantidad');
                 const inputTot = document.getElementById('venta-total');
-                
-                const producto = inputProd ? inputProd.value : "Pan lactal";
-                const cantidad = inputCant ? inputCant.value : "2";
-                const total = inputTot ? inputTot.value : "2400";
+
+                const producto = (inputProd && inputProd.value) ? inputProd.value : "Pan lactal";
+                const cantidad = (inputCant && inputCant.value) ? inputCant.value : "2";
+                const total = (inputTot && inputTot.value) ? inputTot.value : "2400";
 
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
@@ -545,20 +682,16 @@
                 doc.setTextColor(150, 150, 150);
                 doc.text("¡Gracias por su compra!", 10, 100);
 
-                alert("2. PDF creado en memoria. Preparando para compartir...");
-
                 const pdfBlob = doc.output('blob');
                 const file = new File([pdfBlob], 'ticket_venta.pdf', { type: 'application/pdf' });
 
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    alert("3. Abriendo menú para compartir por WhatsApp...");
                     await navigator.share({
                         files: [file],
                         title: 'Ticket de Venta',
                         text: 'Aquí tienes tu ticket.'
                     });
                 } else {
-                    alert("3. Tu dispositivo no soporta compartir archivos directos. Se descargará el PDF y se abrirá WhatsApp.");
                     doc.save('ticket_venta.pdf');
                     setTimeout(function() {
                         window.open('https://wa.me/?text=Hola, aquí está tu ticket de venta. Te adjunto el PDF que acabo de descargar.', '_blank');
@@ -572,11 +705,21 @@
         }
 
         // ==========================================
-        // 9. INICIALIZAR AL CARGAR LA PÁGINA
+        // 9. CERRAR SESIÓN (placeholder)
+        // ==========================================
+        function cerrarSesion() {
+            if (confirm("¿Cerrar sesión?")) {
+                // Aquí puedes añadir lógica real de auth con Supabase si la usas
+                location.reload();
+            }
+        }
+
+        // ==========================================
+        // 10. INICIALIZAR AL CARGAR LA PÁGINA
         // ==========================================
         window.onload = function() {
-            cargarLogoGuardado(); // Carga tu logo si lo subiste antes
-            cargarDatos();        // Carga datos de Supabase
+            cargarLogoGuardado();
+            cargarDatos();
         };
     </script>
 </body>
