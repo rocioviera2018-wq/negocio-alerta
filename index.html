@@ -8,48 +8,21 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-green: #0A3B2C;
-            --dark-green: #0E4533;
-            --light-green: #E6F4F1;
-            --gold: #C9A45C;
-            --bg-color: #F2F7F5;
-            --text-dark: #333333;
-            --text-gray: #777777;
-            --red: #E53935;
+            --primary-green: #0A3B2C; --dark-green: #0E4533; --light-green: #E6F4F1;
+            --gold: #C9A45C; --bg-color: #F2F7F5; --text-dark: #333333;
+            --text-gray: #777777; --red: #E53935; --blue: #1e88e5;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #e0e0e0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .app-container { width: 100%; max-width: 480px; background-color: var(--bg-color); min-height: 100vh; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow-x: hidden; padding-bottom: 80px; }
 
-        body {
-            background-color: #e0e0e0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 480px;
-            background-color: var(--bg-color);
-            min-height: 100vh;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow-x: hidden;
-            padding-bottom: 80px;
-        }
-
-        /* --- SECCIONES (Páginas) --- */
+        /* SECCIONES */
         .app-section { display: none; animation: fadeIn 0.3s ease-in-out; }
         .app-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- HEADER --- */
-        header {
-            background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
-            padding: 20px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px;
-            color: white; display: flex; align-items: center; gap: 12px; position: relative; z-index: 1;
-        }
+        /* HEADER */
+        header { background: linear-gradient(135deg, var(--primary-green), var(--dark-green)); padding: 20px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; color: white; display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; }
         .logo-icon { width: 45px; height: 45px; border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 20px; }
         .header-text h1 { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
         .pro-badge { background-color: var(--gold); color: black; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
@@ -59,14 +32,14 @@
         .notification-badge { position: absolute; top: -5px; right: -5px; background-color: var(--red); color: white; font-size: 9px; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
         .profile-icon { width: 35px; height: 35px; background-color: #1B5E46; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
 
-        /* --- WELCOME BANNER --- */
+        /* WELCOME BANNER */
         .welcome-banner { background-color: var(--dark-green); margin: -15px 20px 0; padding: 12px 15px; border-radius: 15px; display: flex; align-items: center; gap: 10px; color: white; position: relative; z-index: 2; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .welcome-icon { background-color: #1A6B4E; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
         .welcome-text h3 { font-size: 13px; font-weight: 600; }
         .welcome-text p { font-size: 10px; color: rgba(255,255,255,0.7); }
         .logout-btn { margin-left: auto; background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 5px; font-family: 'Poppins', sans-serif; }
 
-        /* --- METRICS --- */
+        /* METRICS */
         .metrics-grid { display: flex; gap: 10px; padding: 15px 20px; }
         .metric-card { flex: 1; background: white; padding: 12px; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 8px; position: relative; }
         .metric-card.productos { border: 1px solid rgba(10, 59, 44, 0.2); }
@@ -84,57 +57,44 @@
         .metric-card.ganancia .metric-value { color: var(--gold); }
         .metric-arrow { font-size: 12px; color: inherit; position: absolute; right: 12px; bottom: 12px; }
 
-        /* --- ACTION GRID --- */
+        /* ACTION GRID */
         .actions-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 0 20px 15px; }
         .action-btn { background: white; border-radius: 15px; padding: 15px 5px; display: flex; flex-direction: column; align-items: center; gap: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.2s; }
         .action-btn:active { transform: scale(0.95); }
         .action-btn i { font-size: 20px; color: var(--primary-green); }
         .action-btn span { font-size: 9px; text-align: center; color: var(--text-dark); font-weight: 500; }
 
-        /* --- CONTENIDO DE PÁGINAS --- */
+        /* CONTENIDO DE PÁGINAS */
         .page-content { padding: 20px; }
         .page-title { color: var(--primary-green); font-size: 22px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
         
-        /* Botón para agregar */
-        .btn-add {
-            background: var(--primary-green); color: white; border: none; padding: 12px 20px;
-            border-radius: 12px; font-size: 14px; font-weight: 600; width: 100%; margin-bottom: 20px;
-            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-            box-shadow: 0 4px 10px rgba(10, 59, 44, 0.2);
-        }
-
-        /* Formulario */
-        .form-container {
-            background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            margin-bottom: 20px; display: none; border: 1px solid #eee;
-        }
+        /* Formularios generales */
+        .btn-add { background: var(--primary-green); color: white; border: none; padding: 12px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; width: 100%; margin-bottom: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 10px rgba(10, 59, 44, 0.2); }
+        .form-container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; display: none; border: 1px solid #eee; }
         .form-container.active { display: block; }
         .input-group { margin-bottom: 12px; }
         .input-group label { display: block; font-size: 12px; font-weight: 600; color: var(--primary-green); margin-bottom: 4px; }
-        .input-group input {
-            width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-family: 'Poppins', sans-serif;
-            font-size: 13px; outline: none; transition: border 0.3s;
-        }
-        .input-group input:focus { border-color: var(--primary-green); }
-        .btn-save {
-            background: var(--gold); color: black; border: none; padding: 10px; width: 100%;
-            border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 10px;
-        }
+        .input-group input, .input-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 13px; outline: none; transition: border 0.3s; background: white; }
+        .input-group input:focus, .input-group select:focus { border-color: var(--primary-green); }
+        .btn-save { background: var(--gold); color: black; border: none; padding: 10px; width: 100%; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 10px; }
 
-        /* Lista de Productos */
-        .product-list { display: flex; flex-direction: column; gap: 10px; }
-        .product-item {
-            background: white; padding: 15px; border-radius: 12px; display: flex; align-items: center; gap: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 4px solid var(--gold);
-        }
-        .product-item img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: #eee; }
-        .product-item .info { flex: 1; }
-        .product-item h4 { font-size: 14px; font-weight: 700; color: var(--text-dark); }
-        .product-item p { font-size: 12px; color: var(--text-gray); }
-        .product-item .price { font-size: 14px; font-weight: 700; color: var(--primary-green); }
+        /* Listas generales */
+        .list-container { display: flex; flex-direction: column; gap: 10px; }
+        .list-item { background: white; padding: 15px; border-radius: 12px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 4px solid var(--gold); }
+        .list-item img { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; background: #eee; }
+        .list-item .info { flex: 1; }
+        .list-item h4 { font-size: 14px; font-weight: 700; color: var(--text-dark); }
+        .list-item p { font-size: 12px; color: var(--text-gray); }
+        .list-item .price { font-size: 14px; font-weight: 700; color: var(--primary-green); }
         .btn-delete { background: #ffebee; color: var(--red); border: none; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        
+        /* Badges para estados */
+        .badge { font-size: 10px; padding: 4px 8px; border-radius: 6px; font-weight: 600; }
+        .badge-pending { background: #fff3e0; color: #ef6c00; }
+        .badge-completed { background: #e8f5e9; color: #43a047; }
+        .badge-cancelled { background: #ffebee; color: var(--red); }
 
-        /* --- LOW STOCK & MOVIMIENTOS (Inicio) --- */
+        /* INICIO */
         .section-card { background: white; margin: 0 20px 15px; padding: 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
         .section-icon { background-color: var(--primary-green); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; }
@@ -156,25 +116,22 @@
         .movement-icon.cliente { background: #f3e5f5; color: #8e24aa; }
         .movement-text { flex: 1; font-size: 11px; color: var(--text-dark); font-weight: 500; }
         .movement-time { font-size: 10px; color: var(--text-gray); }
-        .movement-status { font-size: 10px; padding: 4px 8px; border-radius: 6px; font-weight: 600; }
-        .status-pending { background: #fff3e0; color: #ef6c00; }
-        .status-money { color: #43a047; }
         .footer-note { margin: 0 20px 20px; background-color: var(--light-green); padding: 12px; border-radius: 10px; display: flex; gap: 10px; align-items: flex-start; }
         .footer-note i { color: var(--primary-green); font-size: 14px; margin-top: 2px; }
         .footer-note p { font-size: 9px; color: var(--primary-green); line-height: 1.4; }
 
-        /* --- BOTTOM NAV --- */
-        .bottom-nav {
-            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-            width: 100%; max-width: 480px; background-color: var(--primary-green);
-            border-top-left-radius: 25px; border-top-right-radius: 25px;
-            display: flex; justify-content: space-around; padding: 10px 0 15px;
-            z-index: 100; box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
-        }
+        /* BOTTOM NAV */
+        .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background-color: var(--primary-green); border-top-left-radius: 25px; border-top-right-radius: 25px; display: flex; justify-content: space-around; padding: 10px 0 15px; z-index: 100; box-shadow: 0 -5px 15px rgba(0,0,0,0.1); }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: rgba(255,255,255,0.6); font-size: 9px; cursor: pointer; transition: color 0.3s; width: 16%; }
         .nav-item.active { color: var(--gold); }
         .nav-item i { font-size: 18px; }
         .nav-item span { font-weight: 500; }
+
+        /* REPORTES (Tarjetas especiales) */
+        .report-card { background: white; padding: 15px; border-radius: 15px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 15px; }
+        .report-card i { font-size: 24px; color: var(--gold); }
+        .report-card h4 { font-size: 12px; color: var(--text-gray); }
+        .report-card p { font-size: 18px; font-weight: 700; color: var(--primary-green); }
     </style>
 </head>
 <body>
@@ -211,13 +168,13 @@
             <div class="metric-card stock">
                 <div class="metric-header"><div class="metric-icon"><i class="fas fa-exclamation-triangle"></i></div></div>
                 <span class="metric-title">Stock bajo</span>
-                <span class="metric-value">3</span>
+                <span class="metric-value" id="metric-stock-bajo">0</span>
                 <i class="fas fa-chevron-right metric-arrow"></i>
             </div>
             <div class="metric-card ganancia">
                 <div class="metric-header"><div class="metric-icon"><i class="fas fa-chart-line"></i></div></div>
                 <span class="metric-title">Ganancia</span>
-                <span class="metric-value">$ 18.750</span>
+                <span class="metric-value" id="metric-ganancia">$ 0</span>
                 <i class="fas fa-chevron-right metric-arrow"></i>
             </div>
         </div>
@@ -236,13 +193,11 @@
             <div class="section-header">
                 <div class="section-icon"><i class="fas fa-bell"></i></div>
                 <span class="section-title">Atención para hoy</span>
-                <a href="#" class="see-all">Ver todos ></a>
+                <a href="#" class="see-all" onclick="navigateTo('productos')">Ver todos ></a>
             </div>
-            <div class="alert-badge">3 productos con stock bajo</div>
-            <div class="horizontal-scroll">
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=150" alt="Pan"><div class="product-info"><h4>Pan lactal</h4><p>Quedan: 2</p><span>Mínimo: 5</span></div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1613478223719-2ab802602423?w=150" alt="Jugo"><div class="product-info"><h4>Jugo naranja</h4><p>Quedan: 1</p><span>Mínimo: 3</span></div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=150" alt="Papas"><div class="product-info"><h4>Papas fritas</h4><p>Quedan: 2</p><span>Mínimo: 5</span></div></div>
+            <div class="alert-badge" id="alert-badge-stock">0 productos con stock bajo</div>
+            <div class="horizontal-scroll" id="home-low-stock-list">
+                <!-- Se llena dinámicamente -->
             </div>
         </div>
 
@@ -250,11 +205,11 @@
             <div class="section-header">
                 <div class="section-icon"><i class="fas fa-history"></i></div>
                 <span class="section-title">Últimos movimientos</span>
-                <a href="#" class="see-all">Ver todos ></a>
+                <a href="#" class="see-all" onclick="navigateTo('ventas')">Ver todos ></a>
             </div>
-            <div class="movement-item"><div class="movement-icon venta"><i class="fas fa-plus"></i></div><div class="movement-text">Venta registrada - Pan lactal x2</div><div class="movement-time">17:32</div><div class="movement-status status-money">$ 2.400</div></div>
-            <div class="movement-item"><div class="movement-icon pedido"><i class="fas fa-shopping-cart"></i></div><div class="movement-text">Pedido - Cliente: Ana</div><div class="movement-time">16:45</div><div class="movement-status status-pending">Pendiente</div></div>
-            <div class="movement-item"><div class="movement-icon cliente"><i class="fas fa-user"></i></div><div class="movement-text">Nuevo cliente - María García</div><div class="movement-time">15:20</div><div class="movement-status" style="color: #777;">—</div></div>
+            <div id="home-recent-movements">
+                <!-- Se llena dinámicamente -->
+            </div>
         </div>
 
         <div class="footer-note">
@@ -263,62 +218,132 @@
         </div>
     </div>
 
-    <!-- ================= SECCIÓN: PRODUCTOS (AHORA FUNCIONAL) ================= -->
+    <!-- ================= SECCIÓN: PRODUCTOS ================= -->
     <div id="section-productos" class="app-section">
-        <header>
-            <div class="logo-icon"><i class="fas fa-leaf"></i></div>
-            <div class="header-text"><h1>Negocio Alerta</h1></div>
-        </header>
-        
+        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
         <div class="page-content">
             <h2 class="page-title"><i class="fas fa-shopping-bag" style="color: var(--gold);"></i> Productos</h2>
+            <button class="btn-add" onclick="toggleForm('product-form')"><i class="fas fa-plus-circle"></i> Cargar Nuevo Producto</button>
             
-            <!-- Botón para mostrar el formulario -->
-            <button class="btn-add" onclick="toggleForm()">
-                <i class="fas fa-plus-circle"></i> Cargar Nuevo Producto
-            </button>
-
-            <!-- Formulario de carga -->
             <div id="product-form" class="form-container">
                 <form onsubmit="saveProduct(event)">
-                    <div class="input-group">
-                        <label>Nombre del Producto</label>
-                        <input type="text" id="prod-name" placeholder="Ej: Pan lactal" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Precio ($)</label>
-                        <input type="number" id="prod-price" placeholder="Ej: 1500" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Stock Actual</label>
-                        <input type="number" id="prod-stock" placeholder="Ej: 10" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Stock Mínimo (Alerta)</label>
-                        <input type="number" id="prod-min" placeholder="Ej: 5" required>
-                    </div>
-                    <div class="input-group">
-                        <label>URL de Imagen (Opcional)</label>
-                        <input type="text" id="prod-img" placeholder="https://...">
-                    </div>
+                    <div class="input-group"><label>Nombre</label><input type="text" id="prod-name" required></div>
+                    <div class="input-group"><label>Precio ($)</label><input type="number" id="prod-price" required></div>
+                    <div class="input-group"><label>Stock Actual</label><input type="number" id="prod-stock" required></div>
+                    <div class="input-group"><label>Stock Mínimo (Alerta)</label><input type="number" id="prod-min" required></div>
+                    <div class="input-group"><label>URL de Imagen (Opcional)</label><input type="text" id="prod-img" placeholder="https://..."></div>
                     <button type="submit" class="btn-save">Guardar Producto</button>
                 </form>
             </div>
+            <div id="product-list" class="list-container"></div>
+        </div>
+    </div>
 
-            <!-- Lista de productos cargados -->
-            <div id="product-list" class="product-list">
-                <!-- Aquí se cargarán los productos guardados -->
+    <!-- ================= SECCIÓN: VENTAS ================= -->
+    <div id="section-ventas" class="app-section">
+        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
+        <div class="page-content">
+            <h2 class="page-title"><i class="fas fa-cash-register" style="color: var(--gold);"></i> Ventas</h2>
+            <button class="btn-add" onclick="toggleForm('venta-form')"><i class="fas fa-plus-circle"></i> Registrar Venta</button>
+            
+            <div id="venta-form" class="form-container">
+                <form onsubmit="saveSale(event)">
+                    <div class="input-group">
+                        <label>Producto</label>
+                        <select id="venta-product" required></select>
+                    </div>
+                    <div class="input-group"><label>Cantidad</label><input type="number" id="venta-qty" min="1" value="1" required></div>
+                    <button type="submit" class="btn-save">Registrar Venta</button>
+                </form>
+            </div>
+            <div id="venta-list" class="list-container"></div>
+        </div>
+    </div>
+
+    <!-- ================= SECCIÓN: PEDIDOS ================= -->
+    <div id="section-pedidos" class="app-section">
+        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
+        <div class="page-content">
+            <h2 class="page-title"><i class="fas fa-boxes" style="color: var(--gold);"></i> Pedidos</h2>
+            <button class="btn-add" onclick="toggleForm('pedido-form')"><i class="fas fa-plus-circle"></i> Nuevo Pedido</button>
+            
+            <div id="pedido-form" class="form-container">
+                <form onsubmit="saveOrder(event)">
+                    <div class="input-group"><label>Cliente</label><input type="text" id="pedido-client" required></div>
+                    <div class="input-group"><label>Descripción del Pedido</label><input type="text" id="pedido-desc" placeholder="Ej: 2 Pan lactal" required></div>
+                    <div class="input-group">
+                        <label>Estado</label>
+                        <select id="pedido-status">
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="Entregado">Entregado</option>
+                            <option value="Cancelado">Cancelado</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-save">Guardar Pedido</button>
+                </form>
+            </div>
+            <div id="pedido-list" class="list-container"></div>
+        </div>
+    </div>
+
+    <!-- ================= SECCIÓN: CLIENTES ================= -->
+    <div id="section-clientes" class="app-section">
+        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
+        <div class="page-content">
+            <h2 class="page-title"><i class="fas fa-users" style="color: var(--gold);"></i> Clientes</h2>
+            <button class="btn-add" onclick="toggleForm('cliente-form')"><i class="fas fa-plus-circle"></i> Nuevo Cliente</button>
+            
+            <div id="cliente-form" class="form-container">
+                <form onsubmit="saveClient(event)">
+                    <div class="input-group"><label>Nombre Completo</label><input type="text" id="cliente-name" required></div>
+                    <div class="input-group"><label>Teléfono / WhatsApp</label><input type="tel" id="cliente-phone"></div>
+                    <button type="submit" class="btn-save">Guardar Cliente</button>
+                </form>
+            </div>
+            <div id="cliente-list" class="list-container"></div>
+        </div>
+    </div>
+
+    <!-- ================= SECCIÓN: REPORTES ================= -->
+    <div id="section-reportes" class="app-section">
+        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
+        <div class="page-content">
+            <h2 class="page-title"><i class="fas fa-chart-bar" style="color: var(--gold);"></i> Reportes</h2>
+            <div class="report-card">
+                <i class="fas fa-dollar-sign"></i>
+                <div><h4>Ingresos Totales por Ventas</h4><p id="report-total-ventas">$ 0</p></div>
+            </div>
+            <div class="report-card">
+                <i class="fas fa-box"></i>
+                <div><h4>Total de Productos en Inventario</h4><p id="report-total-stock">0</p></div>
+            </div>
+            <div class="report-card">
+                <i class="fas fa-users"></i>
+                <div><h4>Clientes Registrados</h4><p id="report-total-clientes">0</p></div>
+            </div>
+            <div class="report-card">
+                <i class="fas fa-shopping-bag"></i>
+                <div><h4>Pedidos Activos</h4><p id="report-total-pedidos">0</p></div>
             </div>
         </div>
     </div>
 
-    <!-- ================= SECCIONES DE PLACEHOLDER (Ventas, Pedidos, etc.) ================= -->
-    <div id="section-ventas" class="app-section"><header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header><div class="page-content"><h2 class="page-title">Ventas</h2><p>Registra tus ventas diarias y genera tickets internos.</p><button class="btn-add" onclick="navigateTo('inicio')">Volver al Inicio</button></div></div>
-    <div id="section-pedidos" class="app-section"><header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header><div class="page-content"><h2 class="page-title">Pedidos</h2><p>Gestiona los pedidos de tus clientes y su estado de entrega.</p><button class="btn-add" onclick="navigateTo('inicio')">Volver al Inicio</button></div></div>
-    <div id="section-clientes" class="app-section"><header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header><div class="page-content"><h2 class="page-title">Clientes y Tickets</h2><p>Base de datos de clientes y historial de comprobantes.</p><button class="btn-add" onclick="navigateTo('inicio')">Volver al Inicio</button></div></div>
-    <div id="section-reportes" class="app-section"><header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header><div class="page-content"><h2 class="page-title">Reportes</h2><p>Estadísticas de ganancias, productos más vendidos y más.</p><button class="btn-add" onclick="navigateTo('inicio')">Volver al Inicio</button></div></div>
-    <div id="section-ajustes" class="app-section"><header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header><div class="page-content"><h2 class="page-title">Ajustes</h2><p>Configuración de la cuenta, sincronización con Supabase y preferencias.</p><button class="btn-add" onclick="navigateTo('inicio')">Volver al Inicio</button></div></div>
-
+    <!-- ================= SECCIÓN: AJUSTES ================= -->
+    <div id="section-ajustes" class="app-section">
+        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
+        <div class="page-content">
+            <h2 class="page-title"><i class="fas fa-cog" style="color: var(--gold);"></i> Ajustes</h2>
+            <div class="section-card" style="margin: 0 0 15px 0;">
+                <p style="font-size: 12px; margin-bottom: 10px; color: #555;">Al presionar el botón, se borrarán todos los datos guardados en este dispositivo (Productos, Ventas, Pedidos y Clientes).</p>
+                <button class="btn-add" style="background: var(--red);" onclick="clearAllData()"><i class="fas fa-trash-alt"></i> Borrar todos los datos</button>
+            </div>
+            
+            <div class="section-card" style="margin: 0;">
+                <h4 style="font-size: 14px; color: var(--primary-green); margin-bottom: 5px;">Conexión Supabase</h4>
+                <p style="font-size: 11px; color: #777;">Estado: No conectado. Los datos se están guardando localmente en el navegador.</p>
+            </div>
+        </div>
+    </div>
 
     <!-- ================= BOTTOM NAV ================= -->
     <nav class="bottom-nav">
@@ -332,130 +357,310 @@
 </div>
 
 <script>
-    // --- 1. LÓGICA DE NAVEGACIÓN ---
+    // --- BASE DE DATOS LOCAL (LocalStorage) ---
+    let db = {
+        products: [],
+        sales: [],
+        orders: [],
+        clients: []
+    };
+
+    // Cargar datos al iniciar
+    function initDB() {
+        const stored = localStorage.getItem('negocio_alerta_db');
+        if (stored) {
+            db = JSON.parse(stored);
+        } else {
+            // Datos de ejemplo iniciales
+            db.products = [
+                { id: 1, name: 'Pan lactal', price: 1200, stock: 2, min: 5, img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=150' },
+                { id: 2, name: 'Jugo naranja', price: 800, stock: 10, min: 3, img: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?w=150' }
+            ];
+            db.sales = [{ id: 1, product: 'Pan lactal', qty: 2, total: 2400, date: '17:32' }];
+            db.orders = [{ id: 1, client: 'Ana', desc: '1 Jugo naranja', status: 'Pendiente', date: '16:45' }];
+            db.clients = [{ id: 1, name: 'María García', phone: '123456789' }];
+            saveDB();
+        }
+        renderAll();
+    }
+
+    // Guardar en LocalStorage
+    function saveDB() {
+        localStorage.setItem('negocio_alerta_db', JSON.stringify(db));
+        updateMetrics();
+    }
+
+    // --- NAVEGACIÓN ---
     function navigateTo(sectionId) {
         document.querySelectorAll('.app-section').forEach(sec => sec.classList.remove('active'));
-        const targetSection = document.getElementById('section-' + sectionId);
-        if (targetSection) targetSection.classList.add('active');
-
+        document.getElementById('section-' + sectionId).classList.add('active');
+        
         document.querySelectorAll('.nav-item').forEach(item => {
             item.classList.remove('active');
             if (item.dataset.target === sectionId) item.classList.add('active');
         });
-
+        
         window.scrollTo({ top: 0, behavior: 'smooth' });
-
-        // Si vamos a productos, recargamos la lista
-        if (sectionId === 'productos') {
-            loadProducts();
-        }
+        renderAll();
     }
 
-    // --- 2. LÓGICA DE PRODUCTOS (CRUD con LocalStorage) ---
-    let products = [];
-
-    // Cargar productos al iniciar
-    function initProducts() {
-        const stored = localStorage.getItem('negocio_productos');
-        if (stored) {
-            products = JSON.parse(stored);
-        } else {
-            // Datos de ejemplo por defecto si está vacío
-            products = [
-                { id: 1, name: 'Pan lactal', price: 1200, stock: 2, min: 5, img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=150' },
-                { id: 2, name: 'Jugo naranja', price: 800, stock: 10, min: 3, img: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?w=150' }
-            ];
-            saveToLocalStorage();
-        }
-        loadProducts();
-    }
-
-    // Guardar en LocalStorage
-    function saveToLocalStorage() {
-        localStorage.setItem('negocio_productos', JSON.stringify(products));
-        updateMetrics();
-    }
-
-    // Mostrar/Ocultar formulario
-    function toggleForm() {
-        const form = document.getElementById('product-form');
+    // Mostrar/Ocultar formularios
+    function toggleForm(formId) {
+        const form = document.getElementById(formId);
         form.classList.toggle('active');
     }
 
-    // Guardar un nuevo producto desde el formulario
-    function saveProduct(event) {
-        event.preventDefault(); // Evita que la página se recargue
-
-        const name = document.getElementById('prod-name').value;
-        const price = parseFloat(document.getElementById('prod-price').value);
-        const stock = parseInt(document.getElementById('prod-stock').value);
-        const min = parseInt(document.getElementById('prod-min').value);
-        const img = document.getElementById('prod-img').value || 'https://via.placeholder.com/150';
-
+    // --- LÓGICA PRODUCTOS ---
+    function saveProduct(e) {
+        e.preventDefault();
         const newProduct = {
-            id: Date.now(), // ID único basado en el tiempo
-            name: name,
-            price: price,
-            stock: stock,
-            min: min,
-            img: img
+            id: Date.now(),
+            name: document.getElementById('prod-name').value,
+            price: parseFloat(document.getElementById('prod-price').value),
+            stock: parseInt(document.getElementById('prod-stock').value),
+            min: parseInt(document.getElementById('prod-min').value),
+            img: document.getElementById('prod-img').value || 'https://via.placeholder.com/150'
         };
-
-        products.push(newProduct);
-        saveToLocalStorage();
-        
-        // Limpiar formulario y ocultarlo
-        event.target.reset();
-        toggleForm();
-        loadProducts();
-        
-        alert('¡Producto cargado con éxito!');
+        db.products.push(newProduct);
+        saveDB();
+        e.target.reset();
+        toggleForm('product-form');
+        renderProducts();
+        alert('¡Producto guardado!');
     }
 
-    // Eliminar producto
     function deleteProduct(id) {
-        if (confirm('¿Estás seguro de eliminar este producto?')) {
-            products = products.filter(p => p.id !== id);
-            saveToLocalStorage();
-            loadProducts();
+        if (confirm('¿Eliminar producto?')) {
+            db.products = db.products.filter(p => p.id !== id);
+            saveDB();
+            renderProducts();
         }
     }
 
-    // Renderizar la lista de productos en el DOM
-    function loadProducts() {
-        const listContainer = document.getElementById('product-list');
-        listContainer.innerHTML = '';
-
-        if (products.length === 0) {
-            listContainer.innerHTML = '<p style="text-align:center; color:#777; font-size:13px;">No hay productos cargados aún.</p>';
-            return;
+    // --- LÓGICA VENTAS ---
+    function saveSale(e) {
+        e.preventDefault();
+        const productId = parseInt(document.getElementById('venta-product').value);
+        const qty = parseInt(document.getElementById('venta-qty').value);
+        const product = db.products.find(p => p.id === productId);
+        
+        if(product && product.stock >= qty) {
+            const total = product.price * qty;
+            const now = new Date();
+            const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+            
+            db.sales.push({ id: Date.now(), product: product.name, qty: qty, total: total, date: time });
+            
+            // Descontar stock
+            product.stock -= qty;
+            
+            saveDB();
+            e.target.reset();
+            toggleForm('venta-form');
+            renderSales();
+            alert('¡Venta registrada con éxito!');
+        } else {
+            alert('Stock insuficiente o producto no seleccionado.');
         }
+    }
 
-        products.forEach(product => {
-            const item = document.createElement('div');
-            item.className = 'product-item';
-            item.innerHTML = `
-                <img src="${product.img}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/150'">
-                <div class="info">
-                    <h4>${product.name}</h4>
-                    <p>Stock: ${product.stock} (Mín: ${product.min})</p>
-                    <span class="price">$${product.price.toLocaleString('es-AR')}</span>
-                </div>
-                <button class="btn-delete" onclick="deleteProduct(${product.id})"><i class="fas fa-trash"></i></button>
-            `;
-            listContainer.appendChild(item);
+    // --- LÓGICA PEDIDOS ---
+    function saveOrder(e) {
+        e.preventDefault();
+        const now = new Date();
+        const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+        
+        db.orders.push({
+            id: Date.now(),
+            client: document.getElementById('pedido-client').value,
+            desc: document.getElementById('pedido-desc').value,
+            status: document.getElementById('pedido-status').value,
+            date: time
         });
+        saveDB();
+        e.target.reset();
+        toggleForm('pedido-form');
+        renderOrders();
+        alert('¡Pedido guardado!');
     }
 
-    // Actualizar el contador de la pantalla de Inicio
+    // --- LÓGICA CLIENTES ---
+    function saveClient(e) {
+        e.preventDefault();
+        db.clients.push({
+            id: Date.now(),
+            name: document.getElementById('cliente-name').value,
+            phone: document.getElementById('cliente-phone').value
+        });
+        saveDB();
+        e.target.reset();
+        toggleForm('cliente-form');
+        renderClients();
+        alert('¡Cliente agregado!');
+    }
+
+    // --- RENDERIZADO DINÁMICO ---
+    function renderAll() {
+        renderProducts();
+        renderSales();
+        renderOrders();
+        renderClients();
+        updateMetrics();
+        renderReports();
+        populateSalesDropdown();
+        renderHomeWidgets();
+    }
+
+    function renderProducts() {
+        const list = document.getElementById('product-list');
+        list.innerHTML = db.products.map(p => `
+            <div class="list-item">
+                <img src="${p.img}" onerror="this.src='https://via.placeholder.com/150'">
+                <div class="info">
+                    <h4>${p.name}</h4>
+                    <p>Stock: ${p.stock} (Mín: ${p.min})</p>
+                    <span class="price">$${p.price.toLocaleString('es-AR')}</span>
+                </div>
+                <button class="btn-delete" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i></button>
+            </div>
+        `).join('');
+    }
+
+    function renderSales() {
+        const list = document.getElementById('venta-list');
+        list.innerHTML = db.sales.slice().reverse().map(s => `
+            <div class="list-item" style="border-left-color: #43a047;">
+                <div class="info">
+                    <h4>Venta: ${s.product} x${s.qty}</h4>
+                    <p>Hora: ${s.date}</p>
+                </div>
+                <span class="price" style="color: #43a047;">$${s.total.toLocaleString('es-AR')}</span>
+            </div>
+        `).join('');
+    }
+
+    function renderOrders() {
+        const list = document.getElementById('pedido-list');
+        list.innerHTML = db.orders.slice().reverse().map(o => {
+            let badgeClass = 'badge-pending';
+            if(o.status === 'Entregado') badgeClass = 'badge-completed';
+            if(o.status === 'Cancelado') badgeClass = 'badge-cancelled';
+            
+            return `
+            <div class="list-item" style="border-left-color: var(--blue);">
+                <div class="info">
+                    <h4>${o.client}</h4>
+                    <p>${o.desc}</p>
+                </div>
+                <span class="badge ${badgeClass}">${o.status}</span>
+            </div>`;
+        }).join('');
+    }
+
+    function renderClients() {
+        const list = document.getElementById('cliente-list');
+        list.innerHTML = db.clients.map(c => `
+            <div class="list-item" style="border-left-color: #8e24aa;">
+                <div class="info">
+                    <h4>${c.name}</h4>
+                    <p><i class="fas fa-phone"></i> ${c.phone || 'Sin teléfono'}</p>
+                </div>
+            </div>
+        `).join('');
+    }
+
     function updateMetrics() {
-        document.getElementById('metric-productos').textContent = products.length;
+        const totalProducts = db.products.length;
+        const lowStockCount = db.products.filter(p => p.stock <= p.min).length;
+        const totalEarnings = db.sales.reduce((sum, s) => sum + s.total, 0);
+
+        document.getElementById('metric-productos').textContent = totalProducts;
+        document.getElementById('metric-stock-bajo').textContent = lowStockCount;
+        document.getElementById('metric-ganancia').textContent = '$ ' + totalEarnings.toLocaleString('es-AR');
+        
+        document.getElementById('report-total-ventas').textContent = '$ ' + totalEarnings.toLocaleString('es-AR');
+        document.getElementById('report-total-stock').textContent = totalProducts;
+        document.getElementById('report-total-clientes').textContent = db.clients.length;
+        document.getElementById('report-total-pedidos').textContent = db.orders.filter(o => o.status === 'Pendiente').length;
+        
+        document.getElementById('alert-badge-stock').textContent = `${lowStockCount} productos con stock bajo`;
     }
 
-    // Inicializar la app
-    window.onload = () => {
-        initProducts();
-    };
+    function renderReports() {
+        // Ya se actualiza en updateMetrics
+    }
+
+    // Llenar el select de ventas dinámicamente
+    function populateSalesDropdown() {
+        const select = document.getElementById('venta-product');
+        select.innerHTML = '<option value="">Seleccione un producto...</option>' + 
+            db.products.map(p => `<option value="${p.id}">${p.name} (Stock: ${p.stock}) - $${p.price}</option>`).join('');
+    }
+
+    // Widgets de la pantalla de Inicio
+    function renderHomeWidgets() {
+        // Stock bajo en Inicio
+        const lowStockList = document.getElementById('home-low-stock-list');
+        const lowStockItems = db.products.filter(p => p.stock <= p.min);
+        
+        if(lowStockItems.length === 0) {
+            lowStockList.innerHTML = '<p style="font-size:11px; color:#777;">Todo el stock está en orden.</p>';
+        } else {
+            lowStockList.innerHTML = lowStockItems.slice(0, 5).map(p => `
+                <div class="product-card">
+                    <img src="${p.img}" onerror="this.src='https://via.placeholder.com/150'">
+                    <div class="product-info">
+                        <h4>${p.name}</h4>
+                        <p>Quedan: ${p.stock}</p>
+                        <span>Mínimo: ${p.min}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Últimos movimientos en Inicio
+        const recentMovements = document.getElementById('home-recent-movements');
+        let movementsHTML = '';
+        
+        // Tomar las últimas 3 ventas
+        db.sales.slice(-3).reverse().forEach(s => {
+            movementsHTML += `
+                <div class="movement-item">
+                    <div class="movement-icon venta"><i class="fas fa-plus"></i></div>
+                    <div class="movement-text">Venta: ${s.product} x${s.qty}</div>
+                    <div class="movement-time">${s.date}</div>
+                    <div class="movement-status status-money">$${s.total}</div>
+                </div>`;
+        });
+
+        // Tomar los últimos 2 pedidos
+        db.orders.slice(-2).reverse().forEach(o => {
+            movementsHTML += `
+                <div class="movement-item">
+                    <div class="movement-icon pedido"><i class="fas fa-shopping-cart"></i></div>
+                    <div class="movement-text">Pedido: ${o.client}</div>
+                    <div class="movement-time">${o.date}</div>
+                    <div class="movement-status status-pending">${o.status}</div>
+                </div>`;
+        });
+
+        recentMovements.innerHTML = movementsHTML || '<p style="font-size:11px; color:#777;">No hay movimientos recientes.</p>';
+    }
+
+    // --- AJUSTES ---
+    function clearAllData() {
+        if(confirm('¿Estás seguro? Se borrarán TODOS los datos de la aplicación.')) {
+            localStorage.removeItem('negocio_alerta_db');
+            db = { products: [], sales: [], orders: [], clients: [] };
+            saveDB();
+            renderAll();
+            alert('Datos borrados. La aplicación se ha reiniciado.');
+            navigateTo('inicio');
+        }
+    }
+
+    // Iniciar aplicación
+    window.onload = initDB;
 </script>
 
 </body>
