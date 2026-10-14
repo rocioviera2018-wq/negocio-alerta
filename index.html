@@ -2,587 +2,73 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Negocio Alerta PRO</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-green: #0A3B2C; --dark-green: #0E4533; --light-green: #E6F4F1;
-            --gold: #C9A45C; --bg-color: #F2F7F5; --text-dark: #333333;
-            --text-gray: #777777; --red: #E53935; --blue: #1e88e5;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: #e0e0e0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .app-container { width: 100%; max-width: 480px; background-color: var(--bg-color); min-height: 100vh; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow-x: hidden; padding-bottom: 80px; }
-        
-        .app-section { display: none; animation: fadeIn 0.3s ease-in-out; }
-        .app-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        header { background: linear-gradient(135deg, var(--primary-green), var(--dark-green)); padding: 20px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; color: white; display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; }
-        .logo-icon { width: 45px; height: 45px; border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 20px; }
-        .header-text h1 { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
-        .pro-badge { background-color: var(--gold); color: black; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
-        .header-text p { font-size: 11px; color: rgba(255,255,255,0.8); }
-        .header-icons { margin-left: auto; display: flex; align-items: center; gap: 15px; }
-        .notification-icon { position: relative; font-size: 20px; }
-        .notification-badge { position: absolute; top: -5px; right: -5px; background-color: var(--red); color: white; font-size: 9px; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        .profile-icon { width: 35px; height: 35px; background-color: #1B5E46; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
-
-        .welcome-banner { background-color: var(--dark-green); margin: -15px 20px 0; padding: 12px 15px; border-radius: 15px; display: flex; align-items: center; gap: 10px; color: white; position: relative; z-index: 2; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .welcome-icon { background-color: #1A6B4E; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
-        .welcome-text h3 { font-size: 13px; font-weight: 600; }
-        .welcome-text p { font-size: 10px; color: rgba(255,255,255,0.7); }
-        .logout-btn { margin-left: auto; background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 5px; font-family: 'Poppins', sans-serif; }
-
-        .metrics-grid { display: flex; gap: 10px; padding: 15px 20px; }
-        .metric-card { flex: 1; background: white; padding: 12px; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 8px; position: relative; }
-        .metric-card.productos { border: 1px solid rgba(10, 59, 44, 0.2); }
-        .metric-card.stock { border: 1px solid rgba(229, 57, 53, 0.2); }
-        .metric-card.ganancia { border: 1px solid rgba(201, 164, 92, 0.3); }
-        .metric-header { display: flex; justify-content: space-between; align-items: center; }
-        .metric-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; }
-        .metric-card.productos .metric-icon { background: #e8f5e9; color: var(--primary-green); }
-        .metric-card.stock .metric-icon { background: #ffebee; color: var(--red); }
-        .metric-card.ganancia .metric-icon { background: #fff8e1; color: var(--gold); }
-        .metric-title { font-size: 10px; color: var(--text-gray); }
-        .metric-value { font-size: 15px; font-weight: 700; }
-        .metric-card.productos .metric-value { color: var(--primary-green); }
-        .metric-card.stock .metric-value { color: var(--red); }
-        .metric-card.ganancia .metric-value { color: var(--gold); }
-        .metric-arrow { font-size: 12px; color: inherit; position: absolute; right: 12px; bottom: 12px; }
-
-        .actions-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 0 20px 15px; }
-        .action-btn { background: white; border-radius: 15px; padding: 15px 5px; display: flex; flex-direction: column; align-items: center; gap: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.2s; }
-        .action-btn:active { transform: scale(0.95); }
-        .action-btn i { font-size: 20px; color: var(--primary-green); }
-        .action-btn span { font-size: 9px; text-align: center; color: var(--text-dark); font-weight: 500; }
-
-        .page-content { padding: 20px; }
-        .page-title { color: var(--primary-green); font-size: 22px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-        
-        .btn-add { background: var(--primary-green); color: white; border: none; padding: 12px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; width: 100%; margin-bottom: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 10px rgba(10, 59, 44, 0.2); }
-        .form-container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; display: none; border: 1px solid #eee; }
-        .form-container.active { display: block; }
-        .input-group { margin-bottom: 12px; }
-        .input-group label { display: block; font-size: 12px; font-weight: 600; color: var(--primary-green); margin-bottom: 4px; }
-        .input-group input, .input-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 13px; outline: none; transition: border 0.3s; background: white; }
-        .input-group input:focus, .input-group select:focus { border-color: var(--primary-green); }
-        .btn-save { background: var(--gold); color: black; border: none; padding: 10px; width: 100%; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 10px; }
-        .btn-scan { background: var(--blue); color: white; border: none; padding: 10px; width: 100%; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 5px; }
-
-        .list-container { display: flex; flex-direction: column; gap: 10px; }
-        .list-item { background: white; padding: 15px; border-radius: 12px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 4px solid var(--gold); }
-        .list-item img { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; background: #eee; }
-        .list-item .info { flex: 1; }
-        .list-item h4 { font-size: 14px; font-weight: 700; color: var(--text-dark); }
-        .list-item p { font-size: 12px; color: var(--text-gray); }
-        .list-item .price { font-size: 14px; font-weight: 700; color: var(--primary-green); }
-        .btn-delete { background: #ffebee; color: var(--red); border: none; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        
-        .badge { font-size: 10px; padding: 4px 8px; border-radius: 6px; font-weight: 600; }
-        .badge-pending { background: #fff3e0; color: #ef6c00; }
-        .badge-completed { background: #e8f5e9; color: #43a047; }
-        .badge-cancelled { background: #ffebee; color: var(--red); }
-
-        .section-card { background: white; margin: 0 20px 15px; padding: 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .section-icon { background-color: var(--primary-green); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; }
-        .section-title { font-size: 15px; font-weight: 700; color: var(--text-dark); }
-        .see-all { margin-left: auto; color: var(--primary-green); font-size: 11px; font-weight: 700; text-decoration: none; cursor: pointer; }
-        .alert-badge { display: inline-block; background-color: #ffebee; color: var(--red); font-size: 10px; padding: 4px 10px; border-radius: 10px; margin-bottom: 10px; font-weight: 500; }
-        .horizontal-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; }
-        .horizontal-scroll::-webkit-scrollbar { display: none; }
-        .product-card { min-width: 140px; background: #f9f9f9; border: 1px solid #eee; border-radius: 12px; padding: 10px; display: flex; align-items: center; gap: 8px; }
-        .product-card img { width: 35px; height: 35px; border-radius: 8px; object-fit: cover; }
-        .product-info h4 { font-size: 11px; font-weight: 700; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80px; }
-        .product-info p { font-size: 10px; color: var(--red); font-weight: 500; }
-        .product-info span { font-size: 9px; color: var(--text-gray); }
-        .movement-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
-        .movement-item:last-child { border-bottom: none; }
-        .movement-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
-        .movement-icon.venta { background: #e8f5e9; color: #43a047; }
-        .movement-icon.pedido { background: #e3f2fd; color: #1e88e5; }
-        .movement-icon.cliente { background: #f3e5f5; color: #8e24aa; }
-        .movement-text { flex: 1; font-size: 11px; color: var(--text-dark); font-weight: 500; }
-        .movement-time { font-size: 10px; color: var(--text-gray); }
-        .footer-note { margin: 0 20px 20px; background-color: var(--light-green); padding: 12px; border-radius: 10px; display: flex; gap: 10px; align-items: flex-start; }
-        .footer-note i { color: var(--primary-green); font-size: 14px; margin-top: 2px; }
-        .footer-note p { font-size: 9px; color: var(--primary-green); line-height: 1.4; }
-
-        .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background-color: var(--primary-green); border-top-left-radius: 25px; border-top-right-radius: 25px; display: flex; justify-content: space-around; padding: 10px 0 15px; z-index: 100; box-shadow: 0 -5px 15px rgba(0,0,0,0.1); }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: rgba(255,255,255,0.6); font-size: 9px; cursor: pointer; transition: color 0.3s; width: 16%; }
-        .nav-item.active { color: var(--gold); }
-        .nav-item i { font-size: 18px; }
-        .nav-item span { font-weight: 500; }
-
-        .report-card { background: white; padding: 15px; border-radius: 15px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 15px; }
-        .report-card i { font-size: 24px; color: var(--gold); }
-        .report-card h4 { font-size: 12px; color: var(--text-gray); }
-        .report-card p { font-size: 18px; font-weight: 700; color: var(--primary-green); }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generar PDF y Compartir</title>
+    <!-- Librería para generar PDFs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
-<div class="app-container">
+    <h2>Datos de la Venta</h2>
     
-    <!-- ================= SECCIÓN: INICIO ================= -->
-    <div id="section-inicio" class="app-section active">
-        <header>
-            <div class="logo-icon"><i class="fas fa-leaf"></i></div>
-            <div class="header-text">
-                <h1>Negocio Alerta <span class="pro-badge">PRO</span></h1>
-                <p>Tu negocio organizado, desde el celular.</p>
-            </div>
-            <div class="header-icons">
-                <div class="notification-icon"><i class="far fa-bell"></i><span class="notification-badge" id="noti-badge">0</span></div>
-                <div class="profile-icon"><i class="fas fa-user"></i></div>
-            </div>
-        </header>
+    <!-- Estos son los datos que irán en el PDF. Puedes cambiarlos por los de tu base de datos -->
+    <input type="text" id="producto" placeholder="Producto" value="Camisa">
+    <input type="number" id="cantidad" placeholder="Cantidad" value="2">
+    <input type="number" id="total" placeholder="Total" value="150.50">
+    
+    <br><br>
+    
+    <!-- Botón que activa la función -->
+    <button onclick="generarYCompartirPDF()" style="padding: 15px; font-size: 16px; background-color: #25D366; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        📄 Generar PDF y Enviar por WhatsApp
+    </button>
 
-        <div class="welcome-banner">
-            <div class="welcome-icon"><i class="fas fa-store"></i></div>
-            <div class="welcome-text"><h3>Bienvenido/a</h3><p>Tu negocio, siempre en control.</p></div>
-            <button class="logout-btn" onclick="alert('Cerrando sesión...')"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</button>
-        </div>
+    <script>
+        async function generarYCompartirPDF() {
+            // 1. Capturar los datos de la pantalla
+            const producto = document.getElementById('producto').value;
+            const cantidad = document.getElementById('cantidad').value;
+            const total = document.getElementById('total').value;
 
-        <div class="metrics-grid">
-            <div class="metric-card productos">
-                <div class="metric-header"><div class="metric-icon"><i class="fas fa-box"></i></div></div>
-                <span class="metric-title">Productos</span>
-                <span class="metric-value" id="metric-productos">0</span>
-                <i class="fas fa-chevron-right metric-arrow"></i>
-            </div>
-            <div class="metric-card stock">
-                <div class="metric-header"><div class="metric-icon"><i class="fas fa-exclamation-triangle"></i></div></div>
-                <span class="metric-title">Stock bajo</span>
-                <span class="metric-value" id="metric-stock-bajo">0</span>
-                <i class="fas fa-chevron-right metric-arrow"></i>
-            </div>
-            <div class="metric-card ganancia">
-                <div class="metric-header"><div class="metric-icon"><i class="fas fa-chart-line"></i></div></div>
-                <span class="metric-title">Ganancia</span>
-                <span class="metric-value" id="metric-ganancia">$ 0</span>
-                <i class="fas fa-chevron-right metric-arrow"></i>
-            </div>
-        </div>
-
-        <div class="actions-grid">
-            <div class="action-btn" onclick="navigateTo('inicio')"><i class="fas fa-home"></i><span>Inicio</span></div>
-            <div class="action-btn" onclick="navigateTo('productos')"><i class="fas fa-shopping-bag"></i><span>Productos</span></div>
-            <div class="action-btn" onclick="navigateTo('ventas')"><i class="fas fa-cash-register"></i><span>Ventas</span></div>
-            <div class="action-btn" onclick="navigateTo('pedidos')"><i class="fas fa-boxes"></i><span>Pedidos</span></div>
-            <div class="action-btn" onclick="navigateTo('clientes')"><i class="fas fa-users"></i><span>Clientes y tickets</span></div>
-            <div class="action-btn" onclick="navigateTo('reportes')"><i class="fas fa-chart-bar"></i><span>Reportes</span></div>
-            <div class="action-btn" onclick="navigateTo('ajustes')"><i class="fas fa-cog"></i><span>Ajustes</span></div>
-        </div>
-
-        <div class="section-card">
-            <div class="section-header">
-                <div class="section-icon"><i class="fas fa-bell"></i></div>
-                <span class="section-title">Atención para hoy</span>
-                <a href="#" class="see-all" onclick="navigateTo('productos')">Ver todos ></a>
-            </div>
-            <div class="alert-badge" id="alert-badge-stock">0 productos con stock bajo</div>
-            <div class="horizontal-scroll" id="home-low-stock-list"></div>
-        </div>
-
-        <div class="section-card">
-            <div class="section-header">
-                <div class="section-icon"><i class="fas fa-history"></i></div>
-                <span class="section-title">Últimos movimientos</span>
-                <a href="#" class="see-all" onclick="navigateTo('ventas')">Ver todos ></a>
-            </div>
-            <div id="home-recent-movements"></div>
-        </div>
-
-        <div class="footer-note">
-            <i class="fas fa-shield-alt"></i>
-            <p>Los datos se guardan en este navegador (LocalStorage). Los tickets son comprobantes internos, no facturas fiscales.</p>
-        </div>
-    </div>
-
-    <!-- ================= SECCIÓN: PRODUCTOS ================= -->
-    <div id="section-productos" class="app-section">
-        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
-        <div class="page-content">
-            <h2 class="page-title"><i class="fas fa-shopping-bag" style="color: var(--gold);"></i> Productos</h2>
-            <button class="btn-add" onclick="toggleForm('product-form')"><i class="fas fa-plus-circle"></i> Cargar Nuevo Producto</button>
+            // 2. Crear el PDF con jsPDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
             
-            <div id="product-form" class="form-container">
-                <form onsubmit="saveProduct(event)">
-                    <div class="input-group"><label>Nombre</label><input type="text" id="prod-name" required></div>
-                    <div class="input-group"><label>Código de Barras</label><input type="text" id="prod-code"></div>
-                    <button type="button" class="btn-scan" onclick="scanBarcode()">📷 Escanear Código</button>
-                    <div class="input-group"><label>Costo ($)</label><input type="number" id="prod-cost" step="0.01" required></div>
-                    <div class="input-group"><label>Precio de Lista ($)</label><input type="number" id="prod-list" step="0.01" required></div>
-                    <div class="input-group"><label>Precio de Venta ($)</label><input type="number" id="prod-price" step="0.01" required></div>
-                    <div class="input-group"><label>Stock Actual</label><input type="number" id="prod-stock" required></div>
-                    <div class="input-group"><label>Stock Mínimo</label><input type="number" id="prod-min" value="3" required></div>
-                    <div class="input-group"><label>Foto (Opcional)</label><input type="file" id="prod-img" accept="image/*" capture="environment"></div>
-                    <button type="submit" class="btn-save">Guardar Producto</button>
-                </form>
-            </div>
-            <div id="product-list" class="list-container"></div>
-        </div>
-    </div>
+            // Diseño del PDF (puedes personalizar esto)
+            doc.setFontSize(18);
+            doc.text("Recibo de Venta", 10, 20);
+            doc.setFontSize(12);
+            doc.text("Producto: " + producto, 10, 40);
+            doc.text("Cantidad: " + cantidad, 10, 50);
+            doc.text("Total: $" + total, 10, 60);
+            doc.text("¡Gracias por su compra!", 10, 80);
 
-    <!-- ================= SECCIÓN: VENTAS ================= -->
-    <div id="section-ventas" class="app-section">
-        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
-        <div class="page-content">
-            <h2 class="page-title"><i class="fas fa-cash-register" style="color: var(--gold);"></i> Ventas</h2>
-            <button class="btn-add" onclick="toggleForm('venta-form')"><i class="fas fa-plus-circle"></i> Registrar Venta</button>
-            <div id="venta-form" class="form-container">
-                <form onsubmit="saveSale(event)">
-                    <div class="input-group"><label>Producto</label><select id="venta-product" required></select></div>
-                    <div class="input-group"><label>Cantidad</label><input type="number" id="venta-qty" min="1" value="1" required></div>
-                    <div class="input-group"><label>Cliente (Opcional)</label><input type="text" id="venta-client"></div>
-                    <button type="submit" class="btn-save">Registrar Venta</button>
-                </form>
-            </div>
-            <div id="venta-list" class="list-container"></div>
-        </div>
-    </div>
+            // 3. Convertir el PDF a un archivo (Blob)
+            const pdfBlob = doc.output('blob');
+            const file = new File([pdfBlob], 'recibo_venta.pdf', { type: 'application/pdf' });
 
-    <!-- ================= SECCIÓN: PEDIDOS ================= -->
-    <div id="section-pedidos" class="app-section">
-        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
-        <div class="page-content">
-            <h2 class="page-title"><i class="fas fa-boxes" style="color: var(--gold);"></i> Pedidos</h2>
-            <button class="btn-add" onclick="toggleForm('pedido-form')"><i class="fas fa-plus-circle"></i> Nuevo Pedido</button>
-            <div id="pedido-form" class="form-container">
-                <form onsubmit="saveOrder(event)">
-                    <div class="input-group"><label>Cliente</label><input type="text" id="pedido-client" required></div>
-                    <div class="input-group"><label>Detalle</label><input type="text" id="pedido-desc" required></div>
-                    <div class="input-group"><label>Estado</label><select id="pedido-status"><option>Pendiente</option><option>Entregado</option><option>Cancelado</option></select></div>
-                    <button type="submit" class="btn-save">Guardar Pedido</button>
-                </form>
-            </div>
-            <div id="pedido-list" class="list-container"></div>
-        </div>
-    </div>
-
-    <!-- ================= SECCIÓN: CLIENTES ================= -->
-    <div id="section-clientes" class="app-section">
-        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
-        <div class="page-content">
-            <h2 class="page-title"><i class="fas fa-users" style="color: var(--gold);"></i> Clientes</h2>
-            <button class="btn-add" onclick="toggleForm('cliente-form')"><i class="fas fa-plus-circle"></i> Nuevo Cliente</button>
-            <div id="cliente-form" class="form-container">
-                <form onsubmit="saveClient(event)">
-                    <div class="input-group"><label>Nombre</label><input type="text" id="cliente-name" required></div>
-                    <div class="input-group"><label>Teléfono</label><input type="tel" id="cliente-phone"></div>
-                    <div class="input-group"><label>Dirección</label><input type="text" id="cliente-address"></div>
-                    <button type="submit" class="btn-save">Guardar Cliente</button>
-                </form>
-            </div>
-            <div id="cliente-list" class="list-container"></div>
-        </div>
-    </div>
-
-    <!-- ================= SECCIÓN: REPORTES ================= -->
-    <div id="section-reportes" class="app-section">
-        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
-        <div class="page-content">
-            <h2 class="page-title"><i class="fas fa-chart-bar" style="color: var(--gold);"></i> Reportes</h2>
-            <div class="report-card"><i class="fas fa-dollar-sign"></i><div><h4>Ingresos Totales</h4><p id="report-total-ventas">$ 0</p></div></div>
-            <div class="report-card"><i class="fas fa-box"></i><div><h4>Productos en Inventario</h4><p id="report-total-stock">0</p></div></div>
-            <div class="report-card"><i class="fas fa-users"></i><div><h4>Clientes Registrados</h4><p id="report-total-clientes">0</p></div></div>
-            <div class="report-card"><i class="fas fa-shopping-bag"></i><div><h4>Pedidos Activos</h4><p id="report-total-pedidos">0</p></div></div>
-        </div>
-    </div>
-
-    <!-- ================= SECCIÓN: AJUSTES ================= -->
-    <div id="section-ajustes" class="app-section">
-        <header><div class="logo-icon"><i class="fas fa-leaf"></i></div><div class="header-text"><h1>Negocio Alerta</h1></div></header>
-        <div class="page-content">
-            <h2 class="page-title"><i class="fas fa-cog" style="color: var(--gold);"></i> Ajustes</h2>
-            <div class="section-card" style="margin: 0 0 15px 0;">
-                <p style="font-size: 12px; margin-bottom: 10px; color: #555;">Al presionar el botón, se borrarán todos los datos guardados en este celular.</p>
-                <button class="btn-add" style="background: var(--red);" onclick="clearAllData()"><i class="fas fa-trash-alt"></i> Borrar todos los datos</button>
-            </div>
-            <div class="section-card" style="margin: 0;">
-                <h4 style="font-size: 14px; color: var(--primary-green); margin-bottom: 5px;">Almacenamiento</h4>
-                <p style="font-size: 11px; color: #777;">Estado: Guardando localmente en este dispositivo.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- ================= BOTTOM NAV ================= -->
-    <nav class="bottom-nav">
-        <div class="nav-item active" data-target="inicio" onclick="navigateTo('inicio')"><i class="fas fa-home"></i><span>Inicio</span></div>
-        <div class="nav-item" data-target="productos" onclick="navigateTo('productos')"><i class="fas fa-shopping-bag"></i><span>Productos</span></div>
-        <div class="nav-item" data-target="ventas" onclick="navigateTo('ventas')"><i class="fas fa-cash-register"></i><span>Ventas</span></div>
-        <div class="nav-item" data-target="pedidos" onclick="navigateTo('pedidos')"><i class="fas fa-boxes"></i><span>Pedidos</span></div>
-        <div class="nav-item" data-target="clientes" onclick="navigateTo('clientes')"><i class="fas fa-users"></i><span>Clientes</span></div>
-        <div class="nav-item" data-target="ajustes" onclick="navigateTo('ajustes')"><i class="fas fa-cog"></i><span>Ajustes</span></div>
-    </nav>
-</div>
-
-<script>
-    // --- 1. ESTADO GLOBAL ---
-    let db = JSON.parse(localStorage.getItem('negocio_alerta_db')) || {
-        products: [],
-        sales: [],
-        orders: [],
-        clients: []
-    };
-
-    // Guardar en la memoria del celular
-    function saveDB() {
-        localStorage.setItem('negocio_alerta_db', JSON.stringify(db));
-        renderAll();
-    }
-
-    // --- 2. NAVEGACIÓN ---
-    function navigateTo(sectionId) {
-        document.querySelectorAll('.app-section').forEach(sec => sec.classList.remove('active'));
-        document.getElementById('section-' + sectionId).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.classList.remove('active');
-            if (item.dataset.target === sectionId) item.classList.add('active');
-        });
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        renderAll();
-    }
-
-    function toggleForm(formId) { document.getElementById(formId).classList.toggle('active'); }
-    const money = n => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(Number(n) || 0);
-
-    // --- 3. ESCÁNER DE CÓDIGO DE BARRAS ---
-    async function scanBarcode() {
-        if ('BarcodeDetector' in window) {
-            try {
-                const detector = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128', 'code_39'] });
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-                const video = document.createElement('video'); video.autoplay = true; video.srcObject = stream;
-                Object.assign(video.style, { position: 'fixed', inset: '0', width: '100%', height: '100%', objectFit: 'cover', zIndex: '9999' });
-                document.body.appendChild(video); await video.play();
-                const scan = async () => {
-                    try {
-                        const codes = await detector.detect(video);
-                        if (codes.length) {
-                            document.getElementById('prod-code').value = codes[0].rawValue;
-                            stream.getTracks().forEach(t => t.stop()); video.remove();
-                            alert('Código detectado: ' + codes[0].rawValue); return;
-                        }
-                    } catch (e) {}
-                    requestAnimationFrame(scan);
-                }; scan();
-            } catch (e) { alert('No se pudo acceder a la cámara. Ingresá el código manualmente.'); }
-        } else alert('Este navegador no admite escaneo automático. Ingresá el código manualmente.');
-    }
-
-    // --- 4. COMPRESIÓN DE IMÁGENES (Para que no se llene la memoria) ---
-    function compress(file, cb) {
-        const r = new FileReader();
-        r.onload = () => {
-            const img = new Image();
-            img.onload = () => {
-                const max = 400, s = Math.min(1, max / Math.max(img.width, img.height));
-                const c = document.createElement('canvas'); c.width = img.width * s; c.height = img.height * s;
-                c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-                cb(c.toDataURL('image/jpeg', .6)); // Calidad 60% para ahorrar espacio
-            };
-            img.src = r.result;
-        };
-        r.readAsDataURL(file);
-    }
-
-    // --- 5. GUARDAR DATOS ---
-    function saveProduct(e) {
-        e.preventDefault();
-        const file = document.getElementById('prod-img').files[0];
-        const add = (img) => {
-            db.products.unshift({
-                id: Date.now(),
-                nombre: document.getElementById('prod-name').value,
-                codigo: document.getElementById('prod-code').value,
-                costo: parseFloat(document.getElementById('prod-cost').value),
-                lista: parseFloat(document.getElementById('prod-list').value),
-                precio: parseFloat(document.getElementById('prod-price').value),
-                stock: parseInt(document.getElementById('prod-stock').value),
-                minimo: parseInt(document.getElementById('prod-min').value),
-                imagen: img
-            });
-            alert('¡Producto guardado!');
-            e.target.reset();
-            document.getElementById('prod-min').value = 3;
-            toggleForm('product-form');
-            saveDB();
-        };
-        if (file) compress(file, add); else add('');
-    }
-
-    function saveSale(e) {
-        e.preventDefault();
-        const productId = document.getElementById('venta-product').value;
-        const qty = parseInt(document.getElementById('venta-qty').value);
-        const product = db.products.find(p => p.id == productId);
-        if (!product || qty < 1 || qty > product.stock) return alert('Stock insuficiente.');
-        
-        product.stock -= qty;
-        db.sales.unshift({
-            id: Date.now(),
-            producto: product.nombre,
-            cantidad: qty,
-            total: product.precio * qty,
-            cliente: document.getElementById('venta-client').value,
-            fecha: new Date().toLocaleDateString('es-AR')
-        });
-        
-        alert('¡Venta registrada!');
-        e.target.reset();
-        document.getElementById('venta-qty').value = 1;
-        toggleForm('venta-form');
-        saveDB();
-    }
-
-    function saveOrder(e) {
-        e.preventDefault();
-        db.orders.unshift({
-            id: Date.now(),
-            cliente: document.getElementById('pedido-client').value,
-            detalle: document.getElementById('pedido-desc').value,
-            estado: document.getElementById('pedido-status').value
-        });
-        alert('¡Pedido guardado!'); e.target.reset(); toggleForm('pedido-form'); saveDB();
-    }
-
-    function saveClient(e) {
-        e.preventDefault();
-        db.clients.unshift({
-            id: Date.now(),
-            nombre: document.getElementById('cliente-name').value,
-            telefono: document.getElementById('cliente-phone').value,
-            direccion: document.getElementById('cliente-address').value
-        });
-        alert('¡Cliente agregado!'); e.target.reset(); toggleForm('cliente-form'); saveDB();
-    }
-
-    // --- 6. RENDERIZADO ---
-    function renderAll() {
-        renderProducts(); renderSales(); renderOrders(); renderClients();
-        updateMetrics(); renderHomeWidgets(); populateSalesDropdown();
-    }
-
-    function renderProducts() {
-        const list = document.getElementById('product-list');
-        if (!list) return;
-        list.innerHTML = db.products.map(p => `
-            <div class="list-item">
-                <img src="${p.imagen || 'https://via.placeholder.com/150'}" onerror="this.src='https://via.placeholder.com/150'">
-                <div class="info">
-                    <h4>${p.nombre}</h4>
-                    <p>Cód: ${p.codigo || '—'} | Stock: ${p.stock} (Mín: ${p.minimo})</p>
-                    <span class="price">$${parseFloat(p.precio).toLocaleString('es-AR')}</span>
-                </div>
-                <button class="btn-delete" onclick="deleteItem('products', ${p.id})"><i class="fas fa-trash"></i></button>
-            </div>
-        `).join('') || '<p style="text-align:center; color:#777; font-size:13px;">No hay productos cargados.</p>';
-    }
-
-    function renderSales() {
-        const list = document.getElementById('venta-list');
-        if (!list) return;
-        list.innerHTML = db.sales.map(s => `
-            <div class="list-item" style="border-left-color: #43a047;">
-                <div class="info">
-                    <h4>Venta: ${s.producto} x${s.cantidad}</h4>
-                    <p>Cliente: ${s.cliente || 'Consumidor Final'} | ${s.fecha}</p>
-                </div>
-                <span class="price" style="color: #43a047;">$${parseFloat(s.total).toLocaleString('es-AR')}</span>
-            </div>
-        `).join('') || '<p style="text-align:center; color:#777; font-size:13px;">No hay ventas registradas.</p>';
-    }
-
-    function renderOrders() {
-        const list = document.getElementById('pedido-list');
-        if (!list) return;
-        list.innerHTML = db.orders.map(o => {
-            let badgeClass = o.estado === 'Entregado' ? 'badge-completed' : (o.estado === 'Cancelado' ? 'badge-cancelled' : 'badge-pending');
-            return `
-            <div class="list-item" style="border-left-color: var(--blue);">
-                <div class="info"><h4>${o.cliente}</h4><p>${o.detalle}</p></div>
-                <span class="badge ${badgeClass}">${o.estado}</span>
-            </div>`;
-        }).join('') || '<p style="text-align:center; color:#777; font-size:13px;">No hay pedidos.</p>';
-    }
-
-    function renderClients() {
-        const list = document.getElementById('cliente-list');
-        if (!list) return;
-        list.innerHTML = db.clients.map(c => `
-            <div class="list-item" style="border-left-color: #8e24aa;">
-                <div class="info"><h4>${c.nombre}</h4><p><i class="fas fa-phone"></i> ${c.telefono || 'Sin teléfono'} | ${c.direccion || ''}</p></div>
-            </div>
-        `).join('') || '<p style="text-align:center; color:#777; font-size:13px;">No hay clientes.</p>';
-    }
-
-    function updateMetrics() {
-        const lowStock = db.products.filter(p => p.stock <= p.minimo).length;
-        const totalEarnings = db.sales.reduce((sum, s) => sum + parseFloat(s.total), 0);
-        if(document.getElementById('metric-productos')) document.getElementById('metric-productos').textContent = db.products.length;
-        if(document.getElementById('metric-stock-bajo')) document.getElementById('metric-stock-bajo').textContent = lowStock;
-        if(document.getElementById('metric-ganancia')) document.getElementById('metric-ganancia').textContent = '$ ' + totalEarnings.toLocaleString('es-AR');
-        if(document.getElementById('report-total-ventas')) document.getElementById('report-total-ventas').textContent = '$ ' + totalEarnings.toLocaleString('es-AR');
-        if(document.getElementById('report-total-stock')) document.getElementById('report-total-stock').textContent = db.products.length;
-        if(document.getElementById('report-total-clientes')) document.getElementById('report-total-clientes').textContent = db.clients.length;
-        if(document.getElementById('report-total-pedidos')) document.getElementById('report-total-pedidos').textContent = db.orders.filter(o => o.estado === 'Pendiente').length;
-        if(document.getElementById('alert-badge-stock')) document.getElementById('alert-badge-stock').textContent = `${lowStock} productos con stock bajo`;
-        if(document.getElementById('noti-badge')) document.getElementById('noti-badge').textContent = lowStock;
-    }
-
-    function renderHomeWidgets() {
-        const lowStockList = document.getElementById('home-low-stock-list');
-        if (!lowStockList) return;
-        const lowStockItems = db.products.filter(p => p.stock <= p.minimo);
-        lowStockList.innerHTML = lowStockItems.length === 0 ? '<p style="font-size:11px; color:#777;">Todo el stock está en orden.</p>' :
-            lowStockItems.slice(0, 5).map(p => `
-                <div class="product-card">
-                    <img src="${p.imagen || 'https://via.placeholder.com/150'}" onerror="this.src='https://via.placeholder.com/150'">
-                    <div class="product-info"><h4>${p.nombre}</h4><p>Quedan: ${p.stock}</p><span>Mínimo: ${p.minimo}</span></div>
-                </div>`).join('');
-
-        const recent = document.getElementById('home-recent-movements');
-        if (!recent) return;
-        let html = '';
-        db.sales.slice(0, 3).forEach(s => {
-            html += `<div class="movement-item"><div class="movement-icon venta"><i class="fas fa-plus"></i></div><div class="movement-text">Venta: ${s.producto} x${s.cantidad}</div><div class="movement-status status-money">$${parseFloat(s.total).toLocaleString('es-AR')}</div></div>`;
-        });
-        recent.innerHTML = html || '<p style="font-size:11px; color:#777;">No hay movimientos recientes.</p>';
-    }
-
-    function populateSalesDropdown() {
-        const select = document.getElementById('venta-product');
-        if (!select) return;
-        select.innerHTML = '<option value="">Seleccione un producto...</option>' + 
-            db.products.filter(p => p.stock > 0).map(p => `<option value="${p.id}">${p.nombre} (Stock: ${p.stock}) - $${p.precio}</option>`).join('');
-    }
-
-    // --- 7. ELIMINAR Y LIMPIAR ---
-    function deleteItem(table, id) {
-        if (confirm('¿Estás seguro de eliminar este registro?')) {
-            db[table] = db[table].filter(item => item.id !== id);
-            saveDB();
+            // 4. Intentar compartir por WhatsApp usando el menú nativo de Android
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Recibo de Venta',
+                        text: 'Aquí tienes tu recibo en PDF.'
+                    });
+                } catch (error) {
+                    console.error('Error al compartir:', error);
+                    alert("Cancelaste el envío o hubo un error.");
+                }
+            } else {
+                // 5. Plan B: Si la app no soporta compartir archivos, descarga el PDF y abre WhatsApp con un texto
+                alert("Tu app actual no soporta compartir archivos directamente. Se descargará el PDF y se abrirá WhatsApp.");
+                doc.save('recibo_venta.pdf'); // Descarga el PDF
+                
+                // Abre WhatsApp con un mensaje de texto (no adjunta el PDF automáticamente por seguridad de WhatsApp)
+                const mensaje = encodeURIComponent("Hola, aquí está tu recibo de venta. Te adjunto el PDF que acabo de descargar.");
+                window.open(`https://wa.me/?text=${mensaje}`, '_blank');
+            }
         }
-    }
-
-    function clearAllData() {
-        if (confirm('¡PELIGRO! Se borrarán TODOS los datos de este celular. ¿Continuar?')) {
-            localStorage.removeItem('negocio_alerta_db');
-            db = { products: [], sales: [], orders: [], clients: [] };
-            saveDB();
-            alert('Datos borrados.');
-            navigateTo('inicio');
-        }
-    }
-
-    // Iniciar la aplicación
-    window.onload = renderAll;
-</script>
-
+    </script>
 </body>
 </html>
