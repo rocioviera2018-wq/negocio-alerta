@@ -10,6 +10,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <!-- Librería Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Librería Escáner de Códigos -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     
     <style>
         :root {
@@ -39,7 +41,12 @@
         }
         .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .logo-area { display: flex; align-items: center; gap: 10px; }
-        .logo-icon { background: white; color: var(--primary-dark); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; border: 2px solid var(--gold); }
+        
+        /* Estilos para el logo personalizado */
+        .logo-container { background: white; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--gold); overflow: hidden; position: relative; }
+        .logo-container img { width: 100%; height: 100%; object-fit: cover; }
+        .logo-container i { color: var(--primary-dark); font-size: 24px; }
+
         .header-title h1 { font-size: 20px; margin: 0; }
         .header-title span { color: var(--gold); font-size: 12px; font-weight: bold; }
         .header-icons { display: flex; gap: 15px; font-size: 20px; }
@@ -123,6 +130,10 @@
 
         /* Texto vacío */
         .empty-text { text-align: center; color: var(--text-light); font-size: 14px; padding: 20px; }
+
+        /* Estilos del escáner */
+        #reader { width: 100%; border-radius: 15px; overflow: hidden; border: 2px dashed var(--primary-mid); margin-top: 10px; }
+        #reader video { border-radius: 15px; }
     </style>
 </head>
 <body>
@@ -131,7 +142,11 @@
     <header class="header">
         <div class="header-top">
             <div class="logo-area">
-                <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+                <div class="logo-container">
+                    <!-- Aquí se cargará tu logo. Por defecto muestra una hoja -->
+                    <img id="custom-logo" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Logo" style="display: none;">
+                    <i class="fas fa-leaf" id="default-logo-icon"></i>
+                </div>
                 <div class="header-title">
                     <h1>Negocio Alerta <span>PRO</span></h1>
                     <p style="font-size: 11px; opacity: 0.8;">Tu negocio organizado, desde el celular.</p>
@@ -156,27 +171,17 @@
         <!-- ================= SECCIÓN INICIO ================= -->
         <div id="seccion-inicio">
             <div class="summary-cards">
-                <div class="card-stat products">
-                    <i class="fas fa-box icon"></i>
-                    <h4>Productos</h4>
-                    <p id="stat-productos">0</p>
-                </div>
-                <div class="card-stat stock">
-                    <i class="fas fa-exclamation-triangle icon"></i>
-                    <h4>Stock bajo</h4>
-                    <p id="stat-stock" style="color: var(--danger);">0</p>
-                </div>
-                <div class="card-stat earnings">
-                    <i class="fas fa-chart-line icon"></i>
-                    <h4>Ganancia</h4>
-                    <p id="stat-ganancia">$ 0</p>
-                </div>
+                <div class="card-stat products"><i class="fas fa-box icon"></i><h4>Productos</h4><p id="stat-productos">0</p></div>
+                <div class="card-stat stock"><i class="fas fa-exclamation-triangle icon"></i><h4>Stock bajo</h4><p id="stat-stock" style="color: var(--danger);">0</p></div>
+                <div class="card-stat earnings"><i class="fas fa-chart-line icon"></i><h4>Ganancia</h4><p id="stat-ganancia">$ 0</p></div>
             </div>
 
             <div class="menu-grid">
                 <div class="menu-item active" onclick="cambiarSeccion('inicio', this)"><i class="fas fa-home"></i><span>Inicio</span></div>
                 <div class="menu-item" onclick="cambiarSeccion('productos', this)"><i class="fas fa-shopping-bag"></i><span>Productos</span></div>
                 <div class="menu-item" onclick="cambiarSeccion('ventas', this)"><i class="fas fa-credit-card"></i><span>Ventas</span></div>
+                <!-- NUEVO BOTÓN DE ESCANEAR EN EL MENÚ -->
+                <div class="menu-item" onclick="cambiarSeccion('escaner', this)"><i class="fas fa-qrcode"></i><span>Escanear</span></div>
                 <div class="menu-item" onclick="cambiarSeccion('pedidos', this)"><i class="fas fa-box-open"></i><span>Pedidos</span></div>
                 <div class="menu-item" onclick="cambiarSeccion('clientes', this)"><i class="fas fa-users"></i><span>Clientes</span></div>
                 <div class="menu-item" onclick="cambiarSeccion('reportes', this)"><i class="fas fa-chart-bar"></i><span>Reportes</span></div>
@@ -188,9 +193,7 @@
                     <h3><i class="fas fa-bell" style="color: var(--gold); margin-right: 5px;"></i> Atención para hoy</h3>
                     <a href="#">Ver todos ></a>
                 </div>
-                <div id="lista-alertas">
-                    <p class="empty-text">No hay alertas de stock.</p>
-                </div>
+                <div id="lista-alertas"><p class="empty-text">No hay alertas de stock.</p></div>
             </div>
 
             <div class="section-card">
@@ -198,9 +201,16 @@
                     <h3><i class="fas fa-clock" style="color: var(--primary-mid); margin-right: 5px;"></i> Últimos movimientos</h3>
                     <a href="#">Ver todos ></a>
                 </div>
-                <div id="lista-movimientos">
-                    <p class="empty-text">No hay movimientos recientes.</p>
-                </div>
+                <div id="lista-movimientos"><p class="empty-text">No hay movimientos recientes.</p></div>
+            </div>
+        </div>
+
+        <!-- ================= SECCIÓN ESCÁNER (NUEVA) ================= -->
+        <div id="seccion-escaner" style="display: none;">
+            <div class="section-card">
+                <h3 style="color: var(--primary-dark); margin-bottom: 15px; text-align: center;"><i class="fas fa-qrcode"></i> Escanear Producto</h3>
+                <p class="empty-text" style="padding: 10px; font-size: 13px;">Apunta la cámara al código de barras o QR. Al escanearlo, se irá a la pestaña de Ventas automáticamente.</p>
+                <div id="reader"></div>
             </div>
         </div>
 
@@ -212,18 +222,9 @@
             </div>
             <div class="section-card">
                 <h4 style="margin-bottom: 10px; color: var(--primary-dark);">Agregar Producto</h4>
-                <div class="form-group">
-                    <label>Nombre</label>
-                    <input type="text" id="prod-nombre" placeholder="Ej: Pan lactal">
-                </div>
-                <div class="form-group">
-                    <label>Stock</label>
-                    <input type="number" id="prod-stock" placeholder="Ej: 10">
-                </div>
-                <div class="form-group">
-                    <label>Precio</label>
-                    <input type="number" id="prod-precio" placeholder="Ej: 1200">
-                </div>
+                <div class="form-group"><label>Nombre / Código</label><input type="text" id="prod-nombre" placeholder="Ej: Pan lactal"></div>
+                <div class="form-group"><label>Stock</label><input type="number" id="prod-stock" placeholder="Ej: 10"></div>
+                <div class="form-group"><label>Precio</label><input type="number" id="prod-precio" placeholder="Ej: 1200"></div>
                 <button class="btn-primary" onclick="agregarProducto()">Guardar Producto</button>
             </div>
         </div>
@@ -232,53 +233,31 @@
         <div id="seccion-ventas" style="display: none;">
             <div class="section-card">
                 <h3 style="color: var(--primary-dark); margin-bottom: 15px;"><i class="fas fa-credit-card"></i> Registrar Venta</h3>
-                <div class="form-group">
-                    <label>Producto</label>
-                    <input type="text" id="venta-producto" placeholder="Ej: Pan lactal">
-                </div>
-                <div class="form-group">
-                    <label>Cantidad</label>
-                    <input type="number" id="venta-cantidad" placeholder="Ej: 2">
-                </div>
-                <div class="form-group">
-                    <label>Total</label>
-                    <input type="number" id="venta-total" placeholder="Ej: 2400">
-                </div>
+                <div class="form-group"><label>Producto</label><input type="text" id="venta-producto" placeholder="Ej: Pan lactal"></div>
+                <div class="form-group"><label>Cantidad</label><input type="number" id="venta-cantidad" placeholder="Ej: 2"></div>
+                <div class="form-group"><label>Total</label><input type="number" id="venta-total" placeholder="Ej: 2400"></div>
                 <button class="btn-primary" onclick="registrarVenta()">Registrar Venta</button>
             </div>
         </div>
 
-        <!-- ================= SECCIÓN PEDIDOS ================= -->
-        <div id="seccion-pedidos" style="display: none;">
-            <div class="section-card">
-                <h3 style="color: var(--primary-dark); margin-bottom: 15px;"><i class="fas fa-box-open"></i> Pedidos</h3>
-                <p class="empty-text">Aquí aparecerán tus pedidos.</p>
-            </div>
-        </div>
-
-        <!-- ================= SECCIÓN CLIENTES ================= -->
-        <div id="seccion-clientes" style="display: none;">
-            <div class="section-card">
-                <h3 style="color: var(--primary-dark); margin-bottom: 15px;"><i class="fas fa-users"></i> Clientes</h3>
-                <p class="empty-text">Aquí aparecerán tus clientes.</p>
-            </div>
-        </div>
-
-        <!-- ================= SECCIÓN REPORTES ================= -->
-        <div id="seccion-reportes" style="display: none;">
-            <div class="section-card">
-                <h3 style="color: var(--primary-dark); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Reportes</h3>
-                <button class="btn-pdf" onclick="generarYCompartirPDF()">
-                    <i class="fas fa-file-pdf"></i> Descargar Reporte PDF
-                </button>
-            </div>
-        </div>
-
-        <!-- ================= SECCIÓN AJUSTES ================= -->
+        <!-- ================= OTRAS SECCIONES ================= -->
+        <div id="seccion-pedidos" style="display: none;"><div class="section-card"><h3><i class="fas fa-box-open"></i> Pedidos</h3><p class="empty-text">Aquí aparecerán tus pedidos.</p></div></div>
+        <div id="seccion-clientes" style="display: none;"><div class="section-card"><h3><i class="fas fa-users"></i> Clientes</h3><p class="empty-text">Aquí aparecerán tus clientes.</p></div></div>
+        <div id="seccion-reportes" style="display: none;"><div class="section-card"><h3><i class="fas fa-chart-bar"></i> Reportes</h3><button class="btn-pdf" onclick="generarYCompartirPDF()"><i class="fas fa-file-pdf"></i> Descargar Reporte PDF</button></div></div>
+        
+        <!-- ================= SECCIÓN AJUSTES (CON SUBIDA DE LOGO) ================= -->
         <div id="seccion-ajustes" style="display: none;">
             <div class="section-card">
                 <h3 style="color: var(--primary-dark); margin-bottom: 15px;"><i class="fas fa-cog"></i> Ajustes</h3>
-                <p class="empty-text">Configuración de la app.</p>
+                
+                <div class="form-group" style="background: var(--primary-light); padding: 15px; border-radius: 10px; border: 1px solid #d1e7dd;">
+                    <label style="font-weight: bold; color: var(--primary-dark);"><i class="fas fa-image"></i> Mi Logo Personalizado</label>
+                    <p style="font-size: 11px; color: var(--text-light); margin-bottom: 10px;">Sube una foto cuadrada desde tu galería. Se guardará en este dispositivo.</p>
+                    <input type="file" id="logo-upload" accept="image/*" onchange="subirLogo(event)" style="background: white; padding: 5px;">
+                    <button class="btn-primary" onclick="borrarLogo()" style="background: var(--danger); margin-top: 10px;"><i class="fas fa-trash"></i> Restaurar logo por defecto</button>
+                </div>
+
+                <p class="empty-text">Más configuraciones próximamente.</p>
             </div>
         </div>
 
@@ -296,7 +275,7 @@
         <div class="nav-item active" onclick="cambiarSeccion('inicio', this)"><i class="fas fa-home"></i>Inicio</div>
         <div class="nav-item" onclick="cambiarSeccion('productos', this)"><i class="fas fa-shopping-bag"></i>Productos</div>
         <div class="nav-item" onclick="cambiarSeccion('ventas', this)"><i class="fas fa-credit-card"></i>Ventas</div>
-        <div class="nav-item" onclick="cambiarSeccion('pedidos', this)"><i class="fas fa-box-open"></i>Pedidos</div>
+        <div class="nav-item" onclick="cambiarSeccion('escaner', this)"><i class="fas fa-qrcode"></i>Escanear</div>
         <div class="nav-item" onclick="cambiarSeccion('clientes', this)"><i class="fas fa-users"></i>Clientes</div>
         <div class="nav-item" onclick="cambiarSeccion('ajustes', this)"><i class="fas fa-cog"></i>Ajustes</div>
     </nav>
@@ -311,7 +290,6 @@
 
         let supabaseClient = null;
         
-        // Solo intentamos conectar si el usuario puso las claves reales
         if (SUPABASE_URL !== 'TU_SUPABASE_URL_AQUI' && SUPABASE_KEY !== 'TU_SUPABASE_ANON_KEY_AQUI') {
             try {
                 supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -323,7 +301,48 @@
         }
 
         // ==========================================
-        // 2. NAVEGACIÓN (Cambiar secciones)
+        // 2. LÓGICA DEL ESCÁNER DE CÓDIGOS
+        // ==========================================
+        let html5QrcodeScanner = null;
+
+        function iniciarScanner() {
+            if (html5QrcodeScanner) return; // Evitar duplicados
+            
+            html5QrcodeScanner = new Html5QrcodeScanner(
+                "reader", 
+                { fps: 10, qrbox: {width: 250, height: 250} },
+                /* verbose= */ false
+            );
+            html5QrcodeScanner.render(onScanSuccess, onScanError);
+        }
+
+        function detenerScanner() {
+            if (html5QrcodeScanner) {
+                html5QrcodeScanner.clear().then(() => {
+                    html5QrcodeScanner = null;
+                }).catch(err => console.error("Error al detener escáner", err));
+            }
+        }
+
+        function onScanSuccess(decodedText, decodedResult) {
+            // Detener escáner al encontrar un código
+            detenerScanner();
+            
+            // Poner el código escaneado en el campo de producto de Ventas
+            document.getElementById('venta-producto').value = decodedText;
+            
+            alert("✅ Código escaneado: " + decodedText + "\n\nSe ha cargado en el formulario de Ventas.");
+            
+            // Cambiar automáticamente a la pestaña de Ventas
+            cambiarSeccion('ventas', document.querySelector('.menu-item[onclick*="ventas"]'));
+        }
+
+        function onScanError(errorMessage) {
+            // Errores comunes de lectura (ej. no hay código en cámara), se ignoran para no llenar de alertas
+        }
+
+        // ==========================================
+        // 3. NAVEGACIÓN (Cambiar secciones)
         // ==========================================
         function cambiarSeccion(nombreSeccion, elementoClickeado) {
             // Ocultar todas las secciones
@@ -334,12 +353,20 @@
             const seccionActiva = document.getElementById('seccion-' + nombreSeccion);
             if (seccionActiva) seccionActiva.style.display = 'block';
 
-            // Mostrar u ocultar el botón de PDF según la sección
+            // Controlar el botón de PDF (solo en Inicio)
             const botonPdf = document.getElementById('boton-pdf-inicio');
             if (nombreSeccion === 'inicio') {
                 botonPdf.style.display = 'block';
             } else {
                 botonPdf.style.display = 'none';
+            }
+
+            // CONTROLAR EL ESCÁNER (Encender solo en su pestaña, apagar en las demás)
+            if (nombreSeccion === 'escaner') {
+                // Pequeño retraso para que el div sea visible antes de encender la cámara
+                setTimeout(iniciarScanner, 300); 
+            } else {
+                detenerScanner();
             }
 
             // Quitar 'active' de todos los botones
@@ -360,16 +387,55 @@
         }
 
         // ==========================================
-        // 3. CARGAR DATOS DESDE SUPABASE
+        // 4. LÓGICA DEL LOGO PERSONALIZADO
+        // ==========================================
+        function cargarLogoGuardado() {
+            const logoGuardado = localStorage.getItem('negocio_logo');
+            if (logoGuardado) {
+                const img = document.getElementById('custom-logo');
+                const icon = document.getElementById('default-logo-icon');
+                img.src = logoGuardado;
+                img.style.display = 'block';
+                icon.style.display = 'none';
+            }
+        }
+
+        function subirLogo(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64 = e.target.result;
+                try {
+                    localStorage.setItem('negocio_logo', base64);
+                    document.getElementById('custom-logo').src = base64;
+                    document.getElementById('custom-logo').style.display = 'block';
+                    document.getElementById('default-logo-icon').style.display = 'none';
+                    alert("¡Logo guardado con éxito!");
+                } catch (error) {
+                    alert("La imagen es muy grande. Intenta con una más pequeña.");
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function borrarLogo() {
+            if(confirm("¿Seguro que quieres borrar tu logo personalizado?")) {
+                localStorage.removeItem('negocio_logo');
+                document.getElementById('custom-logo').style.display = 'none';
+                document.getElementById('default-logo-icon').style.display = 'block';
+                document.getElementById('logo-upload').value = '';
+            }
+        }
+
+        // ==========================================
+        // 5. CARGAR DATOS DESDE SUPABASE
         // ==========================================
         async function cargarDatos() {
-            if (!supabaseClient) {
-                console.log("Supabase no configurado. Mostrando datos de prueba.");
-                return;
-            }
+            if (!supabaseClient) return;
 
             try {
-                // Cargar Productos
                 const resProd = await supabaseClient.from('productos').select('*');
                 if (resProd.error) throw resProd.error;
                 const productos = resProd.data;
@@ -385,7 +451,6 @@
                     document.getElementById('lista-productos').innerHTML = '<p class="empty-text">No hay productos registrados.</p>';
                 }
 
-                // Cargar Ventas
                 const resVentas = await supabaseClient.from('ventas').select('*');
                 if (resVentas.error) throw resVentas.error;
                 const ventas = resVentas.data;
@@ -400,7 +465,7 @@
         }
 
         // ==========================================
-        // 4. AGREGAR PRODUCTO
+        // 6. AGREGAR PRODUCTO
         // ==========================================
         async function agregarProducto() {
             const nombre = document.getElementById('prod-nombre').value;
@@ -408,11 +473,7 @@
             const precio = document.getElementById('prod-precio').value;
 
             if (!nombre || !stock || !precio) { alert("Completa todos los campos"); return; }
-
-            if (!supabaseClient) {
-                alert("Faltan las claves de Supabase. Configúralas en el código.");
-                return;
-            }
+            if (!supabaseClient) { alert("Faltan las claves de Supabase."); return; }
 
             try {
                 const { error } = await supabaseClient.from('productos').insert([{ nombre: nombre, stock: parseInt(stock), precio: parseFloat(precio) }]);
@@ -426,7 +487,7 @@
         }
 
         // ==========================================
-        // 5. REGISTRAR VENTA
+        // 7. REGISTRAR VENTA
         // ==========================================
         async function registrarVenta() {
             const producto = document.getElementById('venta-producto').value;
@@ -434,11 +495,7 @@
             const total = document.getElementById('venta-total').value;
 
             if (!producto || !cantidad || !total) { alert("Completa todos los campos"); return; }
-
-            if (!supabaseClient) {
-                alert("Faltan las claves de Supabase. Configúralas en el código.");
-                return;
-            }
+            if (!supabaseClient) { alert("Faltan las claves de Supabase."); return; }
 
             try {
                 const { error } = await supabaseClient.from('ventas').insert([{ producto: producto, cantidad: parseInt(cantidad), total: parseFloat(total) }]);
@@ -452,16 +509,15 @@
         }
 
         // ==========================================
-        // 6. GENERAR PDF Y COMPARTIR POR WHATSAPP
+        // 8. GENERAR PDF Y COMPARTIR POR WHATSAPP
         // ==========================================
         async function generarYCompartirPDF() {
             try {
-                alert("1. Iniciando generación de PDF..."); // Aviso de depuración
+                alert("1. Iniciando generación de PDF...");
 
                 const cliente = "Cliente General";
                 const fecha = new Date().toLocaleDateString();
                 
-                // Evitamos el error de "Optional Chaining" que rompía todo en Android
                 const inputProd = document.getElementById('venta-producto');
                 const inputCant = document.getElementById('venta-cantidad');
                 const inputTot = document.getElementById('venta-total');
@@ -470,7 +526,6 @@
                 const cantidad = inputCant ? inputCant.value : "2";
                 const total = inputTot ? inputTot.value : "2400";
 
-                // Crear PDF
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
 
@@ -490,21 +545,20 @@
                 doc.setTextColor(150, 150, 150);
                 doc.text("¡Gracias por su compra!", 10, 100);
 
-                alert("2. PDF creado en memoria. Preparando para compartir..."); // Aviso
+                alert("2. PDF creado en memoria. Preparando para compartir...");
 
                 const pdfBlob = doc.output('blob');
                 const file = new File([pdfBlob], 'ticket_venta.pdf', { type: 'application/pdf' });
 
-                // Intentar compartir
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    alert("3. El dispositivo SOPORTA compartir archivos. Abriendo menú..."); // Aviso
+                    alert("3. Abriendo menú para compartir por WhatsApp...");
                     await navigator.share({
                         files: [file],
                         title: 'Ticket de Venta',
                         text: 'Aquí tienes tu ticket.'
                     });
                 } else {
-                    alert("3. El dispositivo NO SOPORTA compartir archivos. Se descargará el PDF y se abrirá WhatsApp."); // Aviso
+                    alert("3. Tu dispositivo no soporta compartir archivos directos. Se descargará el PDF y se abrirá WhatsApp.");
                     doc.save('ticket_venta.pdf');
                     setTimeout(function() {
                         window.open('https://wa.me/?text=Hola, aquí está tu ticket de venta. Te adjunto el PDF que acabo de descargar.', '_blank');
@@ -512,16 +566,17 @@
                 }
 
             } catch (error) {
-                alert("❌ ERROR: " + error.message); // Si algo falla, te dirá qué es
+                alert("❌ ERROR: " + error.message);
                 console.error(error);
             }
         }
 
         // ==========================================
-        // 7. INICIALIZAR AL CARGAR LA PÁGINA
+        // 9. INICIALIZAR AL CARGAR LA PÁGINA
         // ==========================================
         window.onload = function() {
-            cargarDatos();
+            cargarLogoGuardado(); // Carga tu logo si lo subiste antes
+            cargarDatos();        // Carga datos de Supabase
         };
     </script>
 </body>
