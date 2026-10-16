@@ -594,7 +594,29 @@ body{
         <div class="form-group"><label>Cantidad</label><input type="number" id="venta-cantidad" placeholder="Ej: 2" oninput="calcularTotal()"></div>
         <div class="form-group"><label>Precio unitario</label><input type="number" id="venta-precio-unit" placeholder="Ej: 1200" oninput="calcularTotal()"></div>
       </div>
-      <div class="form-group"><label>Total</label><input type="number" id="venta-total" placeholder="Ej: 2400"></div>
+      <div class="form-group"><label>Total</label><input type="number" id="venta-total" placeholder="Ej: 2400" oninput="calcularCambio()"></div>
+
+      <div class="form-group">
+        <label>💵 Monto recibido</label>
+        <input type="number" id="venta-recibido" placeholder="Ej: 5000" oninput="calcularCambio()">
+        <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;">
+          <button type="button" class="btn-secondary" style="flex:1;min-width:70px;padding:8px;margin:0;font-size:11px;" onclick="setRecibido('justo')">Justo</button>
+          <button type="button" class="btn-secondary" style="flex:1;min-width:70px;padding:8px;margin:0;font-size:11px;" onclick="setRecibido(1000)">$1.000</button>
+          <button type="button" class="btn-secondary" style="flex:1;min-width:70px;padding:8px;margin:0;font-size:11px;" onclick="setRecibido(2000)">$2.000</button>
+          <button type="button" class="btn-secondary" style="flex:1;min-width:70px;padding:8px;margin:0;font-size:11px;" onclick="setRecibido(5000)">$5.000</button>
+          <button type="button" class="btn-secondary" style="flex:1;min-width:70px;padding:8px;margin:0;font-size:11px;" onclick="setRecibido(10000)">$10.000</button>
+          <button type="button" class="btn-secondary" style="flex:1;min-width:70px;padding:8px;margin:0;font-size:11px;" onclick="setRecibido(20000)">$20.000</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>🔁 Vuelto / Cambio</label>
+        <div id="venta-vuelto-box" style="padding:14px 16px;border-radius:12px;background:#082624;border:1.5px solid #0d3d3a;text-align:center;">
+          <div style="font-size:11px;color:#8a8a8a;margin-bottom:4px;letter-spacing:.5px;">CAMBIO A DEVOLVER</div>
+          <div id="venta-vuelto" style="font-size:26px;font-weight:700;color:var(--turq-400);font-family:'Playfair Display',serif;">$ 0,00</div>
+        </div>
+      </div>
+
       <div class="form-group">
         <label>Cliente (opcional)</label>
         <select id="venta-cliente-select">
@@ -1443,7 +1465,53 @@ function calcularTotal(){
   const unit = parseFloat(document.getElementById('venta-precio-unit').value) || 0;
   if (cant && unit){
     document.getElementById('venta-total').value = (cant * unit).toFixed(2);
+    calcularCambio();
   }
+}
+
+function calcularCambio(){
+  const total = parseFloat(document.getElementById('venta-total').value) || 0;
+  const recibido = parseFloat(document.getElementById('venta-recibido').value) || 0;
+  const vuelto = recibido - total;
+
+  const box = document.getElementById('venta-vuelto-box');
+  const el = document.getElementById('venta-vuelto');
+
+  if (recibido === 0){
+    el.textContent = '$ 0,00';
+    el.style.color = 'var(--turq-400)';
+    box.style.background = '#082624';
+    box.style.borderColor = '#0d3d3a';
+    return;
+  }
+
+  if (vuelto < 0){
+    el.textContent = 'Faltan ' + formatearPrecio(Math.abs(vuelto));
+    el.style.color = '#f25c6a';
+    box.style.background = '#2a0d12';
+    box.style.borderColor = '#4a0d12';
+  } else if (vuelto === 0){
+    el.textContent = '✓ Justo';
+    el.style.color = '#2dd4bf';
+    box.style.background = '#082624';
+    box.style.borderColor = '#0d3d3a';
+  } else {
+    el.textContent = formatearPrecio(vuelto);
+    el.style.color = '#2dd4bf';
+    box.style.background = '#082624';
+    box.style.borderColor = '#0d3d3a';
+  }
+}
+
+function setRecibido(valor){
+  const total = parseFloat(document.getElementById('venta-total').value) || 0;
+  const input = document.getElementById('venta-recibido');
+  if (valor === 'justo'){
+    input.value = total > 0 ? total.toFixed(2) : '';
+  } else {
+    input.value = valor;
+  }
+  calcularCambio();
 }
 
 async function registrarVenta(){
@@ -1458,14 +1526,20 @@ async function registrarVenta(){
   const cliente = clienteSel.value || 'Consumidor final';
   const formaPago = document.getElementById('venta-forma-pago').value;
   const observaciones = document.getElementById('venta-observaciones').value.trim() || null;
+  const recibido = parseFloat(document.getElementById('venta-recibido').value) || total;
+  const vuelto = Math.max(0, recibido - total);
 
   if (!producto || !cantidad || !total) return alert('Completa producto, cantidad y total');
+  if (formaPago === 'Efectivo' && recibido < total) return alert('El monto recibido es menor al total');
   if (!supabaseClient) return alert('Faltan las claves de Supabase.');
 
   try {
     const { error: e1 } = await supabaseClient.from('ventas').insert([{
       producto, cantidad, total, cliente,
-      forma_pago: formaPago, observaciones
+      forma_pago: formaPago,
+      observaciones,
+      monto_recibido: recibido,
+      vuelto: vuelto
     }]);
     if (e1) throw e1;
 
@@ -1479,12 +1553,13 @@ async function registrarVenta(){
         .eq('id', prod.id);
     }
 
-    alert('¡Venta registrada!');
-    ['venta-producto','venta-cantidad','venta-total','venta-precio-unit','venta-observaciones'].forEach(id =>
+    alert('¡Venta registrada!' + (vuelto > 0 ? '\n\n💵 Cambio: ' + formatearPrecio(vuelto) : ''));
+    ['venta-producto','venta-cantidad','venta-total','venta-precio-unit','venta-observaciones','venta-recibido'].forEach(id =>
       document.getElementById(id).value = '');
     document.getElementById('venta-producto-select').selectedIndex = 0;
     document.getElementById('venta-cliente-select').selectedIndex = 0;
     document.getElementById('venta-forma-pago').selectedIndex = 0;
+    calcularCambio();
     cargarDatos();
   } catch(e){ alert('Error: ' + e.message); }
 }
@@ -1679,8 +1754,31 @@ async function generarYCompartirPDF(){
 
     y += 6;
 
+    /* Cambio / vuelto si es efectivo */
+    const inputRecibido = document.getElementById('venta-recibido');
+    const montoRecibido = inputRecibido ? (parseFloat(inputRecibido.value) || 0) : 0;
+    if (formaPago === 'Efectivo' && montoRecibido > 0){
+      const vueltoCalc = Math.max(0, montoRecibido - total);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(80, 80, 80);
+      doc.text('Monto recibido:', marginX, y);
+      doc.setFont('helvetica', 'normal');
+      doc.text(formatearPrecio(montoRecibido), marginX + 30, y);
+      y += 6;
+
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(10, 61, 46);
+      doc.text('Cambio:', marginX, y);
+      doc.setTextColor(45, 212, 191);
+      doc.setFontSize(11);
+      doc.text(formatearPrecio(vueltoCalc), marginX + 30, y);
+      doc.setFontSize(9);
+      y += 6;
+    }
+
     if (observaciones){
       doc.setFont('helvetica', 'bold');
+      doc.setTextColor(80, 80, 80);
       doc.text('Observaciones:', marginX, y);
       doc.setFont('helvetica', 'normal');
       const obsLines = doc.splitTextToSize(observaciones, pageW - marginX*2 - 30);
