@@ -46,6 +46,146 @@ body{
   color:var(--text); padding-bottom:100px; min-height:100vh;
   -webkit-font-smoothing:antialiased;
 }
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
+#login-screen{
+  position:fixed;inset:0;z-index:9999;
+  background:
+    radial-gradient(700px 500px at 50% 0%, #2a0410 0%, transparent 60%),
+    radial-gradient(600px 400px at 50% 100%, #042a28 0%, transparent 60%),
+    #050505;
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;overflow-y:auto;
+}
+.login-box{
+  width:100%;max-width:400px;
+  background:linear-gradient(145deg,#121212,#0a0a0a);
+  border:1px solid #222;border-radius:24px;
+  padding:32px 26px;
+  box-shadow:0 30px 80px -20px rgba(0,0,0,.9), 0 0 0 1px #ffffff08 inset;
+  animation:fadeUp .5s ease both;
+}
+.login-logo{
+  width:88px;height:88px;margin:0 auto 18px;
+  border-radius:50%;position:relative;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(145deg,#1a1a1a,#000);
+  box-shadow:0 12px 30px -10px rgba(45,212,191,.5);
+}
+.login-logo::before{
+  content:"";position:absolute;inset:-3px;border-radius:50%;
+  background:var(--grad-turq);z-index:-1;
+}
+.login-logo img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.login-logo i{font-size:38px;color:var(--turq-400)}
+
+.login-title{
+  font-family:'Playfair Display',serif;font-size:26px;
+  text-align:center;color:#fff;margin-bottom:6px;line-height:1.1;
+}
+.login-title span{
+  background:var(--grad-turq);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;font-weight:700;
+}
+.login-sub{
+  text-align:center;color:#8a8a8a;font-size:13px;margin-bottom:26px;
+}
+
+.btn-google{
+  width:100%;padding:14px;
+  background:#ffffff;color:#1a1a1a;
+  border:none;border-radius:14px;
+  font-size:14px;font-weight:600;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-family:inherit;transition:all .2s;
+  box-shadow:0 6px 20px -8px rgba(0,0,0,.7);
+}
+.btn-google:hover{transform:translateY(-1px);box-shadow:0 10px 26px -8px rgba(255,255,255,.15)}
+.btn-google:active{transform:scale(.98)}
+.btn-google svg{width:18px;height:18px}
+
+.login-divider{
+  display:flex;align-items:center;gap:12px;
+  margin:22px 0;color:#666;font-size:12px;
+}
+.login-divider::before,
+.login-divider::after{
+  content:"";flex:1;height:1px;background:#262626;
+}
+
+.login-input{
+  width:100%;padding:13px 14px;
+  border:1.5px solid #2a2a2a;border-radius:12px;
+  font-size:14px;font-family:inherit;
+  background:#161616;color:#f5f5f5;
+  transition:all .2s;margin-bottom:10px;
+}
+.login-input::placeholder{color:#5a5a5a}
+.login-input:focus{
+  outline:none;border-color:var(--red-600);background:#1a1a1a;
+  box-shadow:0 0 0 4px rgba(200,16,46,.18);
+}
+
+.btn-login-primary{
+  width:100%;padding:14px;
+  background:var(--grad-red);color:#fff;
+  border:none;border-radius:14px;
+  font-size:14px;font-weight:600;cursor:pointer;
+  font-family:inherit;margin-top:6px;
+  transition:all .2s;box-shadow:var(--shadow-red);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-login-primary:hover{transform:translateY(-1px);box-shadow:0 16px 34px -10px rgba(200,16,46,.75)}
+.btn-login-primary:active{transform:scale(.98)}
+.btn-login-primary:disabled{opacity:.6;cursor:not-allowed;transform:none}
+
+.login-links{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:18px;font-size:12.5px;
+}
+.login-links a{
+  color:var(--turq-400);text-decoration:none;
+  font-weight:600;cursor:pointer;transition:.2s;
+}
+.login-links a:hover{color:var(--turq-300);text-decoration:underline}
+
+.login-error{
+  background:#2a0d12;border:1px solid #4a0d12;color:#f25c6a;
+  padding:10px 12px;border-radius:10px;font-size:12.5px;
+  margin-top:12px;display:none;text-align:center;
+}
+.login-info{
+  background:#082624;border:1px solid #0d3d3a;color:var(--turq-400);
+  padding:10px 12px;border-radius:10px;font-size:12.5px;
+  margin-top:12px;display:none;text-align:center;
+}
+
+.login-tabs{
+  display:flex;gap:8px;margin-bottom:20px;
+  background:#0f0f0f;padding:4px;border-radius:12px;
+  border:1px solid #222;
+}
+.login-tab{
+  flex:1;text-align:center;padding:9px;
+  border-radius:9px;font-size:13px;font-weight:600;
+  color:#8a8a8a;cursor:pointer;transition:.2s;
+}
+.login-tab.active{
+  background:linear-gradient(145deg,#1a1a1a,#242424);
+  color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.5);
+}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
 .header{position:relative;background:var(--grad-header);color:#fff;
   padding:22px 20px 26px;border-bottom-left-radius:28px;border-bottom-right-radius:28px;
   box-shadow:var(--shadow-md);overflow:hidden;border-bottom:1px solid #2a2a2a}
@@ -70,6 +210,19 @@ body{
   background:#ffffff0a;border:1px solid #ffffff1a;font-size:16px;color:#e9e9e9;cursor:pointer;
   transition:transform .2s, background .2s, color .2s}
 .header-icons i:hover{background:#2dd4bf22;color:var(--turq-400);transform:translateY(-2px)}
+.user-avatar{
+  width:40px;height:40px;border-radius:50%;object-fit:cover;
+  border:2px solid var(--turq-500);cursor:pointer;
+  box-shadow:0 4px 12px rgba(45,212,191,.4);
+}
+.user-initials{
+  width:40px;height:40px;border-radius:50%;
+  background:var(--grad-turq);color:#00211d;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:15px;
+  border:2px solid transparent;
+  box-shadow:0 4px 12px rgba(45,212,191,.4);
+}
 .welcome-box{background:linear-gradient(135deg,#ffffff08,#2dd4bf0a);border:1px solid #ffffff14;
   padding:16px 18px;border-radius:18px;display:flex;justify-content:space-between;align-items:center;
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);position:relative;z-index:2}
@@ -78,6 +231,7 @@ body{
 .btn-logout{background:transparent;border:1px solid #2dd4bf55;color:var(--turq-400);
   padding:9px 14px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;transition:.2s;font-family:inherit}
 .btn-logout:hover{background:#c8102e22;border-color:var(--red-700);color:#fff}
+
 .container{padding:16px;max-width:620px;margin:0 auto}
 .summary-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
   margin-top:-30px;margin-bottom:20px;position:relative;z-index:5}
@@ -105,7 +259,6 @@ body{
 .menu-item.active span{color:#fff}
 .section-card{background:var(--surface);padding:18px;border-radius:var(--radius-lg);
   box-shadow:var(--shadow-sm);margin-bottom:16px;border:1px solid var(--border);animation:fadeUp .35s ease both}
-@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .section-header h3{font-size:15.5px;font-weight:600;color:#fff;display:flex;align-items:center;gap:6px;
   font-family:'Playfair Display',serif;letter-spacing:.2px}
@@ -145,7 +298,6 @@ body{
 .prod-info{flex:1;min-width:0}
 .prod-info h4{font-size:14px;font-weight:600;margin:0 0 3px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .prod-info span{font-size:11.5px;color:var(--muted);display:block}
-.prod-price{font-size:14px;font-weight:700;color:var(--turq-400);white-space:nowrap}
 .prod-stock-badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;margin-left:6px}
 .prod-stock-badge.ok{background:#082624;color:var(--turq-400);border:1px solid #0d3d3a}
 .prod-stock-badge.low{background:var(--danger-soft);color:var(--red-500);border:1px solid #4a0d12}
@@ -226,6 +378,23 @@ body{
 .ajustes-block h4{font-size:13px;color:#fff;margin-bottom:12px;
   display:flex;align-items:center;gap:6px;font-weight:700}
 .ajustes-block h4 i{color:var(--turq-500)}
+.user-info-box{
+  display:flex;align-items:center;gap:14px;
+  background:linear-gradient(145deg,#0d1f1e,#082624);
+  padding:16px;border-radius:14px;border:1px solid #0d3d3a;
+  margin-bottom:14px;
+}
+.user-info-box .avatar{
+  width:52px;height:52px;border-radius:50%;flex-shrink:0;
+  background:var(--grad-turq);color:#00211d;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:20px;
+  border:2px solid #0d3d3a;
+  box-shadow:0 6px 14px rgba(45,212,191,.4);
+}
+.user-info-box .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.user-info-box .info h4{font-size:14.5px;color:#fff;margin:0 0 3px;font-weight:600;word-break:break-word}
+.user-info-box .info span{font-size:12px;color:#8a8a8a;word-break:break-word}
 ::-webkit-scrollbar{width:8px;height:8px}
 ::-webkit-scrollbar-thumb{background:#333;border-radius:8px}
 ::-webkit-scrollbar-thumb:hover{background:#444}
@@ -238,6 +407,75 @@ body{
 </style>
 </head>
 <body>
+
+<!-- ============================================================
+     PANTALLA DE LOGIN
+     ============================================================ -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <img id="login-logo-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="display:none;" alt="">
+      <i class="fas fa-gem" id="login-logo-icon"></i>
+    </div>
+
+    <h2 class="login-title">Negocio Alerta <span>PRO</span></h2>
+    <p class="login-sub">Tu negocio, siempre en control</p>
+
+    <button class="btn-google" onclick="loginConGoogle()">
+      <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.8-6.8C35.6 2.4 30.2 0 24 0 14.6 0 6.5 5.4 2.6 13.3l7.9 6.1C12.4 13.4 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.6 24.5c0-1.6-.2-3.1-.4-4.5H24v9h12.7c-.5 2.9-2.2 5.4-4.6 7l7.2 5.6c4.2-3.9 6.6-9.6 6.6-17.1z"/><path fill="#FBBC05" d="M10.5 28.6c-.5-1.4-.8-2.9-.8-4.6s.3-3.2.8-4.6l-7.9-6.1C.9 16.6 0 20.2 0 24s.9 7.4 2.6 10.7l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.2-5.6c-2 1.4-4.6 2.2-8.7 2.2-6.2 0-11.6-3.9-13.5-9.4l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>
+      Continuar con Google
+    </button>
+
+    <div class="login-divider">o con tu email</div>
+
+    <div class="login-tabs">
+      <div class="login-tab active" id="tab-login" onclick="cambiarTabLogin('login')">Iniciar sesión</div>
+      <div class="login-tab" id="tab-registro" onclick="cambiarTabLogin('registro')">Registrarme</div>
+    </div>
+
+    <div id="form-login">
+      <input type="email" id="login-email" class="login-input" placeholder="Email" autocomplete="email">
+      <input type="password" id="login-password" class="login-input" placeholder="Contraseña" autocomplete="current-password">
+      <button class="btn-login-primary" id="btn-login" onclick="iniciarSesion()">
+        <i class="fas fa-sign-in-alt"></i> Iniciar sesión
+      </button>
+      <div class="login-links">
+        <a onclick="mostrarRecuperar()">¿Olvidaste tu contraseña?</a>
+      </div>
+    </div>
+
+    <div id="form-registro" style="display:none;">
+      <input type="text" id="reg-nombre" class="login-input" placeholder="Tu nombre" autocomplete="name">
+      <input type="email" id="reg-email" class="login-input" placeholder="Email" autocomplete="email">
+      <input type="password" id="reg-password" class="login-input" placeholder="Contraseña (mín. 6 caracteres)" autocomplete="new-password">
+      <input type="password" id="reg-password2" class="login-input" placeholder="Repetir contraseña" autocomplete="new-password">
+      <button class="btn-login-primary" id="btn-registro" onclick="registrarse()">
+        <i class="fas fa-user-plus"></i> Crear cuenta
+      </button>
+    </div>
+
+    <div id="form-recuperar" style="display:none;">
+      <p style="font-size:12.5px;color:#8a8a8a;text-align:center;margin-bottom:14px;">
+        Te enviaremos un enlace para restablecer tu contraseña.
+      </p>
+      <input type="email" id="rec-email" class="login-input" placeholder="Tu email" autocomplete="email">
+      <button class="btn-login-primary" onclick="enviarRecuperacion()">
+        <i class="fas fa-paper-plane"></i> Enviar enlace
+      </button>
+      <div class="login-links" style="justify-content:center;">
+        <a onclick="volverALogin()">← Volver</a>
+      </div>
+    </div>
+
+    <div id="login-error" class="login-error"></div>
+    <div id="login-info" class="login-info"></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     APP (oculta hasta login)
+     ============================================================ -->
+<div id="app-container" style="display:none;">
 
 <header class="header">
   <div class="header-top">
@@ -253,7 +491,9 @@ body{
     </div>
     <div class="header-icons">
       <i class="fas fa-bell"></i>
-      <i class="fas fa-user-circle"></i>
+      <div id="header-user" onclick="cambiarSeccion('ajustes', document.querySelector('.menu-item[onclick*=\'ajustes\']'))">
+        <div class="user-initials" id="header-initials">U</div>
+      </div>
     </div>
   </div>
   <div class="welcome-box">
@@ -469,6 +709,18 @@ body{
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-cog"></i> Ajustes</h3>
 
+      <div class="user-info-box">
+        <div class="avatar" id="user-info-avatar">U</div>
+        <div class="info">
+          <h4 id="user-info-name">Usuario</h4>
+          <span id="user-info-email">usuario@mail.com</span>
+        </div>
+      </div>
+
+      <button class="btn-secondary" onclick="cerrarSesion()" style="background:#2a0d12;color:#f25c6a;border-color:#4a0d12;margin-bottom:14px;">
+        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+      </button>
+
       <div class="ajustes-block">
         <h4><i class="fas fa-image"></i> Logo del Local</h4>
         <div style="text-align:center;margin-bottom:12px;">
@@ -525,6 +777,8 @@ body{
   <div class="nav-item" onclick="cambiarSeccion('ajustes', this)"><i class="fas fa-cog"></i>Ajustes</div>
 </nav>
 
+</div><!-- /app-container -->
+
 <script>
 /* ==========================================================
    SUPABASE
@@ -534,7 +788,15 @@ const SUPABASE_KEY = 'sb_publishable_4Mfk_ZP_BnVz9luy8CeF0A_Jh4zYV9R';
 
 let supabaseClient = null;
 try {
-  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      storage: window.localStorage,
+      storageKey: 'negocio-alerta-auth'
+    }
+  });
   console.log('Supabase listo');
 } catch(e){ console.warn('Supabase error:', e.message); }
 
@@ -542,14 +804,253 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c =>
   ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 
 /* ==========================================================
-   DATOS DEL LOCAL
+   LOGIN — UI helpers
+   ========================================================== */
+function mostrarError(msg){
+  const el = document.getElementById('login-error');
+  const ok = document.getElementById('login-info');
+  ok.style.display = 'none';
+  el.innerText = msg;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 6000);
+}
+function mostrarInfo(msg){
+  const el = document.getElementById('login-info');
+  const er = document.getElementById('login-error');
+  er.style.display = 'none';
+  el.innerText = msg;
+  el.style.display = 'block';
+}
+function cambiarTabLogin(tab){
+  document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+  document.getElementById('tab-registro').classList.toggle('active', tab === 'registro');
+  document.getElementById('form-login').style.display = (tab === 'login') ? 'block' : 'none';
+  document.getElementById('form-registro').style.display = (tab === 'registro') ? 'block' : 'none';
+  document.getElementById('form-recuperar').style.display = 'none';
+  document.getElementById('login-error').style.display = 'none';
+  document.getElementById('login-info').style.display = 'none';
+}
+function mostrarRecuperar(){
+  document.getElementById('form-login').style.display = 'none';
+  document.getElementById('form-registro').style.display = 'none';
+  document.getElementById('form-recuperar').style.display = 'block';
+  document.getElementById('tab-login').classList.remove('active');
+  document.getElementById('tab-registro').classList.remove('active');
+}
+function volverALogin(){
+  cambiarTabLogin('login');
+}
+function setLoading(btnId, loading, text){
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
+  btn.disabled = loading;
+  if (loading){
+    btn.dataset.original = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + (text || 'Cargando...');
+  } else if (btn.dataset.original){
+    btn.innerHTML = btn.dataset.original;
+  }
+}
+
+/* ==========================================================
+   LOGIN — acciones
+   ========================================================== */
+async function loginConGoogle(){
+  if (!supabaseClient) return mostrarError('Supabase no configurado.');
+  try {
+    const { error } = await supabaseClient.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin + window.location.pathname,
+        queryParams: { prompt: 'select_account' }
+      }
+    });
+    if (error) throw error;
+  } catch(e){
+    mostrarError('Error con Google: ' + e.message);
+  }
+}
+
+async function iniciarSesion(){
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  if (!email || !password) return mostrarError('Completá email y contraseña');
+  if (!supabaseClient) return mostrarError('Supabase no configurado.');
+
+  setLoading('btn-login', true, 'Ingresando...');
+  try {
+    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    // onAuthStateChange se encarga de mostrar la app
+  } catch(e){
+    mostrarError(traducirError(e.message));
+  } finally {
+    setLoading('btn-login', false);
+  }
+}
+
+async function registrarse(){
+  const nombre = document.getElementById('reg-nombre').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const p1 = document.getElementById('reg-password').value;
+  const p2 = document.getElementById('reg-password2').value;
+
+  if (!email || !p1) return mostrarError('Completá email y contraseña');
+  if (p1.length < 6) return mostrarError('La contraseña debe tener al menos 6 caracteres');
+  if (p1 !== p2) return mostrarError('Las contraseñas no coinciden');
+  if (!supabaseClient) return mostrarError('Supabase no configurado.');
+
+  setLoading('btn-registro', true, 'Creando cuenta...');
+  try {
+    const { data, error } = await supabaseClient.auth.signUp({
+      email, password: p1,
+      options: {
+        data: { full_name: nombre || '' },
+        emailRedirectTo: window.location.origin + window.location.pathname
+      }
+    });
+    if (error) throw error;
+
+    if (data.user && data.session){
+      // Sesión activa directa → onAuthStateChange se encarga
+    } else {
+      mostrarInfo('✅ Cuenta creada. Revisá tu email para confirmarla y después iniciá sesión.');
+    }
+  } catch(e){
+    mostrarError(traducirError(e.message));
+  } finally {
+    setLoading('btn-registro', false);
+  }
+}
+
+async function enviarRecuperacion(){
+  const email = document.getElementById('rec-email').value.trim();
+  if (!email) return mostrarError('Escribí tu email');
+  if (!supabaseClient) return mostrarError('Supabase no configurado.');
+
+  try {
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + window.location.pathname
+    });
+    if (error) throw error;
+    mostrarInfo('✅ Te enviamos un enlace a ' + email);
+  } catch(e){
+    mostrarError(traducirError(e.message));
+  }
+}
+
+function traducirError(msg){
+  const m = String(msg).toLowerCase();
+  if (m.includes('invalid login')) return 'Email o contraseña incorrectos';
+  if (m.includes('email not confirmed')) return 'Confirmá tu email antes de iniciar sesión';
+  if (m.includes('user already registered')) return 'Ese email ya está registrado';
+  if (m.includes('password should be')) return 'La contraseña es muy corta (mín. 6)';
+  if (m.includes('unable to validate email')) return 'El email no es válido';
+  if (m.includes('rate limit')) return 'Demasiados intentos. Esperá un minuto.';
+  return msg;
+}
+
+/* ==========================================================
+   SESIÓN — mostrar/ocultar app
+   ========================================================== */
+let usuarioActual = null;
+
+function mostrarApp(user){
+  usuarioActual = user;
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app-container').style.display = 'block';
+  renderDatosUsuario(user);
+  cargarDatosLocalDeStorage();
+  aplicarDatosLocal();
+  cargarLogoGuardado();
+  cargarDatos();
+  cargarClientes();
+}
+
+function mostrarLogin(){
+  usuarioActual = null;
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app-container').style.display = 'none';
+}
+
+function renderDatosUsuario(user){
+  const meta = user.user_metadata || {};
+  const nombre = meta.full_name || meta.name || (user.email || '').split('@')[0] || 'Usuario';
+  const inicial = nombre.trim().charAt(0).toUpperCase();
+  const avatarUrl = meta.avatar_url || meta.picture || null;
+
+  // Header
+  const cont = document.getElementById('header-user');
+  if (avatarUrl){
+    cont.innerHTML = '<img class="user-avatar" src="' + avatarUrl + '" alt="">';
+  } else {
+    cont.innerHTML = '<div class="user-initials">' + esc(inicial) + '</div>';
+  }
+
+  // Bienvenida
+  document.getElementById('welcome-titulo').innerText = 'Hola, ' + nombre.split(' ')[0];
+
+  // Ajustes
+  const av = document.getElementById('user-info-avatar');
+  if (avatarUrl) av.innerHTML = '<img src="' + avatarUrl + '" alt="">';
+  else av.textContent = inicial;
+
+  document.getElementById('user-info-name').textContent = nombre;
+  document.getElementById('user-info-email').textContent = user.email || '';
+}
+
+async function cerrarSesion(){
+  if (!confirm('¿Cerrar sesión?')) return;
+  try {
+    if (supabaseClient) await supabaseClient.auth.signOut();
+  } catch(e){ console.warn(e); }
+  mostrarLogin();
+}
+
+async function chequearSesion(){
+  if (!supabaseClient) return;
+  try {
+    const { data } = await supabaseClient.auth.getSession();
+    if (data && data.session){
+      mostrarApp(data.session.user);
+    } else {
+      mostrarLogin();
+    }
+  } catch(e){
+    console.warn(e);
+    mostrarLogin();
+  }
+}
+
+/* Listener de cambios de auth */
+if (supabaseClient){
+  supabaseClient.auth.onAuthStateChange((event, session) => {
+    console.log('Auth event:', event);
+    if (event === 'SIGNED_IN' && session){
+      mostrarApp(session.user);
+    } else if (event === 'SIGNED_OUT'){
+      mostrarLogin();
+    } else if (event === 'PASSWORD_RECOVERY'){
+      mostrarInfo('Ingresá tu nueva contraseña (función próximamente)');
+    }
+  });
+}
+
+/* ==========================================================
+   DATOS DEL LOCAL (por usuario)
    ========================================================== */
 let datosLocal = { nombre:'', slogan:'', direccion:'', telefono:'', cuit:'', email:'', instagram:'' };
 
+function claveLocal(k){
+  const uid = usuarioActual ? usuarioActual.id : 'anon';
+  return 'negocio_' + k + '_' + uid;
+}
+
 function cargarDatosLocalDeStorage(){
   try {
-    const raw = localStorage.getItem('negocio_local');
+    const raw = localStorage.getItem(claveLocal('local'));
     if (raw) datosLocal = { ...datosLocal, ...JSON.parse(raw) };
+    else datosLocal = { nombre:'', slogan:'', direccion:'', telefono:'', cuit:'', email:'', instagram:'' };
   } catch(e){ console.warn(e); }
 }
 
@@ -559,7 +1060,7 @@ function guardarDatosLocal(){
     if (el) datosLocal[k] = el.value.trim();
   });
   if (!datosLocal.nombre) return alert('El nombre del local es obligatorio.');
-  localStorage.setItem('negocio_local', JSON.stringify(datosLocal));
+  localStorage.setItem(claveLocal('local'), JSON.stringify(datosLocal));
   aplicarDatosLocal();
   alert('✅ Datos del local guardados');
 }
@@ -584,7 +1085,71 @@ function aplicarDatosLocal(){
     if (el) el.value = datosLocal[k] || '';
   });
 
-  document.title = datosLocal.nombre ? datosLocal.nombre + ' — Alerta PRO' : 'Negocio Alerta PRO';
+  if (datosLocal.nombre) document.title = datosLocal.nombre + ' — Alerta PRO';
+}
+
+/* ==========================================================
+   LOGO (por usuario)
+   ========================================================== */
+function cargarLogoGuardado(){
+  const logo = localStorage.getItem(claveLocal('logo'));
+  if (logo) aplicarLogo(logo, false);
+  const loginLogo = document.getElementById('login-logo-img');
+  const loginIcon = document.getElementById('login-logo-icon');
+  if (logo){
+    loginLogo.src = logo; loginLogo.style.display = 'block';
+    loginIcon.style.display = 'none';
+  }
+}
+
+function aplicarLogo(base64, guardar){
+  const img = document.getElementById('custom-logo');
+  const icon = document.getElementById('default-logo-icon');
+  const prev = document.getElementById('preview-logo');
+  if (base64){
+    img.src = base64; img.style.display = 'block';
+    icon.style.display = 'none';
+    if (prev){ prev.src = base64; prev.style.display = 'inline-block'; }
+    if (guardar){
+      try { localStorage.setItem(claveLocal('logo'), base64); }
+      catch(e){ alert('No se pudo guardar (almacenamiento lleno).'); }
+    }
+  } else {
+    img.style.display = 'none';
+    icon.style.display = 'block';
+    if (prev) prev.style.display = 'none';
+  }
+}
+
+function subirLogo(event){
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  if (!file.type.startsWith('image/')) return alert('Selecciona una imagen válida.');
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const size = 400;
+      const canvas = document.createElement('canvas');
+      canvas.width = canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      const min = Math.min(img.width, img.height);
+      ctx.drawImage(img, (img.width-min)/2, (img.height-min)/2, min, min, 0, 0, size, size);
+      aplicarLogo(canvas.toDataURL('image/jpeg', 0.85), true);
+      alert('✅ ¡Logo guardado!');
+    };
+    img.onerror = () => alert('No se pudo leer la imagen.');
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+  event.target.value = '';
+}
+
+function borrarLogo(){
+  if (confirm('¿Borrar tu logo personalizado?')){
+    localStorage.removeItem(claveLocal('logo'));
+    aplicarLogo(null, false);
+  }
 }
 
 /* ==========================================================
@@ -688,64 +1253,6 @@ function cambiarSeccion(nombreSeccion, elementoClickeado){
       const menuArriba = document.querySelector('.menu-grid .menu-item[onclick*="'+nombreSeccion+'"]');
       if (menuArriba) menuArriba.classList.add('active');
     }
-  }
-}
-
-/* ==========================================================
-   LOGO
-   ========================================================== */
-function cargarLogoGuardado(){
-  const logo = localStorage.getItem('negocio_logo');
-  if (logo) aplicarLogo(logo, false);
-}
-
-function aplicarLogo(base64, guardar){
-  const img = document.getElementById('custom-logo');
-  const icon = document.getElementById('default-logo-icon');
-  const prev = document.getElementById('preview-logo');
-  if (base64){
-    img.src = base64; img.style.display = 'block';
-    icon.style.display = 'none';
-    if (prev){ prev.src = base64; prev.style.display = 'inline-block'; }
-    if (guardar){
-      try { localStorage.setItem('negocio_logo', base64); }
-      catch(e){ alert('No se pudo guardar (almacenamiento lleno).'); }
-    }
-  } else {
-    img.style.display = 'none';
-    icon.style.display = 'block';
-    if (prev) prev.style.display = 'none';
-  }
-}
-
-function subirLogo(event){
-  const file = event.target.files && event.target.files[0];
-  if (!file) return;
-  if (!file.type.startsWith('image/')) return alert('Selecciona una imagen válida.');
-  const reader = new FileReader();
-  reader.onload = e => {
-    const img = new Image();
-    img.onload = () => {
-      const size = 400;
-      const canvas = document.createElement('canvas');
-      canvas.width = canvas.height = size;
-      const ctx = canvas.getContext('2d');
-      const min = Math.min(img.width, img.height);
-      ctx.drawImage(img, (img.width-min)/2, (img.height-min)/2, min, min, 0, 0, size, size);
-      aplicarLogo(canvas.toDataURL('image/jpeg', 0.85), true);
-      alert('✅ ¡Logo guardado!');
-    };
-    img.onerror = () => alert('No se pudo leer la imagen.');
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-  event.target.value = '';
-}
-
-function borrarLogo(){
-  if (confirm('¿Borrar tu logo personalizado?')){
-    localStorage.removeItem('negocio_logo');
-    aplicarLogo(null, false);
   }
 }
 
@@ -1094,7 +1601,7 @@ async function registrarVenta(){
 }
 
 /* ==========================================================
-   COMPROBANTE PDF COMPLETO
+   PDF
    ========================================================== */
 function generarNumeroComprobante(){
   const d = new Date();
@@ -1112,7 +1619,6 @@ function formatearPrecio(n){
 
 async function generarYCompartirPDF(){
   try {
-    /* ----- Leer datos del formulario ----- */
     const selProducto = document.getElementById('venta-producto-select');
     const inputProducto = document.getElementById('venta-producto');
     const inputCantidad = document.getElementById('venta-cantidad');
@@ -1132,40 +1638,32 @@ async function generarYCompartirPDF(){
     const formaPago = selFormaPago ? selFormaPago.value : 'Efectivo';
     const observaciones = inputObs ? inputObs.value.trim() : '';
 
-    /* ----- Buscar datos completos del cliente ----- */
     const nombreCliente = selCliente.value || 'Consumidor final';
     let clienteData = null;
     if (nombreCliente !== 'Consumidor final'){
       clienteData = cacheClientes.find(c => c.nombre === nombreCliente) || null;
     }
 
-    /* ----- Comprobante y fecha ----- */
     const numeroComprobante = generarNumeroComprobante();
     const fecha = new Date();
     const fechaStr = fecha.toLocaleDateString('es-AR');
     const horaStr = fecha.toLocaleTimeString('es-AR', { hour:'2-digit', minute:'2-digit' });
 
-    /* =====================================================
-       DIBUJAR PDF
-       ===================================================== */
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     const pageW = 210;
     const marginX = 14;
 
-    /* ---------- CABECERA NEGRA CON FRANJA TURQUESA ---------- */
     doc.setFillColor(10, 10, 10);
     doc.rect(0, 0, pageW, 46, 'F');
     doc.setFillColor(45, 212, 191);
     doc.rect(0, 46, pageW, 1.5, 'F');
 
-    /* Nombre del local (turquesa, grande) */
     doc.setTextColor(45, 212, 191);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(20);
     doc.text(datosLocal.nombre || 'Negocio Alerta PRO', marginX, 16);
 
-    /* Eslogan */
     if (datosLocal.slogan){
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(9);
@@ -1173,29 +1671,21 @@ async function generarYCompartirPDF(){
       doc.text(datosLocal.slogan, marginX, 22);
     }
 
-    /* Datos del local debajo */
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8.5);
     doc.setTextColor(220, 220, 220);
 
     let yLocal = 29;
-    if (datosLocal.direccion){
-      doc.text(datosLocal.direccion, marginX, yLocal);
-      yLocal += 4.5;
-    }
+    if (datosLocal.direccion){ doc.text(datosLocal.direccion, marginX, yLocal); yLocal += 4.5; }
     const lineaContacto = [];
     if (datosLocal.telefono) lineaContacto.push('Tel: ' + datosLocal.telefono);
     if (datosLocal.email) lineaContacto.push(datosLocal.email);
-    if (lineaContacto.length){
-      doc.text(lineaContacto.join('  •  '), marginX, yLocal);
-      yLocal += 4.5;
-    }
+    if (lineaContacto.length){ doc.text(lineaContacto.join('  •  '), marginX, yLocal); yLocal += 4.5; }
     const lineaExtra = [];
     if (datosLocal.cuit) lineaExtra.push('CUIT: ' + datosLocal.cuit);
     if (datosLocal.instagram) lineaExtra.push(datosLocal.instagram);
     if (lineaExtra.length) doc.text(lineaExtra.join('  •  '), marginX, yLocal);
 
-    /* Número de comprobante (arriba a la derecha) */
     doc.setTextColor(255, 255, 255);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(9);
@@ -1208,10 +1698,8 @@ async function generarYCompartirPDF(){
     doc.setTextColor(200, 200, 200);
     doc.text(fechaStr + '  •  ' + horaStr, pageW - marginX, 30, { align:'right' });
 
-    /* ---------- CUERPO ---------- */
     let y = 60;
 
-    /* Bloque cliente */
     doc.setFillColor(245, 247, 246);
     doc.roundedRect(marginX, y, pageW - marginX*2, 30, 3, 3, 'F');
     doc.setFillColor(200, 16, 46);
@@ -1227,7 +1715,6 @@ async function generarYCompartirPDF(){
     doc.setFontSize(11);
     doc.text(nombreCliente, marginX + 6, y + 13);
 
-    /* Datos secundarios del cliente */
     const detalles = [];
     if (clienteData){
       if (clienteData.telefono) detalles.push('Tel: ' + clienteData.telefono);
@@ -1249,7 +1736,6 @@ async function generarYCompartirPDF(){
 
     y += 38;
 
-    /* ---------- TABLA DE DETALLE ---------- */
     const colX = {
       desc: marginX + 4,
       cant: marginX + 108,
@@ -1257,7 +1743,6 @@ async function generarYCompartirPDF(){
       sub: pageW - marginX - 4
     };
 
-    /* Encabezado de tabla */
     doc.setFillColor(10, 10, 10);
     doc.rect(marginX, y, pageW - marginX*2, 10, 'F');
     doc.setTextColor(45, 212, 191);
@@ -1270,7 +1755,6 @@ async function generarYCompartirPDF(){
 
     y += 10;
 
-    /* Fila de datos */
     doc.setDrawColor(230, 230, 230);
     doc.setLineWidth(0.3);
     doc.line(marginX, y, pageW - marginX, y);
@@ -1279,32 +1763,27 @@ async function generarYCompartirPDF(){
     doc.setTextColor(30, 30, 30);
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(10);
-    doc.text(producto.substring(0, 55), colX.desc, y + 7.5);
+    doc.text(String(producto).substring(0, 55), colX.desc, y + 7.5);
     doc.text(String(cantidad), colX.cant, y + 7.5, { align:'right' });
     doc.text(formatearPrecio(precioUnit), colX.unit + 18, y + 7.5, { align:'right' });
     doc.setFont('helvetica', 'bold');
     doc.text(formatearPrecio(total), colX.sub, y + 7.5, { align:'right' });
 
     y += 12;
-
-    /* ---------- TOTAL ---------- */
     y += 6;
 
     doc.setFillColor(245, 247, 246);
     doc.roundedRect(marginX + 100, y, pageW - marginX - (marginX + 100), 18, 3, 3, 'F');
-
     doc.setTextColor(80, 80, 80);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(10);
     doc.text('TOTAL', marginX + 105, y + 11);
-
     doc.setTextColor(200, 16, 46);
     doc.setFontSize(15);
     doc.text(formatearPrecio(total), pageW - marginX - 4, y + 12, { align:'right' });
 
     y += 26;
 
-    /* ---------- FORMA DE PAGO Y OBSERVACIONES ---------- */
     doc.setTextColor(80, 80, 80);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(9);
@@ -1323,7 +1802,6 @@ async function generarYCompartirPDF(){
       y += obsLines.length * 4.5 + 2;
     }
 
-    /* ---------- PIE DE PÁGINA ---------- */
     const pieY = 275;
     doc.setDrawColor(45, 212, 191);
     doc.setLineWidth(0.5);
@@ -1336,12 +1814,9 @@ async function generarYCompartirPDF(){
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7.5);
-    doc.text(
-      'Comprobante no válido como factura fiscal  •  Generado por Negocio Alerta PRO',
-      pageW/2, pieY + 12, { align:'center' }
-    );
+    doc.text('Comprobante no válido como factura fiscal  •  Negocio Alerta PRO',
+      pageW/2, pieY + 12, { align:'center' });
 
-    /* ---------- COMPARTIR O DESCARGAR ---------- */
     const nombreArchivo = 'comprobante_' + numeroComprobante + '.pdf';
     const pdfBlob = doc.output('blob');
     const file = new File([pdfBlob], nombreArchivo, { type: 'application/pdf' });
@@ -1368,21 +1843,10 @@ async function generarYCompartirPDF(){
 }
 
 /* ==========================================================
-   CERRAR SESIÓN
-   ========================================================== */
-function cerrarSesion(){
-  if (confirm('¿Cerrar sesión?')) location.reload();
-}
-
-/* ==========================================================
    INIT
    ========================================================== */
-document.addEventListener('DOMContentLoaded', async () => {
-  cargarDatosLocalDeStorage();
-  aplicarDatosLocal();
-  cargarLogoGuardado();
-  await cargarDatos();
-  await cargarClientes();
+document.addEventListener('DOMContentLoaded', () => {
+  chequearSesion();
 });
 </script>
 </body>
