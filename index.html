@@ -1242,8 +1242,12 @@ let cacheVentas = [];
 
 async function cargarDatos(){
   if (!supabaseClient) return;
+  if (!usuarioActual) return;
+  const uid = usuarioActual.id;
+
   try {
-    const { data: productos, error: errProd } = await supabaseClient.from('productos').select('*');
+    const { data: productos, error: errProd } = await supabaseClient
+      .from('productos').select('*').eq('user_id', uid);
     if (errProd) throw errProd;
 
     cacheProductos = productos || [];
@@ -1317,7 +1321,7 @@ async function cargarDatos(){
     });
 
     const { data: ventas, error: errV } = await supabaseClient
-      .from('ventas').select('*')
+      .from('ventas').select('*').eq('user_id', uid)
       .order('created_at', { ascending: false })
       .limit(200);
     if (errV) throw errV;
@@ -1382,8 +1386,10 @@ function formatearFecha(iso){
 
 async function cargarClientes(){
   if (!supabaseClient) return;
+  if (!usuarioActual) return;
+  const uid = usuarioActual.id;
   try {
-    const { data, error } = await supabaseClient.from('clientes').select('*').order('nombre', { ascending: true });
+    const { data, error } = await supabaseClient.from('clientes').select('*').eq('user_id', uid).order('nombre', { ascending: true });
     if (error) throw error;
     cacheClientes = data || [];
     const lista = document.getElementById('lista-clientes');
@@ -1428,11 +1434,13 @@ async function cargarClientes(){
    ========================================================== */
 async function cargarHistorialVentas(){
   if (!supabaseClient) return;
+  if (!usuarioActual) return;
+  const uid = usuarioActual.id;
   const cont = document.getElementById('historial-ventas');
   cont.innerHTML = '<p class="empty-text">Cargando...</p>';
   try {
     const { data, error } = await supabaseClient
-      .from('ventas').select('*')
+      .from('ventas').select('*').eq('user_id', uid)
       .order('created_at', { ascending: false })
       .limit(100);
     if (error) throw error;
@@ -1490,9 +1498,11 @@ async function agregarProducto(){
 
   if (!nombre || stock === '' || precio === '' || costo === '') return alert('Completa todos los campos');
   if (!supabaseClient) return alert('Faltan las claves de Supabase.');
+  if (!usuarioActual) return alert('No hay usuario logueado.');
 
   try {
     const payload = {
+      user_id: usuarioActual.id,
       nombre,
       costo: parseFloat(costo),
       precio: parseFloat(precio),
@@ -1522,7 +1532,9 @@ async function eliminarProducto(id){
 async function agregarCliente(){
   const nombre = document.getElementById('cli-nombre').value.trim();
   if (!nombre) return alert('El nombre es obligatorio');
+  if (!usuarioActual) return alert('No hay usuario logueado.');
   const payload = {
+    user_id: usuarioActual.id,
     nombre,
     telefono: document.getElementById('cli-telefono').value.trim() || null,
     email: document.getElementById('cli-email').value.trim() || null,
@@ -1604,6 +1616,7 @@ function setRecibido(valor){
 }
 
 async function registrarVenta(){
+  if (!usuarioActual) return alert('No hay usuario logueado.');
   let producto = document.getElementById('venta-producto').value.trim();
   if (!producto){
     const sel = document.getElementById('venta-producto-select');
@@ -1626,6 +1639,7 @@ async function registrarVenta(){
 
   try {
     const payload = {
+      user_id: usuarioActual.id,
       producto, cantidad, total, cliente,
       forma_pago: formaPago, observaciones,
       monto_recibido: recibido, vuelto: vuelto,
@@ -1681,8 +1695,8 @@ function filtrarDia(tipo, elementoBoton){
 }
 
 function aplicarFiltroActual(){
-  if (!cacheVentas.length && supabaseClient){
-    supabaseClient.from('ventas').select('*').order('created_at', { ascending: false }).limit(200)
+  if (!cacheVentas.length && supabaseClient && usuarioActual){
+    supabaseClient.from('ventas').select('*').eq('user_id', usuarioActual.id).order('created_at', { ascending: false }).limit(200)
       .then(({ data }) => {
         cacheVentas = data || [];
         calcularYMostrarReporte();
@@ -1774,20 +1788,22 @@ function calcularYMostrarReporte(){
    BORRAR DATOS
    ========================================================== */
 async function borrarProductos(){
+  if (!usuarioActual) return;
   if (!confirm('⚠️ ¿Borrar TODOS los productos?')) return;
   if (!confirm('Última confirmación: ¿borrar todos los productos?')) return;
   try {
-    const { error } = await supabaseClient.from('productos').delete().neq('id', 0);
+    const { error } = await supabaseClient.from('productos').delete().eq('user_id', usuarioActual.id);
     if (error) throw error;
     alert('✅ Productos borrados');
     cargarDatos();
   } catch(e){ alert('Error: ' + e.message); }
 }
 async function borrarVentas(){
+  if (!usuarioActual) return;
   if (!confirm('⚠️ ¿Borrar TODAS las ventas?')) return;
   if (!confirm('Última confirmación: ¿borrar todas las ventas?')) return;
   try {
-    const { error } = await supabaseClient.from('ventas').delete().neq('id', 0);
+    const { error } = await supabaseClient.from('ventas').delete().eq('user_id', usuarioActual.id);
     if (error) throw error;
     alert('✅ Ventas borradas');
     cargarDatos();
@@ -1795,23 +1811,26 @@ async function borrarVentas(){
   } catch(e){ alert('Error: ' + e.message); }
 }
 async function borrarClientes(){
+  if (!usuarioActual) return;
   if (!confirm('⚠️ ¿Borrar TODOS los clientes?')) return;
   if (!confirm('Última confirmación: ¿borrar todos los clientes?')) return;
   try {
-    const { error } = await supabaseClient.from('clientes').delete().neq('id', 0);
+    const { error } = await supabaseClient.from('clientes').delete().eq('user_id', usuarioActual.id);
     if (error) throw error;
     alert('✅ Clientes borrados');
     cargarClientes();
   } catch(e){ alert('Error: ' + e.message); }
 }
 async function borrarTodo(){
+  if (!usuarioActual) return;
   if (!confirm('⚠️⚠️ BORRAR TODO ⚠️⚠️\n\nProductos, ventas y clientes.')) return;
   const txt = prompt('Escribí BORRAR TODO en mayúsculas:');
   if (txt !== 'BORRAR TODO') return alert('Cancelado.');
   try {
-    await supabaseClient.from('ventas').delete().neq('id', 0);
-    await supabaseClient.from('productos').delete().neq('id', 0);
-    await supabaseClient.from('clientes').delete().neq('id', 0);
+    const uid = usuarioActual.id;
+    await supabaseClient.from('ventas').delete().eq('user_id', uid);
+    await supabaseClient.from('productos').delete().eq('user_id', uid);
+    await supabaseClient.from('clientes').delete().eq('user_id', uid);
     alert('✅ Todo borrado');
     cargarDatos(); cargarClientes(); cargarHistorialVentas();
   } catch(e){ alert('Error: ' + e.message); }
