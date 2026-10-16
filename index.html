@@ -47,9 +47,7 @@ body{
   -webkit-font-smoothing:antialiased;
 }
 
-/* ============================================================
-   LOGIN
-   ============================================================ */
+/* LOGIN */
 #login-screen{
   position:fixed;inset:0;z-index:9999;
   background:
@@ -92,28 +90,6 @@ body{
 }
 .login-sub{
   text-align:center;color:#8a8a8a;font-size:13px;margin-bottom:26px;
-}
-
-.btn-google{
-  width:100%;padding:14px;
-  background:#ffffff;color:#1a1a1a;
-  border:none;border-radius:14px;
-  font-size:14px;font-weight:600;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  font-family:inherit;transition:all .2s;
-  box-shadow:0 6px 20px -8px rgba(0,0,0,.7);
-}
-.btn-google:hover{transform:translateY(-1px);box-shadow:0 10px 26px -8px rgba(255,255,255,.15)}
-.btn-google:active{transform:scale(.98)}
-.btn-google svg{width:18px;height:18px}
-
-.login-divider{
-  display:flex;align-items:center;gap:12px;
-  margin:22px 0;color:#666;font-size:12px;
-}
-.login-divider::before,
-.login-divider::after{
-  content:"";flex:1;height:1px;background:#262626;
 }
 
 .login-input{
@@ -183,9 +159,7 @@ body{
   to{opacity:1;transform:translateY(0)}
 }
 
-/* ============================================================
-   HEADER
-   ============================================================ */
+/* HEADER */
 .header{position:relative;background:var(--grad-header);color:#fff;
   padding:22px 20px 26px;border-bottom-left-radius:28px;border-bottom-right-radius:28px;
   box-shadow:var(--shadow-md);overflow:hidden;border-bottom:1px solid #2a2a2a}
@@ -408,9 +382,7 @@ body{
 </head>
 <body>
 
-<!-- ============================================================
-     PANTALLA DE LOGIN
-     ============================================================ -->
+<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo">
@@ -420,13 +392,6 @@ body{
 
     <h2 class="login-title">Negocio Alerta <span>PRO</span></h2>
     <p class="login-sub">Tu negocio, siempre en control</p>
-
-    <button class="btn-google" onclick="loginConGoogle()">
-      <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.8-6.8C35.6 2.4 30.2 0 24 0 14.6 0 6.5 5.4 2.6 13.3l7.9 6.1C12.4 13.4 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.6 24.5c0-1.6-.2-3.1-.4-4.5H24v9h12.7c-.5 2.9-2.2 5.4-4.6 7l7.2 5.6c4.2-3.9 6.6-9.6 6.6-17.1z"/><path fill="#FBBC05" d="M10.5 28.6c-.5-1.4-.8-2.9-.8-4.6s.3-3.2.8-4.6l-7.9-6.1C.9 16.6 0 20.2 0 24s.9 7.4 2.6 10.7l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.2-5.6c-2 1.4-4.6 2.2-8.7 2.2-6.2 0-11.6-3.9-13.5-9.4l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>
-      Continuar con Google
-    </button>
-
-    <div class="login-divider">o con tu email</div>
 
     <div class="login-tabs">
       <div class="login-tab active" id="tab-login" onclick="cambiarTabLogin('login')">Iniciar sesión</div>
@@ -472,9 +437,7 @@ body{
   </div>
 </div>
 
-<!-- ============================================================
-     APP (oculta hasta login)
-     ============================================================ -->
+<!-- APP -->
 <div id="app-container" style="display:none;">
 
 <header class="header">
@@ -507,7 +470,6 @@ body{
 
 <div class="container">
 
-  <!-- INICIO -->
   <div id="seccion-inicio">
     <div class="summary-cards">
       <div class="card-stat products">
@@ -552,7 +514,6 @@ body{
     </div>
   </div>
 
-  <!-- ESCANER -->
   <div id="seccion-escaner" style="display:none;">
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-qrcode"></i> Escanear Producto</h3>
@@ -581,7 +542,6 @@ body{
     </div>
   </div>
 
-  <!-- PRODUCTOS -->
   <div id="seccion-productos" style="display:none;">
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-shopping-bag"></i> Mis Productos</h3>
@@ -617,7 +577,6 @@ body{
     </div>
   </div>
 
-  <!-- VENTAS -->
   <div id="seccion-ventas" style="display:none;">
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-credit-card"></i> Registrar Venta</h3>
@@ -664,7 +623,6 @@ body{
     </div>
   </div>
 
-  <!-- PEDIDOS -->
   <div id="seccion-pedidos" style="display:none;">
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-box-open"></i> Pedidos</h3>
@@ -672,7 +630,6 @@ body{
     </div>
   </div>
 
-  <!-- CLIENTES -->
   <div id="seccion-clientes" style="display:none;">
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-users"></i> Mis Clientes</h3>
@@ -694,7 +651,6 @@ body{
     </div>
   </div>
 
-  <!-- REPORTES -->
   <div id="seccion-reportes" style="display:none;">
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-chart-bar"></i> Reportes</h3>
@@ -704,7 +660,6 @@ body{
     </div>
   </div>
 
-  <!-- AJUSTES -->
   <div id="seccion-ajustes" style="display:none;">
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-cog"></i> Ajustes</h3>
@@ -777,12 +732,9 @@ body{
   <div class="nav-item" onclick="cambiarSeccion('ajustes', this)"><i class="fas fa-cog"></i>Ajustes</div>
 </nav>
 
-</div><!-- /app-container -->
+</div>
 
 <script>
-/* ==========================================================
-   SUPABASE
-   ========================================================== */
 const SUPABASE_URL = 'https://eyvsvtsbgwccbtytkuju.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_4Mfk_ZP_BnVz9luy8CeF0A_Jh4zYV9R';
 
@@ -803,9 +755,6 @@ try {
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c =>
   ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 
-/* ==========================================================
-   LOGIN — UI helpers
-   ========================================================== */
 function mostrarError(msg){
   const el = document.getElementById('login-error');
   const ok = document.getElementById('login-info');
@@ -852,25 +801,6 @@ function setLoading(btnId, loading, text){
   }
 }
 
-/* ==========================================================
-   LOGIN — acciones
-   ========================================================== */
-async function loginConGoogle(){
-  if (!supabaseClient) return mostrarError('Supabase no configurado.');
-  try {
-    const { error } = await supabaseClient.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: window.location.origin + window.location.pathname,
-        queryParams: { prompt: 'select_account' }
-      }
-    });
-    if (error) throw error;
-  } catch(e){
-    mostrarError('Error con Google: ' + e.message);
-  }
-}
-
 async function iniciarSesion(){
   const email = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-password').value;
@@ -881,7 +811,6 @@ async function iniciarSesion(){
   try {
     const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
     if (error) throw error;
-    // onAuthStateChange se encarga de mostrar la app
   } catch(e){
     mostrarError(traducirError(e.message));
   } finally {
@@ -912,7 +841,7 @@ async function registrarse(){
     if (error) throw error;
 
     if (data.user && data.session){
-      // Sesión activa directa → onAuthStateChange se encarga
+      // Sesión activa directa
     } else {
       mostrarInfo('✅ Cuenta creada. Revisá tu email para confirmarla y después iniciá sesión.');
     }
@@ -950,9 +879,6 @@ function traducirError(msg){
   return msg;
 }
 
-/* ==========================================================
-   SESIÓN — mostrar/ocultar app
-   ========================================================== */
 let usuarioActual = null;
 
 function mostrarApp(user){
@@ -977,23 +903,14 @@ function renderDatosUsuario(user){
   const meta = user.user_metadata || {};
   const nombre = meta.full_name || meta.name || (user.email || '').split('@')[0] || 'Usuario';
   const inicial = nombre.trim().charAt(0).toUpperCase();
-  const avatarUrl = meta.avatar_url || meta.picture || null;
 
-  // Header
   const cont = document.getElementById('header-user');
-  if (avatarUrl){
-    cont.innerHTML = '<img class="user-avatar" src="' + avatarUrl + '" alt="">';
-  } else {
-    cont.innerHTML = '<div class="user-initials">' + esc(inicial) + '</div>';
-  }
+  cont.innerHTML = '<div class="user-initials">' + esc(inicial) + '</div>';
 
-  // Bienvenida
   document.getElementById('welcome-titulo').innerText = 'Hola, ' + nombre.split(' ')[0];
 
-  // Ajustes
   const av = document.getElementById('user-info-avatar');
-  if (avatarUrl) av.innerHTML = '<img src="' + avatarUrl + '" alt="">';
-  else av.textContent = inicial;
+  av.textContent = inicial;
 
   document.getElementById('user-info-name').textContent = nombre;
   document.getElementById('user-info-email').textContent = user.email || '';
@@ -1022,7 +939,6 @@ async function chequearSesion(){
   }
 }
 
-/* Listener de cambios de auth */
 if (supabaseClient){
   supabaseClient.auth.onAuthStateChange((event, session) => {
     console.log('Auth event:', event);
@@ -1036,9 +952,6 @@ if (supabaseClient){
   });
 }
 
-/* ==========================================================
-   DATOS DEL LOCAL (por usuario)
-   ========================================================== */
 let datosLocal = { nombre:'', slogan:'', direccion:'', telefono:'', cuit:'', email:'', instagram:'' };
 
 function claveLocal(k){
@@ -1088,9 +1001,6 @@ function aplicarDatosLocal(){
   if (datosLocal.nombre) document.title = datosLocal.nombre + ' — Alerta PRO';
 }
 
-/* ==========================================================
-   LOGO (por usuario)
-   ========================================================== */
 function cargarLogoGuardado(){
   const logo = localStorage.getItem(claveLocal('logo'));
   if (logo) aplicarLogo(logo, false);
@@ -1152,9 +1062,6 @@ function borrarLogo(){
   }
 }
 
-/* ==========================================================
-   ESCÁNER
-   ========================================================== */
 let html5QrcodeScanner = null;
 let scannerActivo = false;
 let deteniendo = false;
@@ -1224,9 +1131,6 @@ function usarCodigoManual(){
   cambiarSeccion('ventas', document.querySelector('.menu-item[onclick*="ventas"]'));
 }
 
-/* ==========================================================
-   NAVEGACIÓN
-   ========================================================== */
 function cambiarSeccion(nombreSeccion, elementoClickeado){
   document.querySelectorAll('.container > div').forEach(s => s.style.display = 'none');
   const seccionActiva = document.getElementById('seccion-' + nombreSeccion);
@@ -1256,9 +1160,6 @@ function cambiarSeccion(nombreSeccion, elementoClickeado){
   }
 }
 
-/* ==========================================================
-   IMAGEN DE PRODUCTO
-   ========================================================== */
 let productoImagenBase64 = null;
 
 function subirImagenProducto(event){
@@ -1301,9 +1202,6 @@ function limpiarImagenProducto(){
   document.getElementById('btn-limpiar-img').style.display = 'none';
 }
 
-/* ==========================================================
-   CARGA DE DATOS
-   ========================================================== */
 let cacheProductos = [];
 let cacheClientes = [];
 
@@ -1466,9 +1364,6 @@ async function cargarClientes(){
   }
 }
 
-/* ==========================================================
-   PRODUCTOS
-   ========================================================== */
 async function agregarProducto(){
   const nombre = document.getElementById('prod-nombre').value.trim();
   const stock = document.getElementById('prod-stock').value;
@@ -1499,9 +1394,6 @@ async function eliminarProducto(id){
   } catch(e){ alert('Error: ' + e.message); }
 }
 
-/* ==========================================================
-   CLIENTES
-   ========================================================== */
 async function agregarCliente(){
   const nombre = document.getElementById('cli-nombre').value.trim();
   if (!nombre) return alert('El nombre es obligatorio');
@@ -1535,9 +1427,6 @@ async function eliminarCliente(id){
   } catch(e){ alert('Error: ' + e.message); }
 }
 
-/* ==========================================================
-   VENTAS
-   ========================================================== */
 function alSeleccionarProducto(){
   const sel = document.getElementById('venta-producto-select');
   const opt = sel.options[sel.selectedIndex];
@@ -1600,9 +1489,6 @@ async function registrarVenta(){
   } catch(e){ alert('Error: ' + e.message); }
 }
 
-/* ==========================================================
-   PDF
-   ========================================================== */
 function generarNumeroComprobante(){
   const d = new Date();
   const y = d.getFullYear();
@@ -1842,9 +1728,6 @@ async function generarYCompartirPDF(){
   }
 }
 
-/* ==========================================================
-   INIT
-   ========================================================== */
 document.addEventListener('DOMContentLoaded', () => {
   chequearSesion();
 });
