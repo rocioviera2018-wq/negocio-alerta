@@ -29,10 +29,13 @@
   --red-500:#f25c6a;
   --red-100:#fdecee;
 
-  --gold-500:#d4af37;
-  --gold-400:#e6c463;
-  --gold-300:#f3daa0;
-  --gold-100:#fbf3d9;
+  --turq-700:#0d9488;
+  --turq-600:#14b8a6;
+  --turq-500:#2dd4bf;
+  --turq-400:#5eead4;
+  --turq-300:#99f6e4;
+  --turq-200:#ccfbf1;
+  --turq-100:#e6fffb;
 
   --bg:#0a0a0a;
   --surface:#141414;
@@ -52,10 +55,10 @@
   --shadow-md:0 10px 30px -12px rgba(0,0,0,.7);
   --shadow-lg:0 24px 60px -20px rgba(0,0,0,.85);
   --shadow-red:0 12px 30px -12px rgba(200,16,46,.6);
-  --shadow-gold:0 12px 30px -12px rgba(212,175,55,.5);
+  --shadow-turq:0 12px 30px -12px rgba(45,212,191,.55);
 
-  --grad-header:linear-gradient(140deg,#000000 0%,#0a0a0a 40%,#1a0008 70%,#2a0410 100%);
-  --grad-gold:linear-gradient(135deg,#f3daa0 0%,#d4af37 45%,#b8942b 100%);
+  --grad-header:linear-gradient(140deg,#000000 0%,#0a0a0a 40%,#001a18 70%,#002a26 100%);
+  --grad-turq:linear-gradient(135deg,#99f6e4 0%,#2dd4bf 45%,#0d9488 100%);
   --grad-red:linear-gradient(135deg,#e63946 0%,#c8102e 50%,#8b0f1f 100%);
 }
 
@@ -65,7 +68,7 @@ body{
   font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   background:
     radial-gradient(1200px 600px at 10% -10%, #2a0410 0%, transparent 55%),
-    radial-gradient(900px 500px at 110% 10%, #1a1200 0%, transparent 60%),
+    radial-gradient(900px 500px at 110% 10%, #042a28 0%, transparent 60%),
     var(--bg);
   color:var(--text);
   padding-bottom:100px; min-height:100vh;
@@ -92,7 +95,7 @@ body{
 .header::after{
   content:"";position:absolute;inset:auto auto -60% -30%;
   width:260px;height:260px;border-radius:50%;
-  background:radial-gradient(circle at 60% 40%, #d4af3722, transparent 70%);
+  background:radial-gradient(circle at 60% 40%, #2dd4bf22, transparent 70%);
   pointer-events:none;
 }
 .header-top{
@@ -110,17 +113,17 @@ body{
 }
 .logo-container::before{
   content:"";position:absolute;inset:-3px;border-radius:50%;
-  background:var(--grad-gold);z-index:-1;
+  background:var(--grad-turq);z-index:-1;
 }
 .logo-container img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.logo-container i{color:var(--gold-400);font-size:26px}
+.logo-container i{color:var(--turq-400);font-size:26px}
 
 .header-title h1{
   font-family:'Playfair Display',serif;
   font-size:22px;letter-spacing:.2px;line-height:1.1;color:#fff;
 }
 .header-title h1 span{
-  background:var(--grad-gold);
+  background:var(--grad-turq);
   -webkit-background-clip:text;background-clip:text;
   -webkit-text-fill-color:transparent;font-weight:700;
 }
@@ -134,10 +137,10 @@ body{
   font-size:16px;color:#e9e9e9;cursor:pointer;
   transition:transform .2s, background .2s, color .2s;
 }
-.header-icons i:hover{background:#c8102e22;color:var(--gold-400);transform:translateY(-2px)}
+.header-icons i:hover{background:#2dd4bf22;color:var(--turq-400);transform:translateY(-2px)}
 
 .welcome-box{
-  background:linear-gradient(135deg,#ffffff08,#c8102e0a);
+  background:linear-gradient(135deg,#ffffff08,#2dd4bf0a);
   border:1px solid #ffffff14;
   padding:16px 18px;border-radius:18px;
   display:flex;justify-content:space-between;align-items:center;
@@ -147,7 +150,7 @@ body{
 .welcome-text h3{font-size:14.5px;font-weight:600;color:#fff}
 .welcome-text p{font-size:12px;color:#a8a8a8;margin-top:2px}
 .btn-logout{
-  background:transparent;border:1px solid #d4af3755;color:var(--gold-400);
+  background:transparent;border:1px solid #2dd4bf55;color:var(--turq-400);
   padding:9px 14px;border-radius:10px;font-size:12px;font-weight:600;
   cursor:pointer;transition:.2s;font-family:inherit;
 }
@@ -169,12 +172,12 @@ body{
 .card-stat:active{transform:translateY(-2px)}
 .card-stat::before{
   content:"";position:absolute;top:0;left:0;right:0;height:3px;
-  background:var(--grad-gold);opacity:.9;
+  background:var(--grad-turq);opacity:.9;
 }
 .card-stat .icon{font-size:20px;margin-bottom:6px;display:block}
-.card-stat.products .icon{color:var(--gold-400)}
+.card-stat.products .icon{color:var(--turq-400)}
 .card-stat.stock .icon{color:var(--red-600)}
-.card-stat.earnings .icon{color:var(--gold-500)}
+.card-stat.earnings .icon{color:var(--turq-500)}
 .card-stat h4{
   font-size:11px;color:var(--muted);margin-bottom:4px;
   font-weight:500;letter-spacing:.3px;text-transform:uppercase;
@@ -195,7 +198,7 @@ body{
 .menu-item:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:#333}
 .menu-item:active{transform:scale(.96)}
 .menu-item i{
-  font-size:20px;margin-bottom:7px;color:var(--gold-400);
+  font-size:20px;margin-bottom:7px;color:var(--turq-400);
   display:block;transition:color .25s;
 }
 .menu-item span{
@@ -207,7 +210,7 @@ body{
   border-color:var(--red-600);
   box-shadow:var(--shadow-red);
 }
-.menu-item.active i{color:var(--gold-300)}
+.menu-item.active i{color:var(--turq-300)}
 .menu-item.active span{color:#fff}
 
 /* ============ SECTION CARDS ============ */
@@ -230,7 +233,7 @@ body{
   font-family:'Playfair Display',serif;letter-spacing:.2px;
 }
 .section-header a{
-  font-size:12px;color:var(--gold-400);text-decoration:none;font-weight:600;
+  font-size:12px;color:var(--turq-400);text-decoration:none;font-weight:600;
 }
 
 .section-title{
@@ -272,13 +275,13 @@ body{
 .mov-left{display:flex;align-items:center;gap:12px}
 .mov-icon{
   width:38px;height:38px;border-radius:50%;
-  background:#1f1a08;color:var(--gold-400);
+  background:#082624;color:var(--turq-400);
   display:flex;align-items:center;justify-content:center;
-  font-size:15px;flex-shrink:0;border:1px solid #332b12;
+  font-size:15px;flex-shrink:0;border:1px solid #0d3d3a;
 }
 .mov-text h4{font-size:13.5px;margin:0 0 3px;font-weight:600;color:#fff}
 .mov-text span{font-size:11px;color:var(--muted)}
-.mov-right p{font-size:14px;font-weight:700;margin:0;color:var(--gold-400)}
+.mov-right p{font-size:14px;font-weight:700;margin:0;color:var(--turq-400)}
 
 /* ============ PRODUCT CARDS ============ */
 .prod-card{
@@ -293,7 +296,7 @@ body{
   object-fit:cover;flex-shrink:0;
   background:linear-gradient(145deg,#1a1a1a,#242424);
   display:flex;align-items:center;justify-content:center;
-  color:var(--gold-400);font-size:22px;
+  color:var(--turq-400);font-size:22px;
   border:1px solid #2a2a2a;overflow:hidden;
 }
 .prod-thumb img{width:100%;height:100%;object-fit:cover}
@@ -303,12 +306,12 @@ body{
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .prod-info span{font-size:11.5px;color:var(--muted);display:block}
-.prod-price{font-size:14px;font-weight:700;color:var(--gold-400);white-space:nowrap}
+.prod-price{font-size:14px;font-weight:700;color:var(--turq-400);white-space:nowrap}
 .prod-stock-badge{
   display:inline-block;padding:2px 8px;border-radius:20px;
   font-size:10px;font-weight:600;margin-left:6px;
 }
-.prod-stock-badge.ok{background:#1a2a1e;color:#6ee7a3;border:1px solid #2a4a30}
+.prod-stock-badge.ok{background:#082624;color:var(--turq-400);border:1px solid #0d3d3a}
 .prod-stock-badge.low{background:var(--danger-soft);color:var(--red-500);border:1px solid #4a0d12}
 .prod-actions{display:flex;gap:6px;flex-shrink:0}
 .icon-btn{
@@ -331,10 +334,10 @@ body{
 .cliente-card:hover{box-shadow:var(--shadow-sm);transform:translateY(-1px);border-color:#333}
 .cliente-avatar{
   width:46px;height:46px;border-radius:50%;flex-shrink:0;
-  background:var(--grad-gold);color:#1a1200;
+  background:var(--grad-turq);color:#00211d;
   display:flex;align-items:center;justify-content:center;
   font-weight:700;font-size:17px;
-  box-shadow:var(--shadow-gold);
+  box-shadow:var(--shadow-turq);
 }
 .cliente-info{flex:1;min-width:0}
 .cliente-info h4{
@@ -345,7 +348,7 @@ body{
   font-size:11.5px;color:var(--muted);
   display:flex;align-items:center;gap:5px;margin-top:2px;
 }
-.cliente-info span i{font-size:10px;color:var(--gold-500)}
+.cliente-info span i{font-size:10px;color:var(--turq-500)}
 
 /* ============ BUTTONS ============ */
 .btn-primary{
@@ -364,14 +367,14 @@ body{
 
 .btn-secondary{
   width:100%;padding:12px;
-  background:#1c1c1c;color:var(--gold-400);
+  background:#1c1c1c;color:var(--turq-400);
   border:1.5px solid #333;border-radius:14px;
   font-size:13px;font-weight:600;cursor:pointer;
   margin-top:10px;font-family:inherit;
   transition:.2s;
   display:flex;align-items:center;justify-content:center;gap:8px;
 }
-.btn-secondary:hover{background:#242424;border-color:var(--gold-500);color:var(--gold-300)}
+.btn-secondary:hover{background:#242424;border-color:var(--turq-500);color:var(--turq-300)}
 
 .btn-pdf{
   width:100%;padding:16px;
@@ -405,7 +408,7 @@ body{
 .form-group input::placeholder,
 .form-group textarea::placeholder{color:#5a5a5a}
 .form-group select{appearance:none;cursor:pointer;
-  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23d4af37' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%232dd4bf' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 16px center;padding-right:38px;
 }
 .form-group textarea{min-height:80px;line-height:1.5}
@@ -425,8 +428,8 @@ body{
   gap:8px;cursor:pointer;transition:.2s;overflow:hidden;position:relative;
   color:var(--muted);font-size:12px;
 }
-.img-upload-box:hover{border-color:var(--gold-500);background:#181410}
-.img-upload-box i{font-size:28px;color:var(--gold-400)}
+.img-upload-box:hover{border-color:var(--turq-500);background:#0d1f1e}
+.img-upload-box i{font-size:28px;color:var(--turq-400)}
 .img-upload-box img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
 .img-upload-box .overlay{
   position:absolute;inset:0;
@@ -457,7 +460,7 @@ body{
   transition:transform .25s, color .25s;
 }
 .nav-item.active{color:#fff;font-weight:700}
-.nav-item.active i{color:var(--red-600);transform:translateY(-2px)}
+.nav-item.active i{color:var(--turq-400);transform:translateY(-2px)}
 
 /* ============ MISC ============ */
 .empty-text{
@@ -467,7 +470,7 @@ body{
 
 #reader{
   width:100%;border-radius:18px;overflow:hidden;
-  border:2px dashed var(--gold-500);
+  border:2px dashed var(--turq-500);
   margin-top:12px;min-height:60px;background:#0f0f0f;
 }
 #reader video{border-radius:18px;width:100%!important}
@@ -481,7 +484,7 @@ body{
   font-size:13px;color:#fff;margin-bottom:12px;
   display:flex;align-items:center;gap:6px;font-weight:700;
 }
-.ajustes-block h4 i{color:var(--gold-500)}
+.ajustes-block h4 i{color:var(--turq-500)}
 
 ::-webkit-scrollbar{width:8px;height:8px}
 ::-webkit-scrollbar-thumb{background:#333;border-radius:8px}
@@ -502,7 +505,7 @@ body{
     <div class="logo-area">
       <div class="logo-container">
         <img id="custom-logo" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Logo" style="display:none;">
-        <i class="fas fa-crown" id="default-logo-icon"></i>
+        <i class="fas fa-gem" id="default-logo-icon"></i>
       </div>
       <div class="header-title">
         <h1 id="header-nombre">Negocio Alerta <span>PRO</span></h1>
@@ -538,7 +541,7 @@ body{
       </div>
       <div class="card-stat earnings">
         <i class="fas fa-chart-line icon"></i><h4>Ganancia</h4>
-        <p id="stat-ganancia" style="color:var(--gold-400);">$ 0</p>
+        <p id="stat-ganancia" style="color:var(--turq-400);">$ 0</p>
       </div>
     </div>
 
@@ -563,7 +566,7 @@ body{
 
     <div class="section-card">
       <div class="section-header">
-        <h3><i class="fas fa-clock" style="color:var(--gold-500);"></i> Últimos movimientos</h3>
+        <h3><i class="fas fa-clock" style="color:var(--turq-500);"></i> Últimos movimientos</h3>
         <a href="#">Ver todos <i class="fas fa-chevron-right" style="font-size:9px;"></i></a>
       </div>
       <div id="lista-movimientos"><p class="empty-text">No hay movimientos recientes.</p></div>
@@ -590,7 +593,7 @@ body{
       </div>
       <hr style="margin:18px 0;border:none;border-top:1px solid var(--border-soft);">
       <h4 style="font-size:13px;color:#fff;margin-bottom:10px;font-weight:600;">
-        <i class="fas fa-keyboard" style="color:var(--gold-500);"></i> Entrada manual
+        <i class="fas fa-keyboard" style="color:var(--turq-500);"></i> Entrada manual
       </h4>
       <div class="form-group">
         <input type="text" id="input-manual-codigo" placeholder="Ej: 7791234567890">
@@ -607,7 +610,7 @@ body{
     </div>
     <div class="section-card">
       <h4 style="margin-bottom:14px;color:#fff;font-weight:600;font-size:14px;">
-        <i class="fas fa-plus-circle" style="color:var(--gold-500);"></i> Agregar Producto
+        <i class="fas fa-plus-circle" style="color:var(--turq-500);"></i> Agregar Producto
       </h4>
       <div class="form-group">
         <label>Imagen del producto (opcional)</label>
@@ -680,7 +683,7 @@ body{
     </div>
     <div class="section-card">
       <h4 style="margin-bottom:14px;color:#fff;font-weight:600;font-size:14px;">
-        <i class="fas fa-user-plus" style="color:var(--gold-500);"></i> Agregar Cliente
+        <i class="fas fa-user-plus" style="color:var(--turq-500);"></i> Agregar Cliente
       </h4>
       <div class="form-group"><label>Nombre *</label><input type="text" id="cli-nombre" placeholder="Ej: Juan Pérez"></div>
       <div class="form-row">
@@ -712,14 +715,14 @@ body{
         <h4><i class="fas fa-image"></i> Logo del Local</h4>
         <div style="text-align:center;margin-bottom:12px;">
           <img id="preview-logo" src="" alt=""
-               style="display:none;width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid var(--gold-500);box-shadow:var(--shadow-gold);">
+               style="display:none;width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid var(--turq-500);box-shadow:var(--shadow-turq);">
         </div>
         <input type="file" id="logo-upload" accept="image/*" style="display:none" onchange="subirLogo(event)">
         <button class="btn-primary" onclick="document.getElementById('logo-upload').click()">
           <i class="fas fa-upload"></i> Elegir de galería
         </button>
         <input type="file" id="logo-camera" accept="image/*" capture="environment" style="display:none" onchange="subirLogo(event)">
-        <button class="btn-primary" style="background:var(--grad-gold);color:#1a1200;box-shadow:var(--shadow-gold);margin-top:8px;"
+        <button class="btn-primary" style="background:var(--grad-turq);color:#00211d;box-shadow:var(--shadow-turq);margin-top:8px;"
                 onclick="document.getElementById('logo-camera').click()">
           <i class="fas fa-camera"></i> Tomar foto
         </button>
@@ -854,7 +857,7 @@ function iniciarScanner(){
       { fps:10, qrbox:(w,h)=>{const m=Math.min(w,h);return{width:m*0.7,height:m*0.7};} }, false);
     html5QrcodeScanner.render(onScanSuccess, onScanError);
     scannerActivo = true;
-    setScannerStatus('📷 Cámara activa. Apunta al código…', '#d4af37');
+    setScannerStatus('📷 Cámara activa. Apunta al código…', '#2dd4bf');
   } catch(e){
     setScannerStatus('Error al iniciar: ' + e.message, '#e63946');
     scannerActivo = false;
@@ -1345,13 +1348,13 @@ async function generarYCompartirPDF(){
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    /* Cabecera negra con franja dorada */
+    /* Cabecera negra con franja turquesa */
     doc.setFillColor(10, 10, 10);
     doc.rect(0, 0, 210, 42, 'F');
-    doc.setFillColor(200, 16, 46);
+    doc.setFillColor(45, 212, 191);
     doc.rect(0, 42, 210, 2, 'F');
 
-    doc.setTextColor(212, 175, 55);
+    doc.setTextColor(45, 212, 191);
     doc.setFontSize(20);
     doc.text(datosLocal.nombre || 'Negocio Alerta PRO', 14, 18);
     doc.setFontSize(9);
@@ -1372,7 +1375,7 @@ async function generarYCompartirPDF(){
     doc.text('Fecha: ' + fecha, 14, 68);
     doc.text('Cliente: ' + cliente, 14, 76);
 
-    doc.setDrawColor(212, 175, 55);
+    doc.setDrawColor(45, 212, 191);
     doc.setLineWidth(0.8);
     doc.line(14, 82, 196, 82);
 
