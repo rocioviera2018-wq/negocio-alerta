@@ -15,33 +15,19 @@
 
 <style>
 :root{
-  --emerald-900:#04241b;
-  --emerald-800:#062e23;
-  --emerald-700:#0a3d2e;
-  --emerald-600:#0f513c;
-  --emerald-500:#16634a;
-  --emerald-400:#1f8a68;
+  --emerald-900:#04241b; --emerald-800:#062e23; --emerald-700:#0a3d2e;
+  --emerald-600:#0f513c; --emerald-500:#16634a; --emerald-400:#1f8a68;
   --emerald-100:#e6f3ee;
-  --gold-500:#d4af37;
-  --gold-400:#e6c463;
-  --gold-300:#f3daa0;
-  --bg:#f3f6f4;
-  --surface:#ffffff;
-  --text:#12201b;
-  --muted:#7b8a85;
-  --danger:#e74c3c;
-  --danger-soft:#fdeceb;
-  --success:#25D366;
-  --radius-lg:22px;
-  --radius-md:16px;
-  --radius-sm:12px;
+  --gold-500:#d4af37; --gold-400:#e6c463; --gold-300:#f3daa0;
+  --bg:#f3f6f4; --surface:#ffffff; --text:#12201b; --muted:#7b8a85;
+  --danger:#e74c3c; --danger-soft:#fdeceb; --success:#25D366;
+  --radius-lg:22px; --radius-md:16px; --radius-sm:12px;
   --shadow-sm:0 2px 8px rgba(6,46,35,.06);
   --shadow-md:0 10px 30px -12px rgba(6,46,35,.25);
   --shadow-lg:0 24px 60px -20px rgba(6,46,35,.35);
   --grad-header:linear-gradient(140deg,#04241b 0%,#0a3d2e 45%,#16634a 100%);
   --grad-gold:linear-gradient(135deg,#e6c463 0%,#d4af37 50%,#b8942b 100%);
 }
-
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
 body{
@@ -50,422 +36,197 @@ body{
     radial-gradient(1200px 600px at 10% -10%, #d7ebe2 0%, transparent 55%),
     radial-gradient(900px 500px at 110% 10%, #f3e6bd55 0%, transparent 60%),
     var(--bg);
-  color:var(--text);
-  padding-bottom:100px;
-  min-height:100vh;
+  color:var(--text); padding-bottom:100px; min-height:100vh;
   -webkit-font-smoothing:antialiased;
 }
-
-/* ============ HEADER ============ */
-.header{
-  position:relative;background:var(--grad-header);color:#fff;
-  padding:22px 20px 26px;
-  border-bottom-left-radius:28px;border-bottom-right-radius:28px;
-  box-shadow:var(--shadow-md);overflow:hidden;
-}
-.header::before{
-  content:"";position:absolute;inset:-40% -20% auto auto;
-  width:280px;height:280px;border-radius:50%;
-  background:radial-gradient(circle at 30% 30%, #d4af3744, transparent 70%);
-  pointer-events:none;
-}
-.header::after{
-  content:"";position:absolute;inset:auto auto -60% -30%;
-  width:260px;height:260px;border-radius:50%;
-  background:radial-gradient(circle at 60% 40%, #16634a66, transparent 70%);
-  pointer-events:none;
-}
-.header-top{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:18px;position:relative;z-index:2;
-}
+.header{position:relative;background:var(--grad-header);color:#fff;
+  padding:22px 20px 26px;border-bottom-left-radius:28px;border-bottom-right-radius:28px;
+  box-shadow:var(--shadow-md);overflow:hidden}
+.header::before{content:"";position:absolute;inset:-40% -20% auto auto;width:280px;height:280px;
+  border-radius:50%;background:radial-gradient(circle at 30% 30%, #d4af3744, transparent 70%);pointer-events:none}
+.header::after{content:"";position:absolute;inset:auto auto -60% -30%;width:260px;height:260px;
+  border-radius:50%;background:radial-gradient(circle at 60% 40%, #16634a66, transparent 70%);pointer-events:none}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;position:relative;z-index:2}
 .logo-area{display:flex;align-items:center;gap:14px}
-.logo-container{
-  width:60px;height:60px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(145deg,#0a3d2e,#04241b);
-  border:2px solid transparent;background-clip:padding-box;
-  position:relative;flex-shrink:0;
-  box-shadow:0 6px 18px rgba(0,0,0,.35), inset 0 0 0 1px #ffffff12;
-}
-.logo-container::before{
-  content:"";position:absolute;inset:-3px;border-radius:50%;
-  background:var(--grad-gold);z-index:-1;
-}
+.logo-container{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(145deg,#0a3d2e,#04241b);border:2px solid transparent;background-clip:padding-box;
+  position:relative;flex-shrink:0;box-shadow:0 6px 18px rgba(0,0,0,.35), inset 0 0 0 1px #ffffff12}
+.logo-container::before{content:"";position:absolute;inset:-3px;border-radius:50%;background:var(--grad-gold);z-index:-1}
 .logo-container img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .logo-container i{color:var(--gold-400);font-size:26px}
-
-.header-title h1{
-  font-family:'Playfair Display',serif;
-  font-size:22px;letter-spacing:.2px;line-height:1.1;
-}
-.header-title h1 span{
-  background:var(--grad-gold);
-  -webkit-background-clip:text;background-clip:text;
-  -webkit-text-fill-color:transparent;font-weight:700;
-}
+.header-title h1{font-family:'Playfair Display',serif;font-size:22px;letter-spacing:.2px;line-height:1.1}
+.header-title h1 span{background:var(--grad-gold);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;font-weight:700}
 .header-title p{font-size:11.5px;color:#cfe4da;margin-top:3px}
-
 .header-icons{display:flex;gap:10px}
-.header-icons i{
-  width:40px;height:40px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  background:#ffffff14;border:1px solid #ffffff22;
-  font-size:16px;color:#e9f5ef;cursor:pointer;
-  transition:transform .2s, background .2s;
-}
+.header-icons i{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:#ffffff14;border:1px solid #ffffff22;font-size:16px;color:#e9f5ef;cursor:pointer;
+  transition:transform .2s, background .2s}
 .header-icons i:hover{background:#ffffff22;transform:translateY(-2px)}
-
-.welcome-box{
-  background:#ffffff12;border:1px solid #ffffff1f;
-  padding:16px 18px;border-radius:18px;
+.welcome-box{background:#ffffff12;border:1px solid #ffffff1f;padding:16px 18px;border-radius:18px;
   display:flex;justify-content:space-between;align-items:center;
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  position:relative;z-index:2;
-}
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);position:relative;z-index:2}
 .welcome-text h3{font-size:14.5px;font-weight:600}
 .welcome-text p{font-size:12px;opacity:.75;margin-top:2px}
-.btn-logout{
-  background:transparent;border:1px solid #ffffff55;color:#fff;
-  padding:9px 14px;border-radius:10px;font-size:12px;font-weight:600;
-  cursor:pointer;transition:.2s;font-family:inherit;
-}
+.btn-logout{background:transparent;border:1px solid #ffffff55;color:#fff;padding:9px 14px;border-radius:10px;
+  font-size:12px;font-weight:600;cursor:pointer;transition:.2s;font-family:inherit}
 .btn-logout:hover{background:#ffffff1a;border-color:var(--gold-400);color:var(--gold-300)}
-
-/* ============ CONTAINER ============ */
 .container{padding:16px;max-width:620px;margin:0 auto}
-
-/* ============ STATS ============ */
-.summary-cards{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:10px;margin-top:-30px;margin-bottom:20px;position:relative;z-index:5;
-}
-.card-stat{
-  background:var(--surface);padding:14px 8px;border-radius:var(--radius-md);
+.summary-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+  margin-top:-30px;margin-bottom:20px;position:relative;z-index:5}
+.card-stat{background:var(--surface);padding:14px 8px;border-radius:var(--radius-md);
   box-shadow:var(--shadow-md);text-align:center;border:1px solid #eef2ef;
-  position:relative;overflow:hidden;transition:transform .25s;
-}
+  position:relative;overflow:hidden;transition:transform .25s}
 .card-stat:active{transform:translateY(-2px)}
-.card-stat::before{
-  content:"";position:absolute;top:0;left:0;right:0;height:3px;
-  background:var(--grad-gold);opacity:.9;
-}
+.card-stat::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad-gold);opacity:.9}
 .card-stat .icon{font-size:20px;margin-bottom:6px;display:block}
 .card-stat.products .icon{color:var(--emerald-500)}
 .card-stat.stock .icon{color:var(--danger)}
 .card-stat.earnings .icon{color:var(--gold-500)}
-.card-stat h4{
-  font-size:11px;color:var(--muted);margin-bottom:4px;
-  font-weight:500;letter-spacing:.3px;text-transform:uppercase;
-}
+.card-stat h4{font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:500;letter-spacing:.3px;text-transform:uppercase}
 .card-stat p{font-size:17px;font-weight:700;color:var(--emerald-800);margin:0}
-
-/* ============ MENU GRID ============ */
-.menu-grid{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  gap:10px;margin-bottom:20px;
-}
-.menu-item{
-  background:var(--surface);padding:14px 6px 12px;border-radius:var(--radius-md);
-  text-align:center;box-shadow:var(--shadow-sm);cursor:pointer;
-  border:1px solid #eef2ef;transition:all .25s cubic-bezier(.2,.8,.2,1);
-  position:relative;overflow:hidden;
-}
+.menu-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.menu-item{background:var(--surface);padding:14px 6px 12px;border-radius:var(--radius-md);
+  text-align:center;box-shadow:var(--shadow-sm);cursor:pointer;border:1px solid #eef2ef;
+  transition:all .25s cubic-bezier(.2,.8,.2,1);position:relative;overflow:hidden}
 .menu-item:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
 .menu-item:active{transform:scale(.96)}
-.menu-item i{
-  font-size:20px;margin-bottom:7px;color:var(--emerald-500);
-  display:block;transition:color .25s;
-}
-.menu-item span{
-  font-size:10.5px;font-weight:600;display:block;
-  color:var(--text);letter-spacing:.2px;
-}
-.menu-item.active{
-  background:linear-gradient(145deg,#0a3d2e,#04241b);
-  border-color:#0a3d2e;box-shadow:0 12px 28px -10px rgba(10,61,46,.55);
-}
+.menu-item i{font-size:20px;margin-bottom:7px;color:var(--emerald-500);display:block;transition:color .25s}
+.menu-item span{font-size:10.5px;font-weight:600;display:block;color:var(--text);letter-spacing:.2px}
+.menu-item.active{background:linear-gradient(145deg,#0a3d2e,#04241b);border-color:#0a3d2e;
+  box-shadow:0 12px 28px -10px rgba(10,61,46,.55)}
 .menu-item.active i{color:var(--gold-400)}
 .menu-item.active span{color:#f2f7f4}
-
-/* ============ SECTION CARDS ============ */
-.section-card{
-  background:var(--surface);padding:18px;border-radius:var(--radius-lg);
-  box-shadow:var(--shadow-sm);margin-bottom:16px;border:1px solid #eef2ef;
-  animation:fadeUp .35s ease both;
-}
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(8px)}
-  to{opacity:1;transform:translateY(0)}
-}
-.section-header{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:14px;
-}
-.section-header h3{
-  font-size:15.5px;font-weight:600;color:var(--emerald-800);
-  display:flex;align-items:center;gap:6px;
-  font-family:'Playfair Display',serif;letter-spacing:.2px;
-}
-.section-header a{
-  font-size:12px;color:var(--emerald-500);text-decoration:none;font-weight:600;
-}
-
-.section-title{
-  font-family:'Playfair Display',serif;font-size:18px;
-  color:var(--emerald-800);margin-bottom:15px;display:flex;
-  align-items:center;gap:8px;
-}
+.section-card{background:var(--surface);padding:18px;border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-sm);margin-bottom:16px;border:1px solid #eef2ef;animation:fadeUp .35s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.section-header h3{font-size:15.5px;font-weight:600;color:var(--emerald-800);display:flex;align-items:center;gap:6px;
+  font-family:'Playfair Display',serif;letter-spacing:.2px}
+.section-header a{font-size:12px;color:var(--emerald-500);text-decoration:none;font-weight:600}
+.section-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--emerald-800);
+  margin-bottom:15px;display:flex;align-items:center;gap:8px}
 .section-title i{color:var(--gold-500)}
-
-/* ============ ALERTS ============ */
-.alert-item{
-  display:flex;align-items:center;gap:12px;padding:12px;
-  border-bottom:1px solid #f0f4f1;border-radius:12px;transition:background .2s;
-}
+.alert-item{display:flex;align-items:center;gap:12px;padding:12px;
+  border-bottom:1px solid #f0f4f1;border-radius:12px;transition:background .2s}
 .alert-item:hover{background:#fafcfb}
 .alert-item:last-child{border-bottom:none}
-.alert-img{
-  width:44px;height:44px;border-radius:12px;
-  background:var(--danger-soft);color:var(--danger);
-  display:flex;align-items:center;justify-content:center;
-  font-size:20px;flex-shrink:0;overflow:hidden;
-}
+.alert-img{width:44px;height:44px;border-radius:12px;background:var(--danger-soft);color:var(--danger);
+  display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;overflow:hidden}
 .alert-img img{width:100%;height:100%;object-fit:cover}
 .alert-info{flex:1}
 .alert-info h4{font-size:13.5px;margin:0 0 3px;font-weight:600}
 .alert-info p{font-size:12px;color:var(--danger);margin:0;font-weight:500}
 .alert-info span{font-size:10.5px;color:var(--muted)}
-
-/* ============ MOVIMIENTOS ============ */
-.mov-item{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:12px 8px;border-bottom:1px solid #f0f4f1;
-  border-radius:10px;transition:background .2s;
-}
+.mov-item{display:flex;justify-content:space-between;align-items:center;padding:12px 8px;
+  border-bottom:1px solid #f0f4f1;border-radius:10px;transition:background .2s}
 .mov-item:hover{background:#fafcfb}
 .mov-item:last-child{border-bottom:none}
 .mov-left{display:flex;align-items:center;gap:12px}
-.mov-icon{
-  width:38px;height:38px;border-radius:50%;
-  background:var(--emerald-100);color:var(--emerald-500);
-  display:flex;align-items:center;justify-content:center;
-  font-size:15px;flex-shrink:0;
-}
+.mov-icon{width:38px;height:38px;border-radius:50%;background:var(--emerald-100);color:var(--emerald-500);
+  display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
 .mov-text h4{font-size:13.5px;margin:0 0 3px;font-weight:600}
 .mov-text span{font-size:11px;color:var(--muted)}
 .mov-right p{font-size:14px;font-weight:700;margin:0;color:var(--emerald-700)}
-
-/* ============ PRODUCT CARDS ============ */
-.prod-card{
-  display:flex;align-items:center;gap:12px;
-  padding:12px;border-radius:14px;
-  background:#fbfdfc;border:1px solid #eef2ef;
-  margin-bottom:10px;transition:all .2s;
-}
+.prod-card{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;
+  background:#fbfdfc;border:1px solid #eef2ef;margin-bottom:10px;transition:all .2s}
 .prod-card:hover{box-shadow:var(--shadow-sm);transform:translateY(-1px)}
-.prod-thumb{
-  width:56px;height:56px;border-radius:12px;
-  object-fit:cover;flex-shrink:0;
-  background:linear-gradient(145deg,#e6f3ee,#d7ebe2);
-  display:flex;align-items:center;justify-content:center;
-  color:var(--emerald-400);font-size:22px;
-  border:1px solid #e3eae6;overflow:hidden;
-}
+.prod-thumb{width:56px;height:56px;border-radius:12px;object-fit:cover;flex-shrink:0;
+  background:linear-gradient(145deg,#e6f3ee,#d7ebe2);display:flex;align-items:center;justify-content:center;
+  color:var(--emerald-400);font-size:22px;border:1px solid #e3eae6;overflow:hidden}
 .prod-thumb img{width:100%;height:100%;object-fit:cover}
 .prod-info{flex:1;min-width:0}
-.prod-info h4{
-  font-size:14px;font-weight:600;margin:0 0 3px;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
+.prod-info h4{font-size:14px;font-weight:600;margin:0 0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .prod-info span{font-size:11.5px;color:var(--muted);display:block}
-.prod-price{
-  font-size:14px;font-weight:700;color:var(--emerald-700);
-  white-space:nowrap;
-}
-.prod-stock-badge{
-  display:inline-block;padding:2px 8px;border-radius:20px;
-  font-size:10px;font-weight:600;margin-left:6px;
-}
+.prod-price{font-size:14px;font-weight:700;color:var(--emerald-700);white-space:nowrap}
+.prod-stock-badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;
+  font-weight:600;margin-left:6px}
 .prod-stock-badge.ok{background:var(--emerald-100);color:var(--emerald-600)}
 .prod-stock-badge.low{background:var(--danger-soft);color:var(--danger)}
-.prod-actions{
-  display:flex;gap:6px;flex-shrink:0;
-}
-.icon-btn{
-  width:34px;height:34px;border-radius:10px;border:none;
-  display:flex;align-items:center;justify-content:center;
-  font-size:13px;cursor:pointer;transition:.2s;
-  background:#f0f4f1;color:var(--muted);
-}
+.prod-actions{display:flex;gap:6px;flex-shrink:0}
+.icon-btn{width:34px;height:34px;border-radius:10px;border:none;display:flex;align-items:center;
+  justify-content:center;font-size:13px;cursor:pointer;transition:.2s;background:#f0f4f1;color:var(--muted)}
 .icon-btn:hover{background:var(--danger-soft);color:var(--danger)}
 .icon-btn.danger{background:#fef3f2;color:var(--danger)}
 .icon-btn.danger:hover{background:var(--danger);color:#fff}
-
-/* ============ CLIENT CARDS ============ */
-.cliente-card{
-  display:flex;align-items:center;gap:12px;
-  padding:14px;border-radius:14px;
-  background:#fbfdfc;border:1px solid #eef2ef;
-  margin-bottom:10px;transition:all .2s;
-}
+.cliente-card{display:flex;align-items:center;gap:12px;padding:14px;border-radius:14px;
+  background:#fbfdfc;border:1px solid #eef2ef;margin-bottom:10px;transition:all .2s}
 .cliente-card:hover{box-shadow:var(--shadow-sm);transform:translateY(-1px)}
-.cliente-avatar{
-  width:46px;height:46px;border-radius:50%;flex-shrink:0;
-  background:var(--grad-gold);color:#2b1e00;
-  display:flex;align-items:center;justify-content:center;
-  font-weight:700;font-size:17px;
-  box-shadow:0 6px 14px -6px rgba(212,175,55,.6);
-}
+.cliente-avatar{width:46px;height:46px;border-radius:50%;flex-shrink:0;background:var(--grad-gold);
+  color:#2b1e00;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px;
+  box-shadow:0 6px 14px -6px rgba(212,175,55,.6)}
 .cliente-info{flex:1;min-width:0}
-.cliente-info h4{
-  font-size:14px;font-weight:600;margin:0 0 3px;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-.cliente-info span{
-  font-size:11.5px;color:var(--muted);
-  display:flex;align-items:center;gap:5px;margin-top:2px;
-}
+.cliente-info h4{font-size:14px;font-weight:600;margin:0 0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cliente-info span{font-size:11.5px;color:var(--muted);display:flex;align-items:center;gap:5px;margin-top:2px}
 .cliente-info span i{font-size:10px;color:var(--emerald-400)}
-
-/* ============ BUTTONS ============ */
-.btn-primary{
-  width:100%;padding:14px;
-  background:linear-gradient(145deg,#0f513c,#0a3d2e);
-  color:#fff;border:none;border-radius:14px;
-  font-size:14px;font-weight:600;cursor:pointer;
-  margin-top:10px;font-family:inherit;
-  transition:transform .2s, box-shadow .2s;
-  box-shadow:0 8px 20px -8px rgba(10,61,46,.5);
-  letter-spacing:.2px;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-}
+.btn-primary{width:100%;padding:14px;background:linear-gradient(145deg,#0f513c,#0a3d2e);
+  color:#fff;border:none;border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;
+  margin-top:10px;font-family:inherit;transition:transform .2s, box-shadow .2s;
+  box-shadow:0 8px 20px -8px rgba(10,61,46,.5);letter-spacing:.2px;
+  display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-primary:hover{transform:translateY(-1px);box-shadow:0 12px 26px -10px rgba(10,61,46,.6)}
 .btn-primary:active{transform:scale(.98)}
-
-.btn-secondary{
-  width:100%;padding:12px;
-  background:#f0f4f1;color:var(--emerald-700);
-  border:1.5px solid #d1e7dd;border-radius:14px;
-  font-size:13px;font-weight:600;cursor:pointer;
-  margin-top:10px;font-family:inherit;
-  transition:.2s;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-}
+.btn-secondary{width:100%;padding:12px;background:#f0f4f1;color:var(--emerald-700);
+  border:1.5px solid #d1e7dd;border-radius:14px;font-size:13px;font-weight:600;cursor:pointer;
+  margin-top:10px;font-family:inherit;transition:.2s;
+  display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-secondary:hover{background:#e6f3ee;border-color:var(--emerald-400)}
-
-.btn-pdf{
-  width:100%;padding:16px;
-  background:linear-gradient(135deg,#2ddf7a,#25D366 50%,#1eae54);
-  color:#fff;border:none;border-radius:16px;
-  font-size:15px;font-weight:700;cursor:pointer;
+.btn-pdf{width:100%;padding:16px;background:linear-gradient(135deg,#2ddf7a,#25D366 50%,#1eae54);
+  color:#fff;border:none;border-radius:16px;font-size:15px;font-weight:700;cursor:pointer;
   display:flex;align-items:center;justify-content:center;gap:10px;
-  box-shadow:0 12px 30px -12px rgba(37,211,102,.7);
-  margin-top:10px;font-family:inherit;letter-spacing:.3px;
-  transition:transform .2s, box-shadow .2s;
-}
+  box-shadow:0 12px 30px -12px rgba(37,211,102,.7);margin-top:10px;font-family:inherit;
+  letter-spacing:.3px;transition:transform .2s, box-shadow .2s}
 .btn-pdf:hover{transform:translateY(-2px);box-shadow:0 16px 36px -12px rgba(37,211,102,.85)}
 .btn-pdf:active{transform:scale(.98)}
-
-/* ============ FORM ============ */
 .form-group{margin-bottom:12px}
-.form-group label{
-  font-size:12px;color:var(--muted);display:block;
-  margin-bottom:6px;font-weight:500;letter-spacing:.2px;
-}
-.form-group input,
-.form-group select,
-.form-group textarea{
-  width:100%;padding:13px 14px;
-  border:1.5px solid #e3eae6;border-radius:12px;
-  font-size:14px;font-family:inherit;background:#fbfdfc;
-  transition:border-color .2s, box-shadow .2s, background .2s;
-  color:var(--text);resize:vertical;
-}
-.form-group select{appearance:none;cursor:pointer;
-  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%237b8a85' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 16px center;padding-right:38px;
-}
+.form-group label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px;
+  font-weight:500;letter-spacing:.2px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:13px 14px;
+  border:1.5px solid #e3eae6;border-radius:12px;font-size:14px;font-family:inherit;
+  background:#fbfdfc;transition:border-color .2s, box-shadow .2s, background .2s;
+  color:var(--text);resize:vertical}
+.form-group select{appearance:none;cursor:pointer;background-repeat:no-repeat;
+  background-position:right 16px center;padding-right:38px;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%237b8a85' d='M6 8L0 0h12z'/%3E%3C/svg%3E")}
 .form-group textarea{min-height:80px;line-height:1.5}
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus{
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{
   outline:none;border-color:var(--emerald-400);background:#fff;
-  box-shadow:0 0 0 4px rgba(31,138,104,.12);
-}
-
+  box-shadow:0 0 0 4px rgba(31,138,104,.12)}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-
-/* Upload imagen producto */
-.img-upload-box{
-  width:100%;height:160px;border-radius:14px;
-  border:2px dashed #c9d8d2;background:#f6faf8;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
+.img-upload-box{width:100%;height:160px;border-radius:14px;border:2px dashed #c9d8d2;
+  background:#f6faf8;display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:8px;cursor:pointer;transition:.2s;overflow:hidden;position:relative;
-  color:var(--muted);font-size:12px;
-}
+  color:var(--muted);font-size:12px}
 .img-upload-box:hover{border-color:var(--emerald-400);background:#eef7f2}
 .img-upload-box i{font-size:28px;color:var(--emerald-400)}
 .img-upload-box img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
-.img-upload-box .overlay{
-  position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.55),transparent 60%);
-  display:flex;align-items:flex-end;justify-content:center;padding:10px;
-  color:#fff;font-size:11.5px;font-weight:600;opacity:0;transition:.2s;
-}
+.img-upload-box .overlay{position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,.55),transparent 60%);
+  display:flex;align-items:flex-end;justify-content:center;padding:10px;color:#fff;
+  font-size:11.5px;font-weight:600;opacity:0;transition:.2s}
 .img-upload-box:hover .overlay{opacity:1}
-
-/* ============ BOTTOM NAV ============ */
-.bottom-nav{
-  position:fixed;bottom:0;left:0;width:100%;
-  background:rgba(255,255,255,.92);
+.bottom-nav{position:fixed;bottom:0;left:0;width:100%;background:rgba(255,255,255,.92);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
   display:flex;justify-content:space-around;
   padding:10px 0 calc(10px + env(safe-area-inset-bottom));
-  box-shadow:0 -8px 30px -12px rgba(6,46,35,.18);
-  border-top:1px solid #eef2ef;z-index:100;
-}
-.nav-item{
-  text-align:center;color:var(--muted);
-  font-size:10.5px;cursor:pointer;font-weight:500;
-  padding:6px 10px;border-radius:12px;transition:.2s;
-  flex:1;max-width:90px;letter-spacing:.2px;
-}
-.nav-item i{
-  font-size:18px;display:block;margin-bottom:4px;
-  transition:transform .25s, color .25s;
-}
+  box-shadow:0 -8px 30px -12px rgba(6,46,35,.18);border-top:1px solid #eef2ef;z-index:100}
+.nav-item{text-align:center;color:var(--muted);font-size:10.5px;cursor:pointer;font-weight:500;
+  padding:6px 10px;border-radius:12px;transition:.2s;flex:1;max-width:90px;letter-spacing:.2px}
+.nav-item i{font-size:18px;display:block;margin-bottom:4px;transition:transform .25s, color .25s}
 .nav-item.active{color:var(--emerald-700);font-weight:700}
 .nav-item.active i{color:var(--gold-500);transform:translateY(-2px)}
-
-/* ============ MISC ============ */
-.empty-text{
-  text-align:center;color:var(--muted);font-size:13.5px;
-  padding:22px 12px;font-style:italic;
-}
-
-#reader{
-  width:100%;border-radius:18px;overflow:hidden;
-  border:2px dashed var(--emerald-400);
-  margin-top:12px;min-height:60px;background:#f6faf8;
-}
+.empty-text{text-align:center;color:var(--muted);font-size:13.5px;padding:22px 12px;font-style:italic}
+#reader{width:100%;border-radius:18px;overflow:hidden;border:2px dashed var(--emerald-400);
+  margin-top:12px;min-height:60px;background:#f6faf8}
 #reader video{border-radius:18px;width:100%!important}
-
-#seccion-ajustes .form-group{background:transparent;padding:0;border:none}
-.ajustes-block{
-  background:linear-gradient(145deg,#eef7f2,#e6f3ee);
-  padding:16px;border-radius:14px;border:1px solid #d1e7dd;
-  margin-bottom:14px;
-}
-.ajustes-block h4{
-  font-size:13px;color:var(--emerald-800);margin-bottom:12px;
-  display:flex;align-items:center;gap:6px;font-weight:700;
-}
+.ajustes-block{background:linear-gradient(145deg,#eef7f2,#e6f3ee);
+  padding:16px;border-radius:14px;border:1px solid #d1e7dd;margin-bottom:14px}
+.ajustes-block h4{font-size:13px;color:var(--emerald-800);margin-bottom:12px;
+  display:flex;align-items:center;gap:6px;font-weight:700}
 .ajustes-block h4 i{color:var(--gold-500)}
-
 ::-webkit-scrollbar{width:8px;height:8px}
 ::-webkit-scrollbar-thumb{background:#c9d8d2;border-radius:8px}
 ::-webkit-scrollbar-thumb:hover{background:#a9bdb5}
-
 @media (max-width:380px){
   .header-title h1{font-size:19px}
   .menu-item span{font-size:10px}
@@ -476,7 +237,6 @@ body{
 </head>
 <body>
 
-<!-- ================= HEADER ================= -->
 <header class="header">
   <div class="header-top">
     <div class="logo-area">
@@ -505,22 +265,19 @@ body{
 
 <div class="container">
 
-  <!-- ================= INICIO ================= -->
+  <!-- INICIO -->
   <div id="seccion-inicio">
     <div class="summary-cards">
       <div class="card-stat products">
-        <i class="fas fa-box icon"></i>
-        <h4>Productos</h4>
+        <i class="fas fa-box icon"></i><h4>Productos</h4>
         <p id="stat-productos">0</p>
       </div>
       <div class="card-stat stock">
-        <i class="fas fa-exclamation-triangle icon"></i>
-        <h4>Stock bajo</h4>
+        <i class="fas fa-exclamation-triangle icon"></i><h4>Stock bajo</h4>
         <p id="stat-stock" style="color:var(--danger);">0</p>
       </div>
       <div class="card-stat earnings">
-        <i class="fas fa-chart-line icon"></i>
-        <h4>Ganancia</h4>
+        <i class="fas fa-chart-line icon"></i><h4>Ganancia</h4>
         <p id="stat-ganancia">$ 0</p>
       </div>
     </div>
@@ -553,28 +310,24 @@ body{
     </div>
   </div>
 
-  <!-- ================= ESCANER ================= -->
+  <!-- ESCANER -->
   <div id="seccion-escaner" style="display:none;">
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-qrcode"></i> Escanear Producto</h3>
       <p class="empty-text" style="padding:8px 10px;font-size:12.5px;font-style:normal;">
         Apunta la cámara al código. Si no abre, revisa permisos o usa la entrada manual.
       </p>
-
       <button class="btn-primary" onclick="iniciarScanner()" style="margin-bottom:8px;">
         <i class="fas fa-camera"></i> Activar cámara
       </button>
       <button class="btn-primary" onclick="detenerScanner()" style="background:linear-gradient(145deg,#e74c3c,#c0392b);margin-bottom:8px;box-shadow:0 8px 20px -8px rgba(231,76,60,.5);">
         <i class="fas fa-stop"></i> Detener cámara
       </button>
-
       <div id="reader"></div>
       <div id="scanner-status" style="text-align:center;font-size:12px;color:var(--muted);padding:10px;">
         Cámara apagada.
       </div>
-
       <hr style="margin:18px 0;border:none;border-top:1px solid #eef2ef;">
-
       <h4 style="font-size:13px;color:var(--emerald-800);margin-bottom:10px;font-weight:600;">
         <i class="fas fa-keyboard" style="color:var(--gold-500);"></i> Entrada manual
       </h4>
@@ -585,18 +338,16 @@ body{
     </div>
   </div>
 
-  <!-- ================= PRODUCTOS ================= -->
+  <!-- PRODUCTOS -->
   <div id="seccion-productos" style="display:none;">
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-shopping-bag"></i> Mis Productos</h3>
       <div id="lista-productos"><p class="empty-text">Cargando productos...</p></div>
     </div>
-
     <div class="section-card">
       <h4 style="margin-bottom:14px;color:var(--emerald-800);font-weight:600;font-size:14px;">
         <i class="fas fa-plus-circle" style="color:var(--gold-500);"></i> Agregar Producto
       </h4>
-
       <div class="form-group">
         <label>Imagen del producto (opcional)</label>
         <div class="img-upload-box" onclick="document.getElementById('prod-imagen-file').click()">
@@ -614,7 +365,6 @@ body{
           <i class="fas fa-times"></i> Quitar imagen
         </button>
       </div>
-
       <div class="form-group"><label>Nombre / Código</label><input type="text" id="prod-nombre" placeholder="Ej: Pan lactal"></div>
       <div class="form-row">
         <div class="form-group"><label>Stock</label><input type="number" id="prod-stock" placeholder="Ej: 10"></div>
@@ -624,42 +374,36 @@ body{
     </div>
   </div>
 
-  <!-- ================= VENTAS ================= -->
+  <!-- VENTAS -->
   <div id="seccion-ventas" style="display:none;">
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-credit-card"></i> Registrar Venta</h3>
-
       <div class="form-group">
         <label>Producto</label>
         <select id="venta-producto-select" onchange="alSeleccionarProducto()">
           <option value="">— Selecciona un producto —</option>
         </select>
       </div>
-
       <div class="form-group">
         <label>O escribir manualmente</label>
         <input type="text" id="venta-producto" placeholder="Ej: Pan lactal">
       </div>
-
       <div class="form-row">
         <div class="form-group"><label>Cantidad</label><input type="number" id="venta-cantidad" placeholder="Ej: 2" oninput="calcularTotal()"></div>
         <div class="form-group"><label>Precio unitario</label><input type="number" id="venta-precio-unit" placeholder="Ej: 1200" oninput="calcularTotal()"></div>
       </div>
-
       <div class="form-group"><label>Total</label><input type="number" id="venta-total" placeholder="Ej: 2400"></div>
-
       <div class="form-group">
         <label>Cliente (opcional)</label>
         <select id="venta-cliente-select">
           <option value="">— Consumidor final —</option>
         </select>
       </div>
-
       <button class="btn-primary" onclick="registrarVenta()"><i class="fas fa-check-circle"></i> Registrar Venta</button>
     </div>
   </div>
 
-  <!-- ================= PEDIDOS ================= -->
+  <!-- PEDIDOS -->
   <div id="seccion-pedidos" style="display:none;">
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-box-open"></i> Pedidos</h3>
@@ -667,13 +411,12 @@ body{
     </div>
   </div>
 
-  <!-- ================= CLIENTES ================= -->
+  <!-- CLIENTES -->
   <div id="seccion-clientes" style="display:none;">
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-users"></i> Mis Clientes</h3>
       <div id="lista-clientes"><p class="empty-text">Cargando clientes...</p></div>
     </div>
-
     <div class="section-card">
       <h4 style="margin-bottom:14px;color:var(--emerald-800);font-weight:600;font-size:14px;">
         <i class="fas fa-user-plus" style="color:var(--gold-500);"></i> Agregar Cliente
@@ -689,7 +432,7 @@ body{
     </div>
   </div>
 
-  <!-- ================= REPORTES ================= -->
+  <!-- REPORTES -->
   <div id="seccion-reportes" style="display:none;">
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-chart-bar"></i> Reportes</h3>
@@ -699,7 +442,7 @@ body{
     </div>
   </div>
 
-  <!-- ================= AJUSTES ================= -->
+  <!-- AJUSTES -->
   <div id="seccion-ajustes" style="display:none;">
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-cog"></i> Ajustes</h3>
@@ -742,7 +485,6 @@ body{
     </div>
   </div>
 
-  <!-- ================= BOTÓN PDF INICIO ================= -->
   <div id="boton-pdf-inicio">
     <button class="btn-pdf" onclick="generarYCompartirPDF()">
       <i class="fas fa-file-pdf"></i> Generar Ticket PDF
@@ -751,7 +493,6 @@ body{
 
 </div>
 
-<!-- ================= BOTTOM NAV ================= -->
 <nav class="bottom-nav">
   <div class="nav-item active" onclick="cambiarSeccion('inicio', this)"><i class="fas fa-home"></i>Inicio</div>
   <div class="nav-item" onclick="cambiarSeccion('productos', this)"><i class="fas fa-shopping-bag"></i>Productos</div>
@@ -763,83 +504,68 @@ body{
 
 <script>
 /* ==========================================================
-   1) SUPABASE
+   SUPABASE
    ========================================================== */
 const SUPABASE_URL = 'https://eyvsvtsbgwccbtytkuju.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_4Mfk_ZP_BnVz9luy8CeF0A_Jh4zYV9R';
 
 let supabaseClient = null;
-if (SUPABASE_URL && !SUPABASE_URL.includes('TU_SUPABASE_URL')) {
-  try {
-    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    console.log('Supabase listo');
-  } catch(e){ console.warn('Supabase error:', e.message); }
-}
+try {
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  console.log('Supabase listo');
+} catch(e){ console.warn('Supabase error:', e.message); }
 
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c =>
   ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 
 /* ==========================================================
-   2) ESTADO LOCAL: DATOS DEL LOCAL
+   DATOS DEL LOCAL (localStorage)
    ========================================================== */
-let datosLocal = {
-  nombre: '', slogan: '', direccion: '', telefono: '', cuit: '', email: ''
-};
+let datosLocal = { nombre:'', slogan:'', direccion:'', telefono:'', cuit:'', email:'' };
 
 function cargarDatosLocalDeStorage(){
   try {
     const raw = localStorage.getItem('negocio_local');
     if (raw) datosLocal = { ...datosLocal, ...JSON.parse(raw) };
-  } catch(e){ console.warn('Error leyendo datos del local', e); }
+  } catch(e){ console.warn(e); }
 }
 
 function guardarDatosLocal(){
-  const campos = ['nombre','slogan','direccion','telefono','cuit','email'];
-  campos.forEach(k => {
+  ['nombre','slogan','direccion','telefono','cuit','email'].forEach(k => {
     const el = document.getElementById('loc-' + k);
     if (el) datosLocal[k] = el.value.trim();
   });
-
-  if (!datosLocal.nombre){
-    return alert('El nombre del local es obligatorio.');
-  }
-
+  if (!datosLocal.nombre) return alert('El nombre del local es obligatorio.');
   localStorage.setItem('negocio_local', JSON.stringify(datosLocal));
   aplicarDatosLocal();
   alert('✅ Datos del local guardados');
 }
 
 function aplicarDatosLocal(){
-  const headerNombre = document.getElementById('header-nombre');
-  const headerSlogan = document.getElementById('header-slogan');
-  const welcomeDatos = document.getElementById('welcome-datos');
+  const hn = document.getElementById('header-nombre');
+  const hs = document.getElementById('header-slogan');
+  const wd = document.getElementById('welcome-datos');
 
-  if (datosLocal.nombre){
-    headerNombre.innerHTML = esc(datosLocal.nombre) + ' <span>PRO</span>';
-  } else {
-    headerNombre.innerHTML = 'Negocio Alerta <span>PRO</span>';
-  }
+  hn.innerHTML = datosLocal.nombre
+    ? esc(datosLocal.nombre) + ' <span>PRO</span>'
+    : 'Negocio Alerta <span>PRO</span>';
+  hs.textContent = datosLocal.slogan || 'Tu negocio organizado, desde el celular.';
 
-  headerSlogan.textContent = datosLocal.slogan || 'Tu negocio organizado, desde el celular.';
-
-  // Línea de datos en el welcome
   const partes = [];
   if (datosLocal.direccion) partes.push(datosLocal.direccion);
   if (datosLocal.telefono) partes.push('Tel: ' + datosLocal.telefono);
-  welcomeDatos.textContent = partes.length ? partes.join(' • ') : 'Tu negocio, siempre en control.';
+  wd.textContent = partes.length ? partes.join(' • ') : 'Tu negocio, siempre en control.';
 
-  // Rellenar inputs de ajustes
   ['nombre','slogan','direccion','telefono','cuit','email'].forEach(k => {
     const el = document.getElementById('loc-' + k);
     if (el) el.value = datosLocal[k] || '';
   });
 
-  // Título del documento
   document.title = datosLocal.nombre ? datosLocal.nombre + ' — Alerta PRO' : 'Negocio Alerta PRO';
 }
 
 /* ==========================================================
-   3) ESCÁNER
+   ESCÁNER
    ========================================================== */
 let html5QrcodeScanner = null;
 let scannerActivo = false;
@@ -855,23 +581,20 @@ function iniciarScanner(){
   if (location.protocol !== 'https:' &&
       !['localhost','127.0.0.1'].includes(location.hostname)) {
     setScannerStatus('⚠️ La cámara requiere HTTPS.', 'var(--danger)');
-    alert('La cámara solo funciona si la página se abre por HTTPS.');
-    return;
+    return alert('La cámara solo funciona si la página se abre por HTTPS.');
   }
   if (typeof Html5QrcodeScanner === 'undefined'){
-    setScannerStatus('⚠️ Librería no cargada. Recarga la página.', 'var(--danger)');
+    setScannerStatus('⚠️ Librería no cargada.', 'var(--danger)');
     return;
   }
   setScannerStatus('Iniciando cámara…');
   try {
     html5QrcodeScanner = new Html5QrcodeScanner('reader',
-      { fps:10, qrbox:(w,h)=>{const m=Math.min(w,h);return{width:m*0.7,height:m*0.7};} },
-      false);
+      { fps:10, qrbox:(w,h)=>{const m=Math.min(w,h);return{width:m*0.7,height:m*0.7};} }, false);
     html5QrcodeScanner.render(onScanSuccess, onScanError);
     scannerActivo = true;
     setScannerStatus('📷 Cámara activa. Apunta al código…', 'var(--emerald-500)');
   } catch(e){
-    console.error(e);
     setScannerStatus('Error al iniciar: ' + e.message, 'var(--danger)');
     scannerActivo = false;
   }
@@ -892,7 +615,6 @@ function detenerScanner(){
 function onScanSuccess(decodedText){
   detenerScanner();
   document.getElementById('venta-producto').value = decodedText;
-  // Intenta seleccionar el producto en el dropdown si existe
   const sel = document.getElementById('venta-producto-select');
   for (let i=0; i<sel.options.length; i++){
     if (sel.options[i].value.toLowerCase() === decodedText.toLowerCase()){
@@ -915,7 +637,7 @@ function usarCodigoManual(){
 }
 
 /* ==========================================================
-   4) NAVEGACIÓN
+   NAVEGACIÓN
    ========================================================== */
 function cambiarSeccion(nombreSeccion, elementoClickeado){
   document.querySelectorAll('.container > div').forEach(s => s.style.display = 'none');
@@ -930,12 +652,17 @@ function cambiarSeccion(nombreSeccion, elementoClickeado){
   } else {
     detenerScanner();
   }
+  if (nombreSeccion === 'clientes'){
+    cargarClientes();
+  }
+  if (nombreSeccion === 'productos' || nombreSeccion === 'ventas'){
+    cargarDatos();
+  }
 
   document.querySelectorAll('.menu-item, .nav-item').forEach(i => i.classList.remove('active'));
   if (elementoClickeado){
     elementoClickeado.classList.add('active');
-    const esMenuSuperior = elementoClickeado.classList.contains('menu-item');
-    if (esMenuSuperior){
+    if (elementoClickeado.classList.contains('menu-item')){
       const navAbajo = document.querySelector('.bottom-nav .nav-item[onclick*="'+nombreSeccion+'"]');
       if (navAbajo) navAbajo.classList.add('active');
     } else {
@@ -946,7 +673,7 @@ function cambiarSeccion(nombreSeccion, elementoClickeado){
 }
 
 /* ==========================================================
-   5) LOGO
+   LOGO
    ========================================================== */
 function cargarLogoGuardado(){
   const logo = localStorage.getItem('negocio_logo');
@@ -985,16 +712,13 @@ function subirLogo(event){
       canvas.width = canvas.height = size;
       const ctx = canvas.getContext('2d');
       const min = Math.min(img.width, img.height);
-      const sx = (img.width - min) / 2;
-      const sy = (img.height - min) / 2;
-      ctx.drawImage(img, sx, sy, min, min, 0, 0, size, size);
+      ctx.drawImage(img, (img.width-min)/2, (img.height-min)/2, min, min, 0, 0, size, size);
       aplicarLogo(canvas.toDataURL('image/jpeg', 0.85), true);
       alert('✅ ¡Logo guardado!');
     };
     img.onerror = () => alert('No se pudo leer la imagen.');
     img.src = e.target.result;
   };
-  reader.onerror = () => alert('Error al leer el archivo.');
   reader.readAsDataURL(file);
   event.target.value = '';
 }
@@ -1007,7 +731,7 @@ function borrarLogo(){
 }
 
 /* ==========================================================
-   6) IMAGEN DE PRODUCTO (temporal, se guarda al crear)
+   IMAGEN DE PRODUCTO
    ========================================================== */
 let productoImagenBase64 = null;
 
@@ -1020,7 +744,6 @@ function subirImagenProducto(event){
   reader.onload = e => {
     const img = new Image();
     img.onload = () => {
-      // Redimensionar a máx 500px manteniendo aspecto
       const MAX = 500;
       let w = img.width, h = img.height;
       if (w > h && w > MAX){ h = h * (MAX / w); w = MAX; }
@@ -1028,18 +751,13 @@ function subirImagenProducto(event){
 
       const canvas = document.createElement('canvas');
       canvas.width = w; canvas.height = h;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, w, h);
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
       productoImagenBase64 = canvas.toDataURL('image/jpeg', 0.75);
 
-      // Mostrar preview
-      const prev = document.getElementById('prod-img-preview');
-      const ph = document.getElementById('prod-img-placeholder');
-      const ov = document.getElementById('prod-img-overlay');
-      prev.src = productoImagenBase64;
-      prev.style.display = 'block';
-      ph.style.display = 'none';
-      ov.style.display = 'flex';
+      document.getElementById('prod-img-preview').src = productoImagenBase64;
+      document.getElementById('prod-img-preview').style.display = 'block';
+      document.getElementById('prod-img-placeholder').style.display = 'none';
+      document.getElementById('prod-img-overlay').style.display = 'flex';
       document.getElementById('btn-limpiar-img').style.display = 'flex';
     };
     img.onerror = () => alert('No se pudo leer la imagen.');
@@ -1058,7 +776,7 @@ function limpiarImagenProducto(){
 }
 
 /* ==========================================================
-   7) CARGAR DATOS
+   CARGA DE DATOS
    ========================================================== */
 let cacheProductos = [];
 let cacheClientes = [];
@@ -1066,7 +784,6 @@ let cacheClientes = [];
 async function cargarDatos(){
   if (!supabaseClient) return;
   try {
-    /* PRODUCTOS */
     const { data: productos, error: errProd } = await supabaseClient
       .from('productos').select('*');
     if (errProd) throw errProd;
@@ -1087,13 +804,10 @@ async function cargarDatos(){
       listaProd.innerHTML = '<p class="empty-text">No hay productos registrados.</p>';
     } else {
       cacheProductos.forEach(p => {
-        const img = p.imagen
-          ? '<img src="' + p.imagen + '" alt="">'
-          : '<i class="fas fa-box"></i>';
+        const img = p.imagen ? '<img src="' + p.imagen + '" alt="">' : '<i class="fas fa-box"></i>';
         const stockNum = Number(p.stock || 0);
         const badgeClass = stockNum <= STOCK_MINIMO ? 'low' : 'ok';
         const precio = Number(p.precio || 0).toLocaleString();
-
         listaProd.innerHTML +=
           '<div class="prod-card">' +
             '<div class="prod-thumb">' + img + '</div>' +
@@ -1116,9 +830,7 @@ async function cargarDatos(){
       listaAlertas.innerHTML = '<p class="empty-text">No hay alertas de stock.</p>';
     } else {
       bajos.forEach(p => {
-        const img = p.imagen
-          ? '<img src="' + p.imagen + '" alt="">'
-          : '📦';
+        const img = p.imagen ? '<img src="' + p.imagen + '" alt="">' : '📦';
         listaAlertas.innerHTML +=
           '<div class="alert-item">' +
             '<div class="alert-img">' + img + '</div>' +
@@ -1131,7 +843,7 @@ async function cargarDatos(){
       });
     }
 
-    /* Llenar dropdown de productos en ventas */
+    /* Dropdown de productos */
     const selProd = document.getElementById('venta-producto-select');
     selProd.innerHTML = '<option value="">— Selecciona un producto —</option>';
     cacheProductos.forEach(p => {
@@ -1142,7 +854,7 @@ async function cargarDatos(){
       selProd.appendChild(opt);
     });
 
-    /* VENTAS */
+    /* Ventas */
     const { data: ventas, error: errV } = await supabaseClient
       .from('ventas').select('*')
       .order('created_at', { ascending: false })
@@ -1174,7 +886,7 @@ async function cargarDatos(){
       });
     }
   } catch(e){
-    console.error('Error productos/ventas:', e.message);
+    console.error('Error cargando datos:', e.message);
   }
 }
 
@@ -1215,7 +927,6 @@ async function cargarClientes(){
       });
     }
 
-    /* Llenar dropdown de clientes en ventas */
     const sel = document.getElementById('venta-cliente-select');
     sel.innerHTML = '<option value="">— Consumidor final —</option>';
     cacheClientes.forEach(c => {
@@ -1227,12 +938,12 @@ async function cargarClientes(){
   } catch(e){
     console.error('Error clientes:', e.message);
     document.getElementById('lista-clientes').innerHTML =
-      '<p class="empty-text">No se pudieron cargar los clientes. Verifica que la tabla exista en Supabase.</p>';
+      '<p class="empty-text">No se pudieron cargar los clientes.<br>Detalle: ' + esc(e.message) + '</p>';
   }
 }
 
 /* ==========================================================
-   8) AGREGAR / ELIMINAR PRODUCTOS
+   PRODUCTOS: crear / eliminar
    ========================================================== */
 async function agregarProducto(){
   const nombre = document.getElementById('prod-nombre').value.trim();
@@ -1243,19 +954,13 @@ async function agregarProducto(){
   if (!supabaseClient) return alert('Faltan las claves de Supabase.');
 
   try {
-    const payload = {
-      nombre,
-      stock: parseInt(stock),
-      precio: parseFloat(precio)
-    };
+    const payload = { nombre, stock: parseInt(stock), precio: parseFloat(precio) };
     if (productoImagenBase64) payload.imagen = productoImagenBase64;
 
     const { error } = await supabaseClient.from('productos').insert([payload]);
     if (error) throw error;
-
     alert('¡Producto guardado!');
-    ['prod-nombre','prod-stock','prod-precio'].forEach(id =>
-      document.getElementById(id).value = '');
+    ['prod-nombre','prod-stock','prod-precio'].forEach(id => document.getElementById(id).value = '');
     limpiarImagenProducto();
     cargarDatos();
   } catch(e){ alert('Error: ' + e.message); }
@@ -1271,7 +976,7 @@ async function eliminarProducto(id){
 }
 
 /* ==========================================================
-   9) AGREGAR / ELIMINAR CLIENTES
+   CLIENTES: crear / eliminar
    ========================================================== */
 async function agregarCliente(){
   const nombre = document.getElementById('cli-nombre').value.trim();
@@ -1306,7 +1011,7 @@ async function eliminarCliente(id){
 }
 
 /* ==========================================================
-   10) VENTAS
+   VENTAS
    ========================================================== */
 function alSeleccionarProducto(){
   const sel = document.getElementById('venta-producto-select');
@@ -1322,9 +1027,8 @@ function alSeleccionarProducto(){
 function calcularTotal(){
   const cant = parseFloat(document.getElementById('venta-cantidad').value) || 0;
   const unit = parseFloat(document.getElementById('venta-precio-unit').value) || 0;
-  const totalEl = document.getElementById('venta-total');
   if (cant && unit){
-    totalEl.value = (cant * unit).toFixed(2);
+    document.getElementById('venta-total').value = (cant * unit).toFixed(2);
   }
 }
 
@@ -1348,10 +1052,8 @@ async function registrarVenta(){
     }]);
     if (e1) throw e1;
 
-    /* Descontar stock */
     const { data: prod } = await supabaseClient
-      .from('productos').select('id, stock')
-      .eq('nombre', producto).maybeSingle();
+      .from('productos').select('id, stock').eq('nombre', producto).maybeSingle();
 
     if (prod){
       await supabaseClient
@@ -1370,7 +1072,7 @@ async function registrarVenta(){
 }
 
 /* ==========================================================
-   11) PDF + COMPARTIR
+   PDF
    ========================================================== */
 async function generarYCompartirPDF(){
   try {
@@ -1388,7 +1090,6 @@ async function generarYCompartirPDF(){
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    /* Header verde con datos del local */
     doc.setFillColor(10, 61, 46);
     doc.rect(0, 0, 210, 42, 'F');
     doc.setTextColor(212, 175, 55);
@@ -1405,11 +1106,9 @@ async function generarYCompartirPDF(){
     if (contacto.length) { doc.text(contacto.join('  •  '), 14, yInfo); yInfo += 5; }
     if (datosLocal.cuit) doc.text('CUIT: ' + datosLocal.cuit, 14, yInfo);
 
-    /* Cuerpo */
     doc.setTextColor(30,30,30);
     doc.setFontSize(14);
     doc.text('Comprobante de Venta', 14, 58);
-
     doc.setFontSize(11);
     doc.text('Fecha: ' + fecha, 14, 68);
     doc.text('Cliente: ' + cliente, 14, 76);
@@ -1436,11 +1135,7 @@ async function generarYCompartirPDF(){
     const file = new File([pdfBlob], 'ticket_venta.pdf', { type: 'application/pdf' });
 
     if (navigator.canShare && navigator.canShare({ files: [file] })){
-      await navigator.share({
-        files: [file],
-        title: 'Ticket de Venta',
-        text: 'Aquí tienes tu ticket.'
-      });
+      await navigator.share({ files: [file], title: 'Ticket de Venta', text: 'Aquí tienes tu ticket.' });
     } else {
       doc.save('ticket_venta.pdf');
       setTimeout(() => {
@@ -1454,20 +1149,19 @@ async function generarYCompartirPDF(){
 }
 
 /* ==========================================================
-   12) CERRAR SESIÓN
+   CERRAR SESIÓN
    ========================================================== */
 function cerrarSesion(){
   if (confirm('¿Cerrar sesión?')) location.reload();
 }
 
 /* ==========================================================
-   13) INIT
+   INIT
    ========================================================== */
 document.addEventListener('DOMContentLoaded', async () => {
   cargarDatosLocalDeStorage();
   aplicarDatosLocal();
   cargarLogoGuardado();
-
   await cargarDatos();
   await cargarClientes();
 });
