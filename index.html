@@ -78,7 +78,6 @@ body{
 }
 .login-logo img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .login-logo i{font-size:38px;color:var(--turq-400)}
-
 .login-title{
   font-family:'Playfair Display',serif;font-size:26px;
   text-align:center;color:#fff;margin-bottom:6px;line-height:1.1;
@@ -88,10 +87,7 @@ body{
   -webkit-background-clip:text;background-clip:text;
   -webkit-text-fill-color:transparent;font-weight:700;
 }
-.login-sub{
-  text-align:center;color:#8a8a8a;font-size:13px;margin-bottom:26px;
-}
-
+.login-sub{text-align:center;color:#8a8a8a;font-size:13px;margin-bottom:26px}
 .login-input{
   width:100%;padding:13px 14px;
   border:1.5px solid #2a2a2a;border-radius:12px;
@@ -104,7 +100,6 @@ body{
   outline:none;border-color:var(--red-600);background:#1a1a1a;
   box-shadow:0 0 0 4px rgba(200,16,46,.18);
 }
-
 .btn-login-primary{
   width:100%;padding:14px;
   background:var(--grad-red);color:#fff;
@@ -117,7 +112,6 @@ body{
 .btn-login-primary:hover{transform:translateY(-1px);box-shadow:0 16px 34px -10px rgba(200,16,46,.75)}
 .btn-login-primary:active{transform:scale(.98)}
 .btn-login-primary:disabled{opacity:.6;cursor:not-allowed;transform:none}
-
 .login-links{
   display:flex;justify-content:space-between;align-items:center;
   margin-top:18px;font-size:12.5px;
@@ -127,7 +121,6 @@ body{
   font-weight:600;cursor:pointer;transition:.2s;
 }
 .login-links a:hover{color:var(--turq-300);text-decoration:underline}
-
 .login-error{
   background:#2a0d12;border:1px solid #4a0d12;color:#f25c6a;
   padding:10px 12px;border-radius:10px;font-size:12.5px;
@@ -138,7 +131,6 @@ body{
   padding:10px 12px;border-radius:10px;font-size:12.5px;
   margin-top:12px;display:none;text-align:center;
 }
-
 .login-tabs{
   display:flex;gap:8px;margin-bottom:20px;
   background:#0f0f0f;padding:4px;border-radius:12px;
@@ -153,11 +145,7 @@ body{
   background:linear-gradient(145deg,#1a1a1a,#242424);
   color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.5);
 }
-
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(12px)}
-  to{opacity:1;transform:translateY(0)}
-}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
 /* HEADER */
 .header{position:relative;background:var(--grad-header);color:#fff;
@@ -184,11 +172,6 @@ body{
   background:#ffffff0a;border:1px solid #ffffff1a;font-size:16px;color:#e9e9e9;cursor:pointer;
   transition:transform .2s, background .2s, color .2s}
 .header-icons i:hover{background:#2dd4bf22;color:var(--turq-400);transform:translateY(-2px)}
-.user-avatar{
-  width:40px;height:40px;border-radius:50%;object-fit:cover;
-  border:2px solid var(--turq-500);cursor:pointer;
-  box-shadow:0 4px 12px rgba(45,212,191,.4);
-}
 .user-initials{
   width:40px;height:40px;border-radius:50%;
   background:var(--grad-turq);color:#00211d;
@@ -262,6 +245,7 @@ body{
 .mov-text h4{font-size:13.5px;margin:0 0 3px;font-weight:600;color:#fff}
 .mov-text span{font-size:11px;color:var(--muted)}
 .mov-right p{font-size:14px;font-weight:700;margin:0;color:var(--turq-400)}
+.mov-right small{font-size:10px;color:var(--turq-500);display:block;margin-top:2px}
 .prod-card{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;
   background:var(--surface-2);border:1px solid var(--border);margin-bottom:10px;transition:all .2s}
 .prod-card:hover{box-shadow:var(--shadow-sm);transform:translateY(-1px);border-color:#333}
@@ -302,6 +286,11 @@ body{
   margin-top:10px;font-family:inherit;transition:.2s;
   display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-secondary:hover{background:#242424;border-color:var(--turq-500);color:var(--turq-300)}
+.btn-danger{width:100%;padding:12px;background:#2a0d12;color:#f25c6a;
+  border:1.5px solid #4a0d12;border-radius:14px;font-size:13px;font-weight:600;cursor:pointer;
+  margin-top:8px;font-family:inherit;transition:.2s;
+  display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-danger:hover{background:var(--red-700);color:#fff;border-color:var(--red-700)}
 .btn-pdf{width:100%;padding:16px;background:linear-gradient(135deg,#2ddf7a,#25D366 50%,#1eae54);
   color:#04240f;border:none;border-radius:16px;font-size:15px;font-weight:700;cursor:pointer;
   display:flex;align-items:center;justify-content:center;gap:10px;
@@ -352,6 +341,8 @@ body{
 .ajustes-block h4{font-size:13px;color:#fff;margin-bottom:12px;
   display:flex;align-items:center;gap:6px;font-weight:700}
 .ajustes-block h4 i{color:var(--turq-500)}
+.ajustes-block.danger{border-color:#4a0d12;background:linear-gradient(145deg,#1a080b,#2a0d12)}
+.ajustes-block.danger h4 i{color:var(--red-500)}
 .user-info-box{
   display:flex;align-items:center;gap:14px;
   background:linear-gradient(145deg,#0d1f1e,#082624);
@@ -366,7 +357,6 @@ body{
   border:2px solid #0d3d3a;
   box-shadow:0 6px 14px rgba(45,212,191,.4);
 }
-.user-info-box .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .user-info-box .info h4{font-size:14.5px;color:#fff;margin:0 0 3px;font-weight:600;word-break:break-word}
 .user-info-box .info span{font-size:12px;color:#8a8a8a;word-break:break-word}
 ::-webkit-scrollbar{width:8px;height:8px}
@@ -570,9 +560,10 @@ body{
       </div>
       <div class="form-group"><label>Nombre / Código</label><input type="text" id="prod-nombre" placeholder="Ej: Pan lactal"></div>
       <div class="form-row">
-        <div class="form-group"><label>Stock</label><input type="number" id="prod-stock" placeholder="Ej: 10"></div>
-        <div class="form-group"><label>Precio</label><input type="number" id="prod-precio" placeholder="Ej: 1200"></div>
+        <div class="form-group"><label>💵 Precio de costo</label><input type="number" id="prod-costo" placeholder="Ej: 800"></div>
+        <div class="form-group"><label>💰 Precio de venta</label><input type="number" id="prod-precio" placeholder="Ej: 1200"></div>
       </div>
+      <div class="form-group"><label>Stock</label><input type="number" id="prod-stock" placeholder="Ej: 10"></div>
       <button class="btn-primary" onclick="agregarProducto()"><i class="fas fa-save"></i> Guardar Producto</button>
     </div>
   </div>
@@ -733,6 +724,29 @@ body{
         <button class="btn-primary" onclick="guardarDatosLocal()"><i class="fas fa-save"></i> Guardar datos del local</button>
       </div>
 
+      <div class="ajustes-block danger">
+        <h4><i class="fas fa-exclamation-triangle"></i> Zona peligrosa</h4>
+        <p style="font-size:11.5px;color:#a8a8a8;margin-bottom:12px;line-height:1.5;">
+          Estas acciones son <strong style="color:#f25c6a;">permanentes</strong> y no se pueden deshacer.
+        </p>
+
+        <button class="btn-danger" onclick="borrarProductos()">
+          <i class="fas fa-box"></i> Borrar todos los productos
+        </button>
+
+        <button class="btn-danger" onclick="borrarVentas()">
+          <i class="fas fa-credit-card"></i> Borrar todas las ventas
+        </button>
+
+        <button class="btn-danger" onclick="borrarClientes()">
+          <i class="fas fa-users"></i> Borrar todos los clientes
+        </button>
+
+        <button class="btn-danger" onclick="borrarTodo()" style="background:#5a0812;border-color:#8b0f1f;font-weight:700;">
+          <i class="fas fa-trash-alt"></i> BORRAR TODO (reset completo)
+        </button>
+      </div>
+
       <p class="empty-text">Más configuraciones próximamente.</p>
     </div>
   </div>
@@ -771,7 +785,6 @@ try {
       storageKey: 'negocio-alerta-auth'
     }
   });
-  console.log('Supabase listo');
 } catch(e){ console.warn('Supabase error:', e.message); }
 
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c =>
@@ -781,16 +794,14 @@ function mostrarError(msg){
   const el = document.getElementById('login-error');
   const ok = document.getElementById('login-info');
   ok.style.display = 'none';
-  el.innerText = msg;
-  el.style.display = 'block';
+  el.innerText = msg; el.style.display = 'block';
   setTimeout(() => el.style.display = 'none', 6000);
 }
 function mostrarInfo(msg){
   const el = document.getElementById('login-info');
   const er = document.getElementById('login-error');
   er.style.display = 'none';
-  el.innerText = msg;
-  el.style.display = 'block';
+  el.innerText = msg; el.style.display = 'block';
 }
 function cambiarTabLogin(tab){
   document.getElementById('tab-login').classList.toggle('active', tab === 'login');
@@ -808,9 +819,7 @@ function mostrarRecuperar(){
   document.getElementById('tab-login').classList.remove('active');
   document.getElementById('tab-registro').classList.remove('active');
 }
-function volverALogin(){
-  cambiarTabLogin('login');
-}
+function volverALogin(){ cambiarTabLogin('login'); }
 function setLoading(btnId, loading, text){
   const btn = document.getElementById(btnId);
   if (!btn) return;
@@ -828,16 +837,13 @@ async function iniciarSesion(){
   const password = document.getElementById('login-password').value;
   if (!email || !password) return mostrarError('Completá email y contraseña');
   if (!supabaseClient) return mostrarError('Supabase no configurado.');
-
   setLoading('btn-login', true, 'Ingresando...');
   try {
-    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
     if (error) throw error;
   } catch(e){
     mostrarError(traducirError(e.message));
-  } finally {
-    setLoading('btn-login', false);
-  }
+  } finally { setLoading('btn-login', false); }
 }
 
 async function registrarse(){
@@ -845,49 +851,36 @@ async function registrarse(){
   const email = document.getElementById('reg-email').value.trim();
   const p1 = document.getElementById('reg-password').value;
   const p2 = document.getElementById('reg-password2').value;
-
   if (!email || !p1) return mostrarError('Completá email y contraseña');
   if (p1.length < 6) return mostrarError('La contraseña debe tener al menos 6 caracteres');
   if (p1 !== p2) return mostrarError('Las contraseñas no coinciden');
   if (!supabaseClient) return mostrarError('Supabase no configurado.');
-
   setLoading('btn-registro', true, 'Creando cuenta...');
   try {
     const { data, error } = await supabaseClient.auth.signUp({
       email, password: p1,
-      options: {
-        data: { full_name: nombre || '' },
-        emailRedirectTo: window.location.origin + window.location.pathname
-      }
+      options: { data: { full_name: nombre || '' }, emailRedirectTo: window.location.origin + window.location.pathname }
     });
     if (error) throw error;
-
-    if (data.user && data.session){
-      // Sesión activa directa
-    } else {
-      mostrarInfo('✅ Cuenta creada. Revisá tu email para confirmarla y después iniciá sesión.');
+    if (!data.user || !data.session){
+      mostrarInfo('✅ Cuenta creada. Revisá tu email para confirmarla.');
     }
   } catch(e){
     mostrarError(traducirError(e.message));
-  } finally {
-    setLoading('btn-registro', false);
-  }
+  } finally { setLoading('btn-registro', false); }
 }
 
 async function enviarRecuperacion(){
   const email = document.getElementById('rec-email').value.trim();
   if (!email) return mostrarError('Escribí tu email');
   if (!supabaseClient) return mostrarError('Supabase no configurado.');
-
   try {
     const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
       redirectTo: window.location.origin + window.location.pathname
     });
     if (error) throw error;
     mostrarInfo('✅ Te enviamos un enlace a ' + email);
-  } catch(e){
-    mostrarError(traducirError(e.message));
-  }
+  } catch(e){ mostrarError(traducirError(e.message)); }
 }
 
 function traducirError(msg){
@@ -914,81 +907,53 @@ function mostrarApp(user){
   cargarDatos();
   cargarClientes();
 }
-
 function mostrarLogin(){
   usuarioActual = null;
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('app-container').style.display = 'none';
 }
-
 function renderDatosUsuario(user){
   const meta = user.user_metadata || {};
   const nombre = meta.full_name || meta.name || (user.email || '').split('@')[0] || 'Usuario';
   const inicial = nombre.trim().charAt(0).toUpperCase();
-
-  const cont = document.getElementById('header-user');
-  cont.innerHTML = '<div class="user-initials">' + esc(inicial) + '</div>';
-
+  document.getElementById('header-user').innerHTML = '<div class="user-initials">' + esc(inicial) + '</div>';
   document.getElementById('welcome-titulo').innerText = 'Hola, ' + nombre.split(' ')[0];
-
-  const av = document.getElementById('user-info-avatar');
-  av.textContent = inicial;
-
+  document.getElementById('user-info-avatar').textContent = inicial;
   document.getElementById('user-info-name').textContent = nombre;
   document.getElementById('user-info-email').textContent = user.email || '';
 }
-
 async function cerrarSesion(){
   if (!confirm('¿Cerrar sesión?')) return;
-  try {
-    if (supabaseClient) await supabaseClient.auth.signOut();
-  } catch(e){ console.warn(e); }
+  try { if (supabaseClient) await supabaseClient.auth.signOut(); } catch(e){}
   mostrarLogin();
 }
-
 async function chequearSesion(){
   if (!supabaseClient) return;
   try {
     const { data } = await supabaseClient.auth.getSession();
-    if (data && data.session){
-      mostrarApp(data.session.user);
-    } else {
-      mostrarLogin();
-    }
-  } catch(e){
-    console.warn(e);
-    mostrarLogin();
-  }
+    if (data && data.session){ mostrarApp(data.session.user); }
+    else { mostrarLogin(); }
+  } catch(e){ mostrarLogin(); }
 }
-
 if (supabaseClient){
   supabaseClient.auth.onAuthStateChange((event, session) => {
-    console.log('Auth event:', event);
-    if (event === 'SIGNED_IN' && session){
-      mostrarApp(session.user);
-    } else if (event === 'SIGNED_OUT'){
-      mostrarLogin();
-    } else if (event === 'PASSWORD_RECOVERY'){
-      mostrarInfo('Ingresá tu nueva contraseña (función próximamente)');
-    }
+    if (event === 'SIGNED_IN' && session){ mostrarApp(session.user); }
+    else if (event === 'SIGNED_OUT'){ mostrarLogin(); }
   });
 }
 
 let datosLocal = { nombre:'', slogan:'', direccion:'', telefono:'', cuit:'', email:'', instagram:'' };
-
 function claveLocal(k){
   const uid = usuarioActual ? usuarioActual.id : 'anon';
   return 'negocio_' + k + '_' + uid;
 }
-
 function cargarDatosLocalDeStorage(){
   try {
     const raw = localStorage.getItem(claveLocal('local'));
     if (raw) datosLocal = { ...datosLocal, ...JSON.parse(raw) };
     else datosLocal = { nombre:'', slogan:'', direccion:'', telefono:'', cuit:'', email:'', instagram:'' };
-  } catch(e){ console.warn(e); }
+  } catch(e){}
 }
-
 function guardarDatosLocal(){
   ['nombre','slogan','direccion','telefono','cuit','email','instagram'].forEach(k => {
     const el = document.getElementById('loc-' + k);
@@ -999,27 +964,19 @@ function guardarDatosLocal(){
   aplicarDatosLocal();
   alert('✅ Datos del local guardados');
 }
-
 function aplicarDatosLocal(){
-  const hn = document.getElementById('header-nombre');
-  const hs = document.getElementById('header-slogan');
-  const wd = document.getElementById('welcome-datos');
-
-  hn.innerHTML = datosLocal.nombre
+  document.getElementById('header-nombre').innerHTML = datosLocal.nombre
     ? esc(datosLocal.nombre) + ' <span>PRO</span>'
     : 'Negocio Alerta <span>PRO</span>';
-  hs.textContent = datosLocal.slogan || 'Tu negocio organizado, desde el celular.';
-
+  document.getElementById('header-slogan').textContent = datosLocal.slogan || 'Tu negocio organizado, desde el celular.';
   const partes = [];
   if (datosLocal.direccion) partes.push(datosLocal.direccion);
   if (datosLocal.telefono) partes.push('Tel: ' + datosLocal.telefono);
-  wd.textContent = partes.length ? partes.join(' • ') : 'Tu negocio, siempre en control.';
-
+  document.getElementById('welcome-datos').textContent = partes.length ? partes.join(' • ') : 'Tu negocio, siempre en control.';
   ['nombre','slogan','direccion','telefono','cuit','email','instagram'].forEach(k => {
     const el = document.getElementById('loc-' + k);
     if (el) el.value = datosLocal[k] || '';
   });
-
   if (datosLocal.nombre) document.title = datosLocal.nombre + ' — Alerta PRO';
 }
 
@@ -1028,35 +985,24 @@ function cargarLogoGuardado(){
   if (logo) aplicarLogo(logo, false);
   const loginLogo = document.getElementById('login-logo-img');
   const loginIcon = document.getElementById('login-logo-icon');
-  if (logo){
-    loginLogo.src = logo; loginLogo.style.display = 'block';
-    loginIcon.style.display = 'none';
-  }
+  if (logo){ loginLogo.src = logo; loginLogo.style.display = 'block'; loginIcon.style.display = 'none'; }
 }
-
 function aplicarLogo(base64, guardar){
   const img = document.getElementById('custom-logo');
   const icon = document.getElementById('default-logo-icon');
   const prev = document.getElementById('preview-logo');
   if (base64){
-    img.src = base64; img.style.display = 'block';
-    icon.style.display = 'none';
+    img.src = base64; img.style.display = 'block'; icon.style.display = 'none';
     if (prev){ prev.src = base64; prev.style.display = 'inline-block'; }
-    if (guardar){
-      try { localStorage.setItem(claveLocal('logo'), base64); }
-      catch(e){ alert('No se pudo guardar (almacenamiento lleno).'); }
-    }
+    if (guardar){ try { localStorage.setItem(claveLocal('logo'), base64); } catch(e){} }
   } else {
-    img.style.display = 'none';
-    icon.style.display = 'block';
+    img.style.display = 'none'; icon.style.display = 'block';
     if (prev) prev.style.display = 'none';
   }
 }
-
 function subirLogo(event){
   const file = event.target.files && event.target.files[0];
   if (!file) return;
-  if (!file.type.startsWith('image/')) return alert('Selecciona una imagen válida.');
   const reader = new FileReader();
   reader.onload = e => {
     const img = new Image();
@@ -1064,19 +1010,16 @@ function subirLogo(event){
       const size = 400;
       const canvas = document.createElement('canvas');
       canvas.width = canvas.height = size;
-      const ctx = canvas.getContext('2d');
       const min = Math.min(img.width, img.height);
-      ctx.drawImage(img, (img.width-min)/2, (img.height-min)/2, min, min, 0, 0, size, size);
+      canvas.getContext('2d').drawImage(img, (img.width-min)/2, (img.height-min)/2, min, min, 0, 0, size, size);
       aplicarLogo(canvas.toDataURL('image/jpeg', 0.85), true);
       alert('✅ ¡Logo guardado!');
     };
-    img.onerror = () => alert('No se pudo leer la imagen.');
     img.src = e.target.result;
   };
   reader.readAsDataURL(file);
   event.target.value = '';
 }
-
 function borrarLogo(){
   if (confirm('¿Borrar tu logo personalizado?')){
     localStorage.removeItem(claveLocal('logo'));
@@ -1084,25 +1027,15 @@ function borrarLogo(){
   }
 }
 
-let html5QrcodeScanner = null;
-let scannerActivo = false;
-let deteniendo = false;
-
+let html5QrcodeScanner = null, scannerActivo = false, deteniendo = false;
 function setScannerStatus(msg, color){
   const el = document.getElementById('scanner-status');
   if (el){ el.innerText = msg; el.style.color = color || 'var(--muted)'; }
 }
-
 function iniciarScanner(){
   if (scannerActivo) return;
-  if (location.protocol !== 'https:' &&
-      !['localhost','127.0.0.1'].includes(location.hostname)) {
-    setScannerStatus('⚠️ La cámara requiere HTTPS.', '#e63946');
-    return alert('La cámara solo funciona si la página se abre por HTTPS.');
-  }
   if (typeof Html5QrcodeScanner === 'undefined'){
-    setScannerStatus('⚠️ Librería no cargada.', '#e63946');
-    return;
+    setScannerStatus('⚠️ Librería no cargada.', '#e63946'); return;
   }
   setScannerStatus('Iniciando cámara…');
   try {
@@ -1110,41 +1043,30 @@ function iniciarScanner(){
       { fps:10, qrbox:(w,h)=>{const m=Math.min(w,h);return{width:m*0.7,height:m*0.7};} }, false);
     html5QrcodeScanner.render(onScanSuccess, onScanError);
     scannerActivo = true;
-    setScannerStatus('📷 Cámara activa. Apunta al código…', '#2dd4bf');
-  } catch(e){
-    setScannerStatus('Error al iniciar: ' + e.message, '#e63946');
-    scannerActivo = false;
-  }
+    setScannerStatus('📷 Cámara activa.', '#2dd4bf');
+  } catch(e){ setScannerStatus('Error: ' + e.message, '#e63946'); scannerActivo = false; }
 }
-
 function detenerScanner(){
   scannerActivo = false;
   if (!html5QrcodeScanner || deteniendo) return;
   deteniendo = true;
   const inst = html5QrcodeScanner;
   html5QrcodeScanner = null;
-  inst.clear().catch(()=>{}).finally(()=>{
-    deteniendo = false;
-    setScannerStatus('Cámara apagada.');
-  });
+  inst.clear().catch(()=>{}).finally(()=>{ deteniendo = false; setScannerStatus('Cámara apagada.'); });
 }
-
 function onScanSuccess(decodedText){
   detenerScanner();
   document.getElementById('venta-producto').value = decodedText;
   const sel = document.getElementById('venta-producto-select');
   for (let i=0; i<sel.options.length; i++){
     if (sel.options[i].value.toLowerCase() === decodedText.toLowerCase()){
-      sel.selectedIndex = i;
-      alSeleccionarProducto();
-      break;
+      sel.selectedIndex = i; alSeleccionarProducto(); break;
     }
   }
   alert('✅ Código escaneado: ' + decodedText);
   cambiarSeccion('ventas', document.querySelector('.menu-item[onclick*="ventas"]'));
 }
 function onScanError(){}
-
 function usarCodigoManual(){
   const val = document.getElementById('input-manual-codigo').value.trim();
   if (!val) return alert('Escribe un código.');
@@ -1157,18 +1079,11 @@ function cambiarSeccion(nombreSeccion, elementoClickeado){
   document.querySelectorAll('.container > div').forEach(s => s.style.display = 'none');
   const seccionActiva = document.getElementById('seccion-' + nombreSeccion);
   if (seccionActiva) seccionActiva.style.display = 'block';
-
-  const botonPdf = document.getElementById('boton-pdf-inicio');
-  botonPdf.style.display = (nombreSeccion === 'inicio') ? 'block' : 'none';
-
-  if (nombreSeccion === 'escaner'){
-    setScannerStatus('Cámara apagada. Pulsa "Activar cámara".');
-  } else {
-    detenerScanner();
-  }
+  document.getElementById('boton-pdf-inicio').style.display = (nombreSeccion === 'inicio') ? 'block' : 'none';
+  if (nombreSeccion === 'escaner'){ setScannerStatus('Cámara apagada. Pulsa "Activar cámara".'); }
+  else { detenerScanner(); }
   if (nombreSeccion === 'clientes') cargarClientes();
-  if (nombreSeccion === 'productos' || nombreSeccion === 'ventas') cargarDatos();
-
+  if (nombreSeccion === 'productos' || nombreSeccion === 'ventas' || nombreSeccion === 'inicio') cargarDatos();
   document.querySelectorAll('.menu-item, .nav-item').forEach(i => i.classList.remove('active'));
   if (elementoClickeado){
     elementoClickeado.classList.add('active');
@@ -1183,12 +1098,9 @@ function cambiarSeccion(nombreSeccion, elementoClickeado){
 }
 
 let productoImagenBase64 = null;
-
 function subirImagenProducto(event){
   const file = event.target.files && event.target.files[0];
   if (!file) return;
-  if (!file.type.startsWith('image/')) return alert('Selecciona una imagen válida.');
-
   const reader = new FileReader();
   reader.onload = e => {
     const img = new Image();
@@ -1197,25 +1109,21 @@ function subirImagenProducto(event){
       let w = img.width, h = img.height;
       if (w > h && w > MAX){ h = h * (MAX / w); w = MAX; }
       else if (h > MAX){ w = w * (MAX / h); h = MAX; }
-
       const canvas = document.createElement('canvas');
       canvas.width = w; canvas.height = h;
       canvas.getContext('2d').drawImage(img, 0, 0, w, h);
       productoImagenBase64 = canvas.toDataURL('image/jpeg', 0.75);
-
       document.getElementById('prod-img-preview').src = productoImagenBase64;
       document.getElementById('prod-img-preview').style.display = 'block';
       document.getElementById('prod-img-placeholder').style.display = 'none';
       document.getElementById('prod-img-overlay').style.display = 'flex';
       document.getElementById('btn-limpiar-img').style.display = 'flex';
     };
-    img.onerror = () => alert('No se pudo leer la imagen.');
     img.src = e.target.result;
   };
   reader.readAsDataURL(file);
   event.target.value = '';
 }
-
 function limpiarImagenProducto(){
   productoImagenBase64 = null;
   document.getElementById('prod-img-preview').style.display = 'none';
@@ -1230,8 +1138,7 @@ let cacheClientes = [];
 async function cargarDatos(){
   if (!supabaseClient) return;
   try {
-    const { data: productos, error: errProd } = await supabaseClient
-      .from('productos').select('*');
+    const { data: productos, error: errProd } = await supabaseClient.from('productos').select('*');
     if (errProd) throw errProd;
 
     cacheProductos = productos || [];
@@ -1239,8 +1146,7 @@ async function cargarDatos(){
 
     const listaProd = document.getElementById('lista-productos');
     const listaAlertas = document.getElementById('lista-alertas');
-    listaProd.innerHTML = '';
-    listaAlertas.innerHTML = '';
+    listaProd.innerHTML = ''; listaAlertas.innerHTML = '';
 
     const STOCK_MINIMO = 5;
     const bajos = cacheProductos.filter(p => Number(p.stock || 0) <= STOCK_MINIMO);
@@ -1254,6 +1160,8 @@ async function cargarDatos(){
         const stockNum = Number(p.stock || 0);
         const badgeClass = stockNum <= STOCK_MINIMO ? 'low' : 'ok';
         const precio = Number(p.precio || 0).toLocaleString();
+        const costo = Number(p.costo || 0).toLocaleString();
+        const margen = Number(p.precio || 0) - Number(p.costo || 0);
         listaProd.innerHTML +=
           '<div class="prod-card">' +
             '<div class="prod-thumb">' + img + '</div>' +
@@ -1261,7 +1169,8 @@ async function cargarDatos(){
               '<h4>' + esc(p.nombre || p.producto || '') +
                 '<span class="prod-stock-badge ' + badgeClass + '">' + stockNum + ' u.</span>' +
               '</h4>' +
-              '<span>Precio: $' + precio + '</span>' +
+              '<span>Costo: $' + costo + ' • Venta: $' + precio + '</span>' +
+              '<span style="color:var(--turq-400);">Ganancia: $' + margen.toLocaleString() + ' por u.</span>' +
             '</div>' +
             '<div class="prod-actions">' +
               '<button class="icon-btn danger" onclick="eliminarProducto(\'' + p.id + '\')" title="Eliminar">' +
@@ -1296,6 +1205,7 @@ async function cargarDatos(){
       opt.value = p.nombre || p.producto || '';
       opt.textContent = (p.nombre || p.producto || '') + '  —  $' + Number(p.precio || 0).toLocaleString();
       opt.dataset.precio = p.precio || '';
+      opt.dataset.costo = p.costo || '';
       selProd.appendChild(opt);
     });
 
@@ -1306,8 +1216,16 @@ async function cargarDatos(){
     if (errV) throw errV;
 
     const v = ventas || [];
-    const total = v.reduce((s,x) => s + (Number(x.total) || 0), 0);
-    document.getElementById('stat-ganancia').innerText = '$ ' + total.toLocaleString();
+
+    /* GANANCIA REAL: sumar campos 'ganancia' si existen, sino calcular (total - costo_unitario*cantidad) */
+    const gananciaTotal = v.reduce((s,x) => {
+      if (x.ganancia != null) return s + Number(x.ganancia);
+      const cu = Number(x.costo_unitario || 0);
+      const cant = Number(x.cantidad || 0);
+      const total = Number(x.total || 0);
+      return s + (total - cu * cant);
+    }, 0);
+    document.getElementById('stat-ganancia').innerText = '$ ' + gananciaTotal.toLocaleString();
 
     const listaMov = document.getElementById('lista-movimientos');
     listaMov.innerHTML = '';
@@ -1316,6 +1234,8 @@ async function cargarDatos(){
     } else {
       v.slice(0,5).forEach(x => {
         const clienteTxt = x.cliente ? ' • ' + esc(x.cliente) : '';
+        const g = x.ganancia != null ? Number(x.ganancia)
+                : (Number(x.total||0) - Number(x.costo_unitario||0) * Number(x.cantidad||0));
         listaMov.innerHTML +=
           '<div class="mov-item">' +
             '<div class="mov-left">' +
@@ -1325,7 +1245,10 @@ async function cargarDatos(){
                 '<span>' + esc(x.cantidad ?? 0) + ' u.' + clienteTxt + '</span>' +
               '</div>' +
             '</div>' +
-            '<div class="mov-right"><p>$' + esc(x.total ?? 0) + '</p></div>' +
+            '<div class="mov-right">' +
+              '<p>$' + esc(x.total ?? 0) + '</p>' +
+              '<small>+$' + g.toLocaleString() + '</small>' +
+            '</div>' +
           '</div>';
       });
     }
@@ -1340,11 +1263,9 @@ async function cargarClientes(){
     const { data, error } = await supabaseClient
       .from('clientes').select('*').order('nombre', { ascending: true });
     if (error) throw error;
-
     cacheClientes = data || [];
     const lista = document.getElementById('lista-clientes');
     lista.innerHTML = '';
-
     if (!cacheClientes.length){
       lista.innerHTML = '<p class="empty-text">No hay clientes registrados.</p>';
     } else {
@@ -1354,7 +1275,6 @@ async function cargarClientes(){
         if (c.telefono) lineas.push('<span><i class="fas fa-phone"></i> ' + esc(c.telefono) + '</span>');
         if (c.email)    lineas.push('<span><i class="fas fa-envelope"></i> ' + esc(c.email) + '</span>');
         if (c.direccion) lineas.push('<span><i class="fas fa-map-marker-alt"></i> ' + esc(c.direccion) + '</span>');
-
         lista.innerHTML +=
           '<div class="cliente-card">' +
             '<div class="cliente-avatar">' + esc(inicial) + '</div>' +
@@ -1370,7 +1290,6 @@ async function cargarClientes(){
           '</div>';
       });
     }
-
     const sel = document.getElementById('venta-cliente-select');
     sel.innerHTML = '<option value="">— Consumidor final —</option>';
     cacheClientes.forEach(c => {
@@ -1380,7 +1299,6 @@ async function cargarClientes(){
       sel.appendChild(opt);
     });
   } catch(e){
-    console.error('Error clientes:', e.message);
     document.getElementById('lista-clientes').innerHTML =
       '<p class="empty-text">No se pudieron cargar los clientes.<br>Detalle: ' + esc(e.message) + '</p>';
   }
@@ -1388,20 +1306,26 @@ async function cargarClientes(){
 
 async function agregarProducto(){
   const nombre = document.getElementById('prod-nombre').value.trim();
-  const stock = document.getElementById('prod-stock').value;
+  const costo = document.getElementById('prod-costo').value;
   const precio = document.getElementById('prod-precio').value;
+  const stock = document.getElementById('prod-stock').value;
 
-  if (!nombre || stock === '' || precio === '') return alert('Completa todos los campos');
+  if (!nombre || stock === '' || precio === '' || costo === '') return alert('Completa todos los campos');
   if (!supabaseClient) return alert('Faltan las claves de Supabase.');
 
   try {
-    const payload = { nombre, stock: parseInt(stock), precio: parseFloat(precio) };
+    const payload = {
+      nombre,
+      costo: parseFloat(costo),
+      precio: parseFloat(precio),
+      stock: parseInt(stock)
+    };
     if (productoImagenBase64) payload.imagen = productoImagenBase64;
 
     const { error } = await supabaseClient.from('productos').insert([payload]);
     if (error) throw error;
     alert('¡Producto guardado!');
-    ['prod-nombre','prod-stock','prod-precio'].forEach(id => document.getElementById(id).value = '');
+    ['prod-nombre','prod-stock','prod-precio','prod-costo'].forEach(id => document.getElementById(id).value = '');
     limpiarImagenProducto();
     cargarDatos();
   } catch(e){ alert('Error: ' + e.message); }
@@ -1420,7 +1344,6 @@ async function agregarCliente(){
   const nombre = document.getElementById('cli-nombre').value.trim();
   if (!nombre) return alert('El nombre es obligatorio');
   if (!supabaseClient) return alert('Faltan las claves de Supabase.');
-
   const payload = {
     nombre,
     telefono: document.getElementById('cli-telefono').value.trim() || null,
@@ -1429,7 +1352,6 @@ async function agregarCliente(){
     cuit: document.getElementById('cli-cuit').value.trim() || null,
     notas: document.getElementById('cli-notas').value.trim() || null
   };
-
   try {
     const { error } = await supabaseClient.from('clientes').insert([payload]);
     if (error) throw error;
@@ -1473,44 +1395,31 @@ function calcularCambio(){
   const total = parseFloat(document.getElementById('venta-total').value) || 0;
   const recibido = parseFloat(document.getElementById('venta-recibido').value) || 0;
   const vuelto = recibido - total;
-
   const box = document.getElementById('venta-vuelto-box');
   const el = document.getElementById('venta-vuelto');
-
   if (recibido === 0){
-    el.textContent = '$ 0,00';
-    el.style.color = 'var(--turq-400)';
-    box.style.background = '#082624';
-    box.style.borderColor = '#0d3d3a';
+    el.textContent = '$ 0,00'; el.style.color = 'var(--turq-400)';
+    box.style.background = '#082624'; box.style.borderColor = '#0d3d3a';
     return;
   }
-
   if (vuelto < 0){
     el.textContent = 'Faltan ' + formatearPrecio(Math.abs(vuelto));
     el.style.color = '#f25c6a';
-    box.style.background = '#2a0d12';
-    box.style.borderColor = '#4a0d12';
+    box.style.background = '#2a0d12'; box.style.borderColor = '#4a0d12';
   } else if (vuelto === 0){
-    el.textContent = '✓ Justo';
-    el.style.color = '#2dd4bf';
-    box.style.background = '#082624';
-    box.style.borderColor = '#0d3d3a';
+    el.textContent = '✓ Justo'; el.style.color = '#2dd4bf';
+    box.style.background = '#082624'; box.style.borderColor = '#0d3d3a';
   } else {
-    el.textContent = formatearPrecio(vuelto);
-    el.style.color = '#2dd4bf';
-    box.style.background = '#082624';
-    box.style.borderColor = '#0d3d3a';
+    el.textContent = formatearPrecio(vuelto); el.style.color = '#2dd4bf';
+    box.style.background = '#082624'; box.style.borderColor = '#0d3d3a';
   }
 }
 
 function setRecibido(valor){
   const total = parseFloat(document.getElementById('venta-total').value) || 0;
   const input = document.getElementById('venta-recibido');
-  if (valor === 'justo'){
-    input.value = total > 0 ? total.toFixed(2) : '';
-  } else {
-    input.value = valor;
-  }
+  if (valor === 'justo') input.value = total > 0 ? total.toFixed(2) : '';
+  else input.value = valor;
   calcularCambio();
 }
 
@@ -1533,27 +1442,44 @@ async function registrarVenta(){
   if (formaPago === 'Efectivo' && recibido < total) return alert('El monto recibido es menor al total');
   if (!supabaseClient) return alert('Faltan las claves de Supabase.');
 
+  /* Buscar costo del producto para calcular ganancia */
+  const prodInfo = cacheProductos.find(p => (p.nombre || p.producto) === producto);
+  const costoUnit = prodInfo ? Number(prodInfo.costo || 0) : 0;
+  const ganancia = total - costoUnit * cantidad;
+
   try {
-    const { error: e1 } = await supabaseClient.from('ventas').insert([{
+    const payload = {
       producto, cantidad, total, cliente,
       forma_pago: formaPago,
       observaciones,
       monto_recibido: recibido,
-      vuelto: vuelto
-    }]);
+      vuelto: vuelto,
+      costo_unitario: costoUnit,
+      ganancia: ganancia
+    };
+
+    let { error: e1 } = await supabaseClient.from('ventas').insert([payload]);
+
+    /* Si falla por columnas nuevas, reintenta sin ellas */
+    if (e1 && (String(e1.message).includes('costo_unitario') || String(e1.message).includes('ganancia'))){
+      delete payload.costo_unitario;
+      delete payload.ganancia;
+      const r2 = await supabaseClient.from('ventas').insert([payload]);
+      e1 = r2.error;
+    }
     if (e1) throw e1;
 
-    const { data: prod } = await supabaseClient
-      .from('productos').select('id, stock').eq('nombre', producto).maybeSingle();
-
-    if (prod){
+    if (prodInfo){
       await supabaseClient
         .from('productos')
-        .update({ stock: Math.max(0, (Number(prod.stock) || 0) - cantidad) })
-        .eq('id', prod.id);
+        .update({ stock: Math.max(0, (Number(prodInfo.stock) || 0) - cantidad) })
+        .eq('id', prodInfo.id);
     }
 
-    alert('¡Venta registrada!' + (vuelto > 0 ? '\n\n💵 Cambio: ' + formatearPrecio(vuelto) : ''));
+    alert('¡Venta registrada!' +
+      (vuelto > 0 ? '\n\n💵 Cambio: ' + formatearPrecio(vuelto) : '') +
+      '\n💰 Ganancia: ' + formatearPrecio(ganancia));
+
     ['venta-producto','venta-cantidad','venta-total','venta-precio-unit','venta-observaciones','venta-recibido'].forEach(id =>
       document.getElementById(id).value = '');
     document.getElementById('venta-producto-select').selectedIndex = 0;
@@ -1561,6 +1487,61 @@ async function registrarVenta(){
     document.getElementById('venta-forma-pago').selectedIndex = 0;
     calcularCambio();
     cargarDatos();
+  } catch(e){ alert('Error: ' + e.message); }
+}
+
+/* ==========================================================
+   BORRAR DATOS
+   ========================================================== */
+async function borrarProductos(){
+  if (!confirm('⚠️ ¿Borrar TODOS los productos?\n\nEsta acción NO se puede deshacer.')) return;
+  if (!confirm('Última confirmación: ¿Seguro que querés borrar todos los productos?')) return;
+  if (!supabaseClient) return alert('Supabase no configurado.');
+  try {
+    const { error } = await supabaseClient.from('productos').delete().neq('id', 0);
+    if (error) throw error;
+    alert('✅ Productos borrados');
+    cargarDatos();
+  } catch(e){ alert('Error: ' + e.message); }
+}
+
+async function borrarVentas(){
+  if (!confirm('⚠️ ¿Borrar TODAS las ventas?\n\nEsta acción NO se puede deshacer.')) return;
+  if (!confirm('Última confirmación: ¿Seguro que querés borrar todas las ventas?')) return;
+  if (!supabaseClient) return alert('Supabase no configurado.');
+  try {
+    const { error } = await supabaseClient.from('ventas').delete().neq('id', 0);
+    if (error) throw error;
+    alert('✅ Ventas borradas');
+    cargarDatos();
+  } catch(e){ alert('Error: ' + e.message); }
+}
+
+async function borrarClientes(){
+  if (!confirm('⚠️ ¿Borrar TODOS los clientes?\n\nEsta acción NO se puede deshacer.')) return;
+  if (!confirm('Última confirmación: ¿Seguro que querés borrar todos los clientes?')) return;
+  if (!supabaseClient) return alert('Supabase no configurado.');
+  try {
+    const { error } = await supabaseClient.from('clientes').delete().neq('id', 0);
+    if (error) throw error;
+    alert('✅ Clientes borrados');
+    cargarClientes();
+  } catch(e){ alert('Error: ' + e.message); }
+}
+
+async function borrarTodo(){
+  if (!confirm('⚠️⚠️ BORRAR TODO ⚠️⚠️\n\nSe van a borrar:\n• Todos los productos\n• Todas las ventas\n• Todos los clientes\n\nEsta acción NO se puede deshacer.')) return;
+  const txt = prompt('Escribí BORRAR TODO en mayúsculas para confirmar:');
+  if (txt !== 'BORRAR TODO') return alert('Cancelado.');
+  if (!supabaseClient) return alert('Supabase no configurado.');
+
+  try {
+    await supabaseClient.from('ventas').delete().neq('id', 0);
+    await supabaseClient.from('productos').delete().neq('id', 0);
+    await supabaseClient.from('clientes').delete().neq('id', 0);
+    alert('✅ Todo borrado. La app quedó limpia.');
+    cargarDatos();
+    cargarClientes();
   } catch(e){ alert('Error: ' + e.message); }
 }
 
@@ -1598,7 +1579,6 @@ async function generarYCompartirPDF(){
     const total = parseFloat(inputTotal.value) || (cantidad * precioUnit);
     const formaPago = selFormaPago ? selFormaPago.value : 'Efectivo';
     const observaciones = inputObs ? inputObs.value.trim() : '';
-
     const nombreCliente = selCliente.value || 'Consumidor final';
     let clienteData = null;
     if (nombreCliente !== 'Consumidor final'){
@@ -1635,7 +1615,6 @@ async function generarYCompartirPDF(){
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8.5);
     doc.setTextColor(220, 220, 220);
-
     let yLocal = 29;
     if (datosLocal.direccion){ doc.text(datosLocal.direccion, marginX, yLocal); yLocal += 4.5; }
     const lineaContacto = [];
@@ -1660,17 +1639,14 @@ async function generarYCompartirPDF(){
     doc.text(fechaStr + '  •  ' + horaStr, pageW - marginX, 30, { align:'right' });
 
     let y = 60;
-
     doc.setFillColor(245, 247, 246);
     doc.roundedRect(marginX, y, pageW - marginX*2, 30, 3, 3, 'F');
     doc.setFillColor(200, 16, 46);
     doc.rect(marginX, y, 2, 30, 'F');
-
     doc.setTextColor(120, 120, 120);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(8);
     doc.text('DATOS DEL CLIENTE', marginX + 6, y + 6);
-
     doc.setTextColor(30, 30, 30);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(11);
@@ -1694,15 +1670,9 @@ async function generarYCompartirPDF(){
       doc.setTextColor(80, 80, 80);
       doc.text(clienteData.direccion, marginX + 6, y + 25);
     }
-
     y += 38;
 
-    const colX = {
-      desc: marginX + 4,
-      cant: marginX + 108,
-      unit: marginX + 132,
-      sub: pageW - marginX - 4
-    };
+    const colX = { desc: marginX + 4, cant: marginX + 108, unit: marginX + 132, sub: pageW - marginX - 4 };
 
     doc.setFillColor(10, 10, 10);
     doc.rect(marginX, y, pageW - marginX*2, 10, 'F');
@@ -1713,7 +1683,6 @@ async function generarYCompartirPDF(){
     doc.text('CANT.', colX.cant, y + 6.5, { align:'right' });
     doc.text('P. UNIT.', colX.unit + 18, y + 6.5, { align:'right' });
     doc.text('SUBTOTAL', colX.sub, y + 6.5, { align:'right' });
-
     y += 10;
 
     doc.setDrawColor(230, 230, 230);
@@ -1729,9 +1698,7 @@ async function generarYCompartirPDF(){
     doc.text(formatearPrecio(precioUnit), colX.unit + 18, y + 7.5, { align:'right' });
     doc.setFont('helvetica', 'bold');
     doc.text(formatearPrecio(total), colX.sub, y + 7.5, { align:'right' });
-
-    y += 12;
-    y += 6;
+    y += 18;
 
     doc.setFillColor(245, 247, 246);
     doc.roundedRect(marginX + 100, y, pageW - marginX - (marginX + 100), 18, 3, 3, 'F');
@@ -1742,7 +1709,6 @@ async function generarYCompartirPDF(){
     doc.setTextColor(200, 16, 46);
     doc.setFontSize(15);
     doc.text(formatearPrecio(total), pageW - marginX - 4, y + 12, { align:'right' });
-
     y += 26;
 
     doc.setTextColor(80, 80, 80);
@@ -1751,10 +1717,8 @@ async function generarYCompartirPDF(){
     doc.text('Forma de pago:', marginX, y);
     doc.setFont('helvetica', 'normal');
     doc.text(formaPago, marginX + 26, y);
-
     y += 6;
 
-    /* Cambio / vuelto si es efectivo */
     const inputRecibido = document.getElementById('venta-recibido');
     const montoRecibido = inputRecibido ? (parseFloat(inputRecibido.value) || 0) : 0;
     if (formaPago === 'Efectivo' && montoRecibido > 0){
@@ -1765,7 +1729,6 @@ async function generarYCompartirPDF(){
       doc.setFont('helvetica', 'normal');
       doc.text(formatearPrecio(montoRecibido), marginX + 30, y);
       y += 6;
-
       doc.setFont('helvetica', 'bold');
       doc.setTextColor(10, 61, 46);
       doc.text('Cambio:', marginX, y);
@@ -1790,16 +1753,13 @@ async function generarYCompartirPDF(){
     doc.setDrawColor(45, 212, 191);
     doc.setLineWidth(0.5);
     doc.line(marginX, pieY, pageW - marginX, pieY);
-
     doc.setTextColor(120, 120, 120);
     doc.setFont('helvetica', 'italic');
     doc.setFontSize(9);
     doc.text('¡Gracias por su compra!', pageW/2, pieY + 6, { align:'center' });
-
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7.5);
-    doc.text('Comprobante no válido como factura fiscal  •  Negocio Alerta PRO',
-      pageW/2, pieY + 12, { align:'center' });
+    doc.text('Comprobante no válido como factura fiscal  •  Negocio Alerta PRO', pageW/2, pieY + 12, { align:'center' });
 
     const nombreArchivo = 'comprobante_' + numeroComprobante + '.pdf';
     const pdfBlob = doc.output('blob');
@@ -1807,15 +1767,13 @@ async function generarYCompartirPDF(){
 
     if (navigator.canShare && navigator.canShare({ files: [file] })){
       await navigator.share({
-        files: [file],
-        title: 'Comprobante de Venta',
+        files: [file], title: 'Comprobante de Venta',
         text: 'Comprobante ' + numeroComprobante + ' — ' + (datosLocal.nombre || 'Mi negocio')
       });
     } else {
       doc.save(nombreArchivo);
       const mensaje = 'Hola, aquí está tu comprobante ' + numeroComprobante +
-        ' de ' + (datosLocal.nombre || 'mi negocio') +
-        '. Total: ' + formatearPrecio(total);
+        ' de ' + (datosLocal.nombre || 'mi negocio') + '. Total: ' + formatearPrecio(total);
       setTimeout(() => {
         window.open('https://wa.me/?text=' + encodeURIComponent(mensaje), '_blank');
       }, 500);
@@ -1826,9 +1784,7 @@ async function generarYCompartirPDF(){
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  chequearSesion();
-});
+document.addEventListener('DOMContentLoaded', () => { chequearSesion(); });
 </script>
 </body>
 </html>
