@@ -583,7 +583,19 @@ body{
           <i class="fas fa-times"></i> Quitar imagen
         </button>
       </div>
-      <div class="form-group"><label>Nombre / Código</label><input type="text" id="prod-nombre" placeholder="Ej: Pan lactal"></div>
+      
+      <!-- CAMPO MODIFICADO CON BOTÓN DE ESCÁNER -->
+      <div class="form-group">
+        <label>Nombre / Código</label>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="prod-nombre" placeholder="Ej: Pan lactal" style="flex: 1;">
+          <button type="button" class="btn-secondary" onclick="iniciarScannerProducto()" style="width: auto; margin-top: 0; padding: 0 16px;">
+            <i class="fas fa-qrcode"></i>
+          </button>
+        </div>
+      </div>
+      <!-- CONTENEDOR DEL ESCÁNER DE PRODUCTOS -->
+      <div id="reader-producto" style="display:none; margin-bottom: 12px;"></div>
 
       <div class="form-row">
         <div class="form-group">
@@ -1154,6 +1166,57 @@ function usarCodigoManual(){
 }
 
 /* ==========================================================
+   ESCANER PARA PRODUCTOS (NUEVO)
+   ========================================================== */
+let scannerProducto = null;
+
+function iniciarScannerProducto() {
+  const divReader = document.getElementById('reader-producto');
+  divReader.style.display = 'block';
+  
+  if (scannerProducto) return; // Si ya está activo, no hacer nada
+  
+  if (typeof Html5QrcodeScanner === 'undefined') {
+    return alert('La librería del escáner no está cargada.');
+  }
+
+  scannerProducto = new Html5QrcodeScanner(
+    "reader-producto", 
+    { fps: 10, qrbox: { width: 250, height: 250 } }, 
+    false
+  );
+  
+  scannerProducto.render(onScanSuccessProducto, (error) => {});
+}
+
+function onScanSuccessProducto(decodedText) {
+  // Escribir el código en el input de nombre/código
+  document.getElementById('prod-nombre').value = decodedText;
+  
+  // Detener el escáner y ocultar el cuadro de video
+  detenerScannerProducto();
+  
+  // Hacer un pequeño efecto o sonido (opcional)
+  alert('✅ Código capturado: ' + decodedText);
+}
+
+function detenerScannerProducto() {
+  if (scannerProducto) {
+    scannerProducto.clear().then(() => {
+      scannerProducto = null;
+      document.getElementById('reader-producto').style.display = 'none';
+    }).catch(err => {
+      console.error("Error al detener el escáner: ", err);
+      scannerProducto = null;
+      document.getElementById('reader-producto').style.display = 'none';
+    });
+  } else {
+    document.getElementById('reader-producto').style.display = 'none';
+  }
+}
+
+
+/* ==========================================================
    NAVEGACIÓN
    ========================================================== */
 function cambiarSeccion(nombreSeccion, elementoClickeado){
@@ -1161,8 +1224,12 @@ function cambiarSeccion(nombreSeccion, elementoClickeado){
   const seccionActiva = document.getElementById('seccion-' + nombreSeccion);
   if (seccionActiva) seccionActiva.style.display = 'block';
   document.getElementById('boton-pdf-inicio').style.display = (nombreSeccion === 'inicio') ? 'block' : 'none';
+  
   if (nombreSeccion === 'escaner') setScannerStatus('Cámara apagada. Pulsa "Activar cámara".');
-  else detenerScanner();
+  else detenerScanner(); // Detiene escáner de ventas
+
+  detenerScannerProducto(); // Detiene escáner de productos
+
   if (nombreSeccion === 'clientes') cargarClientes();
   if (nombreSeccion === 'inicio' || nombreSeccion === 'productos' || nombreSeccion === 'ventas') cargarDatos();
   if (nombreSeccion === 'ventas') cargarHistorialVentas();
