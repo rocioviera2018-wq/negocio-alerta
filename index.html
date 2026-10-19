@@ -560,6 +560,17 @@ body{
   <div id="seccion-productos" style="display:none;">
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-shopping-bag"></i> Mis Productos</h3>
+      
+      <!-- NUEVO BUSCADOR CON LUPITA -->
+      <div style="position: relative; margin-bottom: 14px;">
+        <i class="fas fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--turq-500); font-size: 14px; pointer-events: none;"></i>
+        <input type="text" id="buscador-productos" 
+               placeholder="Buscar producto..." 
+               oninput="buscarProducto()"
+               style="width: 100%; padding: 12px 14px 12px 38px; border: 1.5px solid #2a2a2a; border-radius: 12px; font-size: 13.5px; font-family: inherit; background: #161616; color: var(--text); outline: none; transition: all .2s;">
+      </div>
+      <!-- FIN NUEVO BUSCADOR -->
+
       <div id="lista-productos"><p class="empty-text">Cargando productos...</p></div>
     </div>
     <div class="section-card">
@@ -583,7 +594,7 @@ body{
           <i class="fas fa-times"></i> Quitar imagen
         </button>
       </div>
-      
+
       <!-- CAMPO MODIFICADO CON BOTÓN DE ESCÁNER -->
       <div class="form-group">
         <label>Nombre / Código</label>
@@ -1173,9 +1184,9 @@ let scannerProducto = null;
 function iniciarScannerProducto() {
   const divReader = document.getElementById('reader-producto');
   divReader.style.display = 'block';
-  
+
   if (scannerProducto) return; // Si ya está activo, no hacer nada
-  
+
   if (typeof Html5QrcodeScanner === 'undefined') {
     return alert('La librería del escáner no está cargada.');
   }
@@ -1185,17 +1196,17 @@ function iniciarScannerProducto() {
     { fps: 10, qrbox: { width: 250, height: 250 } }, 
     false
   );
-  
+
   scannerProducto.render(onScanSuccessProducto, (error) => {});
 }
 
 function onScanSuccessProducto(decodedText) {
   // Escribir el código en el input de nombre/código
   document.getElementById('prod-nombre').value = decodedText;
-  
+
   // Detener el escáner y ocultar el cuadro de video
   detenerScannerProducto();
-  
+
   // Hacer un pequeño efecto o sonido (opcional)
   alert('✅ Código capturado: ' + decodedText);
 }
@@ -1224,7 +1235,7 @@ function cambiarSeccion(nombreSeccion, elementoClickeado){
   const seccionActiva = document.getElementById('seccion-' + nombreSeccion);
   if (seccionActiva) seccionActiva.style.display = 'block';
   document.getElementById('boton-pdf-inicio').style.display = (nombreSeccion === 'inicio') ? 'block' : 'none';
-  
+
   if (nombreSeccion === 'escaner') setScannerStatus('Cámara apagada. Pulsa "Activar cámara".');
   else detenerScanner(); // Detiene escáner de ventas
 
@@ -1849,6 +1860,24 @@ function calcularYMostrarReporte(){
       '</div>';
     }).join('');
   }
+}
+
+/* ==========================================================
+   BUSCADOR DE PRODUCTOS (Filtrado visual)
+   ========================================================== */
+function buscarProducto() {
+  const termino = document.getElementById('buscador-productos').value.toLowerCase().trim();
+  const tarjetas = document.querySelectorAll('#lista-productos .prod-card');
+  
+  tarjetas.forEach(tarjeta => {
+    const nombre = tarjeta.querySelector('.prod-info h4').innerText.toLowerCase();
+    
+    if (nombre.includes(termino)) {
+      tarjeta.style.display = 'flex'; // Muestra la tarjeta
+    } else {
+      tarjeta.style.display = 'none'; // Oculta la tarjeta
+    }
+  });
 }
 
 /* ==========================================================
