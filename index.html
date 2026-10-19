@@ -45,6 +45,7 @@ body{
     var(--bg);
   color:var(--text); padding-bottom:100px; min-height:100vh;
   -webkit-font-smoothing:antialiased;
+  transition:background .4s ease;
 }
 
 /* LOGIN */
@@ -223,7 +224,6 @@ body{
 .alert-info p{font-size:12px;color:var(--red-500);margin:0}
 .alert-info span{font-size:10.5px;color:var(--muted)}
 
-/* Movimientos con fecha */
 .mov-item{display:flex;justify-content:space-between;align-items:center;padding:12px 8px;
   border-bottom:1px solid var(--border-soft);border-radius:10px;gap:8px}
 .mov-item:last-child{border-bottom:none}
@@ -238,7 +238,6 @@ body{
 .mov-right small{font-size:10px;color:var(--turq-500);display:block;margin-top:2px}
 .mov-right .fecha{font-size:9.5px;color:#5a5a5a;display:block;margin-top:2px}
 
-/* Sección de filtro por días */
 .filtro-dias{
   display:flex;gap:6px;overflow-x:auto;padding:4px 0 12px;
   scrollbar-width:none;-ms-overflow-style:none;
@@ -265,7 +264,6 @@ body{
 .resumen-box strong{font-size:16px;color:#fff;font-weight:700;}
 .resumen-box.turq strong{color:var(--turq-400);}
 
-/* Producto card */
 .prod-card{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;
   background:var(--surface-2);border:1px solid var(--border);margin-bottom:10px}
 .prod-thumb{width:56px;height:56px;border-radius:12px;object-fit:cover;flex-shrink:0;
@@ -294,6 +292,8 @@ body{
 .icon-btn:hover{background:#2a2a2a;color:#fff}
 .icon-btn.danger{background:#2a0d12;color:var(--red-500)}
 .icon-btn.danger:hover{background:var(--red-700);color:#fff}
+.icon-btn.edit{background:#0d2a26;color:var(--turq-400)}
+.icon-btn.edit:hover{background:var(--turq-700);color:#fff}
 
 .cliente-card{display:flex;align-items:center;gap:12px;padding:14px;border-radius:14px;
   background:var(--surface-2);border:1px solid var(--border);margin-bottom:10px}
@@ -383,6 +383,138 @@ body{
 }
 .user-info-box .info h4{font-size:14.5px;color:#fff;margin:0 0 3px;font-weight:600;word-break:break-word}
 .user-info-box .info span{font-size:12px;color:#8a8a8a;word-break:break-word}
+
+/* =====================================================
+   TEMAS DE COLORES PERSONALIZADOS
+   ===================================================== */
+body[data-tema="lila"]{
+  --tema-1:#e0c8ff; --tema-2:#c4a1ff; --tema-3:#8b5cf6;
+  --grad-turq:linear-gradient(135deg,#e0c8ff 0%,#c4a1ff 45%,#8b5cf6 100%);
+  --shadow-turq:0 12px 30px -12px rgba(155,109,255,.55);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #1a0d2e 0%, transparent 55%),
+    radial-gradient(900px 500px at 110% 10%, #2a1a4a 0%, transparent 60%),
+    #0a0a0a;
+}
+body[data-tema="rosa"]{
+  --tema-1:#ffd6ea; --tema-2:#ff9ecf; --tema-3:#e94a94;
+  --grad-turq:linear-gradient(135deg,#ffd6ea 0%,#ff9ecf 45%,#e94a94 100%);
+  --shadow-turq:0 12px 30px -12px rgba(255,110,180,.55);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #2e0d1f 0%, transparent 55%),
+    radial-gradient(900px 500px at 110% 10%, #4a1a2e 0%, transparent 60%),
+    #0a0a0a;
+}
+body[data-tema="fucsia"]{
+  --tema-1:#ff7de0; --tema-2:#ff2bbf; --tema-3:#c4006b;
+  --grad-turq:linear-gradient(135deg,#ff7de0 0%,#ff2bbf 45%,#c4006b 100%);
+  --shadow-turq:0 12px 30px -12px rgba(230,0,126,.55);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #2e0a20 0%, transparent 55%),
+    radial-gradient(900px 500px at 110% 10%, #4a1240 0%, transparent 60%),
+    #0a0a0a;
+}
+body[data-tema="negro"]{
+  --tema-1:#99f6e4; --tema-2:#2dd4bf; --tema-3:#0d9488;
+  --grad-turq:linear-gradient(135deg,#99f6e4 0%,#2dd4bf 45%,#0d9488 100%);
+  --shadow-turq:0 12px 30px -12px rgba(45,212,191,.55);
+}
+body[data-tema="verde"]{
+  --tema-1:#c8f7c5; --tema-2:#4ade80; --tema-3:#15803d;
+  --grad-turq:linear-gradient(135deg,#c8f7c5 0%,#4ade80 45%,#15803d 100%);
+  --shadow-turq:0 12px 30px -12px rgba(74,222,128,.55);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #0d2e1a 0%, transparent 55%),
+    radial-gradient(900px 500px at 110% 10%, #1a4a2e 0%, transparent 60%),
+    #0a0a0a;
+}
+body[data-tema="azul"]{
+  --tema-1:#c8ddff; --tema-2:#4d8dff; --tema-3:#1e4fd8;
+  --grad-turq:linear-gradient(135deg,#c8ddff 0%,#4d8dff 45%,#1e4fd8 100%);
+  --shadow-turq:0 12px 30px -12px rgba(77,141,255,.55);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #0d1a2e 0%, transparent 55%),
+    radial-gradient(900px 500px at 110% 10%, #1a2e4a 0%, transparent 60%),
+    #0a0a0a;
+}
+body[data-tema="blanco"]{
+  --tema-1:#a8e6e0; --tema-2:#2dd4bf; --tema-3:#0f766e;
+  --grad-turq:linear-gradient(135deg,#a8e6e0 0%,#2dd4bf 45%,#0f766e 100%);
+  --shadow-turq:0 12px 30px -12px rgba(45,212,191,.55);
+  --bg:#f5f5f5; --surface:#ffffff; --surface-2:#f0f0f0;
+  --text:#111111; --text-soft:#333333; --muted:#666666;
+  --border:#e0e0e0; --border-soft:#eaeaea;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #ccfbf1 0%, transparent 55%),
+    radial-gradient(900px 500px at 110% 10%, #e0f2fe 0%, transparent 60%),
+    #f5f5f5;
+  color:#111;
+}
+body[data-tema="blanco"] .header{color:#111 !important}
+body[data-tema="blanco"] .header-title h1{color:#111}
+body[data-tema="blanco"] .header-title p{color:#444}
+body[data-tema="blanco"] .welcome-box{background:#ffffffaa;border-color:#e0e0e0}
+body[data-tema="blanco"] .welcome-text h3{color:#111}
+body[data-tema="blanco"] .welcome-text p{color:#555}
+body[data-tema="blanco"] .card-stat p,
+body[data-tema="blanco"] .menu-item span,
+body[data-tema="blanco"] .mov-text h4,
+body[data-tema="blanco"] .section-header h3,
+body[data-tema="blanco"] .section-title,
+body[data-tema="blanco"] .prod-info h4,
+body[data-tema="blanco"] .cliente-info h4,
+body[data-tema="blanco"] .ajustes-block h4,
+body[data-tema="blanco"] .user-info-box .info h4{color:#111 !important}
+body[data-tema="blanco"] .bottom-nav{background:rgba(255,255,255,.94);border-top-color:#e0e0e0}
+body[data-tema="blanco"] .nav-item.active{color:#111}
+body[data-tema="blanco"] .form-group input,
+body[data-tema="blanco"] .form-group select,
+body[data-tema="blanco"] .form-group textarea{background:#fff;color:#111;border-color:#d8d8d8}
+body[data-tema="blanco"] .form-group input::placeholder{color:#999}
+body[data-tema="blanco"] .header{background:linear-gradient(140deg,#f0fdfa 0%,#ccfbf1 40%,#99f6e4 70%,#5eead4 100%) !important}
+body[data-tema="blanco"] .menu-item{background:#ffffff}
+body[data-tema="blanco"] .menu-item.active span{color:#fff}
+
+/* Selector visual de temas */
+.temas-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px;
+}
+.tema-swatch{
+  aspect-ratio:1;border-radius:14px;border:3px solid transparent;
+  cursor:pointer;position:relative;overflow:hidden;
+  display:flex;align-items:flex-end;justify-content:center;
+  transition:all .25s;box-shadow:0 4px 12px rgba(0,0,0,.4);
+}
+.tema-swatch::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(145deg, transparent 40%, rgba(0,0,0,.35));
+  pointer-events:none;
+}
+.tema-swatch span{
+  position:relative;z-index:2;font-size:9px;font-weight:700;
+  color:#fff;padding:4px;text-shadow:0 1px 2px rgba(0,0,0,.8);
+  letter-spacing:.3px;text-transform:uppercase;
+}
+.tema-swatch.active{
+  border-color:#fff;transform:scale(1.05);
+  box-shadow:0 0 0 3px rgba(255,255,255,.3), 0 8px 20px rgba(0,0,0,.6);
+}
+.tema-swatch.active::before{
+  content:"\f00c";font-family:"Font Awesome 6 Free";font-weight:900;
+  position:absolute;top:6px;right:6px;z-index:3;
+  width:20px;height:20px;border-radius:50%;
+  background:#fff;color:#111;font-size:11px;
+  display:flex;align-items:center;justify-content:center;
+}
+.tema-lila-swatch{background:linear-gradient(135deg,#c4a1ff,#8b5cf6)}
+.tema-rosa-swatch{background:linear-gradient(135deg,#ff9ecf,#e94a94)}
+.tema-fucsia-swatch{background:linear-gradient(135deg,#ff7de0,#c4006b)}
+.tema-negro-swatch{background:linear-gradient(135deg,#3a3a3a,#000)}
+.tema-verde-swatch{background:linear-gradient(135deg,#4ade80,#15803d)}
+.tema-azul-swatch{background:linear-gradient(135deg,#4d8dff,#1e4fd8)}
+.tema-blanco-swatch{background:linear-gradient(135deg,#ffffff,#a8e6e0)}
+.tema-blanco-swatch span{color:#111 !important;text-shadow:none !important}
+
 ::-webkit-scrollbar{width:8px;height:8px}
 ::-webkit-scrollbar-thumb{background:#333;border-radius:8px}
 @media (max-width:380px){
@@ -393,7 +525,7 @@ body{
 }
 </style>
 </head>
-<body>
+<body data-tema="negro">
 
 <!-- LOGIN -->
 <div id="login-screen">
@@ -561,9 +693,6 @@ body{
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-shopping-bag"></i> Mis Productos</h3>
       
-      <!-- ========================================== -->
-      <!-- NUEVO BUSCADOR CON LUPITA AGREGADO AQUÍ -->
-      <!-- ========================================== -->
       <div style="position: relative; margin-bottom: 14px;">
         <i class="fas fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--turq-500); font-size: 14px; pointer-events: none;"></i>
         <input type="text" id="buscador-productos" 
@@ -571,7 +700,6 @@ body{
                oninput="buscarProducto()"
                style="width: 100%; padding: 12px 14px 12px 38px; border: 1.5px solid #2a2a2a; border-radius: 12px; font-size: 13.5px; font-family: inherit; background: #161616; color: var(--text); outline: none; transition: all .2s;">
       </div>
-      <!-- ========================================== -->
 
       <div id="lista-productos"><p class="empty-text">Cargando productos...</p></div>
     </div>
@@ -597,7 +725,6 @@ body{
         </button>
       </div>
 
-      <!-- CAMPO MODIFICADO CON BOTÓN DE ESCÁNER -->
       <div class="form-group">
         <label>Nombre / Código</label>
         <div style="display: flex; gap: 8px;">
@@ -607,7 +734,6 @@ body{
           </button>
         </div>
       </div>
-      <!-- CONTENEDOR DEL ESCÁNER DE PRODUCTOS -->
       <div id="reader-producto" style="display:none; margin-bottom: 12px;"></div>
 
       <div class="form-row">
@@ -699,7 +825,6 @@ body{
       </button>
     </div>
 
-    <!-- Historial de ventas con borrado -->
     <div class="section-card">
       <div class="section-header">
         <h3><i class="fas fa-history" style="color:var(--turq-500);"></i> Historial de ventas</h3>
@@ -831,6 +956,25 @@ body{
         </button>
       </div>
 
+      <!-- =====================================================
+           NUEVO BLOQUE: SELECTOR DE COLORES / TEMAS
+           ===================================================== -->
+      <div class="ajustes-block">
+        <h4><i class="fas fa-palette"></i> Colores del tema</h4>
+        <p style="font-size:11.5px;color:#a8a8a8;margin-bottom:6px;line-height:1.5;">
+          Elegí un color y se aplicará a toda la app.
+        </p>
+        <div class="temas-grid" id="temas-grid">
+          <div class="tema-swatch tema-lila-swatch"    data-tema="lila"    onclick="aplicarTema('lila', this)"><span>Lila</span></div>
+          <div class="tema-swatch tema-rosa-swatch"    data-tema="rosa"    onclick="aplicarTema('rosa', this)"><span>Rosa</span></div>
+          <div class="tema-swatch tema-fucsia-swatch"  data-tema="fucsia"  onclick="aplicarTema('fucsia', this)"><span>Fucsia</span></div>
+          <div class="tema-swatch tema-negro-swatch"   data-tema="negro"   onclick="aplicarTema('negro', this)"><span>Negro</span></div>
+          <div class="tema-swatch tema-verde-swatch"   data-tema="verde"   onclick="aplicarTema('verde', this)"><span>Verde</span></div>
+          <div class="tema-swatch tema-azul-swatch"    data-tema="azul"    onclick="aplicarTema('azul', this)"><span>Azul</span></div>
+          <div class="tema-swatch tema-blanco-swatch"  data-tema="blanco"  onclick="aplicarTema('blanco', this)"><span>Blanco</span></div>
+        </div>
+      </div>
+
       <div class="ajustes-block">
         <h4><i class="fas fa-store"></i> Datos del Local</h4>
         <div class="form-group"><label>Nombre del local *</label><input type="text" id="loc-nombre" placeholder="Ej: Almacén Don Pedro"></div>
@@ -877,6 +1021,76 @@ body{
   <div class="nav-item" onclick="cambiarSeccion('ajustes', this)"><i class="fas fa-cog"></i>Ajustes</div>
 </nav>
 
+</div>
+
+<!-- =====================================================
+     MODAL EDITAR PRODUCTO
+     ===================================================== -->
+<div id="modal-editar-producto" style="display:none;position:fixed;inset:0;z-index:9998;
+     background:rgba(0,0,0,.85);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+     align-items:center;justify-content:center;padding:16px;overflow-y:auto;">
+  <div style="width:100%;max-width:480px;background:linear-gradient(145deg,#141414,#0a0a0a);
+       border:1px solid #2a2a2a;border-radius:22px;padding:22px;
+       box-shadow:0 30px 80px -20px rgba(0,0,0,.9);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h3 style="font-family:'Playfair Display',serif;font-size:18px;color:#fff;margin:0;">
+        <i class="fas fa-edit" style="color:var(--turq-500);"></i> Editar Producto
+      </h3>
+      <button onclick="cerrarModalEditar()" style="width:34px;height:34px;border-radius:50%;
+              background:#2a2a2a;border:none;color:#fff;font-size:15px;cursor:pointer;">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="form-group">
+      <label>Imagen del producto</label>
+      <div class="img-upload-box" onclick="document.getElementById('edit-img-file').click()" style="height:130px;">
+        <div id="edit-img-placeholder">
+          <i class="fas fa-image"></i><span>Toca para cambiar foto</span>
+        </div>
+        <img id="edit-img-preview" src="" style="display:none;" alt="">
+      </div>
+      <input type="file" id="edit-img-file" accept="image/*" style="display:none" onchange="subirImagenEditar(event)">
+    </div>
+
+    <div class="form-group">
+      <label>Nombre / Código</label>
+      <input type="text" id="edit-nombre" placeholder="Nombre del producto">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label style="color:#f0b350;">💵 Precio COSTO</label>
+        <input type="number" id="edit-costo" placeholder="0" oninput="calcularMargenEditar()">
+      </div>
+      <div class="form-group">
+        <label style="color:var(--turq-400);">💰 Precio VENTA</label>
+        <input type="number" id="edit-precio" placeholder="0" oninput="calcularMargenEditar()">
+      </div>
+    </div>
+
+    <div id="edit-margen-box" style="padding:10px 14px;border-radius:10px;background:#1a1a1a;
+         border:1px solid #2a2a2a;margin-bottom:12px;text-align:center;font-size:13px;">
+      Ganancia: <strong style="color:var(--turq-400);" id="edit-margen-valor">$ 0</strong>
+      <span style="color:var(--muted);">(</span>
+      <strong style="color:var(--turq-400);" id="edit-margen-pct">0%</strong>
+      <span style="color:var(--muted);">)</span>
+    </div>
+
+    <div class="form-group">
+      <label>Stock</label>
+      <input type="number" id="edit-stock" placeholder="0">
+    </div>
+
+    <input type="hidden" id="edit-producto-id">
+
+    <button class="btn-primary" onclick="guardarEdicionProducto()" style="margin-top:6px;">
+      <i class="fas fa-save"></i> Guardar cambios
+    </button>
+    <button class="btn-secondary" onclick="cerrarModalEditar()">
+      <i class="fas fa-times"></i> Cancelar
+    </button>
+  </div>
 </div>
 
 <script>
@@ -1004,6 +1218,7 @@ function mostrarApp(user){
   cargarDatosLocalDeStorage();
   aplicarDatosLocal();
   cargarLogoGuardado();
+  cargarTemaGuardado();
   cargarDatos();
   cargarClientes();
 }
@@ -1128,6 +1343,28 @@ function borrarLogo(){
 }
 
 /* ==========================================================
+   TEMA / COLORES PERSONALIZADOS
+   ========================================================== */
+function aplicarTema(tema, elemento){
+  document.body.setAttribute('data-tema', tema);
+  try { localStorage.setItem(claveLocal('tema'), tema); } catch(e){}
+  actualizarSwatchesTema(tema);
+}
+function actualizarSwatchesTema(tema){
+  document.querySelectorAll('.tema-swatch').forEach(s => {
+    s.classList.toggle('active', s.dataset.tema === tema);
+  });
+}
+function cargarTemaGuardado(){
+  let tema = 'negro';
+  try {
+    tema = localStorage.getItem(claveLocal('tema')) || 'negro';
+  } catch(e){}
+  document.body.setAttribute('data-tema', tema);
+  actualizarSwatchesTema(tema);
+}
+
+/* ==========================================================
    ESCANER
    ========================================================== */
 let html5QrcodeScanner = null, scannerActivo = false, deteniendo = false;
@@ -1178,41 +1415,26 @@ function usarCodigoManual(){
   cambiarSeccion('ventas', document.querySelector('.menu-item[onclick*="ventas"]'));
 }
 
-/* ==========================================================
-   ESCANER PARA PRODUCTOS (NUEVO)
-   ========================================================== */
 let scannerProducto = null;
-
 function iniciarScannerProducto() {
   const divReader = document.getElementById('reader-producto');
   divReader.style.display = 'block';
-
-  if (scannerProducto) return; // Si ya está activo, no hacer nada
-
+  if (scannerProducto) return;
   if (typeof Html5QrcodeScanner === 'undefined') {
     return alert('La librería del escáner no está cargada.');
   }
-
   scannerProducto = new Html5QrcodeScanner(
     "reader-producto", 
     { fps: 10, qrbox: { width: 250, height: 250 } }, 
     false
   );
-
   scannerProducto.render(onScanSuccessProducto, (error) => {});
 }
-
 function onScanSuccessProducto(decodedText) {
-  // Escribir el código en el input de nombre/código
   document.getElementById('prod-nombre').value = decodedText;
-
-  // Detener el escáner y ocultar el cuadro de video
   detenerScannerProducto();
-
-  // Hacer un pequeño efecto o sonido (opcional)
   alert('✅ Código capturado: ' + decodedText);
 }
-
 function detenerScannerProducto() {
   if (scannerProducto) {
     scannerProducto.clear().then(() => {
@@ -1228,7 +1450,6 @@ function detenerScannerProducto() {
   }
 }
 
-
 /* ==========================================================
    NAVEGACIÓN
    ========================================================== */
@@ -1239,9 +1460,9 @@ function cambiarSeccion(nombreSeccion, elementoClickeado){
   document.getElementById('boton-pdf-inicio').style.display = (nombreSeccion === 'inicio') ? 'block' : 'none';
 
   if (nombreSeccion === 'escaner') setScannerStatus('Cámara apagada. Pulsa "Activar cámara".');
-  else detenerScanner(); // Detiene escáner de ventas
+  else detenerScanner();
 
-  detenerScannerProducto(); // Detiene escáner de productos
+  detenerScannerProducto();
 
   if (nombreSeccion === 'clientes') cargarClientes();
   if (nombreSeccion === 'inicio' || nombreSeccion === 'productos' || nombreSeccion === 'ventas') cargarDatos();
@@ -1301,7 +1522,6 @@ function limpiarImagenProducto(){
   document.getElementById('btn-limpiar-img').style.display = 'none';
 }
 
-/* Calcular margen en tiempo real */
 function calcularMargen(){
   const costo = parseFloat(document.getElementById('prod-costo').value) || 0;
   const precio = parseFloat(document.getElementById('prod-precio').value) || 0;
@@ -1311,6 +1531,116 @@ function calcularMargen(){
   const pctEl = document.getElementById('margen-pct');
   if (el) el.textContent = formatearPrecioCorto(margen);
   if (pctEl) pctEl.textContent = pct.toFixed(1) + '%';
+}
+
+/* ==========================================================
+   EDITAR PRODUCTO
+   ========================================================== */
+let productoEditandoId = null;
+let imagenEditarBase64 = null;
+let imagenEditarCambiada = false;
+
+function editarProducto(id){
+  const p = cacheProductos.find(x => String(x.id) === String(id));
+  if (!p) return alert('Producto no encontrado');
+
+  productoEditandoId = p.id;
+  imagenEditarBase64 = p.imagen || null;
+  imagenEditarCambiada = false;
+
+  document.getElementById('edit-nombre').value = p.nombre || p.producto || '';
+  document.getElementById('edit-costo').value  = p.costo  ?? '';
+  document.getElementById('edit-precio').value = p.precio ?? '';
+  document.getElementById('edit-stock').value  = p.stock  ?? '';
+  document.getElementById('edit-producto-id').value = p.id;
+
+  const prev = document.getElementById('edit-img-preview');
+  const ph   = document.getElementById('edit-img-placeholder');
+  if (p.imagen){
+    prev.src = p.imagen; prev.style.display = 'block'; ph.style.display = 'none';
+  } else {
+    prev.style.display = 'none'; ph.style.display = 'flex';
+  }
+
+  calcularMargenEditar();
+  const modal = document.getElementById('modal-editar-producto');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function cerrarModalEditar(){
+  document.getElementById('modal-editar-producto').style.display = 'none';
+  document.body.style.overflow = '';
+  productoEditandoId = null;
+  imagenEditarBase64 = null;
+  imagenEditarCambiada = false;
+}
+
+function subirImagenEditar(event){
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const MAX = 500;
+      let w = img.width, h = img.height;
+      if (w > h && w > MAX){ h = h * (MAX/w); w = MAX; }
+      else if (h > MAX){ w = w * (MAX/h); h = MAX; }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      imagenEditarBase64 = canvas.toDataURL('image/jpeg', 0.75);
+      imagenEditarCambiada = true;
+      document.getElementById('edit-img-preview').src = imagenEditarBase64;
+      document.getElementById('edit-img-preview').style.display = 'block';
+      document.getElementById('edit-img-placeholder').style.display = 'none';
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+  event.target.value = '';
+}
+
+function calcularMargenEditar(){
+  const c = parseFloat(document.getElementById('edit-costo').value) || 0;
+  const p = parseFloat(document.getElementById('edit-precio').value) || 0;
+  const m = p - c;
+  const pct = c > 0 ? (m / c * 100) : 0;
+  const el = document.getElementById('edit-margen-valor');
+  const pctEl = document.getElementById('edit-margen-pct');
+  if (el) el.textContent = formatearPrecioCorto(m);
+  if (pctEl) pctEl.textContent = pct.toFixed(1) + '%';
+}
+
+async function guardarEdicionProducto(){
+  if (!productoEditandoId) return alert('Sin producto seleccionado');
+  const nombre = document.getElementById('edit-nombre').value.trim();
+  const costo = parseFloat(document.getElementById('edit-costo').value);
+  const precio = parseFloat(document.getElementById('edit-precio').value);
+  const stock = parseInt(document.getElementById('edit-stock').value);
+
+  if (!nombre) return alert('El nombre es obligatorio');
+  if (isNaN(costo) || costo < 0) return alert('Costo inválido');
+  if (isNaN(precio) || precio < 0) return alert('Precio inválido');
+  if (isNaN(stock) || stock < 0) return alert('Stock inválido');
+
+  const payload = { nombre, costo, precio, stock };
+  if (imagenEditarCambiada && imagenEditarBase64) payload.imagen = imagenEditarBase64;
+
+  try {
+    const { error } = await supabaseClient
+      .from('productos')
+      .update(payload)
+      .eq('id', productoEditandoId);
+    if (error) throw error;
+
+    alert('✅ Producto actualizado');
+    cerrarModalEditar();
+    cargarDatos();
+  } catch(e){
+    alert('Error: ' + e.message);
+  }
 }
 
 /* ==========================================================
@@ -1367,7 +1697,8 @@ async function cargarDatos(){
               '</div>' +
             '</div>' +
             '<div class="prod-actions">' +
-              '<button class="icon-btn danger" onclick="eliminarProducto(\'' + p.id + '\')"><i class="fas fa-trash"></i></button>' +
+              '<button class="icon-btn edit" onclick="editarProducto(\'' + p.id + '\')" title="Editar"><i class="fas fa-edit"></i></button>' +
+              '<button class="icon-btn danger" onclick="eliminarProducto(\'' + p.id + '\')" title="Eliminar"><i class="fas fa-trash"></i></button>' +
             '</div>' +
           '</div>';
       });
@@ -1408,7 +1739,6 @@ async function cargarDatos(){
 
     cacheVentas = ventas || [];
 
-    /* Ganancia de HOY */
     const hoy = new Date().toISOString().slice(0,10);
     const ventasHoy = cacheVentas.filter(x => (x.created_at || '').slice(0,10) === hoy);
     const ganHoy = ventasHoy.reduce((s,x) => s + calcularGanancia(x), 0);
@@ -1510,7 +1840,7 @@ async function cargarClientes(){
 }
 
 /* ==========================================================
-   HISTORIAL DE VENTAS CON BORRADO INDIVIDUAL
+   HISTORIAL DE VENTAS
    ========================================================== */
 async function cargarHistorialVentas(){
   if (!supabaseClient) return;
@@ -1759,7 +2089,7 @@ async function registrarVenta(){
 }
 
 /* ==========================================================
-   REPORTES POR DÍA
+   REPORTES
    ========================================================== */
 let filtroActual = 'hoy';
 
@@ -1865,7 +2195,7 @@ function calcularYMostrarReporte(){
 }
 
 /* ==========================================================
-   BUSCADOR DE PRODUCTOS
+   BUSCADOR
    ========================================================== */
 function buscarProducto() {
   const termino = document.getElementById('buscador-productos').value.toLowerCase().trim();
@@ -2157,7 +2487,6 @@ async function generarYCompartirPDF(){
   }
 }
 
-/* PDF del reporte por día */
 async function descargarReportePDF(){
   const { inicio, fin, etiqueta } = rangoFechas(filtroActual);
   const ventas = cacheVentas.filter(x => {
