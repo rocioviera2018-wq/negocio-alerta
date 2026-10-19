@@ -2023,11 +2023,11 @@ function setRecibido(valor){
 
 async function registrarVenta(){
   if (!usuarioActual) return alert('No hay usuario logueado.');
+  
   let producto = document.getElementById('venta-producto').value.trim();
-  if (!producto){
-    const sel = document.getElementById('venta-producto-select');
-    if (sel.value) producto = sel.value;
-  }
+  const selProd = document.getElementById('venta-producto-select');
+  if (!producto && selProd.value) producto = selProd.value;
+
   const cantidad = parseInt(document.getElementById('venta-cantidad').value);
   const total = parseFloat(document.getElementById('venta-total').value);
   const cliente = document.getElementById('venta-cliente-select').value || 'Consumidor final';
@@ -2039,7 +2039,12 @@ async function registrarVenta(){
   if (!producto || !cantidad || !total) return alert('Completa producto, cantidad y total');
   if (formaPago === 'Efectivo' && recibido < total) return alert('El monto recibido es menor al total');
 
-  const prodInfo = cacheProductos.find(p => (p.nombre || p.producto) === producto);
+  // Buscar producto para descontar stock (tolerante a mayúsculas y espacios)
+  const prodInfo = cacheProductos.find(p => 
+    (p.nombre || '').toLowerCase().trim() === producto.toLowerCase().trim() ||
+    (p.producto || '').toLowerCase().trim() === producto.toLowerCase().trim()
+  );
+  
   const costoUnit = prodInfo ? Number(prodInfo.costo || 0) : 0;
   const ganancia = total - costoUnit * cantidad;
 
@@ -2062,24 +2067,31 @@ async function registrarVenta(){
     }
     if (e1) throw e1;
 
+    // DESCONTAR STOCK AUTOMÁTICAMENTE
     if (prodInfo){
-      await supabaseClient
+      const stockActual = Number(prodInfo.stock) || 0;
+      const nuevoStock = Math.max(0, stockActual - cantidad);
+      
+      const { error: errStock } = await supabaseClient
         .from('productos')
-        .update({ stock: Math.max(0, (Number(prodInfo.stock) || 0) - cantidad) })
+        .update({ stock: nuevoStock })
         .eq('id', prodInfo.id);
+        
+      if (errStock) console.error('Error al descontar stock:', errStock.message);
     }
 
     alert('¡Venta registrada!' +
       (vuelto > 0 ? '\n\n💵 Cambio: ' + formatearPrecio(vuelto) : '') +
-      '\n💰 Ganancia: ' + formatearPrecio(ganancia));
+      '\n💰 Ganancia: ' + formatearPrecio(ganancia) +
+      (prodInfo ? '\n📦 Stock restante de ' + producto + ': ' + Math.max(0, (Number(prodInfo.stock) || 0) - cantidad) : ''));
 
     ['venta-producto','venta-cantidad','venta-total','venta-precio-unit','venta-observaciones','venta-recibido'].forEach(id =>
       document.getElementById(id).value = '');
-    document.getElementById('venta-producto-select').selectedIndex = 0;
+    selProd.selectedIndex = 0;
     document.getElementById('venta-cliente-select').selectedIndex = 0;
     document.getElementById('venta-forma-pago').selectedIndex = 0;
     calcularCambio();
-    cargarDatos();
+    cargarDatos(); // Recarga los productos y el stock en pantalla
     cargarHistorialVentas();
   } catch(e){ alert('Error: ' + e.message); }
 }
