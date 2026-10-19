@@ -1863,19 +1863,17 @@ function calcularYMostrarReporte(){
 }
 
 /* ==========================================================
-   BUSCADOR DE PRODUCTOS (Filtrado visual)
+   BUSCADOR DE PRODUCTOS
    ========================================================== */
 function buscarProducto() {
   const termino = document.getElementById('buscador-productos').value.toLowerCase().trim();
   const tarjetas = document.querySelectorAll('#lista-productos .prod-card');
   
   tarjetas.forEach(tarjeta => {
-    const nombre = tarjeta.querySelector('.prod-info h4').innerText.toLowerCase();
-    
-    if (nombre.includes(termino)) {
-      tarjeta.style.display = 'flex'; // Muestra la tarjeta
-    } else {
-      tarjeta.style.display = 'none'; // Oculta la tarjeta
+    const nombreElemento = tarjeta.querySelector('.prod-info h4');
+    if (nombreElemento) {
+      const nombre = nombreElemento.innerText.toLowerCase();
+      tarjeta.style.display = nombre.includes(termino) ? 'flex' : 'none';
     }
   });
 }
