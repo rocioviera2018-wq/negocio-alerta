@@ -296,6 +296,8 @@ body{
 .icon-btn.edit:hover{background:var(--turq-700);color:#fff}
 .icon-btn.pdf-hist{background:#1a2a3a;color:#60a5fa}
 .icon-btn.pdf-hist:hover{background:#2a4a6a;color:#fff}
+.icon-btn.print-hist{background:#1a2a26;color:#2dd4bf}
+.icon-btn.print-hist:hover{background:#2a6a5a;color:#fff}
 
 .cliente-card{display:flex;align-items:center;gap:12px;padding:14px;border-radius:14px;
   background:var(--surface-2);border:1px solid var(--border);margin-bottom:10px}
@@ -325,6 +327,12 @@ body{
   box-shadow:0 12px 30px -12px rgba(37,211,102,.6);margin-top:10px;font-family:inherit;
   letter-spacing:.3px}
 .btn-pdf:active{transform:scale(.98)}
+.btn-ticket{width:100%;padding:16px;background:linear-gradient(135deg,#60a5fa,#3b82f6 50%,#1e4fd8);
+  color:#fff;border:none;border-radius:16px;font-size:15px;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 12px 30px -12px rgba(59,130,246,.6);margin-top:10px;font-family:inherit;
+  letter-spacing:.3px}
+.btn-ticket:active{transform:scale(.98)}
 
 .form-group{margin-bottom:12px}
 .form-group label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px;font-weight:500}
@@ -517,7 +525,7 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
 .tema-blanco-swatch{background:linear-gradient(135deg,#ffffff,#a8e6e0)}
 .tema-blanco-swatch span{color:#111 !important;text-shadow:none !important}
 
-/* Estilos específicos carrito de ventas */
+/* Estilos carrito */
 .carrito-item {
   display: flex; justify-content: space-between; align-items: center;
   padding: 10px 12px; background: #1a1a1a; border: 1px solid #333;
@@ -534,7 +542,7 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
 .carrito-total-box span { font-size: 13px; color: #a8a8a8; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
 .carrito-total-box strong { font-size: 24px; color: var(--turq-400); font-family: 'Playfair Display', serif; }
 
-/* Modales extra */
+/* Modales */
 .modal-overlay {
   position: fixed; inset: 0; z-index: 9998;
   background: rgba(0,0,0,.85); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
@@ -544,6 +552,41 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
   width: 100%; max-width: 480px; background: linear-gradient(145deg,#141414,#0a0a0a);
   border: 1px solid #2a2a2a; border-radius: 22px; padding: 22px;
   box-shadow: 0 30px 80px -20px rgba(0,0,0,.9);
+}
+
+/* ESTILOS TICKET IMPRESO */
+#ticket-print {
+  display: none;
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #ticket-print, #ticket-print * {
+    visibility: visible;
+  }
+  #ticket-print {
+    display: block !important;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-width: 80mm;
+    margin: 0 auto;
+    font-family: 'Courier New', Courier, monospace;
+    color: #000 !important;
+    background: #fff !important;
+    font-size: 12px;
+    line-height: 1.3;
+    padding: 5px;
+  }
+  #ticket-print h2 { font-size: 16px; text-align: center; margin: 5px 0; }
+  #ticket-print h3 { font-size: 13px; text-align: center; margin: 3px 0; font-weight: normal; }
+  #ticket-print hr { border: none; border-top: 1px dashed #000; margin: 6px 0; }
+  #ticket-print .ticket-row { display: flex; justify-content: space-between; margin: 2px 0; }
+  #ticket-print .ticket-total { font-size: 15px; font-weight: bold; display: flex; justify-content: space-between; margin-top: 6px; padding-top: 4px; border-top: 1px solid #000; }
+  #ticket-print .ticket-center { text-align: center; margin: 4px 0; }
+  @page { margin: 0; size: 80mm auto; }
 }
 
 ::-webkit-scrollbar{width:8px;height:8px}
@@ -909,6 +952,9 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
       <button class="btn-pdf" onclick="generarYCompartirPDF()" style="margin-top:12px;">
         <i class="fas fa-file-invoice"></i> Generar Comprobante PDF
       </button>
+      <button class="btn-ticket" onclick="imprimirTicket()">
+        <i class="fas fa-print"></i> Imprimir Ticket
+      </button>
     </div>
 
     <div class="section-card">
@@ -1200,6 +1246,9 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
   </div>
 </div>
 
+<!-- TICKET IMPRIMIBLE (oculto en pantalla, visible al imprimir) -->
+<div id="ticket-print"></div>
+
 <script>
 const SUPABASE_URL = 'https://eyvsvtsbgwccbtytkuju.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_4Mfk_ZP_BnVz9luy8CeF0A_Jh4zYV9R';
@@ -1302,7 +1351,6 @@ async function procesarCodigoLector(codigo) {
     return;
   }
 
-  // En lugar de registrar directo, lo agregamos al carrito
   agregarItemAlCarrito(prod, 1);
   reproducirSonido(true);
   mostrarNotificacion('✅ ' + (prod.nombre || prod.producto) + ' agregado al carrito');
@@ -1706,7 +1754,6 @@ function detenerScanner(){
 }
 function onScanSuccess(decodedText){
   detenerScanner();
-  // Agregamos al carrito automáticamente
   const prod = cacheProductos.find(p => 
     (p.nombre || '').toLowerCase().trim() === decodedText.toLowerCase() ||
     (p.producto || '').toLowerCase().trim() === decodedText.toLowerCase()
@@ -1811,7 +1858,7 @@ function verTodasVentas(){
 }
 
 /* ==========================================================
-   CARRITO DE VENTAS (NUEVO)
+   CARRITO DE VENTAS
    ========================================================== */
 let carrito = [];
 
@@ -1911,7 +1958,6 @@ function agregarAlCarrito() {
   const cant = parseInt(document.getElementById('venta-cantidad').value) || 1;
   agregarItemAlCarrito(prod, cant);
   
-  // Limpiar campos de producto
   document.getElementById('venta-producto').value = '';
   document.getElementById('venta-producto-select').selectedIndex = 0;
   document.getElementById('venta-cantidad').value = 1;
@@ -1984,7 +2030,6 @@ async function registrarVentaCarrito() {
 
   if (formaPago === 'Efectivo' && recibido < total) return alert('El monto recibido es menor al total');
 
-  // GUARDAR CADA PRODUCTO DEL CARRITO COMO UNA VENTA
   let ventasRegistradas = 0;
   let errores = [];
 
@@ -2000,7 +2045,7 @@ async function registrarVentaCarrito() {
       cliente,
       forma_pago: formaPago,
       observaciones,
-      monto_recibido: item === carrito[0] ? recibido : 0,  // Solo en el primer ítem
+      monto_recibido: item === carrito[0] ? recibido : 0,
       vuelto: item === carrito[0] ? vuelto : 0,
       costo_unitario: costoUnit,
       ganancia: ganancia
@@ -2017,7 +2062,6 @@ async function registrarVentaCarrito() {
       }
       if (e1) throw e1;
 
-      // Descontar stock
       const nuevoStock = Math.max(0, Number(item.stock) - item.cantidad);
       await supabaseClient.from('productos').update({ stock: nuevoStock }).eq('id', item.id);
 
@@ -2037,7 +2081,6 @@ async function registrarVentaCarrito() {
     (vuelto > 0 ? '🔁 Cambio: ' + formatearPrecio(vuelto) : '')
   );
 
-  // Vaciar carrito y limpiar
   carrito = [];
   renderCarrito();
   document.getElementById('venta-recibido').value = '';
@@ -2080,7 +2123,6 @@ async function guardarClienteRapido() {
     if (error) throw error;
 
     await cargarClientes();
-    // Seleccionar al cliente recién creado
     document.getElementById('venta-cliente-select').value = nombre;
     cerrarModalClienteNuevo();
     mostrarNotificacion('✅ Cliente ' + nombre + ' guardado');
@@ -2483,7 +2525,10 @@ async function cargarHistorialVentas(){
           '<p>$' + esc(x.total ?? 0) + '</p>' +
           '<small>+' + formatearPrecioCorto(g) + '</small>' +
         '</div>' +
-        '<button class="icon-btn pdf-hist" onclick="generarPDFdeVenta(\'' + x.id + '\')" title="Descargar Comprobante" style="margin-left:4px;">' +
+        '<button class="icon-btn print-hist" onclick="imprimirTicketVenta(\'' + x.id + '\')" title="Reimprimir Ticket" style="margin-left:4px;">' +
+          '<i class="fas fa-print"></i>' +
+        '</button>' +
+        '<button class="icon-btn pdf-hist" onclick="generarPDFdeVenta(\'' + x.id + '\')" title="Descargar PDF" style="margin-left:4px;">' +
           '<i class="fas fa-file-pdf"></i>' +
         '</button>' +
         '<button class="icon-btn danger" onclick="eliminarVenta(\'' + x.id + '\')" style="margin-left:4px;">' +
@@ -2766,13 +2811,12 @@ async function generarPDFdeVenta(idVenta) {
   try {
     const venta = cacheVentas.find(v => String(v.id) === String(idVenta));
     if (!venta) return alert('No se encontró la venta');
-
+    
     let clienteData = null;
     if (venta.cliente && venta.cliente !== 'Consumidor final') {
       clienteData = cacheClientes.find(c => c.nombre === venta.cliente) || null;
     }
 
-    // Llenar campos ocultos para reutilizar la función
     document.getElementById('venta-producto').value = venta.producto;
     document.getElementById('venta-cantidad').value = venta.cantidad;
     document.getElementById('venta-precio-unit').value = (venta.total / venta.cantidad).toFixed(2);
@@ -2799,7 +2843,6 @@ async function generarYCompartirPDF(){
     let producto = inputProducto.value.trim();
     if (!producto && selProducto.value) producto = selProducto.value;
 
-    // Si el carrito tiene items, generamos un PDF con todos
     if (carrito && carrito.length > 0) {
       await generarPDFCarrito();
       return;
@@ -3170,6 +3213,117 @@ async function generarPDFCarrito() {
   }
 }
 
+/* ==========================================================
+   TICKET IMPRIMIBLE
+   ========================================================== */
+function generarHTMLTicket(items, cliente, formaPago, observaciones, recibido, vuelto, numeroComprobante) {
+  const fecha = new Date();
+  const fechaStr = fecha.toLocaleDateString('es-AR');
+  const horaStr = fecha.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+  const total = items.reduce((s, x) => s + x.subtotal, 0);
+
+  let html = `
+    <div style="text-align:center;">
+      <h2>${esc(datosLocal.nombre || 'Negocio Alerta PRO')}</h2>
+      ${datosLocal.slogan ? `<h3>${esc(datosLocal.slogan)}</h3>` : ''}
+      ${datosLocal.direccion ? `<p>${esc(datosLocal.direccion)}</p>` : ''}
+      ${datosLocal.telefono ? `<p>Tel: ${esc(datosLocal.telefono)}</p>` : ''}
+      ${datosLocal.cuit ? `<p>CUIT: ${esc(datosLocal.cuit)}</p>` : ''}
+    </div>
+    <hr>
+    <div class="ticket-row"><span>Fecha:</span><span>${fechaStr} ${horaStr}</span></div>
+    <div class="ticket-row"><span>Comprobante:</span><span>${numeroComprobante}</span></div>
+    <div class="ticket-row"><span>Cliente:</span><span>${esc(cliente)}</span></div>
+    <hr>
+    <div class="ticket-row" style="font-weight:bold;">
+      <span>Producto</span><span>Cant x P.Unit</span><span>Subtotal</span>
+    </div>
+    <hr>
+  `;
+
+  items.forEach(item => {
+    html += `
+      <div class="ticket-row">
+        <span style="flex:2; text-align:left;">${esc(item.nombre)}</span>
+        <span style="flex:1; text-align:right;">${item.cantidad} x ${formatearPrecio(item.precio)}</span>
+        <span style="flex:1; text-align:right;">${formatearPrecio(item.subtotal)}</span>
+      </div>
+    `;
+  });
+
+  html += `<hr>`;
+  html += `<div class="ticket-total"><span>TOTAL</span><span>${formatearPrecio(total)}</span></div>`;
+  html += `<div class="ticket-row"><span>Forma de pago:</span><span>${esc(formaPago)}</span></div>`;
+  
+  if (recibido > 0) {
+    html += `<div class="ticket-row"><span>Recibido:</span><span>${formatearPrecio(recibido)}</span></div>`;
+    html += `<div class="ticket-row"><span>Cambio:</span><span>${formatearPrecio(vuelto)}</span></div>`;
+  }
+
+  if (observaciones) {
+    html += `<hr><div style="font-size:11px;"><strong>Obs:</strong> ${esc(observaciones)}</div>`;
+  }
+
+  html += `
+    <hr>
+    <div class="ticket-center">
+      <p style="margin-top:8px;">¡Gracias por su compra!</p>
+      <p style="font-size:10px;">Comprobante no válido como factura fiscal</p>
+      <p style="font-size:10px;">Generado por Negocio Alerta PRO</p>
+    </div>
+  `;
+
+  return html;
+}
+
+function imprimirTicket() {
+  if (!carrito || !carrito.length) {
+    alert('Agregá al menos un producto al carrito antes de imprimir el ticket.');
+    return;
+  }
+  
+  const cliente = document.getElementById('venta-cliente-select').value || 'Consumidor final';
+  const formaPago = document.getElementById('venta-forma-pago').value;
+  const observaciones = document.getElementById('venta-observaciones').value.trim();
+  const total = carrito.reduce((s, x) => s + x.subtotal, 0);
+  const recibido = parseFloat(document.getElementById('venta-recibido').value) || total;
+  const vuelto = Math.max(0, recibido - total);
+  
+  const numeroComprobante = generarNumeroComprobante();
+  
+  const html = generarHTMLTicket(carrito, cliente, formaPago, observaciones, recibido, vuelto, numeroComprobante);
+  
+  document.getElementById('ticket-print').innerHTML = html;
+  window.print();
+}
+
+function imprimirTicketVenta(idVenta) {
+  const venta = cacheVentas.find(v => String(v.id) === String(idVenta));
+  if (!venta) return alert('No se encontró la venta');
+  
+  const cliente = venta.cliente || 'Consumidor final';
+  const formaPago = venta.forma_pago || 'Efectivo';
+  const observaciones = venta.observaciones || '';
+  const recibido = venta.monto_recibido || venta.total;
+  const vuelto = venta.vuelto || 0;
+  const numeroComprobante = venta.numero_comprobante || ('C-' + new Date(venta.created_at).getFullYear() + String(new Date(venta.created_at).getMonth()+1).padStart(2,'0') + String(new Date(venta.created_at).getDate()).padStart(2,'0') + '-' + String(Math.floor(Math.random()*9999)).padStart(4,'0'));
+  
+  const items = [{
+    nombre: venta.producto,
+    cantidad: venta.cantidad,
+    precio: venta.total / venta.cantidad,
+    subtotal: venta.total
+  }];
+  
+  const html = generarHTMLTicket(items, cliente, formaPago, observaciones, recibido, vuelto, numeroComprobante);
+  
+  document.getElementById('ticket-print').innerHTML = html;
+  window.print();
+}
+
+/* ==========================================================
+   REPORTE PDF
+   ========================================================== */
 async function descargarReportePDF(){
   const { inicio, fin, etiqueta } = rangoFechas(filtroActual);
   const ventas = cacheVentas.filter(x => {
