@@ -294,6 +294,8 @@ body{
 .icon-btn.danger:hover{background:var(--red-700);color:#fff}
 .icon-btn.edit{background:#0d2a26;color:var(--turq-400)}
 .icon-btn.edit:hover{background:var(--turq-700);color:#fff}
+.icon-btn.pdf-hist{background:#1a2a3a;color:#60a5fa}
+.icon-btn.pdf-hist:hover{background:#2a4a6a;color:#fff}
 
 .cliente-card{display:flex;align-items:center;gap:12px;padding:14px;border-radius:14px;
   background:var(--surface-2);border:1px solid var(--border);margin-bottom:10px}
@@ -515,6 +517,35 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
 .tema-blanco-swatch{background:linear-gradient(135deg,#ffffff,#a8e6e0)}
 .tema-blanco-swatch span{color:#111 !important;text-shadow:none !important}
 
+/* Estilos específicos carrito de ventas */
+.carrito-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 12px; background: #1a1a1a; border: 1px solid #333;
+  border-radius: 10px; margin-bottom: 8px; font-size: 13px;
+}
+.carrito-item strong { color: #fff; }
+.carrito-item .cant { color: var(--turq-400); font-weight: 700; margin: 0 8px; }
+.carrito-item .subtotal { color: var(--turq-400); font-weight: 700; }
+.carrito-total-box {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px; background: #082624; border: 1.5px solid #0d3d3a;
+  border-radius: 12px; margin-top: 12px;
+}
+.carrito-total-box span { font-size: 13px; color: #a8a8a8; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+.carrito-total-box strong { font-size: 24px; color: var(--turq-400); font-family: 'Playfair Display', serif; }
+
+/* Modales extra */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 9998;
+  background: rgba(0,0,0,.85); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center; padding: 16px; overflow-y: auto;
+}
+.modal-box {
+  width: 100%; max-width: 480px; background: linear-gradient(145deg,#141414,#0a0a0a);
+  border: 1px solid #2a2a2a; border-radius: 22px; padding: 22px;
+  box-shadow: 0 30px 80px -20px rgba(0,0,0,.9);
+}
+
 ::-webkit-scrollbar{width:8px;height:8px}
 ::-webkit-scrollbar-thumb{background:#333;border-radius:8px}
 @media (max-width:380px){
@@ -693,12 +724,17 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-shopping-bag"></i> Mis Productos</h3>
       
-      <div style="position: relative; margin-bottom: 14px;">
-        <i class="fas fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--turq-500); font-size: 14px; pointer-events: none;"></i>
-        <input type="text" id="buscador-productos" 
-               placeholder="Buscar producto..." 
-               oninput="buscarProducto()"
-               style="width: 100%; padding: 12px 14px 12px 38px; border: 1.5px solid #2a2a2a; border-radius: 12px; font-size: 13.5px; font-family: inherit; background: #161616; color: var(--text); outline: none; transition: all .2s;">
+      <div style="display: flex; gap: 8px; margin-bottom: 14px;">
+        <div style="position: relative; flex: 1;">
+          <i class="fas fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--turq-500); font-size: 14px; pointer-events: none;"></i>
+          <input type="text" id="buscador-productos" 
+                 placeholder="Buscar producto..." 
+                 oninput="buscarProducto()"
+                 style="width: 100%; padding: 12px 14px 12px 38px; border: 1.5px solid #2a2a2a; border-radius: 12px; font-size: 13.5px; font-family: inherit; background: #161616; color: var(--text); outline: none; transition: all .2s;">
+        </div>
+        <button id="btn-lector-buscador" onclick="toggleModoLectorBuscador()" style="padding: 0 16px; border-radius: 12px; border: 1.5px solid #333; background: #1c1c1c; color: #2dd4bf; cursor: pointer; transition: all .2s;">
+          <i class="fas fa-barcode"></i>
+        </button>
       </div>
 
       <div id="lista-productos"><p class="empty-text">Cargando productos...</p></div>
@@ -707,6 +743,17 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
       <h4 style="margin-bottom:14px;color:#fff;font-weight:600;font-size:14px;">
         <i class="fas fa-plus-circle" style="color:var(--turq-500);"></i> Agregar Producto
       </h4>
+      
+      <div style="margin-bottom: 16px; padding: 12px; background: #1a1a1a; border: 1px solid #333; border-radius: 12px; text-align: center;">
+        <p style="font-size: 11.5px; color: var(--muted); margin-bottom: 8px; line-height: 1.4;">
+          <strong>¿Tenés un lector USB?</strong><br>Activá y escaneá el código del producto nuevo.
+        </p>
+        <button id="btn-modo-lector-prod" onclick="toggleModoLectorProd()" style="width: 100%; padding: 12px; background: #333; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s;">
+          <i class="fas fa-barcode"></i> Escanear Código de Producto
+        </button>
+        <input type="text" id="input-lector-prod" placeholder="Esperando escaneo..." autocomplete="off" style="width: 100%; margin-top: 8px; padding: 10px; border: 1px dashed #555; border-radius: 8px; background: #0d0d0d; color: #2dd4bf; font-size: 16px; font-weight: 700; text-align: center; display: none; outline: none;">
+      </div>
+
       <div class="form-group">
         <label>Imagen del producto (opcional)</label>
         <div class="img-upload-box" onclick="document.getElementById('prod-imagen-file').click()">
@@ -757,15 +804,15 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
     </div>
   </div>
 
-  <!-- VENTAS -->
+  <!-- VENTAS (CON CARRITO) -->
   <div id="seccion-ventas" style="display:none;">
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-credit-card"></i> Registrar Venta</h3>
       
-      <!-- BOTÓN MODO LECTOR -->
+      <!-- MODO LECTOR -->
       <div style="margin-bottom: 16px; padding: 12px; background: #1a1a1a; border: 1px solid #333; border-radius: 12px; text-align: center;">
         <p style="font-size: 11.5px; color: var(--muted); margin-bottom: 8px; line-height: 1.4;">
-          <strong>¿Tenés un lector USB?</strong><br>Activá el modo automático y escaneá sin tocar el mouse.
+          <strong>¿Tenés un lector USB?</strong><br>Activá y escaneá sin tocar el mouse.
         </p>
         <button id="btn-modo-lector" onclick="toggleModoLector()" style="width: 100%; padding: 12px; background: #333; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s;">
           <i class="fas fa-barcode"></i> Modo Lector: APAGADO
@@ -773,6 +820,22 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
         <input type="text" id="input-lector" placeholder="Esperando escaneo..." autocomplete="off" style="width: 100%; margin-top: 8px; padding: 10px; border: 1px dashed #555; border-radius: 8px; background: #0d0d0d; color: #2dd4bf; font-size: 16px; font-weight: 700; text-align: center; display: none; outline: none;">
       </div>
 
+      <!-- CARRITO -->
+      <div style="background:#0f0f0f; border:1px solid #2a2a2a; border-radius:14px; padding:14px; margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <h4 style="font-size:13px; color:#fff; font-weight:700; margin:0;"><i class="fas fa-shopping-cart" style="color:var(--turq-400);"></i> Carrito</h4>
+          <button onclick="vaciarCarrito()" style="background:transparent; border:none; color:#f25c6a; font-size:11px; font-weight:700; cursor:pointer;">Vaciar</button>
+        </div>
+        <div id="lista-carrito">
+          <p class="empty-text" style="padding:10px; font-size:12px;">El carrito está vacío.</p>
+        </div>
+        <div class="carrito-total-box">
+          <span>Total</span>
+          <strong id="carrito-total">$ 0</strong>
+        </div>
+      </div>
+
+      <!-- AGREGAR PRODUCTO AL CARRITO -->
       <div class="form-group">
         <label>Producto</label>
         <select id="venta-producto-select" onchange="alSeleccionarProducto()">
@@ -784,11 +847,15 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
         <input type="text" id="venta-producto" placeholder="Ej: Pan lactal">
       </div>
       <div class="form-row">
-        <div class="form-group"><label>Cantidad</label><input type="number" id="venta-cantidad" placeholder="Ej: 2" oninput="calcularTotal()"></div>
-        <div class="form-group"><label>Precio unitario</label><input type="number" id="venta-precio-unit" placeholder="Ej: 1200" oninput="calcularTotal()"></div>
+        <div class="form-group"><label>Cantidad</label><input type="number" id="venta-cantidad" placeholder="1" value="1" oninput="calcularTotalItem()"></div>
+        <div class="form-group"><label>Precio unitario</label><input type="number" id="venta-precio-unit" placeholder="0" oninput="calcularTotalItem()"></div>
       </div>
-      <div class="form-group"><label>Total</label><input type="number" id="venta-total" placeholder="Ej: 2400" oninput="calcularCambio()"></div>
+      <div class="form-group"><label>Subtotal</label><input type="number" id="venta-total" placeholder="0" readonly></div>
+      <button class="btn-secondary" onclick="agregarAlCarrito()" style="margin-bottom:16px; background:#082624; border-color:#0d3d3a; color:#2dd4bf;">
+        <i class="fas fa-plus-circle"></i> Agregar al Carrito
+      </button>
 
+      <!-- MONTO RECIBIDO Y VUELTO -->
       <div class="form-group">
         <label>💵 Monto recibido</label>
         <input type="number" id="venta-recibido" placeholder="Ej: 5000" oninput="calcularCambio()">
@@ -810,12 +877,19 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
         </div>
       </div>
 
+      <!-- CLIENTE -->
       <div class="form-group">
-        <label>Cliente (opcional)</label>
-        <select id="venta-cliente-select">
-          <option value="">— Consumidor final —</option>
-        </select>
+        <label>Cliente</label>
+        <div style="display:flex; gap:8px;">
+          <select id="venta-cliente-select" style="flex:1;">
+            <option value="">— Consumidor final —</option>
+          </select>
+          <button type="button" onclick="abrirModalClienteNuevo()" style="padding:0 14px; border-radius:12px; border:1.5px solid #2dd4bf; background:transparent; color:#2dd4bf; cursor:pointer; font-weight:700; font-size:12px;">
+            <i class="fas fa-user-plus"></i> Nuevo
+          </button>
+        </div>
       </div>
+
       <div class="form-group">
         <label>Forma de pago</label>
         <select id="venta-forma-pago">
@@ -831,7 +905,7 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
         <label>Observaciones (opcional)</label>
         <textarea id="venta-observaciones" placeholder="Ej: Entregar antes del viernes..."></textarea>
       </div>
-      <button class="btn-primary" onclick="registrarVenta()"><i class="fas fa-check-circle"></i> Registrar Venta</button>
+      <button class="btn-primary" onclick="registrarVentaCarrito()"><i class="fas fa-check-circle"></i> Registrar Venta</button>
       <button class="btn-pdf" onclick="generarYCompartirPDF()" style="margin-top:12px;">
         <i class="fas fa-file-invoice"></i> Generar Comprobante PDF
       </button>
@@ -968,7 +1042,6 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
         </button>
       </div>
 
-      <!-- SELECTOR DE COLORES / TEMAS -->
       <div class="ajustes-block">
         <h4><i class="fas fa-palette"></i> Colores del tema</h4>
         <p style="font-size:11.5px;color:#a8a8a8;margin-bottom:6px;line-height:1.5;">
@@ -1034,12 +1107,8 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
 </div>
 
 <!-- MODAL EDITAR PRODUCTO -->
-<div id="modal-editar-producto" style="display:none;position:fixed;inset:0;z-index:9998;
-     background:rgba(0,0,0,.85);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-     align-items:center;justify-content:center;padding:16px;overflow-y:auto;">
-  <div style="width:100%;max-width:480px;background:linear-gradient(145deg,#141414,#0a0a0a);
-       border:1px solid #2a2a2a;border-radius:22px;padding:22px;
-       box-shadow:0 30px 80px -20px rgba(0,0,0,.9);">
+<div id="modal-editar-producto" class="modal-overlay" style="display:none;">
+  <div class="modal-box">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
       <h3 style="font-family:'Playfair Display',serif;font-size:18px;color:#fff;margin:0;">
         <i class="fas fa-edit" style="color:var(--turq-500);"></i> Editar Producto
@@ -1101,6 +1170,36 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
   </div>
 </div>
 
+<!-- MODAL NUEVO CLIENTE RÁPIDO -->
+<div id="modal-cliente-rapido" class="modal-overlay" style="display:none;">
+  <div class="modal-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h3 style="font-family:'Playfair Display',serif;font-size:18px;color:#fff;margin:0;">
+        <i class="fas fa-user-plus" style="color:var(--turq-500);"></i> Nuevo Cliente
+      </h3>
+      <button onclick="cerrarModalClienteNuevo()" style="width:34px;height:34px;border-radius:50%;
+              background:#2a2a2a;border:none;color:#fff;font-size:15px;cursor:pointer;">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <p style="font-size:12px; color:var(--muted); margin-bottom:12px;">
+      El cliente se guardará automáticamente al registrar la venta.
+    </p>
+
+    <div class="form-group"><label>Nombre *</label><input type="text" id="cli-rapido-nombre" placeholder="Ej: Juan Pérez"></div>
+    <div class="form-group"><label>Teléfono</label><input type="tel" id="cli-rapido-telefono" placeholder="Ej: 1145678901"></div>
+    <div class="form-group"><label>Email</label><input type="email" id="cli-rapido-email" placeholder="Ej: juan@mail.com"></div>
+
+    <button class="btn-primary" onclick="guardarClienteRapido()" style="margin-top:6px;">
+      <i class="fas fa-save"></i> Guardar y continuar
+    </button>
+    <button class="btn-secondary" onclick="cerrarModalClienteNuevo()">
+      <i class="fas fa-times"></i> Cancelar
+    </button>
+  </div>
+</div>
+
 <script>
 const SUPABASE_URL = 'https://eyvsvtsbgwccbtytkuju.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_4Mfk_ZP_BnVz9luy8CeF0A_Jh4zYV9R';
@@ -1128,6 +1227,8 @@ function formatearPrecioCorto(n){
    MODO LECTOR DE CÓDIGO DE BARRAS (USB)
    ========================================================== */
 let modoLectorActivo = false;
+let modoLectorProdActivo = false;
+let modoLectorBuscadorActivo = false;
 
 function toggleModoLector() {
   modoLectorActivo = !modoLectorActivo;
@@ -1141,7 +1242,6 @@ function toggleModoLector() {
     btn.style.boxShadow = '0 0 20px rgba(37,211,102,0.4)';
     input.style.display = 'block';
     input.focus();
-    // Re-enfocar si se hace clic en cualquier parte de la sección
     document.getElementById('seccion-ventas').addEventListener('click', forzarFocoLector);
   } else {
     btn.innerHTML = '<i class="fas fa-barcode"></i> Modo Lector: APAGADO';
@@ -1162,12 +1262,10 @@ function forzarFocoLector(e) {
   }
 }
 
-// Escuchar cuando el lector (o el usuario) envía un Enter o termina de tipear en el input del lector
 function configurarLector() {
   const input = document.getElementById('input-lector');
   if (!input) return;
 
-  // Manejar Enter (los lectores envían Enter al final)
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -1179,13 +1277,11 @@ function configurarLector() {
     }
   });
 
-  // Fallback: si el lector no envía Enter, procesar después de 300ms de inactividad
   let timeout = null;
   input.addEventListener('input', () => {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
       const codigo = input.value.trim();
-      // Los códigos suelen tener más de 4 caracteres
       if (codigo.length > 4) {
         procesarCodigoLector(codigo);
         input.value = '';
@@ -1195,85 +1291,21 @@ function configurarLector() {
 }
 
 async function procesarCodigoLector(codigo) {
-  // Buscar producto por coincidencia exacta (nombre o código)
   const prod = cacheProductos.find(p => 
     (p.nombre || '').toLowerCase().trim() === codigo.toLowerCase() ||
     (p.producto || '').toLowerCase().trim() === codigo.toLowerCase()
   );
 
   if (!prod) {
-    // Sonido de error (usando Web Audio API)
     reproducirSonido(false);
     alert('⚠️ Producto no encontrado con el código:\n\n' + codigo + '\n\nVerificá que esté cargado con ese mismo código.');
     return;
   }
 
-  // Verificar stock
-  if (Number(prod.stock) <= 0) {
-    reproducirSonido(false);
-    alert('⚠️ Sin stock del producto:\n\n' + (prod.nombre || prod.producto) + '\n\nReponé el stock antes de venderlo.');
-    return;
-  }
-
-  // REGISTRAR VENTA AUTOMÁTICA
-  const cantidad = 1;
-  const precioUnit = Number(prod.precio) || 0;
-  const total = cantidad * precioUnit;
-  const costoUnit = Number(prod.costo) || 0;
-  const ganancia = total - costoUnit * cantidad;
-  const cliente = 'Consumidor final';
-  const formaPago = 'Efectivo';
-
-  try {
-    const payload = {
-      user_id: usuarioActual.id,
-      producto: prod.nombre || prod.producto,
-      cantidad, total, cliente,
-      forma_pago: formaPago, observaciones: 'Venta por lector de código',
-      monto_recibido: total, vuelto: 0,
-      costo_unitario: costoUnit, ganancia: ganancia
-    };
-
-    let { error: e1 } = await supabaseClient.from('ventas').insert([payload]);
-
-    if (e1 && (String(e1.message).includes('costo_unitario') || String(e1.message).includes('ganancia') || String(e1.message).includes('vuelto') || String(e1.message).includes('monto_recibido'))){
-      delete payload.costo_unitario; delete payload.ganancia;
-      delete payload.vuelto; delete payload.monto_recibido;
-      const r2 = await supabaseClient.from('ventas').insert([payload]);
-      e1 = r2.error;
-    }
-    if (e1) throw e1;
-
-    // Descontar stock
-    const nuevoStock = Math.max(0, Number(prod.stock) - cantidad);
-    await supabaseClient
-      .from('productos')
-      .update({ stock: nuevoStock })
-      .eq('id', prod.id);
-
-    // Sonido de éxito
-    reproducirSonido(true);
-
-    // Feedback visual (breve)
-    const input = document.getElementById('input-lector');
-    input.style.background = 'var(--success)';
-    input.style.color = '#000';
-    setTimeout(() => {
-      input.style.background = '#0d0d0d';
-      input.style.color = 'var(--turq-400)';
-    }, 500);
-
-    // Refrescar datos
-    cargarDatos();
-    cargarHistorialVentas();
-
-    // Notificación flotante simple
-    mostrarNotificacion('✅ ' + (prod.nombre || prod.producto) + ' — $' + total);
-
-  } catch(e) {
-    reproducirSonido(false);
-    alert('❌ Error al registrar la venta: ' + e.message);
-  }
+  // En lugar de registrar directo, lo agregamos al carrito
+  agregarItemAlCarrito(prod, 1);
+  reproducirSonido(true);
+  mostrarNotificacion('✅ ' + (prod.nombre || prod.producto) + ' agregado al carrito');
 }
 
 function reproducirSonido(exito) {
@@ -1297,7 +1329,7 @@ function reproducirSonido(exito) {
       osc.start(ctx.currentTime);
       osc.stop(ctx.currentTime + 0.3);
     }
-  } catch(e) { /* Sonido no soportado */ }
+  } catch(e) { }
 }
 
 function mostrarNotificacion(texto) {
@@ -1312,6 +1344,84 @@ function mostrarNotificacion(texto) {
   `;
   document.body.appendChild(div);
   setTimeout(() => div.remove(), 2500);
+}
+
+/* ==========================================================
+   MODO LECTOR EN AGREGAR PRODUCTO
+   ========================================================== */
+function toggleModoLectorProd() {
+  modoLectorProdActivo = !modoLectorProdActivo;
+  const btn = document.getElementById('btn-modo-lector-prod');
+  const input = document.getElementById('input-lector-prod');
+
+  if (modoLectorProdActivo) {
+    btn.innerHTML = '<i class="fas fa-barcode"></i> Escaneando... (Toca para parar)';
+    btn.style.background = 'var(--success)';
+    btn.style.color = '#04240f';
+    input.style.display = 'block';
+    input.focus();
+    configurarLectorProd();
+  } else {
+    btn.innerHTML = '<i class="fas fa-barcode"></i> Escanear Código de Producto';
+    btn.style.background = '#333';
+    btn.style.color = '#fff';
+    input.style.display = 'none';
+    input.value = '';
+  }
+}
+
+function configurarLectorProd() {
+  const input = document.getElementById('input-lector-prod');
+  
+  const newInput = input.cloneNode(true);
+  input.parentNode.replaceChild(newInput, input);
+
+  newInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const codigo = newInput.value.trim();
+      if (codigo) {
+        document.getElementById('prod-nombre').value = codigo;
+        reproducirSonido(true);
+        newInput.value = '';
+        toggleModoLectorProd();
+      }
+    }
+  });
+}
+
+/* ==========================================================
+   MODO LECTOR EN BUSCADOR DE PRODUCTOS
+   ========================================================== */
+function toggleModoLectorBuscador() {
+  modoLectorBuscadorActivo = !modoLectorBuscadorActivo;
+  const btn = document.getElementById('btn-lector-buscador');
+  const inputBusqueda = document.getElementById('buscador-productos');
+
+  if (modoLectorBuscadorActivo) {
+    btn.style.background = 'var(--success)';
+    btn.style.color = '#04240f';
+    inputBusqueda.focus();
+    inputBusqueda.placeholder = '🔍 Escaneá un código...';
+    
+    inputBusqueda.addEventListener('keydown', manejarEnterBuscador);
+  } else {
+    btn.style.background = '#1c1c1c';
+    btn.style.color = '#2dd4bf';
+    inputBusqueda.placeholder = 'Buscar producto...';
+    inputBusqueda.removeEventListener('keydown', manejarEnterBuscador);
+  }
+}
+
+function manejarEnterBuscador(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const codigo = e.target.value.trim();
+    if (codigo) {
+      buscarProducto();
+      reproducirSonido(true);
+    }
+  }
 }
 
 /* ==========================================================
@@ -1420,6 +1530,7 @@ function mostrarApp(user){
   cargarDatos();
   cargarClientes();
   configurarLector();
+  renderCarrito();
 }
 function mostrarLogin(){
   usuarioActual = null;
@@ -1564,7 +1675,7 @@ function cargarTemaGuardado(){
 }
 
 /* ==========================================================
-   ESCANER
+   ESCANER (cámara)
    ========================================================== */
 let html5QrcodeScanner = null, scannerActivo = false, deteniendo = false;
 function setScannerStatus(msg, color){
@@ -1595,23 +1706,35 @@ function detenerScanner(){
 }
 function onScanSuccess(decodedText){
   detenerScanner();
-  document.getElementById('venta-producto').value = decodedText;
-  const sel = document.getElementById('venta-producto-select');
-  for (let i=0; i<sel.options.length; i++){
-    if (sel.options[i].value.toLowerCase() === decodedText.toLowerCase()){
-      sel.selectedIndex = i; alSeleccionarProducto(); break;
-    }
+  // Agregamos al carrito automáticamente
+  const prod = cacheProductos.find(p => 
+    (p.nombre || '').toLowerCase().trim() === decodedText.toLowerCase() ||
+    (p.producto || '').toLowerCase().trim() === decodedText.toLowerCase()
+  );
+  if (prod) {
+    agregarItemAlCarrito(prod, 1);
+    mostrarNotificacion('✅ ' + (prod.nombre || prod.producto) + ' agregado al carrito');
+  } else {
+    alert('⚠️ Producto no encontrado: ' + decodedText);
   }
-  alert('✅ Código escaneado: ' + decodedText);
   cambiarSeccion('ventas', document.querySelector('.menu-item[onclick*="ventas"]'));
 }
 function onScanError(){}
 function usarCodigoManual(){
   const val = document.getElementById('input-manual-codigo').value.trim();
   if (!val) return alert('Escribe un código.');
-  document.getElementById('venta-producto').value = val;
-  document.getElementById('input-manual-codigo').value = '';
-  cambiarSeccion('ventas', document.querySelector('.menu-item[onclick*="ventas"]'));
+  const prod = cacheProductos.find(p => 
+    (p.nombre || '').toLowerCase().trim() === val.toLowerCase() ||
+    (p.producto || '').toLowerCase().trim() === val.toLowerCase()
+  );
+  if (prod) {
+    agregarItemAlCarrito(prod, 1);
+    mostrarNotificacion('✅ ' + (prod.nombre || prod.producto) + ' agregado al carrito');
+    document.getElementById('input-manual-codigo').value = '';
+    cambiarSeccion('ventas', document.querySelector('.menu-item[onclick*="ventas"]'));
+  } else {
+    alert('⚠️ Producto no encontrado: ' + val);
+  }
 }
 
 let scannerProducto = null;
@@ -1663,12 +1786,13 @@ function cambiarSeccion(nombreSeccion, elementoClickeado){
 
   detenerScannerProducto();
 
-  // Apagar modo lector al cambiar de sección
   if (modoLectorActivo) toggleModoLector();
+  if (modoLectorProdActivo) toggleModoLectorProd();
+  if (modoLectorBuscadorActivo) toggleModoLectorBuscador();
 
   if (nombreSeccion === 'clientes') cargarClientes();
   if (nombreSeccion === 'inicio' || nombreSeccion === 'productos' || nombreSeccion === 'ventas') cargarDatos();
-  if (nombreSeccion === 'ventas') cargarHistorialVentas();
+  if (nombreSeccion === 'ventas') { cargarHistorialVentas(); renderCarrito(); }
   if (nombreSeccion === 'reportes') aplicarFiltroActual();
   document.querySelectorAll('.menu-item, .nav-item').forEach(i => i.classList.remove('active'));
   if (elementoClickeado){
@@ -1684,6 +1808,285 @@ function cambiarSeccion(nombreSeccion, elementoClickeado){
 }
 function verTodasVentas(){
   cambiarSeccion('ventas', document.querySelector('.menu-item[onclick*="ventas"]'));
+}
+
+/* ==========================================================
+   CARRITO DE VENTAS (NUEVO)
+   ========================================================== */
+let carrito = [];
+
+function agregarItemAlCarrito(prod, cantidad) {
+  const idx = carrito.findIndex(x => String(x.id) === String(prod.id));
+  const stockActual = Number(prod.stock) || 0;
+
+  if (idx >= 0) {
+    const nuevaCant = carrito[idx].cantidad + cantidad;
+    if (nuevaCant > stockActual) {
+      reproducirSonido(false);
+      alert('⚠️ No hay suficiente stock de ' + prod.nombre + '\nStock disponible: ' + stockActual);
+      return;
+    }
+    carrito[idx].cantidad = nuevaCant;
+    carrito[idx].subtotal = nuevaCant * Number(prod.precio);
+  } else {
+    if (stockActual < cantidad) {
+      reproducirSonido(false);
+      alert('⚠️ No hay stock de ' + (prod.nombre || prod.producto));
+      return;
+    }
+    carrito.push({
+      id: prod.id,
+      nombre: prod.nombre || prod.producto,
+      precio: Number(prod.precio) || 0,
+      costo: Number(prod.costo) || 0,
+      stock: stockActual,
+      cantidad: cantidad,
+      subtotal: cantidad * (Number(prod.precio) || 0)
+    });
+  }
+  renderCarrito();
+}
+
+function renderCarrito() {
+  const cont = document.getElementById('lista-carrito');
+  const totalEl = document.getElementById('carrito-total');
+
+  if (!carrito.length) {
+    cont.innerHTML = '<p class="empty-text" style="padding:10px; font-size:12px;">El carrito está vacío.</p>';
+    totalEl.textContent = '$ 0';
+    return;
+  }
+
+  let total = 0;
+  cont.innerHTML = carrito.map((item, idx) => {
+    total += item.subtotal;
+    return `
+      <div class="carrito-item">
+        <div style="flex:1; min-width:0;">
+          <strong style="display:block; font-size:12.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${esc(item.nombre)}</strong>
+          <div style="font-size:11px; color:#8a8a8a; margin-top:2px;">
+            <span class="cant">${item.cantidad}</span> x ${formatearPrecioCorto(item.precio)}
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span class="subtotal">${formatearPrecioCorto(item.subtotal)}</span>
+          <button onclick="quitarDelCarrito(${idx})" style="background:#2a0d12; border:none; color:#f25c6a; width:26px; height:26px; border-radius:6px; cursor:pointer;">
+            <i class="fas fa-trash" style="font-size:11px;"></i>
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  totalEl.textContent = formatearPrecioCorto(total);
+  calcularCambio();
+}
+
+function quitarDelCarrito(idx) {
+  carrito.splice(idx, 1);
+  renderCarrito();
+}
+
+function vaciarCarrito() {
+  if (!carrito.length) return;
+  if (!confirm('¿Vaciar el carrito?')) return;
+  carrito = [];
+  renderCarrito();
+}
+
+function agregarAlCarrito() {
+  const prodName = document.getElementById('venta-producto').value.trim();
+  const selVal = document.getElementById('venta-producto-select').value;
+  const nombreFinal = prodName || selVal;
+  
+  if (!nombreFinal) return alert('Seleccioná o escribí un producto');
+  
+  const prod = cacheProductos.find(p => 
+    (p.nombre || '').toLowerCase().trim() === nombreFinal.toLowerCase().trim() ||
+    (p.producto || '').toLowerCase().trim() === nombreFinal.toLowerCase().trim()
+  );
+  
+  if (!prod) return alert('Producto no encontrado en el inventario: ' + nombreFinal);
+
+  const cant = parseInt(document.getElementById('venta-cantidad').value) || 1;
+  agregarItemAlCarrito(prod, cant);
+  
+  // Limpiar campos de producto
+  document.getElementById('venta-producto').value = '';
+  document.getElementById('venta-producto-select').selectedIndex = 0;
+  document.getElementById('venta-cantidad').value = 1;
+  document.getElementById('venta-precio-unit').value = '';
+  document.getElementById('venta-total').value = '';
+  reproducirSonido(true);
+}
+
+function alSeleccionarProducto(){
+  const sel = document.getElementById('venta-producto-select');
+  const opt = sel.options[sel.selectedIndex];
+  if (!opt || !opt.value) return;
+  document.getElementById('venta-producto').value = opt.value;
+  if (opt.dataset.precio){
+    document.getElementById('venta-precio-unit').value = opt.dataset.precio;
+    calcularTotalItem();
+  }
+}
+
+function calcularTotalItem(){
+  const cant = parseFloat(document.getElementById('venta-cantidad').value) || 0;
+  const unit = parseFloat(document.getElementById('venta-precio-unit').value) || 0;
+  if (cant && unit){
+    document.getElementById('venta-total').value = (cant * unit).toFixed(2);
+  }
+}
+
+function calcularCambio(){
+  const total = carrito.reduce((s, x) => s + x.subtotal, 0);
+  const recibido = parseFloat(document.getElementById('venta-recibido').value) || 0;
+  const vuelto = recibido - total;
+  const box = document.getElementById('venta-vuelto-box');
+  const el = document.getElementById('venta-vuelto');
+  if (recibido === 0){
+    el.textContent = '$ 0,00'; el.style.color = 'var(--turq-400)';
+    box.style.background = '#082624'; box.style.borderColor = '#0d3d3a';
+    return;
+  }
+  if (vuelto < 0){
+    el.textContent = 'Faltan ' + formatearPrecio(Math.abs(vuelto));
+    el.style.color = '#f25c6a';
+    box.style.background = '#2a0d12'; box.style.borderColor = '#4a0d12';
+  } else if (vuelto === 0){
+    el.textContent = '✓ Justo'; el.style.color = '#2dd4bf';
+    box.style.background = '#082624'; box.style.borderColor = '#0d3d3a';
+  } else {
+    el.textContent = formatearPrecio(vuelto); el.style.color = '#2dd4bf';
+    box.style.background = '#082624'; box.style.borderColor = '#0d3d3a';
+  }
+}
+
+function setRecibido(valor){
+  const total = carrito.reduce((s, x) => s + x.subtotal, 0);
+  const input = document.getElementById('venta-recibido');
+  if (valor === 'justo') input.value = total > 0 ? total.toFixed(2) : '';
+  else input.value = valor;
+  calcularCambio();
+}
+
+async function registrarVentaCarrito() {
+  if (!usuarioActual) return alert('No hay usuario logueado.');
+  if (!carrito.length) return alert('El carrito está vacío. Agregá productos antes de cobrar.');
+
+  const total = carrito.reduce((s, x) => s + x.subtotal, 0);
+  const cliente = document.getElementById('venta-cliente-select').value || 'Consumidor final';
+  const formaPago = document.getElementById('venta-forma-pago').value;
+  const observaciones = document.getElementById('venta-observaciones').value.trim() || null;
+  const recibido = parseFloat(document.getElementById('venta-recibido').value) || total;
+  const vuelto = Math.max(0, recibido - total);
+
+  if (formaPago === 'Efectivo' && recibido < total) return alert('El monto recibido es menor al total');
+
+  // GUARDAR CADA PRODUCTO DEL CARRITO COMO UNA VENTA
+  let ventasRegistradas = 0;
+  let errores = [];
+
+  for (const item of carrito) {
+    const costoUnit = item.costo;
+    const ganancia = item.subtotal - costoUnit * item.cantidad;
+
+    const payload = {
+      user_id: usuarioActual.id,
+      producto: item.nombre,
+      cantidad: item.cantidad,
+      total: item.subtotal,
+      cliente,
+      forma_pago: formaPago,
+      observaciones,
+      monto_recibido: item === carrito[0] ? recibido : 0,  // Solo en el primer ítem
+      vuelto: item === carrito[0] ? vuelto : 0,
+      costo_unitario: costoUnit,
+      ganancia: ganancia
+    };
+
+    try {
+      let { error: e1 } = await supabaseClient.from('ventas').insert([payload]);
+
+      if (e1 && (String(e1.message).includes('costo_unitario') || String(e1.message).includes('ganancia') || String(e1.message).includes('vuelto') || String(e1.message).includes('monto_recibido'))) {
+        delete payload.costo_unitario; delete payload.ganancia;
+        delete payload.vuelto; delete payload.monto_recibido;
+        const r2 = await supabaseClient.from('ventas').insert([payload]);
+        e1 = r2.error;
+      }
+      if (e1) throw e1;
+
+      // Descontar stock
+      const nuevoStock = Math.max(0, Number(item.stock) - item.cantidad);
+      await supabaseClient.from('productos').update({ stock: nuevoStock }).eq('id', item.id);
+
+      ventasRegistradas++;
+    } catch(e) {
+      errores.push(item.nombre + ': ' + e.message);
+    }
+  }
+
+  if (errores.length) {
+    alert('⚠️ Algunos productos no se pudieron registrar:\n\n' + errores.join('\n'));
+  }
+
+  alert('✅ ¡Venta registrada!\n\n' +
+    ventasRegistradas + ' producto(s) vendido(s)\n' +
+    '💵 Total: ' + formatearPrecio(total) + '\n' +
+    (vuelto > 0 ? '🔁 Cambio: ' + formatearPrecio(vuelto) : '')
+  );
+
+  // Vaciar carrito y limpiar
+  carrito = [];
+  renderCarrito();
+  document.getElementById('venta-recibido').value = '';
+  document.getElementById('venta-observaciones').value = '';
+  document.getElementById('venta-cliente-select').selectedIndex = 0;
+  document.getElementById('venta-forma-pago').selectedIndex = 0;
+  document.getElementById('venta-vuelto').textContent = '$ 0,00';
+
+  cargarDatos();
+  cargarHistorialVentas();
+}
+
+/* ==========================================================
+   CLIENTE RÁPIDO (MODAL)
+   ========================================================== */
+function abrirModalClienteNuevo() {
+  document.getElementById('modal-cliente-rapido').style.display = 'flex';
+  document.getElementById('cli-rapido-nombre').value = '';
+  document.getElementById('cli-rapido-telefono').value = '';
+  document.getElementById('cli-rapido-email').value = '';
+  setTimeout(() => document.getElementById('cli-rapido-nombre').focus(), 100);
+}
+function cerrarModalClienteNuevo() {
+  document.getElementById('modal-cliente-rapido').style.display = 'none';
+}
+async function guardarClienteRapido() {
+  const nombre = document.getElementById('cli-rapido-nombre').value.trim();
+  if (!nombre) return alert('El nombre es obligatorio');
+  if (!usuarioActual) return alert('No hay usuario logueado.');
+
+  const payload = {
+    user_id: usuarioActual.id,
+    nombre,
+    telefono: document.getElementById('cli-rapido-telefono').value.trim() || null,
+    email: document.getElementById('cli-rapido-email').value.trim() || null
+  };
+
+  try {
+    const { data, error } = await supabaseClient.from('clientes').insert([payload]).select().single();
+    if (error) throw error;
+
+    await cargarClientes();
+    // Seleccionar al cliente recién creado
+    document.getElementById('venta-cliente-select').value = nombre;
+    cerrarModalClienteNuevo();
+    mostrarNotificacion('✅ Cliente ' + nombre + ' guardado');
+  } catch(e) {
+    alert('Error al guardar cliente: ' + e.message);
+  }
 }
 
 /* ==========================================================
@@ -2029,6 +2432,7 @@ async function cargarClientes(){
       });
     }
     const sel = document.getElementById('venta-cliente-select');
+    const valorActual = sel.value;
     sel.innerHTML = '<option value="">— Consumidor final —</option>';
     cacheClientes.forEach(c => {
       const opt = document.createElement('option');
@@ -2036,6 +2440,7 @@ async function cargarClientes(){
       opt.textContent = c.nombre + (c.telefono ? '  (' + c.telefono + ')' : '');
       sel.appendChild(opt);
     });
+    if (valorActual) sel.value = valorActual;
   } catch(e){
     console.error('Error clientes:', e.message);
   }
@@ -2078,6 +2483,9 @@ async function cargarHistorialVentas(){
           '<p>$' + esc(x.total ?? 0) + '</p>' +
           '<small>+' + formatearPrecioCorto(g) + '</small>' +
         '</div>' +
+        '<button class="icon-btn pdf-hist" onclick="generarPDFdeVenta(\'' + x.id + '\')" title="Descargar Comprobante" style="margin-left:4px;">' +
+          '<i class="fas fa-file-pdf"></i>' +
+        '</button>' +
         '<button class="icon-btn danger" onclick="eliminarVenta(\'' + x.id + '\')" style="margin-left:4px;">' +
           '<i class="fas fa-trash"></i>' +
         '</button>' +
@@ -2169,136 +2577,6 @@ async function eliminarCliente(id){
     const { error } = await supabaseClient.from('clientes').delete().eq('id', id);
     if (error) throw error;
     cargarClientes();
-  } catch(e){ alert('Error: ' + e.message); }
-}
-
-/* ==========================================================
-   VENTAS
-   ========================================================== */
-function alSeleccionarProducto(){
-  const sel = document.getElementById('venta-producto-select');
-  const opt = sel.options[sel.selectedIndex];
-  if (!opt || !opt.value) return;
-  document.getElementById('venta-producto').value = opt.value;
-  if (opt.dataset.precio){
-    document.getElementById('venta-precio-unit').value = opt.dataset.precio;
-    calcularTotal();
-  }
-}
-
-function calcularTotal(){
-  const cant = parseFloat(document.getElementById('venta-cantidad').value) || 0;
-  const unit = parseFloat(document.getElementById('venta-precio-unit').value) || 0;
-  if (cant && unit){
-    document.getElementById('venta-total').value = (cant * unit).toFixed(2);
-    calcularCambio();
-  }
-}
-
-function calcularCambio(){
-  const total = parseFloat(document.getElementById('venta-total').value) || 0;
-  const recibido = parseFloat(document.getElementById('venta-recibido').value) || 0;
-  const vuelto = recibido - total;
-  const box = document.getElementById('venta-vuelto-box');
-  const el = document.getElementById('venta-vuelto');
-  if (recibido === 0){
-    el.textContent = '$ 0,00'; el.style.color = 'var(--turq-400)';
-    box.style.background = '#082624'; box.style.borderColor = '#0d3d3a';
-    return;
-  }
-  if (vuelto < 0){
-    el.textContent = 'Faltan ' + formatearPrecio(Math.abs(vuelto));
-    el.style.color = '#f25c6a';
-    box.style.background = '#2a0d12'; box.style.borderColor = '#4a0d12';
-  } else if (vuelto === 0){
-    el.textContent = '✓ Justo'; el.style.color = '#2dd4bf';
-    box.style.background = '#082624'; box.style.borderColor = '#0d3d3a';
-  } else {
-    el.textContent = formatearPrecio(vuelto); el.style.color = '#2dd4bf';
-    box.style.background = '#082624'; box.style.borderColor = '#0d3d3a';
-  }
-}
-
-function setRecibido(valor){
-  const total = parseFloat(document.getElementById('venta-total').value) || 0;
-  const input = document.getElementById('venta-recibido');
-  if (valor === 'justo') input.value = total > 0 ? total.toFixed(2) : '';
-  else input.value = valor;
-  calcularCambio();
-}
-
-async function registrarVenta(){
-  if (!usuarioActual) return alert('No hay usuario logueado.');
-  
-  let producto = document.getElementById('venta-producto').value.trim();
-  const selProd = document.getElementById('venta-producto-select');
-  if (!producto && selProd.value) producto = selProd.value;
-
-  const cantidad = parseInt(document.getElementById('venta-cantidad').value);
-  const total = parseFloat(document.getElementById('venta-total').value);
-  const cliente = document.getElementById('venta-cliente-select').value || 'Consumidor final';
-  const formaPago = document.getElementById('venta-forma-pago').value;
-  const observaciones = document.getElementById('venta-observaciones').value.trim() || null;
-  const recibido = parseFloat(document.getElementById('venta-recibido').value) || total;
-  const vuelto = Math.max(0, recibido - total);
-
-  if (!producto || !cantidad || !total) return alert('Completa producto, cantidad y total');
-  if (formaPago === 'Efectivo' && recibido < total) return alert('El monto recibido es menor al total');
-
-  // Buscar producto para descontar stock (tolerante a mayúsculas y espacios)
-  const prodInfo = cacheProductos.find(p => 
-    (p.nombre || '').toLowerCase().trim() === producto.toLowerCase().trim() ||
-    (p.producto || '').toLowerCase().trim() === producto.toLowerCase().trim()
-  );
-  
-  const costoUnit = prodInfo ? Number(prodInfo.costo || 0) : 0;
-  const ganancia = total - costoUnit * cantidad;
-
-  try {
-    const payload = {
-      user_id: usuarioActual.id,
-      producto, cantidad, total, cliente,
-      forma_pago: formaPago, observaciones,
-      monto_recibido: recibido, vuelto: vuelto,
-      costo_unitario: costoUnit, ganancia: ganancia
-    };
-
-    let { error: e1 } = await supabaseClient.from('ventas').insert([payload]);
-
-    if (e1 && (String(e1.message).includes('costo_unitario') || String(e1.message).includes('ganancia') || String(e1.message).includes('vuelto') || String(e1.message).includes('monto_recibido'))){
-      delete payload.costo_unitario; delete payload.ganancia;
-      delete payload.vuelto; delete payload.monto_recibido;
-      const r2 = await supabaseClient.from('ventas').insert([payload]);
-      e1 = r2.error;
-    }
-    if (e1) throw e1;
-
-    // DESCONTAR STOCK AUTOMÁTICAMENTE
-    if (prodInfo){
-      const stockActual = Number(prodInfo.stock) || 0;
-      const nuevoStock = Math.max(0, stockActual - cantidad);
-      
-      const { error: errStock } = await supabaseClient
-        .from('productos')
-        .update({ stock: nuevoStock })
-        .eq('id', prodInfo.id);
-        
-      if (errStock) console.error('Error al descontar stock:', errStock.message);
-    }
-
-    alert('¡Venta registrada!' +
-      (vuelto > 0 ? '\n\n💵 Cambio: ' + formatearPrecio(vuelto) : '') +
-      '\n💰 Ganancia: ' + formatearPrecio(ganancia) +
-      (prodInfo ? '\n📦 Stock restante de ' + producto + ': ' + Math.max(0, (Number(prodInfo.stock) || 0) - cantidad) : ''));
-
-    ['venta-producto','venta-cantidad','venta-total','venta-precio-unit','venta-observaciones','venta-recibido'].forEach(id =>
-      document.getElementById(id).value = '');
-    selProd.selectedIndex = 0;
-    document.getElementById('venta-cliente-select').selectedIndex = 0;
-    document.getElementById('venta-forma-pago').selectedIndex = 0;
-    calcularCambio();
-    cargarDatos(); // Recarga los productos y el stock en pantalla
-    cargarHistorialVentas();
   } catch(e){ alert('Error: ' + e.message); }
 }
 
@@ -2484,6 +2762,29 @@ function generarNumeroComprobante(){
   return 'C-' + d.getFullYear() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0') + '-' + String(Math.floor(Math.random()*9999)).padStart(4,'0');
 }
 
+async function generarPDFdeVenta(idVenta) {
+  try {
+    const venta = cacheVentas.find(v => String(v.id) === String(idVenta));
+    if (!venta) return alert('No se encontró la venta');
+
+    let clienteData = null;
+    if (venta.cliente && venta.cliente !== 'Consumidor final') {
+      clienteData = cacheClientes.find(c => c.nombre === venta.cliente) || null;
+    }
+
+    // Llenar campos ocultos para reutilizar la función
+    document.getElementById('venta-producto').value = venta.producto;
+    document.getElementById('venta-cantidad').value = venta.cantidad;
+    document.getElementById('venta-precio-unit').value = (venta.total / venta.cantidad).toFixed(2);
+    document.getElementById('venta-total').value = venta.total;
+    document.getElementById('venta-recibido').value = venta.monto_recibido || venta.total;
+
+    await generarYCompartirPDF();
+  } catch(e) {
+    alert('Error al generar el PDF del historial: ' + e.message);
+  }
+}
+
 async function generarYCompartirPDF(){
   try {
     const selProducto = document.getElementById('venta-producto-select');
@@ -2497,6 +2798,13 @@ async function generarYCompartirPDF(){
 
     let producto = inputProducto.value.trim();
     if (!producto && selProducto.value) producto = selProducto.value;
+
+    // Si el carrito tiene items, generamos un PDF con todos
+    if (carrito && carrito.length > 0) {
+      await generarPDFCarrito();
+      return;
+    }
+
     if (!producto) producto = 'Producto de ejemplo';
 
     const cantidad = parseFloat(inputCantidad.value) || 1;
@@ -2701,6 +3009,167 @@ async function generarYCompartirPDF(){
   }
 }
 
+async function generarPDFCarrito() {
+  try {
+    const selCliente = document.getElementById('venta-cliente-select');
+    const selFormaPago = document.getElementById('venta-forma-pago');
+    const inputObs = document.getElementById('venta-observaciones');
+    const formaPago = selFormaPago ? selFormaPago.value : 'Efectivo';
+    const observaciones = inputObs ? inputObs.value.trim() : '';
+    const nombreCliente = selCliente.value || 'Consumidor final';
+    let clienteData = null;
+    if (nombreCliente !== 'Consumidor final'){
+      clienteData = cacheClientes.find(c => c.nombre === nombreCliente) || null;
+    }
+
+    const totalGeneral = carrito.reduce((s, x) => s + x.subtotal, 0);
+    const numeroComprobante = generarNumeroComprobante();
+    const fecha = new Date();
+    const fechaStr = fecha.toLocaleDateString('es-AR');
+    const horaStr = fecha.toLocaleTimeString('es-AR', { hour:'2-digit', minute:'2-digit' });
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const pageW = 210;
+    const marginX = 14;
+
+    doc.setFillColor(10, 10, 10);
+    doc.rect(0, 0, pageW, 46, 'F');
+    doc.setFillColor(45, 212, 191);
+    doc.rect(0, 46, pageW, 1.5, 'F');
+
+    doc.setTextColor(45, 212, 191);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(20);
+    doc.text(datosLocal.nombre || 'Negocio Alerta PRO', marginX, 16);
+
+    if (datosLocal.slogan){
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(180, 180, 180);
+      doc.text(datosLocal.slogan, marginX, 22);
+    }
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8.5);
+    doc.setTextColor(220, 220, 220);
+    let yLocal = 29;
+    if (datosLocal.direccion){ doc.text(datosLocal.direccion, marginX, yLocal); yLocal += 4.5; }
+    const lc = [];
+    if (datosLocal.telefono) lc.push('Tel: ' + datosLocal.telefono);
+    if (datosLocal.email) lc.push(datosLocal.email);
+    if (lc.length){ doc.text(lc.join('  •  '), marginX, yLocal); yLocal += 4.5; }
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.text('COMPROBANTE', pageW - marginX, 16, { align:'right' });
+    doc.setFontSize(13);
+    doc.setTextColor(45, 212, 191);
+    doc.text(numeroComprobante, pageW - marginX, 23, { align:'right' });
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(200, 200, 200);
+    doc.text(fechaStr + '  •  ' + horaStr, pageW - marginX, 30, { align:'right' });
+
+    let y = 60;
+    doc.setFillColor(245, 247, 246);
+    doc.roundedRect(marginX, y, pageW - marginX*2, 30, 3, 3, 'F');
+    doc.setFillColor(200, 16, 46);
+    doc.rect(marginX, y, 2, 30, 'F');
+    doc.setTextColor(120, 120, 120);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    doc.text('DATOS DEL CLIENTE', marginX + 6, y + 6);
+    doc.setTextColor(30, 30, 30);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.text(nombreCliente, marginX + 6, y + 13);
+    y += 38;
+
+    const colX = { desc: marginX + 4, cant: marginX + 108, unit: marginX + 132, sub: pageW - marginX - 4 };
+    doc.setFillColor(10, 10, 10);
+    doc.rect(marginX, y, pageW - marginX*2, 10, 'F');
+    doc.setTextColor(45, 212, 191);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.text('DESCRIPCIÓN', colX.desc, y + 6.5);
+    doc.text('CANT.', colX.cant, y + 6.5, { align:'right' });
+    doc.text('P. UNIT.', colX.unit + 18, y + 6.5, { align:'right' });
+    doc.text('SUBTOTAL', colX.sub, y + 6.5, { align:'right' });
+    y += 10;
+
+    doc.setTextColor(30, 30, 30);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    carrito.forEach(item => {
+      doc.text(String(item.nombre).substring(0, 55), colX.desc, y + 6);
+      doc.text(String(item.cantidad), colX.cant, y + 6, { align:'right' });
+      doc.text(formatearPrecio(item.precio), colX.unit + 18, y + 6, { align:'right' });
+      doc.setFont('helvetica', 'bold');
+      doc.text(formatearPrecio(item.subtotal), colX.sub, y + 6, { align:'right' });
+      doc.setFont('helvetica', 'normal');
+      y += 7;
+      doc.setDrawColor(240, 240, 240);
+      doc.line(marginX, y, pageW - marginX, y);
+      y += 3;
+    });
+
+    y += 6;
+    doc.setFillColor(245, 247, 246);
+    doc.roundedRect(marginX + 100, y, pageW - marginX - (marginX + 100), 18, 3, 3, 'F');
+    doc.setTextColor(80, 80, 80);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.text('TOTAL', marginX + 105, y + 11);
+    doc.setTextColor(200, 16, 46);
+    doc.setFontSize(15);
+    doc.text(formatearPrecio(totalGeneral), pageW - marginX - 4, y + 12, { align:'right' });
+    y += 26;
+
+    doc.setTextColor(80, 80, 80);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.text('Forma de pago:', marginX, y);
+    doc.setFont('helvetica', 'normal');
+    doc.text(formaPago, marginX + 26, y);
+    y += 6;
+
+    if (observaciones){
+      doc.setFont('helvetica', 'bold');
+      doc.text('Observaciones:', marginX, y);
+      doc.setFont('helvetica', 'normal');
+      const obsLines = doc.splitTextToSize(observaciones, pageW - marginX*2 - 30);
+      doc.text(obsLines, marginX + 28, y);
+    }
+
+    const pieY = 275;
+    doc.setDrawColor(45, 212, 191);
+    doc.setLineWidth(0.5);
+    doc.line(marginX, pieY, pageW - marginX, pieY);
+    doc.setTextColor(120, 120, 120);
+    doc.setFont('helvetica', 'italic');
+    doc.setFontSize(9);
+    doc.text('¡Gracias por su compra!', pageW/2, pieY + 6, { align:'center' });
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7.5);
+    doc.text('Comprobante no válido como factura fiscal  •  Negocio Alerta PRO', pageW/2, pieY + 12, { align:'center' });
+
+    const nombreArchivo = 'comprobante_' + numeroComprobante + '.pdf';
+    const pdfBlob = doc.output('blob');
+    const file = new File([pdfBlob], nombreArchivo, { type: 'application/pdf' });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })){
+      await navigator.share({ files: [file], title: 'Comprobante de Venta', text: 'Comprobante ' + numeroComprobante });
+    } else {
+      doc.save(nombreArchivo);
+    }
+  } catch(err){
+    alert('❌ ERROR PDF: ' + err.message);
+    console.error(err);
+  }
+}
+
 async function descargarReportePDF(){
   const { inicio, fin, etiqueta } = rangoFechas(filtroActual);
   const ventas = cacheVentas.filter(x => {
@@ -2763,6 +3232,7 @@ async function descargarReportePDF(){
 document.addEventListener('DOMContentLoaded', () => { 
   chequearSesion(); 
   configurarLector();
+  renderCarrito();
 });
 </script>
 </body>
