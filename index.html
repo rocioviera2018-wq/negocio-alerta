@@ -761,6 +761,18 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
   <div id="seccion-ventas" style="display:none;">
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-credit-card"></i> Registrar Venta</h3>
+      
+      <!-- BOTÓN MODO LECTOR -->
+      <div style="margin-bottom: 16px; padding: 12px; background: #1a1a1a; border: 1px solid #333; border-radius: 12px; text-align: center;">
+        <p style="font-size: 11.5px; color: var(--muted); margin-bottom: 8px; line-height: 1.4;">
+          <strong>¿Tenés un lector USB?</strong><br>Activá el modo automático y escaneá sin tocar el mouse.
+        </p>
+        <button id="btn-modo-lector" onclick="toggleModoLector()" style="width: 100%; padding: 12px; background: #333; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s;">
+          <i class="fas fa-barcode"></i> Modo Lector: APAGADO
+        </button>
+        <input type="text" id="input-lector" placeholder="Esperando escaneo..." autocomplete="off" style="width: 100%; margin-top: 8px; padding: 10px; border: 1px dashed #555; border-radius: 8px; background: #0d0d0d; color: #2dd4bf; font-size: 16px; font-weight: 700; text-align: center; display: none; outline: none;">
+      </div>
+
       <div class="form-group">
         <label>Producto</label>
         <select id="venta-producto-select" onchange="alSeleccionarProducto()">
@@ -1113,6 +1125,196 @@ function formatearPrecioCorto(n){
 }
 
 /* ==========================================================
+   MODO LECTOR DE CÓDIGO DE BARRAS (USB)
+   ========================================================== */
+let modoLectorActivo = false;
+
+function toggleModoLector() {
+  modoLectorActivo = !modoLectorActivo;
+  const btn = document.getElementById('btn-modo-lector');
+  const input = document.getElementById('input-lector');
+
+  if (modoLectorActivo) {
+    btn.innerHTML = '<i class="fas fa-barcode"></i> Modo Lector: ENCENDIDO';
+    btn.style.background = 'var(--success)';
+    btn.style.color = '#04240f';
+    btn.style.boxShadow = '0 0 20px rgba(37,211,102,0.4)';
+    input.style.display = 'block';
+    input.focus();
+    // Re-enfocar si se hace clic en cualquier parte de la sección
+    document.getElementById('seccion-ventas').addEventListener('click', forzarFocoLector);
+  } else {
+    btn.innerHTML = '<i class="fas fa-barcode"></i> Modo Lector: APAGADO';
+    btn.style.background = '#333';
+    btn.style.color = '#fff';
+    btn.style.boxShadow = 'none';
+    input.style.display = 'none';
+    input.value = '';
+    document.getElementById('seccion-ventas').removeEventListener('click', forzarFocoLector);
+  }
+}
+
+function forzarFocoLector(e) {
+  if (!modoLectorActivo) return;
+  const input = document.getElementById('input-lector');
+  if (e.target !== input && e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT' && e.target.tagName !== 'TEXTAREA') {
+    input.focus();
+  }
+}
+
+// Escuchar cuando el lector (o el usuario) envía un Enter o termina de tipear en el input del lector
+function configurarLector() {
+  const input = document.getElementById('input-lector');
+  if (!input) return;
+
+  // Manejar Enter (los lectores envían Enter al final)
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const codigo = input.value.trim();
+      if (codigo) {
+        procesarCodigoLector(codigo);
+        input.value = '';
+      }
+    }
+  });
+
+  // Fallback: si el lector no envía Enter, procesar después de 300ms de inactividad
+  let timeout = null;
+  input.addEventListener('input', () => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      const codigo = input.value.trim();
+      // Los códigos suelen tener más de 4 caracteres
+      if (codigo.length > 4) {
+        procesarCodigoLector(codigo);
+        input.value = '';
+      }
+    }, 300);
+  });
+}
+
+async function procesarCodigoLector(codigo) {
+  // Buscar producto por coincidencia exacta (nombre o código)
+  const prod = cacheProductos.find(p => 
+    (p.nombre || '').toLowerCase().trim() === codigo.toLowerCase() ||
+    (p.producto || '').toLowerCase().trim() === codigo.toLowerCase()
+  );
+
+  if (!prod) {
+    // Sonido de error (usando Web Audio API)
+    reproducirSonido(false);
+    alert('⚠️ Producto no encontrado con el código:\n\n' + codigo + '\n\nVerificá que esté cargado con ese mismo código.');
+    return;
+  }
+
+  // Verificar stock
+  if (Number(prod.stock) <= 0) {
+    reproducirSonido(false);
+    alert('⚠️ Sin stock del producto:\n\n' + (prod.nombre || prod.producto) + '\n\nReponé el stock antes de venderlo.');
+    return;
+  }
+
+  // REGISTRAR VENTA AUTOMÁTICA
+  const cantidad = 1;
+  const precioUnit = Number(prod.precio) || 0;
+  const total = cantidad * precioUnit;
+  const costoUnit = Number(prod.costo) || 0;
+  const ganancia = total - costoUnit * cantidad;
+  const cliente = 'Consumidor final';
+  const formaPago = 'Efectivo';
+
+  try {
+    const payload = {
+      user_id: usuarioActual.id,
+      producto: prod.nombre || prod.producto,
+      cantidad, total, cliente,
+      forma_pago: formaPago, observaciones: 'Venta por lector de código',
+      monto_recibido: total, vuelto: 0,
+      costo_unitario: costoUnit, ganancia: ganancia
+    };
+
+    let { error: e1 } = await supabaseClient.from('ventas').insert([payload]);
+
+    if (e1 && (String(e1.message).includes('costo_unitario') || String(e1.message).includes('ganancia') || String(e1.message).includes('vuelto') || String(e1.message).includes('monto_recibido'))){
+      delete payload.costo_unitario; delete payload.ganancia;
+      delete payload.vuelto; delete payload.monto_recibido;
+      const r2 = await supabaseClient.from('ventas').insert([payload]);
+      e1 = r2.error;
+    }
+    if (e1) throw e1;
+
+    // Descontar stock
+    const nuevoStock = Math.max(0, Number(prod.stock) - cantidad);
+    await supabaseClient
+      .from('productos')
+      .update({ stock: nuevoStock })
+      .eq('id', prod.id);
+
+    // Sonido de éxito
+    reproducirSonido(true);
+
+    // Feedback visual (breve)
+    const input = document.getElementById('input-lector');
+    input.style.background = 'var(--success)';
+    input.style.color = '#000';
+    setTimeout(() => {
+      input.style.background = '#0d0d0d';
+      input.style.color = 'var(--turq-400)';
+    }, 500);
+
+    // Refrescar datos
+    cargarDatos();
+    cargarHistorialVentas();
+
+    // Notificación flotante simple
+    mostrarNotificacion('✅ ' + (prod.nombre || prod.producto) + ' — $' + total);
+
+  } catch(e) {
+    reproducirSonido(false);
+    alert('❌ Error al registrar la venta: ' + e.message);
+  }
+}
+
+function reproducirSonido(exito) {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    
+    if (exito) {
+      osc.frequency.value = 880;
+      gain.gain.setValueAtTime(0.1, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.15);
+    } else {
+      osc.frequency.value = 220;
+      gain.gain.setValueAtTime(0.15, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.3);
+    }
+  } catch(e) { /* Sonido no soportado */ }
+}
+
+function mostrarNotificacion(texto) {
+  const div = document.createElement('div');
+  div.textContent = texto;
+  div.style.cssText = `
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    background: var(--success); color: #04240f; padding: 14px 22px;
+    border-radius: 12px; font-weight: 700; font-size: 14px;
+    box-shadow: 0 10px 30px rgba(37,211,102,.5); z-index: 99999;
+    animation: fadeUp .3s ease both;
+  `;
+  document.body.appendChild(div);
+  setTimeout(() => div.remove(), 2500);
+}
+
+/* ==========================================================
    LOGIN / AUTH
    ========================================================== */
 function mostrarError(msg){
@@ -1217,6 +1419,7 @@ function mostrarApp(user){
   cargarTemaGuardado();
   cargarDatos();
   cargarClientes();
+  configurarLector();
 }
 function mostrarLogin(){
   usuarioActual = null;
@@ -1459,6 +1662,9 @@ function cambiarSeccion(nombreSeccion, elementoClickeado){
   else detenerScanner();
 
   detenerScannerProducto();
+
+  // Apagar modo lector al cambiar de sección
+  if (modoLectorActivo) toggleModoLector();
 
   if (nombreSeccion === 'clientes') cargarClientes();
   if (nombreSeccion === 'inicio' || nombreSeccion === 'productos' || nombreSeccion === 'ventas') cargarDatos();
@@ -2554,7 +2760,10 @@ async function descargarReportePDF(){
   doc.save('reporte_' + filtroActual + '.pdf');
 }
 
-document.addEventListener('DOMContentLoaded', () => { chequearSesion(); });
+document.addEventListener('DOMContentLoaded', () => { 
+  chequearSesion(); 
+  configurarLector();
+});
 </script>
 </body>
 </html>
