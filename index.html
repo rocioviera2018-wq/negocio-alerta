@@ -762,88 +762,104 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
     </div>
   </div>
 
-  <!-- PRODUCTOS -->
+  <!-- PRODUCTOS (REESTRUCTURADO) -->
   <div id="seccion-productos" style="display:none;">
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-shopping-bag"></i> Mis Productos</h3>
-      
-      <div style="display: flex; gap: 8px; margin-bottom: 14px;">
-        <div style="position: relative; flex: 1;">
+
+      <!-- Barra: buscador + lector + botón Cargar -->
+      <div style="display: flex; gap: 8px; margin-bottom: 14px; align-items: stretch;">
+        <div style="position: relative; flex: 1; min-width: 0;">
           <i class="fas fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--turq-500); font-size: 14px; pointer-events: none;"></i>
-          <input type="text" id="buscador-productos" 
-                 placeholder="Buscar producto..." 
+          <input type="text" id="buscador-productos"
+                 placeholder="Buscar producto..."
                  oninput="buscarProducto()"
                  style="width: 100%; padding: 12px 14px 12px 38px; border: 1.5px solid #2a2a2a; border-radius: 12px; font-size: 13.5px; font-family: inherit; background: #161616; color: var(--text); outline: none; transition: all .2s;">
         </div>
-        <button id="btn-lector-buscador" onclick="toggleModoLectorBuscador()" style="padding: 0 16px; border-radius: 12px; border: 1.5px solid #333; background: #1c1c1c; color: #2dd4bf; cursor: pointer; transition: all .2s;">
+        <button id="btn-lector-buscador" onclick="toggleModoLectorBuscador()" title="Modo lector de código"
+                style="padding: 0 14px; border-radius: 12px; border: 1.5px solid #333; background: #1c1c1c; color: #2dd4bf; cursor: pointer; transition: all .2s; flex-shrink: 0;">
           <i class="fas fa-barcode"></i>
         </button>
-      </div>
-
-      <div id="lista-productos"><p class="empty-text">Cargando productos...</p></div>
-    </div>
-    <div class="section-card">
-      <h4 style="margin-bottom:14px;color:#fff;font-weight:600;font-size:14px;">
-        <i class="fas fa-plus-circle" style="color:var(--turq-500);"></i> Agregar Producto
-      </h4>
-      
-      <div style="margin-bottom: 16px; padding: 12px; background: #1a1a1a; border: 1px solid #333; border-radius: 12px; text-align: center;">
-        <p style="font-size: 11.5px; color: var(--muted); margin-bottom: 8px; line-height: 1.4;">
-          <strong>¿Tenés un lector USB?</strong><br>Activá y escaneá el código del producto nuevo.
-        </p>
-        <button id="btn-modo-lector-prod" onclick="toggleModoLectorProd()" style="width: 100%; padding: 12px; background: #333; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s;">
-          <i class="fas fa-barcode"></i> Escanear Código de Producto
-        </button>
-        <input type="text" id="input-lector-prod" placeholder="Esperando escaneo..." autocomplete="off" style="width: 100%; margin-top: 8px; padding: 10px; border: 1px dashed #555; border-radius: 8px; background: #0d0d0d; color: #2dd4bf; font-size: 16px; font-weight: 700; text-align: center; display: none; outline: none;">
-      </div>
-
-      <div class="form-group">
-        <label>Imagen del producto (opcional)</label>
-        <div class="img-upload-box" onclick="document.getElementById('prod-imagen-file').click()">
-          <div id="prod-img-placeholder">
-            <i class="fas fa-image"></i>
-            <span>Toca para subir una foto</span>
-          </div>
-          <img id="prod-img-preview" src="" style="display:none;" alt="">
-          <div class="overlay" id="prod-img-overlay" style="display:none;">
-            <span><i class="fas fa-sync"></i> Cambiar imagen</span>
-          </div>
-        </div>
-        <input type="file" id="prod-imagen-file" accept="image/*" style="display:none" onchange="subirImagenProducto(event)">
-        <button type="button" class="btn-secondary" onclick="limpiarImagenProducto()" id="btn-limpiar-img" style="display:none;margin-top:8px;">
-          <i class="fas fa-times"></i> Quitar imagen
+        <button id="btn-toggle-agregar" onclick="toggleFormAgregarProducto()" title="Cargar nuevo producto"
+                style="padding: 0 14px; border-radius: 12px; border: none; background: var(--grad-turq); color: #00211d; cursor: pointer; font-weight: 700; font-size: 13px; display: flex; align-items: center; gap: 5px; box-shadow: 0 4px 12px rgba(45,212,191,.4); transition: all .2s; white-space: nowrap; flex-shrink: 0;">
+          <i class="fas fa-plus"></i> <span>Cargar</span>
         </button>
       </div>
 
-      <div class="form-group">
-        <label>Nombre / Código</label>
-        <div style="display: flex; gap: 8px;">
-          <input type="text" id="prod-nombre" placeholder="Ej: Pan lactal" style="flex: 1;">
-          <button type="button" class="btn-secondary" onclick="iniciarScannerProducto()" style="width: auto; margin-top: 0; padding: 0 16px;">
-            <i class="fas fa-qrcode"></i>
+      <!-- Formulario agregar producto (colapsable, arriba de la lista) -->
+      <div id="form-agregar-producto" style="display:none; margin-bottom: 16px; padding: 14px; background: #0f0f0f; border: 1.5px solid #2dd4bf; border-radius: 14px; animation: fadeUp .25s ease both;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <h4 style="margin:0; color:#fff; font-weight:700; font-size:14px;">
+            <i class="fas fa-plus-circle" style="color:var(--turq-500);"></i> Nuevo Producto
+          </h4>
+          <button onclick="toggleFormAgregarProducto()" title="Cerrar"
+                  style="width:30px;height:30px;border-radius:50%;background:#2a2a2a;border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+            <i class="fas fa-times" style="font-size:12px;"></i>
           </button>
         </div>
-      </div>
-      <div id="reader-producto" style="display:none; margin-bottom: 12px;"></div>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label style="color:#f0b350;">💵 Precio de COSTO</label>
-          <input type="number" id="prod-costo" placeholder="Ej: 800" oninput="calcularMargen()">
+        <!-- MODO LECTOR -->
+        <div style="margin-bottom: 16px; padding: 12px; background: #1a1a1a; border: 1px solid #333; border-radius: 12px; text-align: center;">
+          <p style="font-size: 11.5px; color: var(--muted); margin-bottom: 8px; line-height: 1.4;">
+            <strong>¿Tenés un lector USB?</strong><br>Activá y escaneá el código del producto nuevo.
+          </p>
+          <button id="btn-modo-lector-prod" onclick="toggleModoLectorProd()" style="width: 100%; padding: 12px; background: #333; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s;">
+            <i class="fas fa-barcode"></i> Escanear Código de Producto
+          </button>
+          <input type="text" id="input-lector-prod" placeholder="Esperando escaneo..." autocomplete="off" style="width: 100%; margin-top: 8px; padding: 10px; border: 1px dashed #555; border-radius: 8px; background: #0d0d0d; color: #2dd4bf; font-size: 16px; font-weight: 700; text-align: center; display: none; outline: none;">
         </div>
+
         <div class="form-group">
-          <label style="color:var(--turq-400);">💰 Precio de VENTA</label>
-          <input type="number" id="prod-precio" placeholder="Ej: 1200" oninput="calcularMargen()">
+          <label>Imagen del producto (opcional)</label>
+          <div class="img-upload-box" onclick="document.getElementById('prod-imagen-file').click()">
+            <div id="prod-img-placeholder">
+              <i class="fas fa-image"></i>
+              <span>Toca para subir una foto</span>
+            </div>
+            <img id="prod-img-preview" src="" style="display:none;" alt="">
+            <div class="overlay" id="prod-img-overlay" style="display:none;">
+              <span><i class="fas fa-sync"></i> Cambiar imagen</span>
+            </div>
+          </div>
+          <input type="file" id="prod-imagen-file" accept="image/*" style="display:none" onchange="subirImagenProducto(event)">
+          <button type="button" class="btn-secondary" onclick="limpiarImagenProducto()" id="btn-limpiar-img" style="display:none;margin-top:8px;">
+            <i class="fas fa-times"></i> Quitar imagen
+          </button>
         </div>
+
+        <div class="form-group">
+          <label>Nombre / Código</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="prod-nombre" placeholder="Ej: Pan lactal" style="flex: 1;">
+            <button type="button" class="btn-secondary" onclick="iniciarScannerProducto()" style="width: auto; margin-top: 0; padding: 0 16px;">
+              <i class="fas fa-qrcode"></i>
+            </button>
+          </div>
+        </div>
+        <div id="reader-producto" style="display:none; margin-bottom: 12px;"></div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label style="color:#f0b350;">💵 Precio de COSTO</label>
+            <input type="number" id="prod-costo" placeholder="Ej: 800" oninput="calcularMargen()">
+          </div>
+          <div class="form-group">
+            <label style="color:var(--turq-400);">💰 Precio de VENTA</label>
+            <input type="number" id="prod-precio" placeholder="Ej: 1200" oninput="calcularMargen()">
+          </div>
+        </div>
+
+        <div id="margen-box" style="padding:10px 14px;border-radius:10px;background:#1a1a1a;border:1px solid #2a2a2a;margin-bottom:12px;text-align:center;font-size:13px;">
+          Ganancia por unidad: <strong style="color:var(--turq-400);" id="margen-valor">$ 0</strong>
+          <span style="color:var(--muted);"> (</span><strong style="color:var(--turq-400);" id="margen-pct">0%</strong><span style="color:var(--muted);">)</span>
+        </div>
+
+        <div class="form-group"><label>Stock</label><input type="number" id="prod-stock" placeholder="Ej: 10"></div>
+        <button class="btn-primary" onclick="agregarProducto()"><i class="fas fa-save"></i> Guardar Producto</button>
       </div>
 
-      <div id="margen-box" style="padding:10px 14px;border-radius:10px;background:#1a1a1a;border:1px solid #2a2a2a;margin-bottom:12px;text-align:center;font-size:13px;">
-        Ganancia por unidad: <strong style="color:var(--turq-400);" id="margen-valor">$ 0</strong>
-        <span style="color:var(--muted);"> (</span><strong style="color:var(--turq-400);" id="margen-pct">0%</strong><span style="color:var(--muted);">)</span>
-      </div>
-
-      <div class="form-group"><label>Stock</label><input type="number" id="prod-stock" placeholder="Ej: 10"></div>
-      <button class="btn-primary" onclick="agregarProducto()"><i class="fas fa-save"></i> Guardar Producto</button>
+      <!-- Lista de productos -->
+      <div id="lista-productos"><p class="empty-text">Cargando productos...</p></div>
     </div>
   </div>
 
@@ -851,7 +867,7 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
   <div id="seccion-ventas" style="display:none;">
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-credit-card"></i> Registrar Venta</h3>
-      
+
       <!-- MODO LECTOR -->
       <div style="margin-bottom: 16px; padding: 12px; background: #1a1a1a; border: 1px solid #333; border-radius: 12px; text-align: center;">
         <p style="font-size: 11.5px; color: var(--muted); margin-bottom: 8px; line-height: 1.4;">
@@ -1273,6 +1289,40 @@ function formatearPrecioCorto(n){
 }
 
 /* ==========================================================
+   TOGGLE FORM AGREGAR PRODUCTO (colapsable arriba)
+   ========================================================== */
+function toggleFormAgregarProducto() {
+  const form = document.getElementById('form-agregar-producto');
+  const btn = document.getElementById('btn-toggle-agregar');
+  if (!form) return;
+  const isHidden = form.style.display === 'none' || form.style.display === '';
+
+  if (isHidden) {
+    form.style.display = 'block';
+    if (btn) {
+      btn.innerHTML = '<i class="fas fa-times"></i> <span>Cerrar</span>';
+      btn.style.background = '#333';
+      btn.style.color = '#fff';
+      btn.style.boxShadow = 'none';
+    }
+    setTimeout(() => {
+      form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      const nombreInput = document.getElementById('prod-nombre');
+      if (nombreInput) nombreInput.focus();
+    }, 150);
+  } else {
+    if (modoLectorProdActivo) toggleModoLectorProd();
+    form.style.display = 'none';
+    if (btn) {
+      btn.innerHTML = '<i class="fas fa-plus"></i> <span>Cargar</span>';
+      btn.style.background = 'var(--grad-turq)';
+      btn.style.color = '#00211d';
+      btn.style.boxShadow = '0 4px 12px rgba(45,212,191,.4)';
+    }
+  }
+}
+
+/* ==========================================================
    MODO LECTOR DE CÓDIGO DE BARRAS (USB)
    ========================================================== */
 let modoLectorActivo = false;
@@ -1340,7 +1390,7 @@ function configurarLector() {
 }
 
 async function procesarCodigoLector(codigo) {
-  const prod = cacheProductos.find(p => 
+  const prod = cacheProductos.find(p =>
     (p.nombre || '').toLowerCase().trim() === codigo.toLowerCase() ||
     (p.producto || '').toLowerCase().trim() === codigo.toLowerCase()
   );
@@ -1363,7 +1413,7 @@ function reproducirSonido(exito) {
     const gain = ctx.createGain();
     osc.connect(gain);
     gain.connect(ctx.destination);
-    
+
     if (exito) {
       osc.frequency.value = 880;
       gain.gain.setValueAtTime(0.1, ctx.currentTime);
@@ -1420,7 +1470,7 @@ function toggleModoLectorProd() {
 
 function configurarLectorProd() {
   const input = document.getElementById('input-lector-prod');
-  
+
   const newInput = input.cloneNode(true);
   input.parentNode.replaceChild(newInput, input);
 
@@ -1451,7 +1501,7 @@ function toggleModoLectorBuscador() {
     btn.style.color = '#04240f';
     inputBusqueda.focus();
     inputBusqueda.placeholder = '🔍 Escaneá un código...';
-    
+
     inputBusqueda.addEventListener('keydown', manejarEnterBuscador);
   } else {
     btn.style.background = '#1c1c1c';
@@ -1754,7 +1804,7 @@ function detenerScanner(){
 }
 function onScanSuccess(decodedText){
   detenerScanner();
-  const prod = cacheProductos.find(p => 
+  const prod = cacheProductos.find(p =>
     (p.nombre || '').toLowerCase().trim() === decodedText.toLowerCase() ||
     (p.producto || '').toLowerCase().trim() === decodedText.toLowerCase()
   );
@@ -1770,7 +1820,7 @@ function onScanError(){}
 function usarCodigoManual(){
   const val = document.getElementById('input-manual-codigo').value.trim();
   if (!val) return alert('Escribe un código.');
-  const prod = cacheProductos.find(p => 
+  const prod = cacheProductos.find(p =>
     (p.nombre || '').toLowerCase().trim() === val.toLowerCase() ||
     (p.producto || '').toLowerCase().trim() === val.toLowerCase()
   );
@@ -1793,8 +1843,8 @@ function iniciarScannerProducto() {
     return alert('La librería del escáner no está cargada.');
   }
   scannerProducto = new Html5QrcodeScanner(
-    "reader-producto", 
-    { fps: 10, qrbox: { width: 250, height: 250 } }, 
+    "reader-producto",
+    { fps: 10, qrbox: { width: 250, height: 250 } },
     false
   );
   scannerProducto.render(onScanSuccessProducto, (error) => {});
@@ -1945,19 +1995,19 @@ function agregarAlCarrito() {
   const prodName = document.getElementById('venta-producto').value.trim();
   const selVal = document.getElementById('venta-producto-select').value;
   const nombreFinal = prodName || selVal;
-  
+
   if (!nombreFinal) return alert('Seleccioná o escribí un producto');
-  
-  const prod = cacheProductos.find(p => 
+
+  const prod = cacheProductos.find(p =>
     (p.nombre || '').toLowerCase().trim() === nombreFinal.toLowerCase().trim() ||
     (p.producto || '').toLowerCase().trim() === nombreFinal.toLowerCase().trim()
   );
-  
+
   if (!prod) return alert('Producto no encontrado en el inventario: ' + nombreFinal);
 
   const cant = parseInt(document.getElementById('venta-cantidad').value) || 1;
   agregarItemAlCarrito(prod, cant);
-  
+
   document.getElementById('venta-producto').value = '';
   document.getElementById('venta-producto-select').selectedIndex = 0;
   document.getElementById('venta-cantidad').value = 1;
@@ -2582,6 +2632,9 @@ async function agregarProducto(){
     limpiarImagenProducto();
     calcularMargen();
     cargarDatos();
+    // Cerrar el formulario automáticamente para volver a ver la lista
+    const form = document.getElementById('form-agregar-producto');
+    if (form && form.style.display !== 'none') toggleFormAgregarProducto();
   } catch(e){ alert('Error: ' + e.message); }
 }
 
@@ -2737,7 +2790,7 @@ function calcularYMostrarReporte(){
 function buscarProducto() {
   const termino = document.getElementById('buscador-productos').value.toLowerCase().trim();
   const tarjetas = document.querySelectorAll('#lista-productos .prod-card');
-  
+
   tarjetas.forEach(tarjeta => {
     const nombreElemento = tarjeta.querySelector('.prod-info h4');
     if (nombreElemento) {
@@ -2811,7 +2864,7 @@ async function generarPDFdeVenta(idVenta) {
   try {
     const venta = cacheVentas.find(v => String(v.id) === String(idVenta));
     if (!venta) return alert('No se encontró la venta');
-    
+
     let clienteData = null;
     if (venta.cliente && venta.cliente !== 'Consumidor final') {
       clienteData = cacheClientes.find(c => c.nombre === venta.cliente) || null;
@@ -3254,7 +3307,7 @@ function generarHTMLTicket(items, cliente, formaPago, observaciones, recibido, v
   html += `<hr>`;
   html += `<div class="ticket-total"><span>TOTAL</span><span>${formatearPrecio(total)}</span></div>`;
   html += `<div class="ticket-row"><span>Forma de pago:</span><span>${esc(formaPago)}</span></div>`;
-  
+
   if (recibido > 0) {
     html += `<div class="ticket-row"><span>Recibido:</span><span>${formatearPrecio(recibido)}</span></div>`;
     html += `<div class="ticket-row"><span>Cambio:</span><span>${formatearPrecio(vuelto)}</span></div>`;
@@ -3281,18 +3334,18 @@ function imprimirTicket() {
     alert('Agregá al menos un producto al carrito antes de imprimir el ticket.');
     return;
   }
-  
+
   const cliente = document.getElementById('venta-cliente-select').value || 'Consumidor final';
   const formaPago = document.getElementById('venta-forma-pago').value;
   const observaciones = document.getElementById('venta-observaciones').value.trim();
   const total = carrito.reduce((s, x) => s + x.subtotal, 0);
   const recibido = parseFloat(document.getElementById('venta-recibido').value) || total;
   const vuelto = Math.max(0, recibido - total);
-  
+
   const numeroComprobante = generarNumeroComprobante();
-  
+
   const html = generarHTMLTicket(carrito, cliente, formaPago, observaciones, recibido, vuelto, numeroComprobante);
-  
+
   document.getElementById('ticket-print').innerHTML = html;
   window.print();
 }
@@ -3300,23 +3353,23 @@ function imprimirTicket() {
 function imprimirTicketVenta(idVenta) {
   const venta = cacheVentas.find(v => String(v.id) === String(idVenta));
   if (!venta) return alert('No se encontró la venta');
-  
+
   const cliente = venta.cliente || 'Consumidor final';
   const formaPago = venta.forma_pago || 'Efectivo';
   const observaciones = venta.observaciones || '';
   const recibido = venta.monto_recibido || venta.total;
   const vuelto = venta.vuelto || 0;
   const numeroComprobante = venta.numero_comprobante || ('C-' + new Date(venta.created_at).getFullYear() + String(new Date(venta.created_at).getMonth()+1).padStart(2,'0') + String(new Date(venta.created_at).getDate()).padStart(2,'0') + '-' + String(Math.floor(Math.random()*9999)).padStart(4,'0'));
-  
+
   const items = [{
     nombre: venta.producto,
     cantidad: venta.cantidad,
     precio: venta.total / venta.cantidad,
     subtotal: venta.total
   }];
-  
+
   const html = generarHTMLTicket(items, cliente, formaPago, observaciones, recibido, vuelto, numeroComprobante);
-  
+
   document.getElementById('ticket-print').innerHTML = html;
   window.print();
 }
@@ -3383,8 +3436,8 @@ async function descargarReportePDF(){
   doc.save('reporte_' + filtroActual + '.pdf');
 }
 
-document.addEventListener('DOMContentLoaded', () => { 
-  chequearSesion(); 
+document.addEventListener('DOMContentLoaded', () => {
+  chequearSesion();
   configurarLector();
   renderCarrito();
 });
