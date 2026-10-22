@@ -762,10 +762,22 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
     </div>
   </div>
 
-  <!-- PRODUCTOS (REESTRUCTURADO) -->
+  <!-- PRODUCTOS -->
   <div id="seccion-productos" style="display:none;">
     <div class="section-card">
       <h3 class="section-title"><i class="fas fa-shopping-bag"></i> Mis Productos</h3>
+
+      <!-- RESUMEN DE PRODUCTOS -->
+      <div id="resumen-productos" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
+        <div class="resumen-box">
+          <small>Cantidad de productos</small>
+          <strong id="resumen-cant-productos">0</strong>
+        </div>
+        <div class="resumen-box turq">
+          <small>Total de unidades</small>
+          <strong id="resumen-total-unidades">0</strong>
+        </div>
+      </div>
 
       <!-- Barra: buscador + lector + botón Cargar -->
       <div style="display: flex; gap: 8px; margin-bottom: 14px; align-items: stretch;">
@@ -1262,7 +1274,7 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
   </div>
 </div>
 
-<!-- TICKET IMPRIMIBLE (oculto en pantalla, visible al imprimir) -->
+<!-- TICKET IMPRIMIBLE -->
 <div id="ticket-print"></div>
 
 <script>
@@ -2360,6 +2372,14 @@ async function cargarDatos(){
     cacheProductos = productos || [];
     document.getElementById('stat-productos').innerText = cacheProductos.length;
 
+    // ===== RESUMEN: cantidad de productos + total de unidades =====
+    const totalUnidades = cacheProductos.reduce((s, p) => s + (Number(p.stock) || 0), 0);
+    const elCant = document.getElementById('resumen-cant-productos');
+    const elUnid = document.getElementById('resumen-total-unidades');
+    if (elCant) elCant.textContent = cacheProductos.length + (cacheProductos.length === 1 ? ' producto' : ' productos');
+    if (elUnid) elUnid.textContent = totalUnidades.toLocaleString('es-AR') + ' u.';
+    // ===============================================================
+
     const listaProd = document.getElementById('lista-productos');
     const listaAlertas = document.getElementById('lista-alertas');
     listaProd.innerHTML = ''; listaAlertas.innerHTML = '';
@@ -2632,7 +2652,6 @@ async function agregarProducto(){
     limpiarImagenProducto();
     calcularMargen();
     cargarDatos();
-    // Cerrar el formulario automáticamente para volver a ver la lista
     const form = document.getElementById('form-agregar-producto');
     if (form && form.style.display !== 'none') toggleFormAgregarProducto();
   } catch(e){ alert('Error: ' + e.message); }
