@@ -768,7 +768,7 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
       <h3 class="section-title"><i class="fas fa-shopping-bag"></i> Mis Productos</h3>
 
       <!-- RESUMEN DE PRODUCTOS -->
-      <div id="resumen-productos" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
+      <div id="resumen-productos" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
         <div class="resumen-box">
           <small>Cantidad de productos</small>
           <strong id="resumen-cant-productos">0</strong>
@@ -776,6 +776,22 @@ body[data-tema="blanco"] .menu-item.active span{color:#fff}
         <div class="resumen-box turq">
           <small>Total de unidades</small>
           <strong id="resumen-total-unidades">0</strong>
+        </div>
+      </div>
+
+      <!-- ESTADÍSTICAS: INVERSIÓN / VENTA / GANANCIA -->
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px;">
+        <div class="resumen-box" style="border-color:#4a3a18; padding:10px 6px;">
+          <small style="color:#f0b350;">💵 Inversión</small>
+          <strong id="stat-inversion" style="color:#f0b350; font-size:13.5px;">$ 0</strong>
+        </div>
+        <div class="resumen-box turq" style="border-color:#0d3d3a; padding:10px 6px;">
+          <small>💰 Venta total</small>
+          <strong id="stat-valor-venta" style="font-size:13.5px;">$ 0</strong>
+        </div>
+        <div class="resumen-box" style="border-color:#3a2a5a; padding:10px 6px;">
+          <small style="color:#c19cff;">📈 Ganancia</small>
+          <strong id="stat-ganancia-potencial" style="color:#c19cff; font-size:13.5px;">$ 0</strong>
         </div>
       </div>
 
@@ -2379,6 +2395,24 @@ async function cargarDatos(){
     if (elCant) elCant.textContent = cacheProductos.length + (cacheProductos.length === 1 ? ' producto' : ' productos');
     if (elUnid) elUnid.textContent = totalUnidades.toLocaleString('es-AR') + ' u.';
     // ===============================================================
+
+    // ===== ESTADÍSTICAS: inversión / venta / ganancia =====
+    let invTotal = 0, ventaTotal = 0;
+    cacheProductos.forEach(p => {
+      const c = Number(p.costo)  || 0;
+      const v = Number(p.precio) || 0;
+      const s = Number(p.stock)  || 0;
+      invTotal   += c * s;
+      ventaTotal += v * s;
+    });
+    const ganTotal = ventaTotal - invTotal;
+    const elInv   = document.getElementById('stat-inversion');
+    const elVenta = document.getElementById('stat-valor-venta');
+    const elGan   = document.getElementById('stat-ganancia-potencial');
+    if (elInv)   elInv.textContent   = formatearPrecioCorto(invTotal);
+    if (elVenta) elVenta.textContent = formatearPrecioCorto(ventaTotal);
+    if (elGan)   elGan.textContent   = formatearPrecioCorto(ganTotal);
+    // =======================================================
 
     const listaProd = document.getElementById('lista-productos');
     const listaAlertas = document.getElementById('lista-alertas');
